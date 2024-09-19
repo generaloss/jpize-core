@@ -30,9 +30,9 @@ dependencies {
 ## Examples
 #### 1. Application
 ``` java
-public class MyApp extends JpizeApplication{
+public class MyApp extends JpizeApplication {
 
-    public static void main(String[] args){
+    public static void main(String[] args) {
         // create window context
         Context.create(1280, 720, "Window Title")
             .icon("/icon.png").build()
@@ -42,17 +42,17 @@ public class MyApp extends JpizeApplication{
         Jpize.run();
     }
     
-    public MyApp(){ } // constructor calls before init()
+    public MyApp() { } // constructor calls before init()
     
-    public void init(){ } // init() calls at the same time as Jpize.run();
+    public void init() { } // init() calls at the same time as Jpize.run();
     
-    public void update(){ } // update loop
+    public void update() { } // update loop
     
-    public void render(){ } // render loop
+    public void render() { } // render loop
     
-    public void resize(int width, int height){ } // calls when window resizes
+    public void resize(int width, int height) { } // calls when window resizes
     
-    public void dispose(){ } // exit app
+    public void dispose() { } // exit app
     
 }
 ```
