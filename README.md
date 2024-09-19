@@ -35,21 +35,24 @@ public class MyApp extends JpizeApplication{
     public static void main(String[] args){
         // Create window context
         Context.create(1280, 720, "Window Title")
-                .icon("/icon.png")
-                .register()
-                .setAdapter(new MyApp());
-                
+            .icon("/icon.png").build()
+            .setApp(new MyApp());
+        
+        Context.create(720, 480, "Loading...")
+            
+        Jpize.run();
+        
         // Run created contexts
         Jpize.runContexts();
     }
     
-    public App(){ } // Constructor calls before init()
+    public MyApp(){ } // Constructor calls before init()
     
     public void init(){ } // Init
     
-    public void render(){ } // Render loop
-    
     public void update(){ } // Update loop
+    
+    public void render(){ } // Render loop
     
     public void resize(int width, int height){ } // Calls when window resizes
     
