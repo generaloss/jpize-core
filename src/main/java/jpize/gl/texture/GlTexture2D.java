@@ -17,7 +17,7 @@ public class GlTexture2D extends GlTexture {
 
     public GlTexture2D() {
         super();
-        setFilters(GlFilter.NEAREST, GlFilter.LINEAR);
+        this.setFilters(GlFilter.NEAREST);
     }
 
     public GlTexture2D(int width, int height) {

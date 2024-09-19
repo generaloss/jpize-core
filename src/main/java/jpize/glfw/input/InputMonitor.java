@@ -8,6 +8,7 @@ public class InputMonitor {
 
     private final BitSet keysDown, keysRelease;
     private final BitSet btnsDown, btnsRelease;
+    private float scrollX, scrollY;
 
     public InputMonitor(GlfwWindow window) {
         keysDown = new BitSet(Key.values().length);
@@ -17,6 +18,7 @@ public class InputMonitor {
 
         window.getCallbacks().addKeyCallback(this::onKey);
         window.getCallbacks().addMouseButtonCallback(this::onButton);
+        window.getCallbacks().addScrollCallback(this::onScroll);
     }
     
     private void onKey(GlfwWindow window, Key key, int scancode, GlfwAction action, GlfwMods mods) {
@@ -29,11 +31,18 @@ public class InputMonitor {
         if(action.isRelease()) btnsRelease.set(button.ordinal());
     }
 
+    private void onScroll(GlfwWindow window, float scrollX, float scrollY) {
+        this.scrollX += scrollX;
+        this.scrollY += scrollY;
+    }
+
     public void clear() {
         keysDown.clear();
         keysRelease.clear();
         btnsDown.clear();
         btnsRelease.clear();
+        scrollX = 0;
+        scrollY = 0;
     }
     
     public boolean isKeyDown(Key key) {
@@ -50,6 +59,14 @@ public class InputMonitor {
 
     public boolean isMouseButtonUp(MouseBtn button) {
         return btnsRelease.get(button.ordinal());
+    }
+
+    public float getScrollX() {
+        return scrollX;
+    }
+
+    public float getScrollY() {
+        return scrollY;
     }
 
 }

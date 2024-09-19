@@ -251,19 +251,19 @@ public class GlfwCallbacks {
     }
 
 
-    //!LWJGL3.3.4 public void addIMEStatusCallback(GlfwIMEStatusCallback callback) {
-    //!LWJGL3.3.4     callbacksIMEStatus.add(callback);
-    //!LWJGL3.3.4     if(callbackIMEStatus == null){
-    //!LWJGL3.3.4         callbackIMEStatus = glfwSetIMEStatusCallback(windowID, (windowID) -> {
-    //!LWJGL3.3.4             window.makeContextCurrent();
-    //!LWJGL3.3.4             callbacksIMEStatus.forEach(c -> c.invoke(window));
-    //!LWJGL3.3.4         });
-    //!LWJGL3.3.4     }
-    //!LWJGL3.3.4 }
+    public void addIMEStatusCallback(GlfwIMEStatusCallback callback) {
+        callbacksIMEStatus.add(callback);
+        if(callbackIMEStatus == null){
+            callbackIMEStatus = glfwSetIMEStatusCallback(windowID, (windowID) -> {
+                window.makeContextCurrent();
+                callbacksIMEStatus.forEach(c -> c.invoke(window));
+            });
+        }
+    }
 
-    //!LWJGL3.3.4 public void removeIMEStatusCallback(GlfwIMEStatusCallback callback) {
-    //!LWJGL3.3.4     callbacksIMEStatus.remove(callback);
-    //!LWJGL3.3.4 }
+    public void removeIMEStatusCallback(GlfwIMEStatusCallback callback) {
+        callbacksIMEStatus.remove(callback);
+    }
 
 
     public void addCharModsCallback(GlfwCharModsCallback callback) {
@@ -315,34 +315,34 @@ public class GlfwCallbacks {
     }
 
 
-    //!LWJGL3.3.4 public void addPreeditCallback(GlfwPreeditCallback callback) { //! ???
-    //!LWJGL3.3.4     callbacksPreedit.add(callback);
-    //!LWJGL3.3.4     if(callbackPreedit == null){
-    //!LWJGL3.3.4         callbackPreedit = glfwSetPreeditCallback(windowID, (windowID, preeditCount, preeditStringPointer, blockCount, blockSizesPointer, focusedBlock, caret) -> {
-    //!LWJGL3.3.4             window.makeContextCurrent();
-    //!LWJGL3.3.4             callbacksPreedit.forEach(c -> c.invoke(window, preeditCount, preeditStringPointer, blockCount, blockSizesPointer, focusedBlock, caret));
-    //!LWJGL3.3.4         });
-    //!LWJGL3.3.4     }
-    //!LWJGL3.3.4 }
+    public void addPreeditCallback(GlfwPreeditCallback callback) { //! ???
+        callbacksPreedit.add(callback);
+        if(callbackPreedit == null){
+            callbackPreedit = glfwSetPreeditCallback(windowID, (windowID, preeditCount, preeditStringPointer, blockCount, blockSizesPointer, focusedBlock, caret) -> {
+                window.makeContextCurrent();
+                callbacksPreedit.forEach(c -> c.invoke(window, preeditCount, preeditStringPointer, blockCount, blockSizesPointer, focusedBlock, caret));
+            });
+        }
+    }
 
-    //!LWJGL3.3.4 public void removePreeditCallback(GlfwPreeditCallback callback) { //! ???
-    //!LWJGL3.3.4     callbacksPreedit.remove(callback);
-    //!LWJGL3.3.4 }
+    public void removePreeditCallback(GlfwPreeditCallback callback) { //! ???
+        callbacksPreedit.remove(callback);
+    }
 
 
-    //!LWJGL3.3.4 public void addPreeditCandidateCallback(GlfwPreeditCandidateCallback callback) { //! ???
-    //!LWJGL3.3.4     callbacksPreeditCandidate.add(callback);
-    //!LWJGL3.3.4     if(callbackPreeditCandidate == null){
-    //!LWJGL3.3.4         callbackPreeditCandidate = glfwSetPreeditCandidateCallback(windowID, (windowID, candidatesCount, selectedIndex, pageStart, pageSize) -> {
-    //!LWJGL3.3.4             window.makeContextCurrent();
-    //!LWJGL3.3.4             callbacksPreeditCandidate.forEach(c -> c.invoke(window, candidatesCount, selectedIndex, pageStart, pageSize));
-    //!LWJGL3.3.4         });
-    //!LWJGL3.3.4     }
-    //!LWJGL3.3.4 }
+    public void addPreeditCandidateCallback(GlfwPreeditCandidateCallback callback) { //! ???
+        callbacksPreeditCandidate.add(callback);
+        if(callbackPreeditCandidate == null){
+            callbackPreeditCandidate = glfwSetPreeditCandidateCallback(windowID, (windowID, candidatesCount, selectedIndex, pageStart, pageSize) -> {
+                window.makeContextCurrent();
+                callbacksPreeditCandidate.forEach(c -> c.invoke(window, candidatesCount, selectedIndex, pageStart, pageSize));
+            });
+        }
+    }
 
-    //!LWJGL3.3.4 public void removePreeditCandidateCallback(GlfwPreeditCandidateCallback callback) { //! ???
-    //!LWJGL3.3.4     callbacksPreeditCandidate.remove(callback);
-    //!LWJGL3.3.4 }
+    public void removePreeditCandidateCallback(GlfwPreeditCandidateCallback callback) { //! ???
+        callbacksPreeditCandidate.remove(callback);
+    }
 
 
     public void addDropCallback(GlfwDropCallback callback) {

@@ -52,6 +52,10 @@ public class Jpize {
         return input().getCursorY();
     }
 
+    public static float getScroll() {
+        return input().getScrollY();
+    }
+
 
     public static int getFPS() {
         return ContextManager.getFPS();

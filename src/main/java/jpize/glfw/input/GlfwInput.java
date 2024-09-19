@@ -5,7 +5,10 @@ import jpize.glfw.cursor.GlfwCursor;
 import jpize.glfw.window.GlfwWindow;
 import jpize.util.math.vector.Vec2f;
 import org.lwjgl.system.MemoryUtil;
+
+import java.awt.*;
 import java.nio.DoubleBuffer;
+import java.nio.IntBuffer;
 
 import static org.lwjgl.glfw.GLFW.*;
 
@@ -40,6 +43,14 @@ public class GlfwInput {
 
     public boolean isKeyUp(Key key) {
         return inputMonitor.isKeyUp(key);
+    }
+
+    public float getScrollX() {
+        return inputMonitor.getScrollX();
+    }
+
+    public float getScrollY() {
+        return inputMonitor.getScrollY();
     }
     
 
@@ -143,7 +154,7 @@ public class GlfwInput {
         return value;
     }
 
-    public float getCursorY() {
+    public float getCursorNativeY() {
         final DoubleBuffer buffer = MemoryUtil.memAllocDouble(1);
         glfwGetCursorPos(windowID, null, buffer);
         final float value = (float) buffer.get();
@@ -151,38 +162,42 @@ public class GlfwInput {
         return value;
     }
 
+    public float getCursorY() {
+        return (window.getHeight() - getCursorNativeY());
+    }
+
     public void setCursorPos(double x, double y) {
         glfwSetCursorPos(windowID, x, y);
     }
 
 
-    //!LWJGL3.3.4 public Rectangle getPreeditCursorRectangle() {
-    //!LWJGL3.3.4     final IntBuffer xBuf = MemoryUtil.memAllocInt(1);
-    //!LWJGL3.3.4     final IntBuffer yBuf = MemoryUtil.memAllocInt(1);
-    //!LWJGL3.3.4     final IntBuffer widthBuf = MemoryUtil.memAllocInt(1);
-    //!LWJGL3.3.4     final IntBuffer heightBuf = MemoryUtil.memAllocInt(1);
+    public Rectangle getPreeditCursorRectangle() {
+        final IntBuffer xBuf = MemoryUtil.memAllocInt(1);
+        final IntBuffer yBuf = MemoryUtil.memAllocInt(1);
+        final IntBuffer widthBuf = MemoryUtil.memAllocInt(1);
+        final IntBuffer heightBuf = MemoryUtil.memAllocInt(1);
 
-    //!LWJGL3.3.4     glfwGetPreeditCursorRectangle(windowID, xBuf, yBuf, widthBuf, heightBuf);
-    //!LWJGL3.3.4     final Rectangle value = new Rectangle(xBuf.get(), yBuf.get(), widthBuf.get(), heightBuf.get());
+        glfwGetPreeditCursorRectangle(windowID, xBuf, yBuf, widthBuf, heightBuf);
+        final Rectangle value = new Rectangle(xBuf.get(), yBuf.get(), widthBuf.get(), heightBuf.get());
 
-    //!LWJGL3.3.4     MemoryUtil.memFree(xBuf);
-    //!LWJGL3.3.4     MemoryUtil.memFree(yBuf);
-    //!LWJGL3.3.4     MemoryUtil.memFree(widthBuf);
-    //!LWJGL3.3.4     MemoryUtil.memFree(heightBuf);
-    //!LWJGL3.3.4     return value;
-    //!LWJGL3.3.4 }
+        MemoryUtil.memFree(xBuf);
+        MemoryUtil.memFree(yBuf);
+        MemoryUtil.memFree(widthBuf);
+        MemoryUtil.memFree(heightBuf);
+        return value;
+    }
 
-    //!LWJGL3.3.4 public void setPreeditCursorRectangle(int x, int y, int width, int height) {
-    //!LWJGL3.3.4     glfwSetPreeditCursorRectangle(windowID, x, y, width, height);
-    //!LWJGL3.3.4 }
+    public void setPreeditCursorRectangle(int x, int y, int width, int height) {
+        glfwSetPreeditCursorRectangle(windowID, x, y, width, height);
+    }
 
-    //!LWJGL3.3.4 public IntBuffer getPreeditCandidate(int index) {
-    //!LWJGL3.3.4     return glfwGetPreeditCandidate(windowID, index);
-    //!LWJGL3.3.4 }
+    public IntBuffer getPreeditCandidate(int index) {
+        return glfwGetPreeditCandidate(windowID, index);
+    }
 
-    //!LWJGL3.3.4 public void resetPreeditText() {
-    //!LWJGL3.3.4     glfwResetPreeditText(windowID);
-    //!LWJGL3.3.4 }
+    public void resetPreeditText() {
+        glfwResetPreeditText(windowID);
+    }
 
 
     private final Vec2f prevCursorPos = new Vec2f();

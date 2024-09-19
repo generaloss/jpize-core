@@ -133,9 +133,9 @@ public class GlfwWindow {
     }
 
 
-    //!LWJGL3.3.4 public String getTitle() {
-    //!LWJGL3.3.4     return glfwGetWindowTitle(ID);
-    //!LWJGL3.3.4 }
+    public String getTitle() {
+        return glfwGetWindowTitle(ID);
+    }
 
     public void setTitle(CharSequence title) {
         glfwSetWindowTitle(ID, title);
