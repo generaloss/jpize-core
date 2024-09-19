@@ -1,0 +1,102 @@
+package jpize.util.font;
+
+import jpize.util.font.glyph.GlyphIterator;
+import jpize.util.font.glyph.GlyphMap;
+import jpize.util.font.glyph.GlyphPages;
+import jpize.util.font.glyph.GlyphSprite;
+import jpize.util.TextureBatch;
+import jpize.util.math.vector.Vec2f;
+import jpize.util.Disposable;
+
+public class Font implements Disposable {
+
+    public final FontInfo info;
+    public final GlyphPages pages;
+    public final GlyphMap glyphs;
+    public final FontOptions options;
+
+    protected Font(FontInfo info, GlyphPages pages, GlyphMap glyphs) {
+        this.info = info;
+        this.pages = pages;
+        this.glyphs = glyphs;
+        this.options = new FontOptions(this);
+    }
+
+
+    public float getScale() {
+        return options.scale;
+    }
+
+    public void setScale(float scale) {
+        options.scale = scale;
+    }
+
+
+    public Vec2f getBounds(String text) {
+        float width = 0;
+        float height = 0;
+
+        for(GlyphSprite glyph: iterable(text)){
+            final float glyphMaxX = glyph.getX() + ((char) glyph.getCode() == ' ' ? glyph.getAdvanceX() : glyph.getWidth());
+            final float glyphMaxY = glyph.getOffsetY() + glyph.getHeight() + glyph.getLineY() * options.getAdvanceScaled();
+
+            width = Math.max(width, glyphMaxX);
+            height = Math.max(height, glyphMaxY);
+        }
+
+        return new Vec2f(width, height);
+    }
+
+    public Vec2f getMaxBounds(String text) {
+        float width = 0;
+        float height = 0;
+
+        for(GlyphSprite glyph: iterable(text)){
+            final float glyphMaxX = glyph.getX() + ((char) glyph.getCode() == ' ' ? glyph.getAdvanceX() : glyph.getWidth());
+            final float glyphMaxY = (glyph.getLineY() + 1) * options.getAdvanceScaled();
+
+            width = Math.max(width, glyphMaxX);
+            height = Math.max(height, glyphMaxY);
+        }
+
+        return new Vec2f(width, height);
+    }
+
+    public float getTextWidth(String text) {
+        float width = 0;
+        for(GlyphSprite glyph: iterable(text)){
+            final float glyphMaxX = glyph.getX() + ((char) glyph.getCode() == ' ' ? glyph.getAdvanceX() : glyph.getWidth());
+            width = Math.max(width, glyphMaxX);
+        }
+        return width;
+    }
+
+    public float getTextHeight(String text) {
+        float height = 0;
+        for(GlyphSprite glyph: iterable(text)){
+            final float glyphMaxY = Math.abs(glyph.getY() + info.getDescent() + glyph.getHeight()) - info.getDescent();
+            height = Math.max(height, glyphMaxY);
+        }
+        return height;
+    }
+
+
+    public void drawText(TextureBatch batch, String text, float x, float y) {
+        TextRenderer.render(this, batch, text, x, y);
+    }
+
+    public void drawText(String text, float x, float y) {
+        TextRenderer.render(this, text, x, y);
+    }
+
+    public Iterable<GlyphSprite> iterable(String text) {
+        return () -> new GlyphIterator(glyphs, options, text, options.advanceFactor.x, options.advanceFactor.y);
+    }
+
+
+    @Override
+    public void dispose() {
+        pages.dispose();
+    }
+
+}

@@ -1,0 +1,136 @@
+package jpize.util.postprocess.effects;
+
+import jpize.app.Jpize;
+import jpize.util.res.Resource;
+import jpize.gl.Gl;
+import jpize.util.postprocess.FrameBufferObject;
+import jpize.util.postprocess.PostProcessEffect;
+import jpize.util.postprocess.RenderBufferObject;
+import jpize.util.postprocess.ScreenQuad;
+import jpize.util.shader.Shader;
+
+public class Bloom implements PostProcessEffect {
+
+    private final FrameBufferObject colorBuffer, fbo2, blurBuffer;
+    private final RenderBufferObject depthBuffer;
+    private final Shader brightShader, blurShader, combineShader;
+    private float brightness, radius, bloom, exposure, gamma;
+
+    public Bloom(float brightness, float radius) {
+        this.brightness = brightness;
+        this.radius = radius;
+
+        this.bloom = 1F;
+        this.exposure = 2F;
+        this.gamma = 0.6F;
+
+        final int width = Jpize.getWidth();
+        final int height = Jpize.getHeight();
+
+        // Frame Buffer 1 & Render Buffer
+        this.colorBuffer = new FrameBufferObject(width, height);
+        this.colorBuffer.create();
+        this.colorBuffer.bind();
+        this.depthBuffer = new RenderBufferObject(width, height);
+        this.depthBuffer.create();
+        this.colorBuffer.unbind();
+
+        // Frame Buffers 2 & 3
+        this.fbo2 = new FrameBufferObject(width, height);
+        this.fbo2.create();
+        this.blurBuffer = new FrameBufferObject(width, height);
+        this.blurBuffer.create();
+
+        // Shader
+        final Resource vertexShader = Resource.internal("/shader/bloom/bloom.vert");
+
+        this.brightShader = new Shader(vertexShader, Resource.internal("/shader/bloom/bloom_bright.frag"));
+        this.blurShader = new Shader(vertexShader, Resource.internal("/shader/bloom/bloom_blur.frag"));
+        this.combineShader = new Shader(vertexShader, Resource.internal("/shader/bloom/bloom_combine.frag"));
+    }
+
+
+    public void setBrightness(float brightness) {
+        this.brightness = brightness;
+    }
+
+    public void setRadius(float radius) {
+        this.radius = radius;
+    }
+
+    public void setBloom(float bloom) {
+        this.bloom = bloom;
+    }
+
+    public void setExposure(float exposure) {
+        this.exposure = exposure;
+    }
+
+    public void setGamma(float gamma) {
+        this.gamma = gamma;
+    }
+
+    @Override
+    public void begin() {
+        // draw scene in fbo 1
+        depthBuffer.bind();
+        colorBuffer.bind();
+        Gl.clearColorDepthBuffers();
+    }
+
+    @Override
+    public void end() {
+        depthBuffer.unbind();
+        colorBuffer.unbind();
+
+        fbo2.bind();
+        Gl.clearColorBuffer();
+        {
+            brightShader.bind();
+            brightShader.uniform("u_frame", colorBuffer.getTexture());
+            brightShader.uniform("u_brightness", brightness);
+            ScreenQuad.render();
+        }
+        fbo2.unbind();
+
+        blurBuffer.bind();
+        Gl.clearColorBuffer();
+        {
+            blurShader.bind();
+            blurShader.uniform("u_frame", fbo2.getTexture());
+            blurShader.uniform("u_radius", radius);
+            ScreenQuad.render();
+        }
+        blurBuffer.unbind();
+
+        combineShader.bind();
+        combineShader.uniform("u_frame1", colorBuffer.getTexture());
+        combineShader.uniform("u_frame2", blurBuffer.getTexture());
+        combineShader.uniform("u_bloom", bloom);
+        combineShader.uniform("u_exposure", exposure);
+        combineShader.uniform("u_gamma", gamma);
+        ScreenQuad.render();
+    }
+
+    @Override
+    public void end(PostProcessEffect target) { }
+
+    public void resize(int width, int height) {
+        depthBuffer.resize(width, height);
+        colorBuffer.resize(width, height);
+        fbo2.resize(width, height);
+        blurBuffer.resize(width, height);
+    }
+
+    @Override
+    public void dispose() {
+        depthBuffer.dispose();
+        colorBuffer.dispose();
+        fbo2.dispose();
+        blurBuffer.dispose();
+        brightShader.dispose();
+        blurShader.dispose();
+        combineShader.dispose();
+    }
+
+}

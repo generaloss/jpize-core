@@ -1,0 +1,13 @@
+Manifest-Version: 1.0
+Main-Class: jpize.test.MultipleWindowsTest
+Class-Path: lwjgl-openal-3.3.4-natives-windows.jar annotations-23.0.0.ja
+ r lwjgl-glfw-3.3.4-natives-linux.jar jpize-audio-24.7.1.dev.1.1.jar lwj
+ gl-stb-3.3.4-natives-linux.jar lwjgl-3.3.4-natives-windows.jar jorbis-0
+ .0.17.jar lwjgl-assimp-3.3.4-natives-windows.jar jlayer-1.0.1.jar lwjgl
+ -stb-3.3.4-natives-windows.jar lwjgl-opengl-3.3.4.jar lwjgl-openal-3.3.
+ 4.jar lwjgl-glfw-3.3.4.jar lwjgl-opengl-3.3.4-natives-linux.jar lwjgl-s
+ tb-3.3.4.jar lwjgl-glfw-3.3.4-natives-windows.jar lwjgl-assimp-3.3.4.ja
+ r lwjgl-openal-3.3.4-natives-linux.jar lwjgl-3.3.4.jar lwjgl-opengl-3.3
+ .4-natives-windows.jar jpize-utils-24.7.1.dev.1.1.jar lwjgl-assimp-3.3.
+ 4-natives-linux.jar lwjgl-3.3.4-natives-linux.jar
+
