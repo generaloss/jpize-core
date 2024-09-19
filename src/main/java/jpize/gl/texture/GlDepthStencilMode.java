@@ -8,7 +8,7 @@ public enum GlDepthStencilMode {
     STENCIL_INDEX   (GL_STENCIL_INDEX  ), // 640_1
     DEPTH_COMPONENT (GL_DEPTH_COMPONENT); // 640_2
 
-    public final int value;;
+    public final int value;
 
     GlDepthStencilMode(int value) {
         this.value = value;
