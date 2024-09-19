@@ -44,7 +44,7 @@ public class MyApp extends JpizeApplication {
     
     public MyApp() { } // constructor calls before init()
     
-    public void init() { } // init() calls at the same time as Jpize.run();
+    public void init() { } // init() calls after Jpize.run();
     
     public void update() { } // update loop
     
