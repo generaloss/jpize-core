@@ -33,17 +33,13 @@ dependencies {
 public class MyApp extends JpizeApplication{
 
     public static void main(String[] args){
-        // Create window context
+        // create window context
         Context.create(1280, 720, "Window Title")
             .icon("/icon.png").build()
             .setApp(new MyApp());
         
-        Context.create(720, 480, "Loading...")
-            
+        // run created contexts
         Jpize.run();
-        
-        // Run created contexts
-        Jpize.runContexts();
     }
     
     public MyApp(){ } // Constructor calls before init()
