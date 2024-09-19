@@ -42,17 +42,17 @@ public class MyApp extends JpizeApplication{
         Jpize.run();
     }
     
-    public MyApp(){ } // Constructor calls before init()
+    public MyApp(){ } // constructor calls before init()
     
-    public void init(){ } // Init
+    public void init(){ } // init() calls at the same time as Jpize.run();
     
-    public void update(){ } // Update loop
+    public void update(){ } // update loop
     
-    public void render(){ } // Render loop
+    public void render(){ } // render loop
     
-    public void resize(int width, int height){ } // Calls when window resizes
+    public void resize(int width, int height){ } // calls when window resizes
     
-    public void dispose(){ } // Exit app
+    public void dispose(){ } // exit app
     
 }
 ```
