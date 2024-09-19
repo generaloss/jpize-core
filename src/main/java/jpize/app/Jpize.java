@@ -6,6 +6,14 @@ import jpize.glfw.window.GlfwWindow;
 
 public class Jpize {
 
+    public static ContextBuilder create(String title, int width, int height) {
+        return new ContextBuilder(title, width, height);
+    }
+
+    public static ContextBuilder create(int width, int height, String title) {
+        return create(title, width, height);
+    }
+
     public static void run() {
         ContextManager.run();
     }

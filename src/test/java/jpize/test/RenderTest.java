@@ -1,6 +1,5 @@
 package jpize.test;
 
-import jpize.app.Context;
 import jpize.app.Jpize;
 import jpize.app.JpizeApplication;
 import jpize.gl.Gl;
@@ -72,7 +71,7 @@ public class RenderTest extends JpizeApplication {
 
     public static void main(String[] args) {
         Glfw.glfwInitHintPlatform(GlfwPlatform.X11);
-        Context.create(1280, 720, "Render Test").build().setApp(new RenderTest());
+        Jpize.create(1280, 720, "Render Test").build().setApp(new RenderTest());
         Jpize.run();
     }
 

@@ -1,7 +1,6 @@
 package jpize.test;
 
 import jpize.app.Jpize;
-import jpize.app.Context;
 import jpize.app.JpizeApplication;
 import jpize.gl.Gl;
 import jpize.glfw.Glfw;
@@ -17,11 +16,19 @@ import jpize.util.ctrl.TextProcessor;
 public class MultipleWindowsTest {
 
     public static void main(String[] args) {
+        // makeCtx();
+        // createCtx();
+        // create();
+        // newContext();
+        // createContext();
+        //
+        // run();
+
         Glfw.glfwInitHintPlatform(GlfwPlatform.X11);
-        Context.create("Window 1", 800, 600)
+        Jpize.create("Window 1", 800, 600)
             .icon("/icon.png").build()
             .setApp(new Window1());
-        Context.create("Window 2", 800, 600)
+        Jpize.create("Window 2", 800, 600)
             .icon(new PixmapRGBA(16, 16).fill(0, 0, 15, 15, 1, 0, 1, 1F)).build()
             .setApp(new Window2());
 

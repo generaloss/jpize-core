@@ -34,7 +34,7 @@ public class MyApp extends JpizeApplication {
 
     public static void main(String[] args) {
         // create window context
-        Context.create(1280, 720, "Window Title")
+        Jpize.create(1280, 720, "Window Title")
             .icon("/icon.png").build()
             .setApp(new MyApp());
         

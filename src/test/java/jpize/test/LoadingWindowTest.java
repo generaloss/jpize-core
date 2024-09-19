@@ -1,7 +1,6 @@
 package jpize.test;
 
 import jpize.app.Jpize;
-import jpize.app.Context;
 import jpize.app.JpizeApplication;
 import jpize.glfw.Glfw;
 import jpize.glfw.init.GlfwPlatform;
@@ -14,7 +13,7 @@ public class LoadingWindowTest {
 
     public static void main(String[] args) {
         Glfw.glfwInitHintPlatform(GlfwPlatform.X11);
-        Context.create(720, 480, "Loading...")
+        Jpize.create(720, 480, "Loading...")
             .decorated(false).resizable(false).build()
             .skipRender(true).setApp(new LoadingWindow());
         Jpize.run();
@@ -31,7 +30,7 @@ public class LoadingWindowTest {
             batch.end();
 
             Jpize.syncExecutor().execLater(2F, () -> {
-                Context.create(1280, 720, "Content Window")
+                Jpize.create(1280, 720, "Content Window")
                     .icon("/icon.png").build()
                     .setApp(new ContextWindow());
                 Jpize.exitOthers();
