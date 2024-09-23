@@ -22,7 +22,7 @@ public class LoadingWindowTest {
     private static class LoadingWindow extends JpizeApplication {
         TextureBatch batch = new TextureBatch();
         GlTexture2D bg = new GlTexture2D("/bg.png");
-        Font font = FontLoader.getDefault();
+        Font font = FontLoader.loadDefault();
         public void init() {
             batch.begin();
             batch.draw(bg, 0, 0, Jpize.getWidth(), Jpize.getHeight());
@@ -39,6 +39,7 @@ public class LoadingWindowTest {
         public void dispose() {
             batch.dispose();
             bg.dispose();
+            font.dispose();
         }
     }
 

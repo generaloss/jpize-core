@@ -25,18 +25,20 @@ import static org.lwjgl.stb.STBTruetype.*;
 
 public class FontLoader {
 
-    private static Font defaultFont, defaultFontBold;
-
-    public static Font getDefault() {
-        if(defaultFont == null)
-            defaultFont = loadTrueType("/font/DroidSans.ttf", 64, FontCharset.DEFAULT_ENG_RUS);
-        return defaultFont;
+    public static Font loadDefault(int size, Charset charset) {
+        return loadTrueType("/font/droidsans.ttf", size, charset);
     }
 
-    public static Font getDefaultBold() {
-        if(defaultFontBold == null)
-            defaultFontBold = loadTrueType("/font/DroidSans-Bold.ttf", 64, FontCharset.DEFAULT_ENG_RUS);
-        return defaultFontBold;
+    public static Font loadDefault() {
+        return loadDefault(64, Charset.DEFAULT_ENG_RUS);
+    }
+
+    public static Font loadDefaultBold(int size, Charset charset) {
+        return loadTrueType("/font/droidsans-bold.ttf", size, charset);
+    }
+
+    public static Font loadDefaultBold() {
+        return loadDefaultBold(64, Charset.DEFAULT_ENG_RUS);
     }
 
 
@@ -129,7 +131,7 @@ public class FontLoader {
     }
 
 
-    public static Font loadTrueType(Resource resource, int size, FontCharset charset) {
+    public static Font loadTrueType(Resource resource, int size, Charset charset) {
         final GlyphPages pages = new GlyphPages();
         final GlyphMap glyphs = new GlyphMap();
 
@@ -143,8 +145,8 @@ public class FontLoader {
 
         final PixmapA pixmap = new PixmapA(bitmapWidth, bitmapHeight);
         final ByteBuffer fontFileData = resource.readByteBuffer();
-        final STBTTBakedChar.Buffer charData = STBTTBakedChar.malloc(charset.getLastChar() + 1);
-        stbtt_BakeFontBitmap(fontFileData, size, pixmap.getBuffer(), bitmapWidth, bitmapHeight, charset.getFirstChar(), charData);
+        final STBTTBakedChar.Buffer charData = STBTTBakedChar.malloc(charset.maxChar() + 1);
+        stbtt_BakeFontBitmap(fontFileData, size, pixmap.getBuffer(), bitmapWidth, bitmapHeight, charset.minChar(), charData);
 
         // Texture
         final GlTexture2D texture = new GlTexture2D()
@@ -173,12 +175,12 @@ public class FontLoader {
             final STBTTAlignedQuad quad = STBTTAlignedQuad.malloc(stack);
 
             for(int i = 0; i < charset.size(); i++){
-                final int code = charset.charAt(i);
+                final int code = charset.get(i);
 
                 // Getting advanceX
                 final FloatBuffer advanceXBuffer = stack.floats(0);
                 final FloatBuffer advanceYBuffer = stack.floats(0);
-                stbtt_GetBakedQuad(charData, bitmapWidth, bitmapHeight, code - charset.getFirstChar(), advanceXBuffer, advanceYBuffer, quad, false);
+                stbtt_GetBakedQuad(charData, bitmapWidth, bitmapHeight, code - charset.minChar(), advanceXBuffer, advanceYBuffer, quad, false);
                 final float advanceX = advanceXBuffer.get();
 
                 // Calculating glyph Region on the texture & glyph Width and Height
@@ -207,16 +209,16 @@ public class FontLoader {
         return new Font(info, pages, glyphs);
     }
 
-    public static Font loadTrueType(String filepath, int size, FontCharset charset) {
+    public static Font loadTrueType(String filepath, int size, Charset charset) {
         return loadTrueType(Resource.internal(filepath), size, charset);
     }
 
     public static Font loadTrueType(Resource resource, int size) {
-        return loadTrueType(resource, size, FontCharset.DEFAULT);
+        return loadTrueType(resource, size, Charset.DEFAULT);
     }
 
     public static Font loadTrueType(String filePath, int size) {
-        return loadTrueType(filePath, size, FontCharset.DEFAULT);
+        return loadTrueType(filePath, size, Charset.DEFAULT);
     }
 
 }

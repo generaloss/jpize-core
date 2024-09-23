@@ -6,7 +6,7 @@ import jpize.gl.Gl;
 import jpize.glfw.Glfw;
 import jpize.glfw.init.GlfwPlatform;
 import jpize.util.camera.PerspectiveCamera;
-import jpize.util.ShaderBuilder;
+import jpize.util.shader.ShaderBuilder;
 import jpize.gl.tesselation.GlPrimitive;
 import jpize.gl.type.GlType;
 import jpize.gl.vertex.GlVertAttr;

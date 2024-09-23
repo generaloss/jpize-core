@@ -6,24 +6,16 @@ import jpize.gl.Gl;
 import jpize.glfw.Glfw;
 import jpize.glfw.init.GlfwPlatform;
 import jpize.glfw.input.Key;
+import jpize.util.ctrl.TextInput;
 import jpize.util.font.Font;
 import jpize.util.font.FontLoader;
 import jpize.gl.texture.GlTexture2D;
 import jpize.util.pixmap.PixmapRGBA;
 import jpize.util.TextureBatch;
-import jpize.util.ctrl.TextProcessor;
 
 public class MultipleWindowsTest {
 
     public static void main(String[] args) {
-        // makeCtx();
-        // createCtx();
-        // create();
-        // newContext();
-        // createContext();
-        //
-        // run();
-
         Glfw.glfwInitHintPlatform(GlfwPlatform.X11);
         Jpize.create("Window 1", 800, 600)
             .icon("/icon.png").build()
@@ -61,10 +53,10 @@ public class MultipleWindowsTest {
     }
 
     public static class Window2 extends JpizeApplication {
-        final Font font = FontLoader.getDefaultBold();
-        final TextProcessor textProc = new TextProcessor();
+        final Font font = FontLoader.loadDefaultBold();
+        final TextInput textProc = new TextInput().enable();
         public void init() {
-            textProc.insertText("I want pizza");
+            textProc.insert("I want pizza");
             Gl.clearColor(0.02, 0.05, 0.12, 1F);
         }
         public void update() {
@@ -73,10 +65,11 @@ public class MultipleWindowsTest {
         }
         public void render() {
             Gl.clearColorBuffer();
-            font.drawText(textProc.getString(true), 100, 100);
+            font.drawText(textProc.makeString(true), 100, 100);
         }
         public void dispose() {
             Jpize.window().hide();
+            font.dispose();
         }
     }
 

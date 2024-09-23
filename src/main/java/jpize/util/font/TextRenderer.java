@@ -15,6 +15,10 @@ import jpize.util.color.Color;
 import jpize.util.math.matrix.Matrix3f;
 import jpize.util.math.matrix.Matrix4f;
 import jpize.util.math.vector.Vec2f;
+import org.lwjgl.glfw.GLFW;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class TextRenderer {
 
@@ -46,22 +50,25 @@ public class TextRenderer {
     }
 
 
-    private static Mesh tmpMesh;
-    private static BaseShader tmpShader;
-    private static Matrix4f tmpMatrix1, tmpMatrix2;
+    private record Renderer(Mesh mesh, BaseShader shader, Matrix4f matrix1, Matrix4f matrix2) { }
+    private static final Map<Long, Renderer> RENDERERS_BY_CONTEXT = new HashMap<>();
 
     public static void render(Font font, String text, float x, float y) {
         if(text == null || text.isEmpty() || text.isBlank())
             return;
 
-        if(tmpMesh == null){
-            tmpMesh = new Mesh(new GlVertAttr(2, GlType.FLOAT), new GlVertAttr(2, GlType.FLOAT), new GlVertAttr(4, GlType.FLOAT));
-            tmpMesh.setMode(GlPrimitive.QUADS);
-            tmpShader = BaseShader.getPos2UvColor();
-            tmpMatrix1 = new Matrix4f();
-            tmpMatrix2 = new Matrix4f();
+        if(!RENDERERS_BY_CONTEXT.containsKey(GLFW.glfwGetCurrentContext())){
+            final Renderer renderer = new Renderer(
+                new Mesh(new GlVertAttr(2, GlType.FLOAT), new GlVertAttr(2, GlType.FLOAT), new GlVertAttr(4, GlType.FLOAT)),
+                BaseShader.getPos2UvColor(),
+                new Matrix4f(), new Matrix4f()
+            );
+            renderer.mesh.setMode(GlPrimitive.QUADS);
+            RENDERERS_BY_CONTEXT.put(GLFW.glfwGetCurrentContext(), renderer);
         }
-        tmpMatrix1.setOrthographic(0, 0, Jpize.getWidth(), Jpize.getHeight());
+        final Renderer renderer = RENDERERS_BY_CONTEXT.get(GLFW.glfwGetCurrentContext());
+
+        renderer.matrix1.setOrthographic(0, 0, Jpize.getWidth(), Jpize.getHeight());
 
         final Color color = font.options.color;
 
@@ -122,24 +129,24 @@ public class TextRenderer {
             if(lastTexture != page){
                 lastTexture = page;
 
-                tmpMesh.getBuffer().setData(vertices.copyOf());
+                renderer.mesh.getBuffer().setData(vertices.copyOf());
                 vertices.clear();
 
-                tmpShader.bind();
-                tmpShader.setMatrices(tmpMatrix1, tmpMatrix2);
-                tmpShader.setTexture(lastTexture);
-                tmpMesh.render();
+                renderer.shader.bind();
+                renderer.shader.setMatrices(renderer.matrix1, renderer.matrix2);
+                renderer.shader.setTexture(lastTexture);
+                renderer.mesh.render();
             }
         }
 
         if(lastTexture == null || vertices.isEmpty())
             return;
 
-        tmpMesh.getBuffer().setData(vertices.copyOf());
-        tmpShader.bind();
-        tmpShader.setMatrices(tmpMatrix1, tmpMatrix2);
-        tmpShader.setTexture(lastTexture);
-        tmpMesh.render();
+        renderer.mesh.getBuffer().setData(vertices.copyOf());
+        renderer.shader.bind();
+        renderer.shader.setMatrices(renderer.matrix1, renderer.matrix2);
+        renderer.shader.setTexture(lastTexture);
+        renderer.mesh.render();
     }
 
 }

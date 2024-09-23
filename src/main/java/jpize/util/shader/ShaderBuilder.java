@@ -1,6 +1,4 @@
-package jpize.util;
-
-import jpize.util.shader.Shader;
+package jpize.util.shader;
 
 import java.util.ArrayList;
 import java.util.List;
