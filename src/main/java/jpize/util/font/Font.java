@@ -36,7 +36,7 @@ public class Font implements Disposable {
         float width = 0;
         float height = 0;
 
-        for(GlyphSprite glyph: iterable(text)){
+        for(GlyphSprite glyph: this.iterable(text)){
             final float glyphMaxX = glyph.getX() + ((char) glyph.getCode() == ' ' ? glyph.getAdvanceX() : glyph.getWidth());
             final float glyphMaxY = glyph.getOffsetY() + glyph.getHeight() + glyph.getLineY() * options.getAdvanceScaled();
 
@@ -51,7 +51,7 @@ public class Font implements Disposable {
         float width = 0;
         float height = 0;
 
-        for(GlyphSprite glyph: iterable(text)){
+        for(GlyphSprite glyph: this.iterable(text)){
             final float glyphMaxX = glyph.getX() + ((char) glyph.getCode() == ' ' ? glyph.getAdvanceX() : glyph.getWidth());
             final float glyphMaxY = (glyph.getLineY() + 1) * options.getAdvanceScaled();
 
@@ -64,16 +64,29 @@ public class Font implements Disposable {
 
     public float getTextWidth(String text) {
         float width = 0;
-        for(GlyphSprite glyph: iterable(text)){
+        for(GlyphSprite glyph: this.iterable(text)){
             final float glyphMaxX = glyph.getX() + ((char) glyph.getCode() == ' ' ? glyph.getAdvanceX() : glyph.getWidth());
             width = Math.max(width, glyphMaxX);
         }
         return width;
     }
 
+    public float getTextAdvance(String text) {
+        float width = 0;
+        GlyphSprite prevGlyph = null;
+        for(GlyphSprite glyph: this.iterable(text)){
+            final float glyphMaxX = glyph.getX() + ((char) glyph.getCode() == ' ' ? glyph.getAdvanceX() : glyph.getWidth());
+            width = Math.max(width, glyphMaxX);
+            prevGlyph = glyph;
+        }
+        if(prevGlyph != null)
+            width = Math.max(width, prevGlyph.getX() + prevGlyph.getAdvanceX());
+        return width;
+    }
+
     public float getTextHeight(String text) {
         float height = 0;
-        for(GlyphSprite glyph: iterable(text)){
+        for(GlyphSprite glyph: this.iterable(text)){
             final float glyphMaxY = Math.abs(glyph.getY() + info.getDescent() + glyph.getHeight()) - info.getDescent();
             height = Math.max(height, glyphMaxY);
         }

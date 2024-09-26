@@ -16,7 +16,12 @@ public enum GlfwAction {
         this.value = value;
     }
 
-    public boolean isPress() {
+
+    public boolean isDown() {
+        return (this == PRESS);
+    }
+
+    public boolean isPressed() {
         return (this != RELEASE);
     }
 

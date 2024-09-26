@@ -21,7 +21,7 @@ public class GlyphIterator implements Iterator<GlyphSprite> {
     public GlyphIterator(GlyphMap glyphs, FontOptions options, CharSequence text, float advanceFactorX, float advanceFactorY) {
         this.glyphs = glyphs;
         this.options = options;
-        this.text = textWithoutNullGlyphs(text);
+        this.text = this.textWithoutNullGlyphs(text);
         this.size = this.text.length();
 
         this.advanceFactor = new Vec2f(advanceFactorX, advanceFactorY);
@@ -50,7 +50,7 @@ public class GlyphIterator implements Iterator<GlyphSprite> {
         prevIncX = 0;
         prevIncY = 0;
 
-        final Glyph glyph = findNextGlyph();
+        final Glyph glyph = this.findNextGlyph();
 
         // Scale
         final float scale = options.scale;
@@ -101,14 +101,15 @@ public class GlyphIterator implements Iterator<GlyphSprite> {
     }
 
     private CharSequence textWithoutNullGlyphs(CharSequence text) {
-        final StringBuilder builder = new StringBuilder();
+        if(text == null || text.isEmpty())
+            return "";
 
+        final StringBuilder builder = new StringBuilder();
         for(int i = 0; i < text.length(); i++){
             final int code = Character.codePointAt(text, i);
             if(code == '\n' || glyphs.has(code))
                 builder.append((char) code);
         }
-
         return builder.toString();
     }
 

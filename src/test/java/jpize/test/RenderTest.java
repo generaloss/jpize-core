@@ -70,7 +70,7 @@ public class RenderTest extends JpizeApplication {
 
 
     public static void main(String[] args) {
-        Glfw.glfwInitHintPlatform(GlfwPlatform.X11);
+        if(System.getProperty("os.name").equals("Linux")) Glfw.glfwInitHintPlatform(GlfwPlatform.X11);
         Jpize.create(1280, 720, "Render Test").build().setApp(new RenderTest());
         Jpize.run();
     }

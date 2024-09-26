@@ -2,6 +2,8 @@ package jpize.util.ctrl;
 
 import jpize.app.Jpize;
 import jpize.glfw.callback.GlfwCallbacks;
+import jpize.glfw.callback.GlfwCharCallback;
+import jpize.glfw.callback.GlfwKeyCallback;
 import jpize.glfw.input.GlfwAction;
 import jpize.glfw.input.GlfwMods;
 import jpize.glfw.input.Key;
@@ -12,17 +14,21 @@ import jpize.util.math.Maths;
 import jpize.util.math.vector.Vec2i;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.StringJoiner;
 
 public class TextInput implements Iterable<String> {
 
+    private boolean enabled;
     private final StringList lines;
     private final Vec2i position;
     private int multilineX;
     private int tabSpaces;
     private int maxLines;
     private Charset specialCharset;
+    private final GlfwCharCallback charCallback;
+    private final GlfwKeyCallback keyCallback;
 
     public TextInput() {
         this.lines = new StringList("");
@@ -30,11 +36,13 @@ public class TextInput implements Iterable<String> {
         this.tabSpaces = 4;
         this.maxLines = -1;
         this.specialCharset = Charset.SPECIAL_SYMBOLS.copy();
+        this.charCallback = this::onChar;
+        this.keyCallback = this::onKey;
     }
 
 
     public TextInput insert(int x, int y, CharSequence string) {
-        if(string.isEmpty())
+        if(string == null || string.isEmpty())
             return this;
 
         final String[] lines = string.toString().split("\n");
@@ -203,17 +211,30 @@ public class TextInput implements Iterable<String> {
         }
     }
 
+
+    public boolean enabled() {
+        return enabled;
+    }
+
     public TextInput enable() {
+        if(enabled)
+            return this;
+        enabled = true;
         final GlfwCallbacks callbacks = GlfwWindow.getCurrentContext().getCallbacks();
-        callbacks.addCharCallback(this::onChar);
-        callbacks.addKeyCallback(this::onKey);
+        callbacks.addCharCallback(charCallback);
+        callbacks.addKeyCallback(keyCallback);
+        System.out.println("enable");
         return this;
     }
 
     public TextInput disable() {
+        if(!enabled)
+            return this;
+        enabled = false;
         final GlfwCallbacks callbacks = GlfwWindow.getCurrentContext().getCallbacks();
-        callbacks.removeCharCallback(this::onChar);
-        callbacks.removeKeyCallback(this::onKey);
+        callbacks.removeCharCallback(charCallback);
+        callbacks.removeKeyCallback(keyCallback);
+        System.out.println("disable");
         return this;
     }
 
@@ -247,14 +268,14 @@ public class TextInput implements Iterable<String> {
     public boolean insertLine(int y, CharSequence string) {
         if(maxLines != -1 && y >= maxLines)
             return false;
-        lines.add(y, string.toString());
+        lines.add(y, string.toString()).trim();
         return true;
     }
 
     public boolean addLine(CharSequence string) {
         if(maxLines != -1 && lines.size() >= maxLines)
             return false;
-        lines.add(string.toString());
+        lines.add(string.toString()).trim();
         return true;
     }
 
@@ -296,6 +317,14 @@ public class TextInput implements Iterable<String> {
     public int setY(int y) {
         position.y = Maths.clamp(y, 0, this.lines() - 1);
         return (y - position.y);
+    }
+
+    public boolean setPos(int x, int y) {
+        return (this.setY(y) == 0) && (this.setX(x) == 0);
+    }
+
+    public boolean setPos(Vec2i pos) {
+        return this.setPos(pos.x, pos.y);
     }
 
     public TextInput setEndX() {
@@ -404,20 +433,104 @@ public class TextInput implements Iterable<String> {
     }
 
 
-    public String makeString(boolean invert) {
+    public static String makeString(String[] lines, boolean invert) {
         final StringJoiner joiner = new StringJoiner("\n");
         if(!invert){
             for(String line: lines)
                 joiner.add(line);
         }else{
-            for(int i = 0; i < this.lines(); i++)
-                joiner.add(this.getLine(this.lines() - 1 - i));
+            final int linesNum = lines.length;
+            for(int i = 0; i < linesNum; i++)
+                joiner.add(lines[linesNum - 1 - i]);
         }
         return joiner.toString();
     }
 
+    public String makeString(boolean invert) {
+        return makeString(this.lines.array(), invert);
+    }
+
     public String makeString() {
         return this.makeString(false);
+    }
+
+    public static class Selection implements Iterable<String>{
+        public final boolean invert, oneline;
+        public final Vec2i start, end;
+        public final String[] lines;
+        public final int length;
+
+        public Selection(TextInput input, int x1, int y1, int x2, int y2) {
+            final int maxY = (input.lines() - 1);
+            y1 = Maths.clamp(y1, 0, maxY);
+            y2 = Maths.clamp(y2, 0, maxY);
+            x1 = Maths.clamp(x1, 0, input.getLine(y1).length());
+            x2 = Maths.clamp(x2, 0, input.getLine(y2).length());
+
+            this.oneline = (y1 == y2);
+            this.invert = (y1 >= y2) && !oneline;
+
+            final int startY = Math.min(y2, y1);
+            final int endY = Math.max(y2, y1);
+
+            final int startX = (oneline ? Math.min(x1, x2) : (invert ? x2 : x1));
+            final int endX =   (oneline ? Math.max(x1, x2) : (invert ? x1 : x2));
+
+            this.start = new Vec2i(startX, startY);
+            this.end = new Vec2i(endX, endY);
+
+            if(oneline){
+                if(x1 == x2){
+                    this.lines = new String[0];
+                    this.length = 0;
+                    return;
+                }
+
+                final String line = input.getLine(startY).substring(startX, endX);
+                this.lines = new StringList(line).array();
+                this.length = line.length();
+                return;
+            }
+
+            final StringList slice = new StringList();
+            slice.add(input.getLine(startY).substring(startX));
+
+            for(int y = startY + 1; y < endY; y++)
+                slice.add(input.getLine(y));
+
+            slice.add(input.getLine(endY).substring(0, endX));
+            this.lines = slice.trim().array();
+
+            int length = 0;
+            for(String line: lines)
+                length += line.length();
+            this.length = length;
+        }
+
+        public int size() {
+            return lines.length;
+        }
+
+        public String line(int index) {
+            return lines[index];
+        }
+
+        public boolean isEmpty() {
+            return lines.length == 0;
+        }
+
+        @Override
+        public @NotNull Iterator<String> iterator() {
+            return Arrays.stream(lines).iterator();
+        }
+    }
+
+    public Selection selection(int x1, int y1, int x2, int y2) {
+        return new Selection(this, x1, y1, x2, y2);
+    }
+
+    public Selection selection(Vec2i start, Vec2i end) {
+        return this.selection(start.x, start.y, end.x, end.y);
     }
 
 

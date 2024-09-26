@@ -38,7 +38,7 @@ public class GlfwInput {
     }
     
     public boolean isKeyPressed(Key key) {
-        return this.getKey(key).isPress();
+        return this.getKey(key).isPressed();
     }
 
     public boolean isKeyUp(Key key) {
@@ -63,7 +63,7 @@ public class GlfwInput {
     }
 
     public boolean isButtonPressed(MouseBtn button) {
-        return this.getMouseButton(button).isPress();
+        return this.getMouseButton(button).isPressed();
     }
 
     public boolean isButtonUp(MouseBtn button) {

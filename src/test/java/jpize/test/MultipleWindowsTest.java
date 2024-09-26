@@ -16,7 +16,7 @@ import jpize.util.TextureBatch;
 public class MultipleWindowsTest {
 
     public static void main(String[] args) {
-        Glfw.glfwInitHintPlatform(GlfwPlatform.X11);
+        if(System.getProperty("os.name").equals("Linux")) Glfw.glfwInitHintPlatform(GlfwPlatform.X11);
         Jpize.create("Window 1", 800, 600)
             .icon("/icon.png").build()
             .setApp(new Window1());

@@ -114,4 +114,10 @@ public class GlyphSprite {
         this.render(batch, 0, 0, 1, 1, 1, 1);
     }
 
+
+    @Override
+    public String toString() {
+        return String.valueOf((char) code);
+    }
+
 }

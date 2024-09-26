@@ -12,7 +12,7 @@ import jpize.util.TextureBatch;
 public class LoadingWindowTest {
 
     public static void main(String[] args) {
-        Glfw.glfwInitHintPlatform(GlfwPlatform.X11);
+        if(System.getProperty("os.name").equals("Linux")) Glfw.glfwInitHintPlatform(GlfwPlatform.X11);
         Jpize.create(720, 480, "Loading...")
             .decorated(false).resizable(false).build()
             .skipRender(true).setApp(new LoadingWindow());
