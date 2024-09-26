@@ -389,8 +389,8 @@ public class TextureBatch implements Disposable {
     }
 
     public void flip(boolean x, boolean y) {
-        flipMat.val[Matrix3f.m00] = (y ? 1F : -1F);
-        flipMat.val[Matrix3f.m11] = (x ? 1F : -1F);
+        flipMat.val[Matrix3f.m00] = (y ? -1F : 1F);
+        flipMat.val[Matrix3f.m11] = (x ? -1F : 1F);
     }
 
 
