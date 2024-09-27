@@ -105,7 +105,7 @@ public class TextEditorTest extends JpizeApplication {
 
     public void render() {
         Gl.clearColorBuffer();
-        batch.begin();
+        batch.setup();
         {
             // external vars
             final String text = input.makeString();
@@ -152,7 +152,7 @@ public class TextEditorTest extends JpizeApplication {
             final float y = Jpize.getHeight() - (input.getY() + 1) * lineHeight + scrollY;
             batch.drawRect(1F, 1F, 1F, 1F, x, y, 3, lineHeight);
         }
-        batch.end();
+        batch.render();
     }
 
     public void dispose() {

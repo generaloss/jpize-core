@@ -35,16 +35,42 @@ public class MultipleWindowsTest {
             Gl.clearColor(1, 1, 1, 1F);
         }
         public void update() {
-            if(Key.ESCAPE.down()) Jpize.exitOthers();
-            if(Key.E.down()) Jpize.exit();
+            if(Key.E.down()) Jpize.exitOthers();
+            if(Key.ESCAPE.down()) Jpize.exit();
+            if(Key.X.down()) fx = !fx;
+            if(Key.Y.down()){
+                Jpize.syncExecutor().execLater(100, () -> {
+                    fy = !fy;
+                    Jpize.syncExecutor().execLater(100, () -> {
+                        fy = !fy;
+                        fy = !fy;
+                    });
+                });
+                Jpize.syncExecutor().execLater(100, () -> {
+                    fy = !fy;
+                    Jpize.syncExecutor().execLater(100, () -> {
+                        fy = !fy;
+                        fy = !fy;
+                    });
+                });
+                Jpize.syncExecutor().execLater(100, () -> {
+                    fy = !fy;
+                    Jpize.syncExecutor().execLater(100, () -> {
+                        fy = !fy;
+                        fy = !fy;
+                    });
+                });
+            }
         }
         int angle = 0;
+        boolean fx, fy;
         public void render() {
             Gl.clearColorBuffer();
             batch.rotate(angle++);
-            batch.begin();
+            batch.flip(fx, fy);
+            batch.setup();
             batch.draw(texture, 200 * 0.3F, 200 * 0.3F, 400, 400);
-            batch.end();
+            batch.render();
         }
         public void dispose() {
             batch.dispose();
@@ -60,8 +86,8 @@ public class MultipleWindowsTest {
             Gl.clearColor(0.02, 0.05, 0.12, 1F);
         }
         public void update() {
-            if(Key.ESCAPE.down()) Jpize.exitOthers();
-            if(Key.E.down()) Jpize.exit();
+            if(Key.E.down()) Jpize.exitOthers();
+            if(Key.ESCAPE.down()) Jpize.exit();
         }
         public void render() {
             Gl.clearColorBuffer();

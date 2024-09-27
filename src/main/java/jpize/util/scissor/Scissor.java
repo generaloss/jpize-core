@@ -61,7 +61,7 @@ public class Scissor {
         
         scissorList.put(scissor.getIndex(), scissor);
         
-        batch.end();
+        batch.render();
         if(!Gl.isEnabled(GlTarget.SCISSOR_TEST))
             Gl.enable(GlTarget.SCISSOR_TEST);
         scissor.activate();
@@ -94,7 +94,7 @@ public class Scissor {
         final ScissorNode scissor = new ScissorNode(index, x, y, width, height, parentIndex);
         scissorList.put(index, scissor);
         
-        batch.end();
+        batch.render();
         if(!Gl.isEnabled(GlTarget.SCISSOR_TEST))
             Gl.enable(GlTarget.SCISSOR_TEST);
         scissor.activate();
@@ -105,7 +105,7 @@ public class Scissor {
         final ScissorNode removedScissor = scissorList.remove(index);
         final long removedParent = removedScissor.getParentIndex();
         
-        batch.end();
+        batch.render();
         if(removedParent != -1L && !scissorList.isEmpty()){
             final ScissorNode scissor = scissorList.get(removedParent);
             scissor.activate();

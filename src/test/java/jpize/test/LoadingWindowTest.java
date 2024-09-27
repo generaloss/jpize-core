@@ -24,10 +24,10 @@ public class LoadingWindowTest {
         GlTexture2D bg = new GlTexture2D("/bg.png");
         Font font = FontLoader.loadDefault();
         public void init() {
-            batch.begin();
+            batch.setup();
             batch.draw(bg, 0, 0, Jpize.getWidth(), Jpize.getHeight());
             font.drawText(batch, "Loading...", 50, 50);
-            batch.end();
+            batch.render();
 
             Jpize.syncExecutor().execLater(2F, () -> {
                 Jpize.create(1280, 720, "Content Window")

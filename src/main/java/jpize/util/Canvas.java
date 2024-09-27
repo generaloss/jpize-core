@@ -34,9 +34,9 @@ public class Canvas extends PixmapRGBA {
 
         frameTexture.setImage(this);
         camera.update();
-        batch.begin(camera);
+        batch.setup(camera);
         batch.draw(frameTexture, 0, 0, Jpize.getWidth(), Jpize.getHeight());
-        batch.end();
+        batch.render();
 
         if(cullFace)
             Gl.enable(GlTarget.CULL_FACE);

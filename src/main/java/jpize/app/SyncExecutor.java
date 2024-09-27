@@ -19,7 +19,11 @@ public class SyncExecutor {
 
 
     protected void sync() {
-        list.removeIf(Task::tryToExec);
+        // noinspection Java8CollectionRemoveIf (removeIf() throws a ConcurrentModificationException if a task adds another task)
+        for(Task task: list)
+            if(task.tryToExec())
+                list.remove(task);
+
         while(!queue.isEmpty())
             queue.poll().run();
     }
