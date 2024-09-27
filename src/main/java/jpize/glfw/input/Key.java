@@ -171,4 +171,48 @@ public enum Key {
             map.put(key.value, key);
     });
 
+
+    public static boolean downAny(Key... buttons) {
+        for(Key key: buttons)
+            if(key.down())
+                return true;
+        return false;
+    }
+
+    public static boolean pressedAny(Key... buttons) {
+        for(Key key: buttons)
+            if(key.pressed())
+                return true;
+        return false;
+    }
+
+    public static boolean upAny(Key... buttons) {
+        for(Key key: buttons)
+            if(key.up())
+                return true;
+        return false;
+    }
+
+
+    public static boolean downAll(Key... buttons) {
+        for(Key key: buttons)
+            if(!key.down())
+                return false;
+        return true;
+    }
+
+    public static boolean pressedAll(Key... buttons) {
+        for(Key key: buttons)
+            if(!key.pressed())
+                return false;
+        return true;
+    }
+
+    public static boolean upAll(Key... buttons) {
+        for(Key key: buttons)
+            if(!key.up())
+                return false;
+        return true;
+    }
+
 }

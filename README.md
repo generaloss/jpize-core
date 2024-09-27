@@ -11,7 +11,7 @@
 <dependency>
     <groupId>io.github.generaloss</groupId>
     <artifactId>jpize-core</artifactId>
-    <version>24.2.2</version>
+    <version>24.9.1</version>
 </dependency>
 ```
 ### Gradle (Kotlin)
@@ -21,7 +21,7 @@ repositories {
 }
 
 dependencies {
-    implementation("io.github.generaloss:jpize-core:24.2.2")
+    implementation("io.github.generaloss:jpize-core:24.9.1")
 }
 ```
 
@@ -44,14 +44,19 @@ public class MyApp extends JpizeApplication {
     
     public MyApp() { } // constructor calls before init()
     
+    @Override
     public void init() { } // init() calls after Jpize.run();
     
+    @Override
     public void update() { } // update loop
     
+    @Override
     public void render() { } // render loop
     
+    @Override
     public void resize(int width, int height) { } // calls when window resizes
     
+    @Override
     public void dispose() { } // exit app
     
 }
@@ -63,7 +68,7 @@ TextureBatch batch = new TextureBatch(); // canvas for textures
 GlTexture2D texture = new GlTexture2D("/texture.png");
 
 Gl.clearColorBuffer();
-batch.begin();
+batch.setup();
 
 // rotate, shear and scale for subsequent textures
 batch.rotate(angle);
@@ -75,13 +80,13 @@ batch.draw(texture, x, y, width, height);
 batch.drawRect(r, g, b, a,  x, y,  width, height);
 batch.drawRect(a,  x, y,  width, height);
 
-batch.end();
+batch.render();
 ```
 
 #### 3. Fonts:
 ``` java
 // load
-Font font = FontLoader.getDefault();
+Font font = FontLoader.loadDefault();
 
 Font font = FontLoader.loadFnt(path_or_resource);
 
@@ -105,33 +110,30 @@ font.drawText(batch, text, x, y)
 
 #### 4. Input:
 ``` java
-// mouse
-Jpize.getX()  // position
+// mouse position
+Jpize.getX()  
 Jpize.getY()
 
-Jpize.isTouched()    // touch
-Jpize.isTouchDown()
-Jpize.isTouchReleased()
+// scroll
+Jpize.input().getScroll()  
 
-Jpize.input().getScroll()  // scroll
+// mouse buttons
+MouseBtn.LEFT.down()     
+MouseBtn.RIGHT.pressed()
+MouseBtn.MIDDLE.up()
 
-Btn.LEFT.isDown()     // buttons
-Btn.LEFT.isPressed()
-Btn.LEFT.isReleased()
-
-// keyboard
-Key.ENTER.isPressed()
-Key.ESCAPE.isDown()
-Key.SPACE.isReleased()
+// keys
+Key.ENTER.pressed()
+Key.ESCAPE.down()
+Key.SPACE.up()
 
 // window
 Jpize.getWidth()
 Jpize.getHeight()
-Jpize.getAspect()
 
 // FPS & Delta Time
 Jpize.getFPS()
-Jpize.getDt()
+Jpize.getDT()
 ```
 
 ---

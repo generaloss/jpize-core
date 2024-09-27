@@ -39,4 +39,48 @@ public enum MouseBtn {
         return values()[value];
     }
 
+
+    public static boolean downAny(MouseBtn... buttons) {
+        for(MouseBtn button: buttons)
+            if(button.down())
+                return true;
+        return false;
+    }
+
+    public static boolean pressedAny(MouseBtn... buttons) {
+        for(MouseBtn button: buttons)
+            if(button.pressed())
+                return true;
+        return false;
+    }
+
+    public static boolean upAny(MouseBtn... buttons) {
+        for(MouseBtn button: buttons)
+            if(button.up())
+                return true;
+        return false;
+    }
+
+
+    public static boolean downAll(MouseBtn... buttons) {
+        for(MouseBtn button: buttons)
+            if(!button.down())
+                return false;
+        return true;
+    }
+
+    public static boolean pressedAll(MouseBtn... buttons) {
+        for(MouseBtn button: buttons)
+            if(!button.pressed())
+                return false;
+        return true;
+    }
+
+    public static boolean upAll(MouseBtn... buttons) {
+        for(MouseBtn button: buttons)
+            if(!button.up())
+                return false;
+        return true;
+    }
+
 }
