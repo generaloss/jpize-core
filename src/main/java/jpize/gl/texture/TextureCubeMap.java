@@ -5,22 +5,22 @@ import jpize.gl.type.GlType;
 import jpize.util.pixmap.Pixmap;
 import jpize.util.pixmap.PixmapIO;
 
-public class GlTextureCubeMap extends GlTexture {
+public class TextureCubeMap extends GlTexture {
 
     public static GlTexTarget TARGET = GlTexTarget.TEXTURE_CUBE_MAP;
     public static GlTexParamTarget PARAM_TARGET = GlTexParamTarget.TEXTURE_CUBE_MAP;
 
-    public GlTextureCubeMap() {
+    public TextureCubeMap() {
         super();
         setFilters(GlFilter.LINEAR);
     }
 
-    public GlTextureCubeMap(String positive_x, String negative_x, String positive_y, String negative_y, String positive_z, String negative_z) {
+    public TextureCubeMap(String positive_x, String negative_x, String positive_y, String negative_y, String positive_z, String negative_z) {
         this();
         setDefaultImages(positive_x, negative_x, positive_y, negative_y, positive_z, negative_z);
     }
 
-    public GlTextureCubeMap(Pixmap positive_x, Pixmap negative_x, Pixmap positive_y, Pixmap negative_y, Pixmap positive_z, Pixmap negative_z) {
+    public TextureCubeMap(Pixmap positive_x, Pixmap negative_x, Pixmap positive_y, Pixmap negative_y, Pixmap positive_z, Pixmap negative_z) {
         this();
         setDefaultImages(positive_x, negative_x, positive_y, negative_y, positive_z, negative_z);
     }
@@ -31,7 +31,7 @@ public class GlTextureCubeMap extends GlTexture {
         super.dispose();
     }
 
-    public GlTextureCubeMap bind() {
+    public TextureCubeMap bind() {
         super.glBind(PARAM_TARGET);
         return this;
     }
@@ -44,20 +44,20 @@ public class GlTextureCubeMap extends GlTexture {
     // tex func
 
 
-    public GlTextureCubeMap active(int active) {
+    public TextureCubeMap active(int active) {
         bind();
         super.glActiveTexture(active);
         return this;
     }
 
-    public GlTextureCubeMap generateMipmap() {
+    public TextureCubeMap generateMipmap() {
         bind();
         super.glGenerateMipmap(TARGET);
         return this;
     }
 
 
-    public GlTextureCubeMap generateMipmap(int baseLevel, int maxLevel) {
+    public TextureCubeMap generateMipmap(int baseLevel, int maxLevel) {
         bind();
         super.glSetBaseLevel(PARAM_TARGET, baseLevel);
         super.glSetMaxLevel(PARAM_TARGET, maxLevel);
@@ -90,7 +90,7 @@ public class GlTextureCubeMap extends GlTexture {
     // params
 
 
-    public GlTextureCubeMap setDepthStencilTextureMode(GlDepthStencilMode mode) {
+    public TextureCubeMap setDepthStencilTextureMode(GlDepthStencilMode mode) {
         bind();
         super.glSetDepthStencilTextureMode(PARAM_TARGET, mode);
         return this;
@@ -102,7 +102,7 @@ public class GlTextureCubeMap extends GlTexture {
     }
 
 
-    public GlTextureCubeMap setBaseLevel(int level) {
+    public TextureCubeMap setBaseLevel(int level) {
         bind();
         super.glSetBaseLevel(PARAM_TARGET, level);
         return this;
@@ -114,7 +114,7 @@ public class GlTextureCubeMap extends GlTexture {
     }
 
 
-    public GlTextureCubeMap setCompareFunc(GlCompareFunc value) {
+    public TextureCubeMap setCompareFunc(GlCompareFunc value) {
         bind();
         super.glSetCompareFunc(PARAM_TARGET, value);
         return this;
@@ -126,7 +126,7 @@ public class GlTextureCubeMap extends GlTexture {
     }
 
 
-    public GlTextureCubeMap setCompareMode(GlCompareMode value) {
+    public TextureCubeMap setCompareMode(GlCompareMode value) {
         bind();
         super.glSetCompareMode(PARAM_TARGET, value);
         return this;
@@ -138,7 +138,7 @@ public class GlTextureCubeMap extends GlTexture {
     }
 
 
-    public GlTextureCubeMap setLodBias(float lodBias) {
+    public TextureCubeMap setLodBias(float lodBias) {
         bind();
         super.glSetLodBias(PARAM_TARGET, lodBias);
         return this;
@@ -150,26 +150,26 @@ public class GlTextureCubeMap extends GlTexture {
     }
 
 
-    public GlTextureCubeMap setMinFilter(GlFilter filter) {
+    public TextureCubeMap setMinFilter(GlFilter filter) {
         bind();
         super.glSetMinFilter(PARAM_TARGET, filter);
         return this;
     }
 
-    public GlTextureCubeMap setMagFilter(GlFilter filter) {
+    public TextureCubeMap setMagFilter(GlFilter filter) {
         bind();
         super.glSetMagFilter(PARAM_TARGET, filter);
         return this;
     }
 
-    public GlTextureCubeMap setFilters(GlFilter min, GlFilter mag) {
+    public TextureCubeMap setFilters(GlFilter min, GlFilter mag) {
         bind();
         super.glSetMinFilter(PARAM_TARGET, min);
         super.glSetMagFilter(PARAM_TARGET, mag);
         return this;
     }
 
-    public GlTextureCubeMap setFilters(GlFilter minAndMag) {
+    public TextureCubeMap setFilters(GlFilter minAndMag) {
         return setFilters(minAndMag, minAndMag);
     }
 
@@ -185,7 +185,7 @@ public class GlTextureCubeMap extends GlTexture {
     }
 
 
-    public GlTextureCubeMap setMinLod(int value) {
+    public TextureCubeMap setMinLod(int value) {
         bind();
         super.glSetMinLod(PARAM_TARGET, value);
         return this;
@@ -197,7 +197,7 @@ public class GlTextureCubeMap extends GlTexture {
     }
 
 
-    public GlTextureCubeMap setMaxLod(int value) {
+    public TextureCubeMap setMaxLod(int value) {
         bind();
         super.glSetMaxLod(PARAM_TARGET, value);
         return this;
@@ -209,7 +209,7 @@ public class GlTextureCubeMap extends GlTexture {
     }
 
 
-    public GlTextureCubeMap setMaxLevel(int level) {
+    public TextureCubeMap setMaxLevel(int level) {
         bind();
         super.glSetMaxLevel(PARAM_TARGET, level);
         return this;
@@ -221,7 +221,7 @@ public class GlTextureCubeMap extends GlTexture {
     }
 
 
-    public GlTextureCubeMap setSqizzleR(int value) {
+    public TextureCubeMap setSqizzleR(int value) {
         bind();
         super.glSetSqizzleR(PARAM_TARGET, value);
         return this;
@@ -233,7 +233,7 @@ public class GlTextureCubeMap extends GlTexture {
     }
 
 
-    public GlTextureCubeMap setSqizzleG(int value) {
+    public TextureCubeMap setSqizzleG(int value) {
         bind();
         super.glSetSqizzleG(PARAM_TARGET, value);
         return this;
@@ -245,7 +245,7 @@ public class GlTextureCubeMap extends GlTexture {
     }
 
 
-    public GlTextureCubeMap setSqizzleB(int value) {
+    public TextureCubeMap setSqizzleB(int value) {
         bind();
         super.glSetSqizzleB(PARAM_TARGET, value);
         return this;
@@ -257,7 +257,7 @@ public class GlTextureCubeMap extends GlTexture {
     }
 
 
-    public GlTextureCubeMap setSqizzleA(int value) {
+    public TextureCubeMap setSqizzleA(int value) {
         bind();
         super.glSetSqizzleA(PARAM_TARGET, value);
         return this;
@@ -269,32 +269,32 @@ public class GlTextureCubeMap extends GlTexture {
     }
 
 
-    public GlTextureCubeMap setWrapS(GlWrap wrap) {
+    public TextureCubeMap setWrapS(GlWrap wrap) {
         bind();
         super.glSetWrapS(PARAM_TARGET, wrap);
         return this;
     }
 
-    public GlTextureCubeMap setWrapT(GlWrap wrap) {
+    public TextureCubeMap setWrapT(GlWrap wrap) {
         bind();
         super.glSetWrapT(PARAM_TARGET, wrap);
         return this;
     }
 
-    public GlTextureCubeMap setWrapR(GlWrap wrap) {
+    public TextureCubeMap setWrapR(GlWrap wrap) {
         bind();
         super.glSetWrapR(PARAM_TARGET, wrap);
         return this;
     }
 
-    public GlTextureCubeMap setWrap(GlWrap s, GlWrap t) {
+    public TextureCubeMap setWrap(GlWrap s, GlWrap t) {
         bind();
         super.glSetWrapS(PARAM_TARGET, s);
         super.glSetWrapT(PARAM_TARGET, t);
         return this;
     }
 
-    public GlTextureCubeMap setWrap(GlWrap s, GlWrap t, GlWrap r) {
+    public TextureCubeMap setWrap(GlWrap s, GlWrap t, GlWrap r) {
         bind();
         super.glSetWrapS(PARAM_TARGET, s);
         super.glSetWrapT(PARAM_TARGET, t);
@@ -302,11 +302,11 @@ public class GlTextureCubeMap extends GlTexture {
         return this;
     }
 
-    public GlTextureCubeMap setWrapST(GlWrap wrap) {
+    public TextureCubeMap setWrapST(GlWrap wrap) {
         return setWrap(wrap, wrap);
     }
 
-    public GlTextureCubeMap setWrapSTR(GlWrap wrap) {
+    public TextureCubeMap setWrapSTR(GlWrap wrap) {
         return setWrap(wrap, wrap, wrap);
     }
 
@@ -327,7 +327,7 @@ public class GlTextureCubeMap extends GlTexture {
     }
 
 
-    public GlTextureCubeMap setBorderColor(float... color) {
+    public TextureCubeMap setBorderColor(float... color) {
         bind();
         super.glSetBorderColor(PARAM_TARGET, color);
         return this;
@@ -339,7 +339,7 @@ public class GlTextureCubeMap extends GlTexture {
     }
 
 
-    public GlTextureCubeMap setSwizzle(float... color) {
+    public TextureCubeMap setSwizzle(float... color) {
         bind();
         super.glSetSwizzle(PARAM_TARGET, color);
         return this;
@@ -351,7 +351,7 @@ public class GlTextureCubeMap extends GlTexture {
     }
 
 
-    public GlTextureCubeMap setMaxAnisotropy(float levels) {
+    public TextureCubeMap setMaxAnisotropy(float levels) {
         bind();
         super.glSetMaxAnisotropy(PARAM_TARGET, levels);
         return this;

@@ -1,11 +1,8 @@
-package jpize.util.shader;
+package jpize.gl.shader;
 
-import jpize.gl.shader.GlProgram;
-import jpize.gl.shader.GlShader;
-import jpize.gl.shader.GlShaderType;
-import jpize.gl.texture.GlTextureCubeMap;
-import jpize.gl.texture.GlTexture2D;
-import jpize.gl.texture.GlTexture2DArray;
+import jpize.gl.texture.TextureCubeMap;
+import jpize.gl.texture.Texture2D;
+import jpize.gl.texture.Texture2DArray;
 import jpize.util.Disposable;
 import jpize.util.color.Color;
 import jpize.util.math.matrix.Matrix3f;
@@ -155,19 +152,19 @@ public class Shader implements Disposable {
         program.uniform(getUniformLocation(uniformName), color.r, color.g, color.b, color.a);
     }
 
-    public void uniform(String uniformName, GlTexture2D texture) {
+    public void uniform(String uniformName, Texture2D texture) {
         texture.active(num_sampler2D);
         program.uniform(getUniformLocation(uniformName), num_sampler2D);
         num_sampler2D++;
     }
 
-    public void uniform(String uniformName, GlTexture2DArray textureArray) {
+    public void uniform(String uniformName, Texture2DArray textureArray) {
         textureArray.active(num_sampler2DArray);
         program.uniform(getUniformLocation(uniformName), num_sampler2DArray);
         num_sampler2DArray++;
     }
 
-    public void uniform(String uniformName, GlTextureCubeMap cubeMap) {
+    public void uniform(String uniformName, TextureCubeMap cubeMap) {
         cubeMap.active(num_samplerCube);
         program.uniform(getUniformLocation(uniformName), num_samplerCube);
         num_samplerCube++;

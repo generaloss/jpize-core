@@ -1,6 +1,5 @@
-package jpize.util.buffer;
+package jpize.gl.buffer;
 
-import jpize.gl.buffer.GlVertexBuffer;
 import jpize.gl.type.GlType;
 import jpize.gl.vertex.GlVertAttr;
 

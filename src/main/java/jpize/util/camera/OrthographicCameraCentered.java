@@ -5,13 +5,13 @@ import jpize.util.math.Maths;
 import jpize.util.math.matrix.Matrix4f;
 import jpize.util.math.vector.Vec2i;
 
-public class CenteredOrthographicCamera extends Camera2D {
+public class OrthographicCameraCentered extends Camera2D {
     
     private float scale, rotation;
     private final Matrix4f projection, view, combined, scalingMatrix, translationMatrix, rotationMatrix;
     private boolean imaginaryX, imaginaryY;
 
-    public CenteredOrthographicCamera(int width, int height) {
+    public OrthographicCameraCentered(int width, int height) {
         super(width, height);
 
         this.scale = 1F;
@@ -26,7 +26,7 @@ public class CenteredOrthographicCamera extends Camera2D {
         updateViewMatrix();
     }
 
-    public CenteredOrthographicCamera() {
+    public OrthographicCameraCentered() {
         this(Jpize.getWidth(), Jpize.getHeight());
     }
 
@@ -37,14 +37,14 @@ public class CenteredOrthographicCamera extends Camera2D {
     }
 
     private void updateProjectionMatrix() {
-        projection.identity().setOrthographic(-Maths.round(this.width / 2F), -Maths.round(this.height / 2F), this.width, this.height);
+        projection.identity().setOrthographic(-Maths.round(width / 2F), -Maths.round(height / 2F), width, height);
     }
 
     private void updateViewMatrix() {
-        scalingMatrix.setScale(scale);
         translationMatrix.setTranslate(imaginaryX ? 0 : -position.x, imaginaryY ? 0 : -position.y);
+        scalingMatrix.setScale(scale);
         rotationMatrix.setRotationZ(rotation);
-        view.set(scalingMatrix.mul(rotationMatrix.mul(translationMatrix)));
+        view.set(scalingMatrix.mul(translationMatrix).mul(rotationMatrix));
         updateCombinedMatrix();
     }
 
@@ -52,10 +52,10 @@ public class CenteredOrthographicCamera extends Camera2D {
         combined.set(projection).mul(view);
     }
 
+    @Override
     public void resize(int width, int height) {
         if(Vec2i.equals(width, height, this.width, this.height))
             return;
-    
         super.resize(width, height);
         updateProjectionMatrix();
     }
@@ -65,28 +65,30 @@ public class CenteredOrthographicCamera extends Camera2D {
         imaginaryY = y;
     }
 
+    @Override
     public float getScale() {
         return scale;
-    }
-
-    public void scale(float scale) {
-        this.scale *= scale;
     }
 
     public void setScale(float scale) {
         this.scale = scale;
     }
 
+    public void scale(float scale) {
+        this.scale *= scale;
+    }
+
+    @Override
     public float getRotation() {
         return rotation;
     }
 
-    public void rotate(float deg) {
-        rotation += deg;
-    }
-
     public void setRotation(float deg) {
         rotation = deg;
+    }
+
+    public void rotate(float deg) {
+        rotation += deg;
     }
 
     @Override

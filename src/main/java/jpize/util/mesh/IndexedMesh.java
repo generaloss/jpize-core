@@ -3,8 +3,8 @@ package jpize.util.mesh;
 import jpize.gl.tesselation.GlPrimitive;
 import jpize.gl.vertex.GlVertexArray;
 import jpize.gl.vertex.GlVertAttr;
-import jpize.util.buffer.IndexBuffer;
-import jpize.util.buffer.VertexBuffer;
+import jpize.gl.buffer.IndexBuffer;
+import jpize.gl.buffer.VertexBuffer;
 
 public class IndexedMesh implements IMesh {
 

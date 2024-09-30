@@ -2,17 +2,17 @@ package jpize.util.postprocess.effects;
 
 import jpize.app.Jpize;
 import jpize.gl.Gl;
-import jpize.util.postprocess.FrameBufferObject;
+import jpize.gl.tesselation.GlFramebuffer;
 import jpize.util.postprocess.PostProcessEffect;
-import jpize.util.postprocess.RenderBufferObject;
+import jpize.gl.tesselation.GlRenderbuffer;
 import jpize.util.postprocess.ScreenQuad;
-import jpize.util.shader.Shader;
+import jpize.gl.shader.Shader;
 import jpize.util.res.Resource;
 
 public class GaussianBlur implements PostProcessEffect {
 
-    private final FrameBufferObject fbo1, fbo2;
-    private final RenderBufferObject rbo;
+    private final GlFramebuffer fbo1, fbo2;
+    private final GlRenderbuffer rbo;
     private final Shader shader;
     private float radius;
 
@@ -23,15 +23,15 @@ public class GaussianBlur implements PostProcessEffect {
         final int height = Jpize.getHeight();
 
         // framebuffer 1 & renderbuffer
-        this.fbo1 = new FrameBufferObject(width, height);
+        this.fbo1 = new GlFramebuffer(width, height);
         this.fbo1.create();
         this.fbo1.bind();
-        this.rbo = new RenderBufferObject(width, height);
+        this.rbo = new GlRenderbuffer(width, height);
         this.rbo.create();
         this.fbo1.unbind();
 
         // framebuffer 2
-        this.fbo2 = new FrameBufferObject(width, height);
+        this.fbo2 = new GlFramebuffer(width, height);
         this.fbo2.create();
 
         // shader (quad)

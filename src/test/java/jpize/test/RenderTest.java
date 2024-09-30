@@ -11,7 +11,7 @@ import jpize.gl.tesselation.GlPrimitive;
 import jpize.gl.type.GlType;
 import jpize.gl.vertex.GlVertAttr;
 import jpize.util.mesh.Mesh;
-import jpize.util.shader.Shader;
+import jpize.gl.shader.Shader;
 import jpize.util.math.axisaligned.AABox;
 import jpize.util.math.axisaligned.AABoxBody;
 
@@ -70,7 +70,9 @@ public class RenderTest extends JpizeApplication {
 
 
     public static void main(String[] args) {
-        if(System.getProperty("os.name").equals("Linux")) Glfw.glfwInitHintPlatform(GlfwPlatform.X11);
+        if(System.getProperty("os.name").equals("Linux"))
+            Glfw.glfwInitHintPlatform(GlfwPlatform.X11); // waiting for fixes in lwjgl 3.3.5
+
         Jpize.create(1280, 720, "Render Test").build().setApp(new RenderTest());
         Jpize.run();
     }

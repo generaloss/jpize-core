@@ -12,7 +12,7 @@ public class Context {
     private final SyncExecutor syncExecutor;
 
     private JpizeApplication app;
-    private boolean skipRender;
+    private boolean disableRender;
 
     protected Context(GlfwWindow window) {
         window.makeContextCurrent();
@@ -40,8 +40,8 @@ public class Context {
         return this;
     }
 
-    public Context skipRender(boolean skipRender) {
-        this.skipRender = skipRender;
+    public Context disableRender(boolean disable) {
+        this.disableRender = disable;
         return this;
     }
 
@@ -52,7 +52,8 @@ public class Context {
         window.show();
         if(app != null){
             app.init();
-            if(skipRender) window.swapBuffers();
+            if(disableRender)
+                window.swapBuffers();
         }
     }
 
@@ -76,7 +77,7 @@ public class Context {
         // execute tasks in context thread
         syncExecutor.sync();
         // render
-        if(app != null && !skipRender){
+        if(app != null && !disableRender){
             app.render();
             window.swapBuffers();
         }

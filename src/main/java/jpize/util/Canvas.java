@@ -5,13 +5,14 @@ import jpize.util.camera.OrthographicCamera;
 import jpize.gl.Gl;
 import jpize.gl.glenum.GlTarget;
 import jpize.util.pixmap.PixmapRGBA;
-import jpize.gl.texture.GlTexture2D;
+import jpize.gl.texture.Texture2D;
+import jpize.gl.texture.TextureBatch;
 
 public class Canvas extends PixmapRGBA {
 
     private final TextureBatch batch;
     private final OrthographicCamera camera;
-    private final GlTexture2D frameTexture;
+    private final Texture2D frameTexture;
 
     public Canvas(int width, int height) {
         super(width, height);
@@ -19,7 +20,7 @@ public class Canvas extends PixmapRGBA {
         this.batch = new TextureBatch();
         this.camera = new OrthographicCamera();
         this.batch.flip(false, true);
-        this.frameTexture = new GlTexture2D(this);
+        this.frameTexture = new Texture2D(this);
     }
 
     public Canvas() {

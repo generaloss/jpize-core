@@ -1,10 +1,10 @@
-package jpize.util.atlas;
+package jpize.util.texture;
 
 import jpize.util.res.Resource;
 import jpize.util.pixmap.PixmapRGBA;
 import jpize.util.pixmap.PixmapIO;
 import jpize.util.region.Region;
-import jpize.gl.texture.GlTexture2D;
+import jpize.gl.texture.Texture2D;
 
 import java.util.*;
 
@@ -12,7 +12,7 @@ public class TextureAtlas<I> {
 
     private final List<Image<I>> images;
     private Map<I, Region> regions;
-    private GlTexture2D texture;
+    private Texture2D texture;
 
     public TextureAtlas() {
         this.images = new ArrayList<>();
@@ -51,7 +51,7 @@ public class TextureAtlas<I> {
             ));
         }
 
-        texture = new GlTexture2D(pixmap);
+        texture = new Texture2D(pixmap);
         images.clear();
     }
 
@@ -90,7 +90,7 @@ public class TextureAtlas<I> {
     }
 
 
-    public GlTexture2D getTexture() {
+    public Texture2D getTexture() {
         return texture;
     }
 

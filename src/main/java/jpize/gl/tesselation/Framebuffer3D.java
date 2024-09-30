@@ -1,24 +1,26 @@
-package jpize.util.postprocess;
+package jpize.gl.tesselation;
 
-import jpize.gl.texture.GlTexture;
 import jpize.gl.Gl;
 import jpize.util.Disposable;
-import jpize.gl.texture.GlTexture2D;
+import jpize.gl.texture.Texture2D;
 
 public class Framebuffer3D implements Disposable {
 
-    private final FrameBufferObject fbo;
-    private final RenderBufferObject rbo;
+    private final GlFramebuffer fbo;
+    private final GlRenderbuffer rbo;
 
     public Framebuffer3D() {
-        this.fbo = new FrameBufferObject();
-        this.fbo.create();
-        this.fbo.bind();
-
-        this.rbo = new RenderBufferObject();
-        this.rbo.create();
-
+        this.fbo = new GlFramebuffer().create().bind();
+        this.rbo = new GlRenderbuffer().create();
         this.fbo.unbind();
+    }
+
+    public GlFramebuffer getFBO() {
+        return fbo;
+    }
+
+    public GlRenderbuffer getRBO() {
+        return rbo;
     }
 
 
@@ -33,11 +35,11 @@ public class Framebuffer3D implements Disposable {
         rbo.unbind();
     }
 
-    public GlTexture2D getFrameTexture() {
+    public Texture2D getFrameTexture() {
         return fbo.getTexture();
     }
 
-    public GlTexture getDepthMap() {
+    public Texture2D getDepthTexture() {
         return rbo.getTexture();
     }
 

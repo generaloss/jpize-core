@@ -7,9 +7,9 @@ import jpize.gl.vertex.GlVertAttr;
 import jpize.util.font.glyph.GlyphSprite;
 import jpize.util.mesh.Mesh;
 import jpize.util.region.Region;
-import jpize.gl.texture.GlTexture2D;
+import jpize.gl.texture.Texture2D;
 import jpize.util.shader.BaseShader;
-import jpize.util.TextureBatch;
+import jpize.gl.texture.TextureBatch;
 import jpize.util.array.FloatList;
 import jpize.util.color.Color;
 import jpize.util.math.matrix.Matrix3f;
@@ -23,7 +23,7 @@ import java.util.Map;
 public class TextRenderer {
 
     public static void render(Font font, TextureBatch batch, String text, float x, float y) {
-        if(text == null || text.isEmpty() || text.isBlank())
+        if(text == null || text.isBlank())
             return;
 
         final Color color = font.options.color;
@@ -54,7 +54,7 @@ public class TextRenderer {
     private static final Map<Long, Renderer> RENDERERS_BY_CONTEXT = new HashMap<>();
 
     public static void render(Font font, String text, float x, float y) {
-        if(text == null || text.isEmpty() || text.isBlank())
+        if(text == null || text.isBlank())
             return;
 
         if(!RENDERERS_BY_CONTEXT.containsKey(GLFW.glfwGetCurrentContext())){
@@ -82,7 +82,7 @@ public class TextRenderer {
         final float descent = font.options.getDescentScaled();
 
         final FloatList vertices = new FloatList(text.length() * 4);
-        GlTexture2D lastTexture = null;
+        Texture2D lastTexture = null;
 
         for(GlyphSprite sprite: font.iterable(text)){
             if((char) sprite.getCode() == ' ' || !sprite.isCanRender())
@@ -94,7 +94,7 @@ public class TextRenderer {
             renderPos.y += descent;
             renderPos.mulMat3(mat);
 
-            final GlTexture2D page = sprite.getPage();
+            final Texture2D page = sprite.getPage();
             final float width = sprite.getWidth();
             final float height = sprite.getHeight();
             final Region region = sprite.getRegion();

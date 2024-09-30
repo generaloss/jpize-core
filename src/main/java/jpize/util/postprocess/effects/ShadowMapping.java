@@ -9,9 +9,9 @@ import jpize.gl.texture.GlFilter;
 import jpize.gl.texture.GlInternalFormat;
 import jpize.gl.texture.GlWrap;
 import jpize.gl.type.GlType;
-import jpize.util.postprocess.FrameBufferObject;
-import jpize.gl.texture.GlTexture2D;
-import jpize.util.shader.Shader;
+import jpize.gl.tesselation.GlFramebuffer;
+import jpize.gl.texture.Texture2D;
+import jpize.gl.shader.Shader;
 import jpize.util.math.matrix.Matrix4f;
 import jpize.util.math.vector.Vec3f;
 
@@ -22,7 +22,7 @@ public class ShadowMapping implements Disposable {
 
     private final int width, height;
     private final Vec3f pos, dir;
-    private final FrameBufferObject fbo;
+    private final GlFramebuffer fbo;
     private final Shader shader;
     private final Matrix4f projectionMatrix, spaceMatrix, lookAtMatrix;
 
@@ -34,7 +34,7 @@ public class ShadowMapping implements Disposable {
         this.height = height;
 
         // framebuffer
-        this.fbo = new FrameBufferObject(width, height);
+        this.fbo = new GlFramebuffer(width, height);
 
         this.fbo.setAttachment(GlAttachment.DEPTH_ATTACHMENT);
         this.fbo.setWrite(false);
@@ -69,7 +69,7 @@ public class ShadowMapping implements Disposable {
         Gl.viewport(Jpize.getWidth(), Jpize.getHeight());
     }
 
-    public GlTexture2D getShadowMap() {
+    public Texture2D getShadowMap() {
         return fbo.getTexture();
     }
 

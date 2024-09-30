@@ -1,16 +1,19 @@
-package jpize.util.postprocess;
+package jpize.gl.tesselation;
 
 import jpize.gl.Gl;
 import jpize.util.Disposable;
-import jpize.gl.texture.GlTexture2D;
+import jpize.gl.texture.Texture2D;
 
-public class Framebuffer2D implements Disposable { // For the laziest :))))
+public class Framebuffer2D implements Disposable {
 
-    private final FrameBufferObject fbo;
+    private final GlFramebuffer fbo;
 
     public Framebuffer2D() {
-        this.fbo = new FrameBufferObject();
-        this.fbo.create();
+        this.fbo = new GlFramebuffer().create();
+    }
+
+    public GlFramebuffer getFBO() {
+        return fbo;
     }
 
 
@@ -23,7 +26,7 @@ public class Framebuffer2D implements Disposable { // For the laziest :))))
         fbo.unbind();
     }
 
-    public GlTexture2D getFrameTexture() {
+    public Texture2D getFrameTexture() {
         return fbo.getTexture();
     }
 

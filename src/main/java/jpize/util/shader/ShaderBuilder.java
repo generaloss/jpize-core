@@ -1,5 +1,7 @@
 package jpize.util.shader;
 
+import jpize.gl.shader.Shader;
+
 import java.util.ArrayList;
 import java.util.List;
 

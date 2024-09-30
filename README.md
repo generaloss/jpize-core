@@ -11,7 +11,7 @@
 <dependency>
     <groupId>io.github.generaloss</groupId>
     <artifactId>jpize-core</artifactId>
-    <version>24.9.1</version>
+    <version>24.9.1.1</version>
 </dependency>
 ```
 ### Gradle (Kotlin)
@@ -21,7 +21,7 @@ repositories {
 }
 
 dependencies {
-    implementation("io.github.generaloss:jpize-core:24.9.1")
+    implementation("io.github.generaloss:jpize-core:24.9.1.1")
 }
 ```
 
@@ -65,7 +65,7 @@ public class MyApp extends JpizeApplication {
 #### 2. 2D Graphics:
 ``` java
 TextureBatch batch = new TextureBatch(); // canvas for textures
-GlTexture2D texture = new GlTexture2D("/texture.png");
+Texture2D texture = new Texture2D("/texture.png");
 
 Gl.clearColorBuffer();
 batch.setup();

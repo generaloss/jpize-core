@@ -1,15 +1,15 @@
 package jpize.util.font.glyph;
 
 import jpize.util.region.Region;
-import jpize.gl.texture.GlTexture2D;
-import jpize.util.TextureBatch;
+import jpize.gl.texture.Texture2D;
+import jpize.gl.texture.TextureBatch;
 import jpize.util.color.Color;
 
 public class GlyphSprite {
 
     private final int code;
     private final Region region;
-    private final GlTexture2D page;
+    private final Texture2D page;
 
     private final float x;
     private final float y;
@@ -62,7 +62,7 @@ public class GlyphSprite {
         return region;
     }
 
-    public GlTexture2D getPage() {
+    public Texture2D getPage() {
         return page;
     }
     

@@ -1,7 +1,8 @@
-package jpize.util;
+package jpize.gl.texture;
 
 import jpize.app.Jpize;
 import jpize.gl.tesselation.GlPrimitive;
+import jpize.util.Disposable;
 import jpize.util.mesh.Mesh;
 import jpize.util.color.ImmutableColor;
 import jpize.util.region.Region;
@@ -10,15 +11,14 @@ import jpize.util.res.Resource;
 import jpize.gl.type.GlType;
 import jpize.gl.vertex.GlVertAttr;
 import jpize.util.camera.Camera;
-import jpize.gl.texture.GlTexture2D;
 import jpize.util.color.Color;
 import jpize.util.math.matrix.Matrix3f;
 import jpize.util.math.matrix.Matrix4f;
 import jpize.util.math.vector.Vec2f;
-import jpize.util.scissor.Scissor;
-import jpize.util.shader.Shader;
+import jpize.gl.tesselation.Scissor;
+import jpize.gl.shader.Shader;
 
-import static jpize.util.buffer.QuadIndexBuffer.QUAD_VERTICES;
+import static jpize.gl.buffer.QuadIndexBuffer.QUAD_VERTICES;
 
 public class TextureBatch implements Disposable {
 
@@ -26,7 +26,7 @@ public class TextureBatch implements Disposable {
     private final Mesh mesh;
     private final Shader shader;
     private final Color color;
-    private GlTexture2D lastTexture;
+    private Texture2D lastTexture;
     private Matrix4f combinedMat;
     private Shader customShader;
     // data
@@ -43,7 +43,7 @@ public class TextureBatch implements Disposable {
     public TextureBatch(int maxSize) {
         this.maxSize = maxSize;
         this.color = new Color();
-        this.scissor = new Scissor(this);
+        this.scissor = new Scissor(this::render);
         this.transformOrigin = new Vec2f(0.5F);
 
         // shader
@@ -152,7 +152,7 @@ public class TextureBatch implements Disposable {
     }
 
 
-    public void draw(GlTexture2D texture, float x, float y, float width, float height) {
+    public void draw(Texture2D texture, float x, float y, float width, float height) {
         if(!scissor.intersects(x, y, width, height))
             return;
         if(size == maxSize)
@@ -175,7 +175,7 @@ public class TextureBatch implements Disposable {
         if(size == maxSize)
             this.render();
 
-        final GlTexture2D texture = textureRegion.getTexture();
+        final Texture2D texture = textureRegion.getTexture();
         if(texture != lastTexture){
             if(texture == null)
                 return;
@@ -189,7 +189,7 @@ public class TextureBatch implements Disposable {
         size++;
     }
 
-    public void draw(GlTexture2D texture, float x, float y, float width, float height, Region region) {
+    public void draw(Texture2D texture, float x, float y, float width, float height, Region region) {
         if(!scissor.intersects(x, y, width, height))
             return;
         if(size == maxSize)
@@ -214,7 +214,7 @@ public class TextureBatch implements Disposable {
         if(size == maxSize)
             this.render();
 
-        final GlTexture2D texture = textureRegion.getTexture();
+        final Texture2D texture = textureRegion.getTexture();
         if(texture != lastTexture){
             if(texture == null)
                 return;
@@ -230,7 +230,7 @@ public class TextureBatch implements Disposable {
         size++;
     }
 
-    public void draw(GlTexture2D texture, float x, float y, float width, float height, float r, float g, float b, float a) {
+    public void draw(Texture2D texture, float x, float y, float width, float height, float r, float g, float b, float a) {
         if(!scissor.intersects(x, y, width, height))
             return;
         if(size == maxSize)
@@ -247,11 +247,11 @@ public class TextureBatch implements Disposable {
         size++;
     }
 
-    public void draw(GlTexture2D texture, float x, float y, float width, float height, Color color) {
+    public void draw(Texture2D texture, float x, float y, float width, float height, Color color) {
         this.draw(texture, x, y, width, height, color.r, color.g, color.b, color.a);
     }
 
-    public void draw(GlTexture2D texture, float x, float y, float width, float height, Region region, float r, float g, float b, float a) {
+    public void draw(Texture2D texture, float x, float y, float width, float height, Region region, float r, float g, float b, float a) {
         if(!scissor.intersects(x, y, width, height))
             return;
         if(size == maxSize)
@@ -270,7 +270,7 @@ public class TextureBatch implements Disposable {
         size++;
     }
 
-    public void draw(GlTexture2D texture, float x, float y, float width, float height, Region region, Color color) {
+    public void draw(Texture2D texture, float x, float y, float width, float height, Region region, Color color) {
         this.draw(texture, x, y, width, height, region, color.r, color.g, color.b, color.a);
     }
 
@@ -280,7 +280,7 @@ public class TextureBatch implements Disposable {
         if(size == maxSize)
             this.render();
 
-        final GlTexture2D texture = textureRegion.getTexture();
+        final Texture2D texture = textureRegion.getTexture();
         if(texture != lastTexture){
             if(texture == null)
                 return;

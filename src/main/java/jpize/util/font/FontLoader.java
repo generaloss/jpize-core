@@ -8,7 +8,7 @@ import jpize.util.font.glyph.Glyph;
 import jpize.util.font.glyph.GlyphMap;
 import jpize.util.font.glyph.GlyphPages;
 import jpize.util.region.Region;
-import jpize.gl.texture.GlTexture2D;
+import jpize.gl.texture.Texture2D;
 import jpize.util.pixmap.PixmapA;
 import jpize.util.io.FastReader;
 import org.lwjgl.stb.STBTTAlignedQuad;
@@ -76,13 +76,13 @@ public class FontLoader {
                     }
 
                     final Resource textureResource = Resource.internal(relativeTexturePath);
-                    pages.add(pageID, new GlTexture2D(textureResource));
+                    pages.add(pageID, new Texture2D(textureResource));
                 }
                 case "char" -> {
                     final int code = Integer.parseInt(getValue(tokens[1]));
 
                     final int page = Integer.parseInt(getValue(tokens[9]));
-                    final GlTexture2D pageTexture = pages.get(page);
+                    final Texture2D pageTexture = pages.get(page);
 
                     final float s0 = (float) Integer.parseInt(getValue(tokens[2])) / pageTexture.getWidth();
                     final float t0 = (float) Integer.parseInt(getValue(tokens[3])) / pageTexture.getHeight();
@@ -149,7 +149,7 @@ public class FontLoader {
         stbtt_BakeFontBitmap(fontFileData, size, pixmap.getBuffer(), bitmapWidth, bitmapHeight, charset.minChar(), charData);
 
         // Texture
-        final GlTexture2D texture = new GlTexture2D()
+        final Texture2D texture = new Texture2D()
             .setFilters(GlFilter.LINEAR)
             .setImage(pixmap.toPixmapRGBA());
 

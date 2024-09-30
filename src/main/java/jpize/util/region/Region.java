@@ -1,6 +1,6 @@
 package jpize.util.region;
 
-import jpize.gl.texture.GlTexture2D;
+import jpize.gl.texture.Texture2D;
 
 public class Region {
 
@@ -19,7 +19,7 @@ public class Region {
         set(u1, v1, u2, v2);
     }
     
-    public Region(GlTexture2D texture, double x, double y, double width, double height) {
+    public Region(Texture2D texture, double x, double y, double width, double height) {
         set(texture, x, y, width, height);
     }
 
@@ -45,7 +45,7 @@ public class Region {
         set((float) u1, (float) v1, (float) u2, (float) v2);
     }
 
-    public void set(GlTexture2D texture, double x, double y, double width, double height) {
+    public void set(Texture2D texture, double x, double y, double width, double height) {
         set(
             x / texture.getWidth(),
             y / texture.getHeight(),
@@ -101,11 +101,11 @@ public class Region {
         return width / height;
     }
     
-    public float getWidthPx(GlTexture2D texture) {
+    public float getWidthPx(Texture2D texture) {
         return width * texture.getWidth();
     }
     
-    public float getHeightPx(GlTexture2D texture) {
+    public float getHeightPx(Texture2D texture) {
         return height * texture.getHeight();
     }
 

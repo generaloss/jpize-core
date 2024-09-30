@@ -3,18 +3,18 @@ package jpize.util.postprocess.effects;
 import jpize.app.Jpize;
 import jpize.util.res.Resource;
 import jpize.gl.Gl;
-import jpize.util.postprocess.FrameBufferObject;
+import jpize.gl.tesselation.GlFramebuffer;
 import jpize.util.postprocess.PostProcessEffect;
-import jpize.util.postprocess.RenderBufferObject;
-import jpize.gl.texture.GlTexture2D;
+import jpize.gl.tesselation.GlRenderbuffer;
+import jpize.gl.texture.Texture2D;
 import jpize.util.postprocess.ScreenQuad;
-import jpize.util.shader.Shader;
+import jpize.gl.shader.Shader;
 
 public class MotionBlur implements PostProcessEffect {
 
-    private final FrameBufferObject fbo1, fbo2;
-    private final RenderBufferObject rbo1, rbo2;
-    private final GlTexture2D backframe;
+    private final GlFramebuffer fbo1, fbo2;
+    private final GlRenderbuffer rbo1, rbo2;
+    private final Texture2D backframe;
     private final Shader shader;
 
     public MotionBlur() {
@@ -22,18 +22,18 @@ public class MotionBlur implements PostProcessEffect {
         final int height = Jpize.getHeight();
 
         // framebuffer 1 & renderbuffer 1
-        this.fbo1 = new FrameBufferObject(width, height);
+        this.fbo1 = new GlFramebuffer(width, height);
         this.fbo1.create();
         this.fbo1.bind();
-        this.rbo1 = new RenderBufferObject(width, height);
+        this.rbo1 = new GlRenderbuffer(width, height);
         this.rbo1.create();
         this.fbo1.unbind();
 
         // framebuffer 2 & renderbuffer 2
-        this.fbo2 = new FrameBufferObject(width, height);
+        this.fbo2 = new GlFramebuffer(width, height);
         this.fbo2.create();
         this.fbo2.bind();
-        this.rbo2 = new RenderBufferObject(width, height);
+        this.rbo2 = new GlRenderbuffer(width, height);
         this.rbo2.create();
         this.fbo2.unbind();
 
@@ -41,7 +41,7 @@ public class MotionBlur implements PostProcessEffect {
         this.shader = new Shader(Resource.internal("/shader/motion/motion.vert"), Resource.internal("/shader/motion/motion.frag"));
 
         // texture (previous frame)
-        this.backframe = new GlTexture2D(width, height);
+        this.backframe = new Texture2D(width, height);
     }
 
 

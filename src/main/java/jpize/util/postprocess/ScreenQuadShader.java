@@ -1,8 +1,8 @@
 package jpize.util.postprocess;
 
 import jpize.util.res.Resource;
-import jpize.gl.texture.GlTexture2D;
-import jpize.util.shader.Shader;
+import jpize.gl.texture.Texture2D;
+import jpize.gl.shader.Shader;
 
 public class ScreenQuadShader {
 
@@ -13,7 +13,7 @@ public class ScreenQuadShader {
         this.shader = new Shader(Resource.internal("/shader/screen/screen.vert"), Resource.internal("/shader/screen/screen.frag"));
     }
 
-    public static void use(GlTexture2D texture) {
+    public static void use(Texture2D texture) {
         if(instance == null)
             instance = new ScreenQuadShader();
 

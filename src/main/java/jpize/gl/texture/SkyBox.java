@@ -1,23 +1,23 @@
-package jpize.util;
+package jpize.gl.texture;
 
 import jpize.gl.Gl;
 import jpize.gl.type.GlType;
 import jpize.gl.vertex.GlVertAttr;
+import jpize.util.Disposable;
 import jpize.util.camera.Camera;
 import jpize.util.mesh.IndexedMesh;
-import jpize.gl.texture.GlTextureCubeMap;
 import jpize.util.math.matrix.Matrix4f;
 import jpize.util.res.Resource;
-import jpize.util.shader.Shader;
+import jpize.gl.shader.Shader;
 
 public class SkyBox implements Disposable {
 
-    private final GlTextureCubeMap cubeMap;
+    private final TextureCubeMap cubeMap;
     private final Shader shader;
     private final IndexedMesh mesh;
     
     public SkyBox(String positive_x, String negative_x, String positive_y, String negative_y, String positive_z, String negative_z) {
-        this.cubeMap = new GlTextureCubeMap(positive_x, negative_x, positive_y, negative_y, positive_z, negative_z);
+        this.cubeMap = new TextureCubeMap(positive_x, negative_x, positive_y, negative_y, positive_z, negative_z);
         this.shader = new Shader(Resource.internal("/shader/skybox/skybox.vert"), Resource.internal("/shader/skybox/skybox.frag"));
 
         this.mesh = new IndexedMesh(new GlVertAttr(3, GlType.FLOAT));
@@ -41,17 +41,6 @@ public class SkyBox implements Disposable {
         );
     }
     
-    public SkyBox() {
-        this(
-            "skybox/2/skybox_positive_x.png",
-            "skybox/2/skybox_negative_x.png",
-            "skybox/2/skybox_positive_y.png",
-            "skybox/2/skybox_negative_y.png",
-            "skybox/2/skybox_positive_z.png",
-            "skybox/2/skybox_negative_z.png"
-        );
-    }
-    
 
     public void render(Matrix4f projection, Matrix4f view) {
         Gl.depthMask(false);
@@ -69,7 +58,7 @@ public class SkyBox implements Disposable {
         render(camera.getProjection(), view);
     }
     
-    public GlTextureCubeMap getCubeMap() {
+    public TextureCubeMap getCubeMap() {
         return cubeMap;
     }
 

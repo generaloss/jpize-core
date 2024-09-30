@@ -1,6 +1,5 @@
-package jpize.util.buffer;
+package jpize.gl.buffer;
 
-import jpize.gl.buffer.GlBufUsage;
 import jpize.gl.type.GlType;
 
 public class QuadIndexBuffer extends IndexBuffer {

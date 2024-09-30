@@ -1,7 +1,7 @@
 package jpize.util.font.glyph;
 
 import jpize.util.region.Region;
-import jpize.util.TextureBatch;
+import jpize.gl.texture.TextureBatch;
 import jpize.util.math.vector.Vec2f;
 
 public class Glyph {

@@ -1,28 +1,28 @@
 package jpize.util.region;
 
-import jpize.gl.texture.GlTexture2D;
+import jpize.gl.texture.Texture2D;
 
 public class TextureRegion extends Region {
     
-    private GlTexture2D texture;
+    private Texture2D texture;
 
     public TextureRegion(TextureRegion textureRegion) {
         setTextureRegion(textureRegion);
     }
 
-    public TextureRegion(GlTexture2D texture, int x, int y, int width, int height)  {
+    public TextureRegion(Texture2D texture, int x, int y, int width, int height)  {
         setTextureRegion(texture, x, y, width, height);
     }
 
-    public TextureRegion(GlTexture2D texture, double u1, double v1, double u2, double v2) {
+    public TextureRegion(Texture2D texture, double u1, double v1, double u2, double v2) {
         setTextureRegion(texture, u1, v1, u2, v2);
     }
 
-    public TextureRegion(GlTexture2D texture, Region region) {
+    public TextureRegion(Texture2D texture, Region region) {
         setTextureRegion(texture, region);
     }
 
-    public TextureRegion(GlTexture2D texture) {
+    public TextureRegion(Texture2D texture) {
         setTextureRegion(texture, 0D, 0D, 1D, 1D);
     }
 
@@ -45,17 +45,17 @@ public class TextureRegion extends Region {
         super.set(textureRegion.u1, textureRegion.v1, textureRegion.u2, textureRegion.v2);
     }
 
-    public void setTextureRegion(GlTexture2D texture, int x, int y, int width, int height) {
+    public void setTextureRegion(Texture2D texture, int x, int y, int width, int height) {
         setTexture(texture);
         setRegion(x, y, width, height);
     }
 
-    public void setTextureRegion(GlTexture2D texture, double u1, double v1, double u2, double v2) {
+    public void setTextureRegion(Texture2D texture, double u1, double v1, double u2, double v2) {
         setTexture(texture);
         setRegion(u1, v1, u2, v2);
     }
 
-    public void setTextureRegion(GlTexture2D texture, Region region) {
+    public void setTextureRegion(Texture2D texture, Region region) {
         setTexture(texture);
         setRegion(region);
     }
@@ -90,11 +90,11 @@ public class TextureRegion extends Region {
     }
 
     
-    public void setTexture(GlTexture2D texture) {
+    public void setTexture(Texture2D texture) {
         this.texture = texture;
     }
 
-    public GlTexture2D getTexture() {
+    public Texture2D getTexture() {
         return texture;
     }
 
@@ -112,7 +112,7 @@ public class TextureRegion extends Region {
         return new TextureRegion(this);
     }
     
-    public static Region calcFromRect(int x, int y, int width, int height, GlTexture2D texture) {
+    public static Region calcFromRect(int x, int y, int width, int height, Texture2D texture) {
         return new Region(
             (double) x / texture.getWidth(),
             (double) y / texture.getHeight(),

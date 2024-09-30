@@ -1,51 +1,51 @@
-package jpize.util.scissor;
+package jpize.gl.tesselation;
 
 import jpize.gl.Gl;
 import jpize.gl.glenum.GlTarget;
-import jpize.util.TextureBatch;
 import jpize.util.math.Maths;
 import jpize.util.math.vector.Vec2d;
 import jpize.util.math.vector.Vec2f;
 import jpize.util.math.vector.Vec2i;
 
+import java.awt.*;
 import java.awt.geom.Rectangle2D;
 import java.util.HashMap;
 import java.util.Map;
 
 public class Scissor {
     
-    private final TextureBatch batch;
-    private final Map<Long, ScissorNode> scissorList;
-    private ScissorNode active;
+    private final Runnable onFlush;
+    private final Map<Long, Node> scissors;
+    private Node active;
     
-    public Scissor(TextureBatch batch) {
-        this.batch = batch;
-        this.scissorList = new HashMap<>();
+    public Scissor(Runnable onFlush) {
+        this.onFlush = onFlush;
+        this.scissors = new HashMap<>();
     }
 
 
-    public ScissorNode getActive() {
+    public Node getActive() {
         return active;
     }
     
-    public void begin(long index, double x, double y, double width, double height) {
-        this.begin(index, Maths.round(x), Maths.round(y), Maths.round(width), Maths.round(height));
+    public void begin(long ID, double x, double y, double width, double height) {
+        this.begin(ID, Maths.round(x), Maths.round(y), Maths.round(width), Maths.round(height));
     }
     
-    public void begin(long index, double x, double y, double width, double height, long parentIndex) {
-        this.begin(index, Maths.round(x), Maths.round(y), Maths.round(width), Maths.round(height), parentIndex);
+    public void begin(long ID, double x, double y, double width, double height, long parentIndex) {
+        this.begin(ID, Maths.round(x), Maths.round(y), Maths.round(width), Maths.round(height), parentIndex);
     }
     
-    public void begin(long index, int x, int y, int width, int height) {
-        this.begin(index, x, y, width, height, -1L);
+    public void begin(long ID, int x, int y, int width, int height) {
+        this.begin(ID, x, y, width, height, -1L);
     }
     
-    public void begin(ScissorNode scissor) {
-        if(scissor.getIndex() < 0L)
+    public void begin(Node scissor) {
+        if(scissor.getID() < 0L)
             return;
         
-        if(scissor.getParentIndex() != -1L && !scissorList.isEmpty()){
-            final ScissorNode parent = scissorList.get(scissor.getParentIndex());
+        if(scissor.getParentID() != -1L && !scissors.isEmpty()){
+            final Node parent = scissors.get(scissor.getParentID());
             
             final int parentX2 = parent.getX2();
             final int parentY2 = parent.getY2();
@@ -59,21 +59,21 @@ public class Scissor {
             scissor.getRectangle().height = Math.max(0, Math.min(Math.min(scissor.getHeight(), oldY2 - parent.getY()), Math.min(parentY2, scissor.getY2()) - scissor.getY()));
         }
         
-        scissorList.put(scissor.getIndex(), scissor);
-        
-        batch.render();
+        scissors.put(scissor.getID(), scissor);
+
+        onFlush.run();
         if(!Gl.isEnabled(GlTarget.SCISSOR_TEST))
             Gl.enable(GlTarget.SCISSOR_TEST);
         scissor.activate();
         active = scissor;
     }
     
-    public void begin(long index, int x, int y, int width, int height, long parentIndex) {
-        if(index < 0L)
+    public void begin(long ID, int x, int y, int width, int height, long parentIndex) {
+        if(ID < 0L)
             return;
         
-        if(parentIndex != -1L && !scissorList.isEmpty()){
-            final ScissorNode parent = scissorList.get(parentIndex);
+        if(parentIndex != -1L && !scissors.isEmpty()){
+            final Node parent = scissors.get(parentIndex);
             
             final int parentX2 = parent.getX2();
             final int parentY2 = parent.getY2();
@@ -91,23 +91,23 @@ public class Scissor {
             height = Math.max(0, Math.min(Math.min(height, oldY2 - parent.getY()), Math.min(parentY2, y2) - y));
         }
         
-        final ScissorNode scissor = new ScissorNode(index, x, y, width, height, parentIndex);
-        scissorList.put(index, scissor);
-        
-        batch.render();
+        final Node scissor = new Node(ID, x, y, width, height, parentIndex);
+        scissors.put(ID, scissor);
+
+        onFlush.run();
         if(!Gl.isEnabled(GlTarget.SCISSOR_TEST))
             Gl.enable(GlTarget.SCISSOR_TEST);
         scissor.activate();
         active = scissor;
     }
     
-    public void end(long index) {
-        final ScissorNode removedScissor = scissorList.remove(index);
-        final long removedParent = removedScissor.getParentIndex();
-        
-        batch.render();
-        if(removedParent != -1L && !scissorList.isEmpty()){
-            final ScissorNode scissor = scissorList.get(removedParent);
+    public void end(long ID) {
+        final Node removedScissor = scissors.remove(ID);
+        final long removedParent = removedScissor.getParentID();
+
+        onFlush.run();
+        if(removedParent != -1L && !scissors.isEmpty()){
+            final Node scissor = scissors.get(removedParent);
             scissor.activate();
             active = scissor;
             
@@ -160,6 +160,67 @@ public class Scissor {
 
     public boolean isActive() {
         return active != null;
+    }
+
+
+    public static class Node {
+
+        private final long ID, parentID;
+        private final Rectangle rectangle;
+
+        public Node(long ID, Rectangle rectangle, long parentID) {
+            this.ID = ID;
+            this.rectangle = rectangle;
+            this.parentID = parentID;
+        }
+
+        public Node(long ID, int x, int y, int width, int height, long parentID) {
+            this(ID, new Rectangle(x, y, width, height), parentID);
+        }
+
+
+        public void activate() {
+            Gl.scissor(rectangle.x, rectangle.y, rectangle.width, rectangle.height);
+        }
+
+
+        public long getID() {
+            return ID;
+        }
+
+        public long getParentID() {
+            return parentID;
+        }
+
+        public Rectangle getRectangle() {
+            return rectangle;
+        }
+
+
+        public int getX() {
+            return rectangle.x;
+        }
+
+        public int getY() {
+            return rectangle.y;
+        }
+
+        public int getX2() {
+            return rectangle.x + rectangle.width;
+        }
+
+        public int getY2() {
+            return rectangle.y + rectangle.height;
+        }
+
+        public int getWidth() {
+            return rectangle.width;
+        }
+
+        public int getHeight() {
+            return rectangle.height;
+        }
+
     }
     
 }

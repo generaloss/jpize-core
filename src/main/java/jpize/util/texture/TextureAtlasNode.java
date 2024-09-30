@@ -1,4 +1,4 @@
-package jpize.util.atlas;
+package jpize.util.texture;
 
 import jpize.util.pixmap.PixmapRGBA;
 

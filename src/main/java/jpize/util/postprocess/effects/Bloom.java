@@ -3,16 +3,16 @@ package jpize.util.postprocess.effects;
 import jpize.app.Jpize;
 import jpize.util.res.Resource;
 import jpize.gl.Gl;
-import jpize.util.postprocess.FrameBufferObject;
+import jpize.gl.tesselation.GlFramebuffer;
 import jpize.util.postprocess.PostProcessEffect;
-import jpize.util.postprocess.RenderBufferObject;
+import jpize.gl.tesselation.GlRenderbuffer;
 import jpize.util.postprocess.ScreenQuad;
-import jpize.util.shader.Shader;
+import jpize.gl.shader.Shader;
 
 public class Bloom implements PostProcessEffect {
 
-    private final FrameBufferObject colorBuffer, fbo2, blurBuffer;
-    private final RenderBufferObject depthBuffer;
+    private final GlFramebuffer colorBuffer, fbo2, blurBuffer;
+    private final GlRenderbuffer depthBuffer;
     private final Shader brightShader, blurShader, combineShader;
     private float brightness, radius, bloom, exposure, gamma;
 
@@ -28,17 +28,17 @@ public class Bloom implements PostProcessEffect {
         final int height = Jpize.getHeight();
 
         // Frame Buffer 1 & Render Buffer
-        this.colorBuffer = new FrameBufferObject(width, height);
+        this.colorBuffer = new GlFramebuffer(width, height);
         this.colorBuffer.create();
         this.colorBuffer.bind();
-        this.depthBuffer = new RenderBufferObject(width, height);
+        this.depthBuffer = new GlRenderbuffer(width, height);
         this.depthBuffer.create();
         this.colorBuffer.unbind();
 
         // Frame Buffers 2 & 3
-        this.fbo2 = new FrameBufferObject(width, height);
+        this.fbo2 = new GlFramebuffer(width, height);
         this.fbo2.create();
-        this.blurBuffer = new FrameBufferObject(width, height);
+        this.blurBuffer = new GlFramebuffer(width, height);
         this.blurBuffer.create();
 
         // Shader

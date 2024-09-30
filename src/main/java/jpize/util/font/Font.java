@@ -4,7 +4,7 @@ import jpize.util.font.glyph.GlyphIterator;
 import jpize.util.font.glyph.GlyphMap;
 import jpize.util.font.glyph.GlyphPages;
 import jpize.util.font.glyph.GlyphSprite;
-import jpize.util.TextureBatch;
+import jpize.gl.texture.TextureBatch;
 import jpize.util.math.vector.Vec2f;
 import jpize.util.Disposable;
 

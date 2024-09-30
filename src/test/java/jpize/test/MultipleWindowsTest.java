@@ -9,65 +9,26 @@ import jpize.glfw.input.Key;
 import jpize.util.ctrl.TextInput;
 import jpize.util.font.Font;
 import jpize.util.font.FontLoader;
-import jpize.gl.texture.GlTexture2D;
+import jpize.gl.texture.Texture2D;
 import jpize.util.pixmap.PixmapRGBA;
-import jpize.util.TextureBatch;
+import jpize.gl.texture.TextureBatch;
 
 public class MultipleWindowsTest {
 
-    public static void main(String[] args) {
-        if(System.getProperty("os.name").equals("Linux")) Glfw.glfwInitHintPlatform(GlfwPlatform.X11);
-        Jpize.create("Window 1", 800, 600)
-            .icon("/icon.png").build()
-            .setApp(new Window1());
-        Jpize.create("Window 2", 800, 600)
-            .icon(new PixmapRGBA(16, 16).fill(0, 0, 15, 15, 1, 0, 1, 1F)).build()
-            .setApp(new Window2());
-
-        System.out.println("platform: " + Glfw.getPlatform());
-        Jpize.run();
-    }
-
     public static class Window1 extends JpizeApplication {
         final TextureBatch batch = new TextureBatch();
-        final GlTexture2D texture = new GlTexture2D("/icon.png");
+        final Texture2D texture = new Texture2D("/icon.png");
         public void init() {
             Gl.clearColor(1, 1, 1, 1F);
         }
         public void update() {
             if(Key.E.down()) Jpize.exitOthers();
             if(Key.ESCAPE.down()) Jpize.exit();
-            if(Key.X.down()) fx = !fx;
-            if(Key.Y.down()){
-                Jpize.syncExecutor().execLater(100, () -> {
-                    fy = !fy;
-                    Jpize.syncExecutor().execLater(100, () -> {
-                        fy = !fy;
-                        fy = !fy;
-                    });
-                });
-                Jpize.syncExecutor().execLater(100, () -> {
-                    fy = !fy;
-                    Jpize.syncExecutor().execLater(100, () -> {
-                        fy = !fy;
-                        fy = !fy;
-                    });
-                });
-                Jpize.syncExecutor().execLater(100, () -> {
-                    fy = !fy;
-                    Jpize.syncExecutor().execLater(100, () -> {
-                        fy = !fy;
-                        fy = !fy;
-                    });
-                });
-            }
         }
         int angle = 0;
-        boolean fx, fy;
         public void render() {
             Gl.clearColorBuffer();
             batch.rotate(angle++);
-            batch.flip(fx, fy);
             batch.setup();
             batch.draw(texture, 200 * 0.3F, 200 * 0.3F, 400, 400);
             batch.render();
@@ -97,6 +58,21 @@ public class MultipleWindowsTest {
             Jpize.window().hide();
             font.dispose();
         }
+    }
+
+    public static void main(String[] args) {
+        if(System.getProperty("os.name").equals("Linux"))
+            Glfw.glfwInitHintPlatform(GlfwPlatform.X11); // waiting for fixes in lwjgl 3.3.5
+
+        Jpize.create("Window 1", 800, 600)
+            .icon("/icon.png")
+            .build().setApp(new Window1());
+
+        Jpize.create("Window 2", 800, 600)
+            .icon(new PixmapRGBA(16, 16).fill(0, 0, 15, 15, 1, 0, 1, 1F))
+            .build().setApp(new Window2());
+
+        Jpize.run();
     }
 
 }

@@ -89,10 +89,12 @@ public class PerspectiveCamera extends Camera3D {
         return frustum;
     }
 
+    @Override
     public float getFov() {
         return fovY;
     }
 
+    @Override
     public void setFov(float fieldOfView) {
         if(this.fovY == fieldOfView)
             return;
@@ -101,10 +103,12 @@ public class PerspectiveCamera extends Camera3D {
         updateProjectionMatrix();
     }
 
+    @Override
     public float getNear() {
         return near;
     }
 
+    @Override
     public void setNear(float near) {
         if(this.near == near)
             return;
@@ -113,10 +117,12 @@ public class PerspectiveCamera extends Camera3D {
         updateProjectionMatrix();
     }
 
+    @Override
     public float getFar() {
         return far;
     }
 
+    @Override
     public void setFar(float far) {
         if(this.far == far)
             return;

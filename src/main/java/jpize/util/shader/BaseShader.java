@@ -1,6 +1,7 @@
 package jpize.util.shader;
 
-import jpize.gl.texture.GlTexture2D;
+import jpize.gl.shader.Shader;
+import jpize.gl.texture.Texture2D;
 import jpize.util.res.Resource;
 import jpize.util.camera.Camera;
 import jpize.util.color.Color;
@@ -39,7 +40,7 @@ public class BaseShader extends Shader {
     }
 
 
-    public void setTexture(GlTexture2D texture) {
+    public void setTexture(Texture2D texture) {
         super.uniform("u_texture", texture);
     }
     

@@ -1,7 +1,4 @@
-package jpize.util.buffer;
-
-import jpize.gl.buffer.GlBufUsage;
-import jpize.gl.buffer.GlIndexBuffer;
+package jpize.gl.buffer;
 
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;

@@ -40,10 +40,7 @@ public class OrthographicCamera extends Camera2D {
     }
 
     private void updateViewMatrix() {
-        translationMatrix.setTranslate(
-            imaginaryX ? 0 : -position.x,
-            imaginaryY ? 0 : -position.y
-        );
+        translationMatrix.setTranslate(imaginaryX ? 0 : -position.x, imaginaryY ? 0 : -position.y);
         scalingMatrix.setScale(scale);
         rotationMatrix.setRotationZ(rotation);
         view.set(scalingMatrix.mul(translationMatrix).mul(rotationMatrix));
@@ -58,7 +55,6 @@ public class OrthographicCamera extends Camera2D {
     public void resize(int width, int height) {
         if(Vec2i.equals(width, height, this.width, this.height))
             return;
-
         super.resize(width, height);
         updateProjectionMatrix();
     }
@@ -68,28 +64,30 @@ public class OrthographicCamera extends Camera2D {
         imaginaryY = y;
     }
 
+    @Override
     public float getScale() {
         return scale;
-    }
-
-    public void scale(float scale) {
-        this.scale *= scale;
     }
 
     public void setScale(float scale) {
         this.scale = scale;
     }
 
+    public void scale(float scale) {
+        this.scale *= scale;
+    }
+
+    @Override
     public float getRotation() {
         return rotation;
     }
 
-    public void rotate(float deg) {
-        rotation += deg;
+    public void setRotation(float deg) {
+        rotation = deg;
     }
 
-    public void setRot(float deg) {
-        rotation = deg;
+    public void rotate(float deg) {
+        rotation += deg;
     }
 
     @Override

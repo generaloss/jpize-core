@@ -5,7 +5,7 @@ import jpize.glfw.window.GlfwWindow;
 import jpize.util.shader.BaseShader;
 import jpize.util.postprocess.ScreenQuad;
 import jpize.util.postprocess.ScreenQuadShader;
-import jpize.util.TextureUtils;
+import jpize.gl.texture.TextureUtils;
 import jpize.util.ReflectUtils;
 import jpize.util.time.DeltaTimeCounter;
 import jpize.util.time.UpsCounter;

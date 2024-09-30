@@ -1,42 +1,43 @@
-package jpize.util.postprocess;
+package jpize.gl.tesselation;
 
 import jpize.app.Jpize;
 import jpize.gl.GlObject;
 import jpize.gl.buffer.GlAttachment;
 import jpize.gl.texture.*;
 import jpize.gl.type.GlType;
-import jpize.gl.texture.GlTexture2D;
+import jpize.gl.texture.Texture2D;
 
 import static org.lwjgl.opengl.GL33.*;
 
-public class RenderBufferObject extends GlObject {
+public class GlRenderbuffer extends GlObject {
 
     private int width, height;
     private GlAttachment attachment;
-    private final GlTexture2D texture;
+    private final Texture2D texture;
 
-    public RenderBufferObject(int width, int height) {
+    public GlRenderbuffer(int width, int height) {
         super(glGenRenderbuffers());
         
         this.width = width;
         this.height = height;
         this.attachment = GlAttachment.DEPTH_ATTACHMENT;
 
-        this.texture = new GlTexture2D()
+        this.texture = new Texture2D()
             .setWrapST(GlWrap.CLAMP_TO_EDGE).setFilters(GlFilter.NEAREST).setMaxLevel(0)
             .setDefaultImage(width, height);
     }
 
-    public RenderBufferObject() {
+    public GlRenderbuffer() {
         this(Jpize.getWidth(), Jpize.getHeight());
     }
 
 
-    public void setAttachment(GlAttachment attachment) {
+    public GlRenderbuffer setAttachment(GlAttachment attachment) {
         this.attachment = attachment;
+        return this;
     }
 
-    public void create() {
+    public GlRenderbuffer create() {
         updateTexture();
         
         bind();
@@ -44,6 +45,7 @@ public class RenderBufferObject extends GlObject {
         glRenderbufferStorage(GL_RENDERBUFFER, GlInternalFormat.DEPTH_COMPONENT32.value, width, height);
         glFramebufferRenderbuffer(GL_FRAMEBUFFER, attachment.value, GL_RENDERBUFFER, ID);
         unbind();
+        return this;
     }
 
     public void resize(int width, int height) {
@@ -62,7 +64,7 @@ public class RenderBufferObject extends GlObject {
     }
     
 
-    public GlTexture getTexture() {
+    public Texture2D getTexture() {
         return texture;
     }
 
@@ -74,8 +76,9 @@ public class RenderBufferObject extends GlObject {
         return height;
     }
     
-    public void bind() {
+    public GlRenderbuffer bind() {
         glBindRenderbuffer(GL_RENDERBUFFER, ID);
+        return this;
     }
 
     @Override
@@ -84,8 +87,9 @@ public class RenderBufferObject extends GlObject {
         texture.dispose();
     }
 
-    public void unbind() {
+    public GlRenderbuffer unbind() {
         glBindRenderbuffer(GL_RENDERBUFFER, 0);
+        return this;
     }
 
 }
