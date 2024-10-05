@@ -31,7 +31,7 @@ public class TextEditorTest extends JpizeApplication {
     private TextInput.Selection selection = new TextInput.Selection(input, 0, 0, 0, 0);
 
     public void init() {
-        font.options.invLineWrap = true;
+        font.options().invLineWrap = true;
         Gl.clearColor(0.1, 0.11, 0.12);
         // System.out.println(font.getTextAdvance("i ") + " | " + (font.getTextAdvance("i") + font.getTextAdvance(" ")));
 
@@ -59,9 +59,9 @@ public class TextEditorTest extends JpizeApplication {
         }
 
         // cinematic
-        font.options.scale += (editorScale - font.options.scale) / 10;
-        lineHeight = font.options.getLineHeightScaled();
-        numerationWidth = 200 * font.options.scale;
+        font.options().scale += (editorScale - font.options().scale) / 10;
+        lineHeight = font.options().getLineHeightScaled();
+        numerationWidth = 200 * font.options().scale;
         animatedScroll += (scroll - animatedScroll) / 10;
         scrollY = animatedScroll * lineHeight - Jpize.getHeight() * 0.5F;
 
@@ -120,7 +120,7 @@ public class TextEditorTest extends JpizeApplication {
                 numeration.add(String.valueOf(i + 1));
 
             batch.drawRect(0.3F, 0.32F, 0.35F, 1F,  numerationWidth - 2, numerationY, 2, numerationHeight);
-            font.options.color.set(0.3, 0.32, 0.35);
+            font.options().color.set(0.3, 0.32, 0.35);
             font.drawText(batch, numeration.toString(), 0, Jpize.getHeight() + scrollY);
 
             // render selection
@@ -144,7 +144,7 @@ public class TextEditorTest extends JpizeApplication {
             }
 
             // render text
-            font.options.color.set(0.95, 0.95, 0.93);
+            font.options().color.set(0.95, 0.95, 0.93);
             font.drawText(batch, text, numerationWidth, textY);
 
             // render cursor

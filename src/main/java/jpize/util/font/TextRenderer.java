@@ -26,16 +26,16 @@ public class TextRenderer {
         if(text == null || text.isBlank())
             return;
 
-        final Color color = font.options.color;
+        final Color color = font.options().color;
 
         batch.setTransformOrigin(0, 0);
-        batch.rotate(font.options.rotation);
-        batch.shear(font.options.getItalicAngle(), 0);
+        batch.rotate(font.options().rotation);
+        batch.shear(font.options().getItalicAngle(), 0);
 
-        final Vec2f centerPos = font.getBounds(text).mul(font.options.rotateOrigin);
-        centerPos.y *= font.options.getLineWrapSign();
+        final Vec2f centerPos = font.getBounds(text).mul(font.options().rotateOrigin);
+        centerPos.y *= font.options().getLineWrapSign();
 
-        final float descent = font.options.getDescentScaled();
+        final float descent = font.options().getDescentScaled();
 
         for(GlyphSprite sprite: font.iterable(text)){
             if((char) sprite.getCode() == ' ' || !sprite.isCanRender())
@@ -43,7 +43,7 @@ public class TextRenderer {
 
             final Vec2f renderPos = new Vec2f();
             renderPos.y -= descent;
-            renderPos.sub(centerPos).rotate(font.options.rotation).add(centerPos).add(x, y);
+            renderPos.sub(centerPos).rotate(font.options().rotation).add(centerPos).add(x, y);
             renderPos.y += descent;
             sprite.render(batch, renderPos.x, renderPos.y, color.r, color.g, color.b, color.a);
         }
@@ -70,16 +70,16 @@ public class TextRenderer {
 
         renderer.matrix1.setOrthographic(0, 0, Jpize.getWidth(), Jpize.getHeight());
 
-        final Color color = font.options.color;
+        final Color color = font.options().color;
 
         final Matrix3f mat = new Matrix3f();
-        mat.setRotation(font.options.rotation);
-        mat.shear(font.options.getItalicAngle(), 0);
+        mat.setRotation(font.options().rotation);
+        mat.shear(font.options().getItalicAngle(), 0);
 
-        final Vec2f centerPos = font.getBounds(text).mul(font.options.rotateOrigin);
-        centerPos.y *= font.options.getLineWrapSign();
+        final Vec2f centerPos = font.getBounds(text).mul(font.options().rotateOrigin);
+        centerPos.y *= font.options().getLineWrapSign();
 
-        final float descent = font.options.getDescentScaled();
+        final float descent = font.options().getDescentScaled();
 
         final FloatList vertices = new FloatList(text.length() * 4);
         Texture2D lastTexture = null;
@@ -90,7 +90,7 @@ public class TextRenderer {
 
             final Vec2f renderPos = new Vec2f(sprite.getX(), sprite.getY());
             renderPos.y -= descent;
-            renderPos.sub(centerPos).rotate(font.options.rotation).add(centerPos).add(x, y);
+            renderPos.sub(centerPos).rotate(font.options().rotation).add(centerPos).add(x, y);
             renderPos.y += descent;
             renderPos.mulMat3(mat);
 

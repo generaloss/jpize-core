@@ -2,9 +2,9 @@ package jpize.util.font;
 
 public class FontInfo {
 
-    private final float height;
-    private final float ascent;
-    private final float descent;
+    protected final float height;
+    protected final float ascent;
+    protected final float descent;
 
     public FontInfo(float height, float ascent, float descent) {
         this.height = height;

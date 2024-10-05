@@ -35,7 +35,7 @@ public class FontOptions {
     }
 
     public float getAdvance() {
-        return font.info.getHeight() + lineGaps;
+        return font.getHeight() + lineGaps;
     }
 
     public float getAdvanceScaled() {
@@ -47,11 +47,11 @@ public class FontOptions {
     }
 
     public float getDescentScaled() {
-        return font.info.getDescent() * scale;
+        return font.getDescent() * scale;
     }
 
     public float getLineHeightScaled() {
-        return font.info.getHeight() * scale;
+        return font.getHeight() * scale;
     }
 
     public float getItalicAngle() {

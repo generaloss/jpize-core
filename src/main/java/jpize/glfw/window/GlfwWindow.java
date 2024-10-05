@@ -120,7 +120,8 @@ public class GlfwWindow {
     }
 
     public void setMonitor(GlfwMonitor monitor, int x, int y, int width, int height, int refreshRate) {
-        glfwSetWindowMonitor(ID, monitor.getID(), x, y, width, height, refreshRate);
+        final long monitorID = (monitor == null) ? 0L : monitor.getID();
+        glfwSetWindowMonitor(ID, monitorID, x, y, width, height, refreshRate);
     }
 
 
@@ -326,12 +327,15 @@ public class GlfwWindow {
     private final Vec2i windowedPos = new Vec2i();
     private final Vec2i windowedSize = new Vec2i();
 
-    public void setFullscreen() {
+    public void setFullscreen(GlfwMonitor monitor) {
         windowedPos.set(getPos());
         windowedSize.set(getSize());
-        final GlfwMonitor monitor = GlfwMonitor.getPrimaryMonitor();
         final GLFWVidMode videoMode = monitor.getVideoMode();
         setMonitor(monitor, 0, 0, videoMode.width(), videoMode.height(), videoMode.refreshRate());
+    }
+
+    public void setFullscreen() {
+        this.setFullscreen(GlfwMonitor.getPrimaryMonitor());
     }
 
     public void setWindowed() {
@@ -339,8 +343,8 @@ public class GlfwWindow {
     }
 
     public void setFullscreen(boolean fullscreen) {
-        if(fullscreen) setWindowed();
-        else setFullscreen();
+        if(fullscreen) this.setFullscreen();
+        else this.setWindowed();
     }
 
     public boolean isFullscreen() {
@@ -348,7 +352,7 @@ public class GlfwWindow {
     }
 
     public void toggleFullscreen() {
-        setFullscreen(!isFullscreen());
+        this.setFullscreen(!this.isFullscreen());
     }
 
 

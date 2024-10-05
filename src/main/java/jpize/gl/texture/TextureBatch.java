@@ -34,9 +34,9 @@ public class TextureBatch implements Disposable {
     private int size, vertexBufferOffset;
     public final float[] vertexData;
     // transform
-    private float translateX, translateY;
     private final Vec2f transformOrigin;
     private final Matrix3f transformMat, rotationMat, shearMat, scaleMat;
+    private Vec2f translate;
     private boolean flipX, flipY;
     private final Scissor scissor;
 
@@ -101,10 +101,10 @@ public class TextureBatch implements Disposable {
 
         transformMat.set(rotationMat.getMul(scaleMat.getMul(shearMat)));
 
-        final Vec2f vertex1 = new Vec2f(0F,    height).sub(origin) .mulMat3(transformMat) .add(origin).add(x + translateX, y + translateY);
-        final Vec2f vertex2 = new Vec2f(0F,    0F    ).sub(origin) .mulMat3(transformMat) .add(origin).add(x + translateX, y + translateY);
-        final Vec2f vertex3 = new Vec2f(width, 0F    ).sub(origin) .mulMat3(transformMat) .add(origin).add(x + translateX, y + translateY);
-        final Vec2f vertex4 = new Vec2f(width, height).sub(origin) .mulMat3(transformMat) .add(origin).add(x + translateX, y + translateY);
+        final Vec2f vertex1 = new Vec2f(0F,    height).sub(origin) .mulMat3(transformMat) .add(origin).add(x, y).add(translate);
+        final Vec2f vertex2 = new Vec2f(0F,    0F    ).sub(origin) .mulMat3(transformMat) .add(origin).add(x, y).add(translate);
+        final Vec2f vertex3 = new Vec2f(width, 0F    ).sub(origin) .mulMat3(transformMat) .add(origin).add(x, y).add(translate);
+        final Vec2f vertex4 = new Vec2f(width, height).sub(origin) .mulMat3(transformMat) .add(origin).add(x, y).add(translate);
 
         this.addVertex(vertex1.x, vertex1.y, (flipX ? u2 : u1), (flipY ? v2 : v1), r, g, b, a);
         this.addVertex(vertex2.x, vertex2.y, (flipX ? u2 : u1), (flipY ? v1 : v2), r, g, b, a);
@@ -317,11 +317,13 @@ public class TextureBatch implements Disposable {
         return size;
     }
 
-
     public Scissor getScissor() {
         return scissor;
     }
 
+    public Color color() {
+        return color;
+    }
 
     public void resetColor() {
         color.set(1F, 1F, 1F, 1F);
@@ -343,10 +345,6 @@ public class TextureBatch implements Disposable {
         color.set(r, g, b, 1F);
     }
 
-    public Color getColor() {
-        return color;
-    }
-
     public void setAlpha(double a) {
         color.setA(a);
     }
@@ -360,9 +358,8 @@ public class TextureBatch implements Disposable {
         transformOrigin.set(x, y);
     }
 
-    public void translate(float x, float y) {
-        translateX = x;
-        translateY = y;
+    public Vec2f translate() {
+        return translate;
     }
 
     public void rotate(double angle) {

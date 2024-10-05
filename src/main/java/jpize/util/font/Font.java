@@ -1,25 +1,37 @@
 package jpize.util.font;
 
-import jpize.util.font.glyph.GlyphIterator;
-import jpize.util.font.glyph.GlyphMap;
-import jpize.util.font.glyph.GlyphPages;
-import jpize.util.font.glyph.GlyphSprite;
+import jpize.gl.texture.Texture2D;
+import jpize.util.font.glyph.*;
 import jpize.gl.texture.TextureBatch;
 import jpize.util.math.vector.Vec2f;
 import jpize.util.Disposable;
 
-public class Font implements Disposable {
+import java.util.Map;
 
-    public final FontInfo info;
-    public final GlyphPages pages;
-    public final GlyphMap glyphs;
-    public final FontOptions options;
+public class Font extends FontInfo implements Disposable {
 
-    protected Font(FontInfo info, GlyphPages pages, GlyphMap glyphs) {
-        this.info = info;
+    private final Map<Integer, Texture2D> pages;
+    private final Map<Integer, Glyph> glyphs;
+    private final FontOptions options;
+
+    protected Font(float height, float ascent, float descent, Map<Integer, Texture2D> pages, Map<Integer, Glyph> glyphs) {
+        super(height, ascent, descent);
         this.pages = pages;
         this.glyphs = glyphs;
         this.options = new FontOptions(this);
+    }
+
+
+    public Map<Integer, Texture2D> getPages() {
+        return pages;
+    }
+
+    public Map<Integer, Glyph> getGlyphs() {
+        return glyphs;
+    }
+
+    public FontOptions options() {
+        return options;
     }
 
 
@@ -87,7 +99,7 @@ public class Font implements Disposable {
     public float getTextHeight(String text) {
         float height = 0;
         for(GlyphSprite glyph: this.iterable(text)){
-            final float glyphMaxY = Math.abs(glyph.getY() + info.getDescent() + glyph.getHeight()) - info.getDescent();
+            final float glyphMaxY = Math.abs(glyph.getY() + super.descent + glyph.getHeight()) - super.descent;
             height = Math.max(height, glyphMaxY);
         }
         return height;
@@ -103,13 +115,14 @@ public class Font implements Disposable {
     }
 
     public Iterable<GlyphSprite> iterable(String text) {
-        return () -> new GlyphIterator(glyphs, options, text, options.advanceFactor.x, options.advanceFactor.y);
+        return () -> new GlyphIterator(this, text);
     }
 
 
     @Override
     public void dispose() {
-        pages.dispose();
+        for(Texture2D page: pages.values())
+            page.dispose();
     }
 
 }

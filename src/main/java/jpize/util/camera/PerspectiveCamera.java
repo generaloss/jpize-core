@@ -29,13 +29,13 @@ public class PerspectiveCamera extends Camera3D {
         this.projection = new Matrix4f();
         this.combined = new Matrix4f();
 
-        updateProjectionMatrix();
-        updateViewMatrix();
+        this.updateProjectionMatrix();
+        this.updateViewMatrix();
     }
 
     @Override
     public void update() {
-        updateViewMatrix();
+        this.updateViewMatrix();
     }
 
     private void updateProjectionMatrix() {
@@ -75,7 +75,7 @@ public class PerspectiveCamera extends Camera3D {
             return;
 
         super.resize(width, height);
-        updateProjectionMatrix();
+        this.updateProjectionMatrix();
     }
 
     public void setImaginaryOrigins(boolean x, boolean y, boolean z) {
@@ -100,7 +100,7 @@ public class PerspectiveCamera extends Camera3D {
             return;
 
         this.fovY = fieldOfView;
-        updateProjectionMatrix();
+        this.updateProjectionMatrix();
     }
 
     @Override
@@ -114,7 +114,7 @@ public class PerspectiveCamera extends Camera3D {
             return;
 
         this.near = near;
-        updateProjectionMatrix();
+        this.updateProjectionMatrix();
     }
 
     @Override
@@ -128,7 +128,7 @@ public class PerspectiveCamera extends Camera3D {
             return;
 
         this.far = far;
-        updateProjectionMatrix();
+        this.updateProjectionMatrix();
     }
 
     @Override

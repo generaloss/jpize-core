@@ -16,6 +16,15 @@ public abstract class Camera3D extends Camera {
     }
 
 
+    public Vec3f position() {
+        return position;
+    }
+
+    public EulerAngles rotation() {
+        return rotation;
+    }
+
+
     public float getX() {
         return position.x;
     }
@@ -26,14 +35,6 @@ public abstract class Camera3D extends Camera {
 
     public float getZ() {
         return position.z;
-    }
-
-    public Vec3f getPosition() {
-        return position;
-    }
-
-    public EulerAngles getRotation() {
-        return rotation;
     }
 
 

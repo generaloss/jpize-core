@@ -5,8 +5,6 @@ import jpize.util.math.Mathc;
 import jpize.util.res.Resource;
 import jpize.gl.texture.GlFilter;
 import jpize.util.font.glyph.Glyph;
-import jpize.util.font.glyph.GlyphMap;
-import jpize.util.font.glyph.GlyphPages;
 import jpize.util.region.Region;
 import jpize.gl.texture.Texture2D;
 import jpize.util.pixmap.PixmapA;
@@ -20,6 +18,8 @@ import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import java.nio.file.Path;
+import java.util.HashMap;
+import java.util.Map;
 
 import static org.lwjgl.stb.STBTruetype.*;
 
@@ -43,8 +43,8 @@ public class FontLoader {
 
 
     public static Font loadFnt(Resource resource) {
-        final GlyphPages pages = new GlyphPages();
-        final GlyphMap glyphs = new GlyphMap();
+        final Map<Integer, Texture2D> pages = new HashMap<>();
+        final Map<Integer, Glyph> glyphs = new HashMap<>();
 
         int height = 0;
         int ascent = 0;
@@ -76,7 +76,7 @@ public class FontLoader {
                     }
 
                     final Resource textureResource = Resource.internal(relativeTexturePath);
-                    pages.add(pageID, new Texture2D(textureResource));
+                    pages.put(pageID, new Texture2D(textureResource));
                 }
                 case "char" -> {
                     final int code = Integer.parseInt(getValue(tokens[1]));
@@ -97,7 +97,7 @@ public class FontLoader {
                     final float glyphHeight = regionOnTexture.getHeightPx(pages.get(page));
                     final float glyphWidth = regionOnTexture.getWidthPx(pages.get(page));
 
-                    glyphs.add(new Glyph(
+                    glyphs.put(code, new Glyph(
                         code,
 
                         offsetX,
@@ -107,16 +107,14 @@ public class FontLoader {
 
                         regionOnTexture,
                         advanceX,
-                        page,
-                        pages
+                        page
                     ));
                 }
             }
         }
 
-        final FontInfo info = new FontInfo(height, ascent, descent);
-        final Font font = new Font(info, pages, glyphs);
-        font.options.italic = italic;
+        final Font font = new Font(height, ascent, descent, pages, glyphs);
+        font.options().italic = italic;
 
         return font;
     }
@@ -132,8 +130,8 @@ public class FontLoader {
 
 
     public static Font loadTrueType(Resource resource, int size, Charset charset) {
-        final GlyphPages pages = new GlyphPages();
-        final GlyphMap glyphs = new GlyphMap();
+        final Map<Integer, Texture2D> pages = new HashMap<>();
+        final Map<Integer, Glyph> glyphs = new HashMap<>();
 
         float ascent;
         float descent;
@@ -153,7 +151,7 @@ public class FontLoader {
             .setFilters(GlFilter.LINEAR)
             .setImage(pixmap.toPixmapRGBA());
 
-        pages.add(0, texture);
+        pages.put(0, texture);
 
         // STB
         try(final MemoryStack stack = MemoryStack.stackPush()){
@@ -189,7 +187,7 @@ public class FontLoader {
                 float glyphWidth = quad.x1() - quad.x0();
 
                 // Adding Glyph to the font
-                glyphs.add(new Glyph(
+                glyphs.put(code, new Glyph(
                     code,
 
                     quad.x0(),
@@ -199,14 +197,12 @@ public class FontLoader {
 
                     regionOnTexture,
                     advanceX,
-                    0,
-                    pages
+                    0
                 ));
             }
         }
 
-        final FontInfo info = new FontInfo(size, ascent, descent);
-        return new Font(info, pages, glyphs);
+        return new Font(size, ascent, descent, pages, glyphs);
     }
 
     public static Font loadTrueType(String filepath, int size, Charset charset) {

@@ -1,5 +1,6 @@
 package jpize.util.font.glyph;
 
+import jpize.util.font.Font;
 import jpize.util.region.Region;
 import jpize.gl.texture.Texture2D;
 import jpize.gl.texture.TextureBatch;
@@ -21,10 +22,10 @@ public class GlyphSprite {
     private final float advanceX;
     private final float offsetY;
 
-    public GlyphSprite(Glyph glyph, float cursorX, float cursorY, float scale, int lineY) {
+    public GlyphSprite(Font font, Glyph glyph, float cursorX, float cursorY, float scale, int lineY) {
         this.code   = glyph.code;
         this.region = glyph.region;
-        this.page   = glyph.pages.get(glyph.pageID);
+        this.page   = font.getPages().get(glyph.pageID);
 
         this.x      = scale * (glyph.offset.x + cursorX);
         this.y      = scale * (glyph.offset.y + cursorY);
