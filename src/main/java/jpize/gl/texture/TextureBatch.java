@@ -36,7 +36,7 @@ public class TextureBatch implements Disposable {
     // transform
     private final Vec2f transformOrigin;
     private final Matrix3f transformMat, rotationMat, shearMat, scaleMat;
-    private Vec2f translate;
+    private final Vec2f position;
     private boolean flipX, flipY;
     private final Scissor scissor;
 
@@ -73,6 +73,7 @@ public class TextureBatch implements Disposable {
         this.rotationMat = new Matrix3f();
         this.shearMat = new Matrix3f();
         this.scaleMat = new Matrix3f();
+        this.position = new Vec2f();
     }
 
     public TextureBatch() {
@@ -101,10 +102,10 @@ public class TextureBatch implements Disposable {
 
         transformMat.set(rotationMat.getMul(scaleMat.getMul(shearMat)));
 
-        final Vec2f vertex1 = new Vec2f(0F,    height).sub(origin) .mulMat3(transformMat) .add(origin).add(x, y).add(translate);
-        final Vec2f vertex2 = new Vec2f(0F,    0F    ).sub(origin) .mulMat3(transformMat) .add(origin).add(x, y).add(translate);
-        final Vec2f vertex3 = new Vec2f(width, 0F    ).sub(origin) .mulMat3(transformMat) .add(origin).add(x, y).add(translate);
-        final Vec2f vertex4 = new Vec2f(width, height).sub(origin) .mulMat3(transformMat) .add(origin).add(x, y).add(translate);
+        final Vec2f vertex1 = new Vec2f(0F,    height).sub(origin) .mulMat3(transformMat) .add(origin).add(x, y).add(position);
+        final Vec2f vertex2 = new Vec2f(0F,    0F    ).sub(origin) .mulMat3(transformMat) .add(origin).add(x, y).add(position);
+        final Vec2f vertex3 = new Vec2f(width, 0F    ).sub(origin) .mulMat3(transformMat) .add(origin).add(x, y).add(position);
+        final Vec2f vertex4 = new Vec2f(width, height).sub(origin) .mulMat3(transformMat) .add(origin).add(x, y).add(position);
 
         this.addVertex(vertex1.x, vertex1.y, (flipX ? u2 : u1), (flipY ? v2 : v1), r, g, b, a);
         this.addVertex(vertex2.x, vertex2.y, (flipX ? u2 : u1), (flipY ? v1 : v2), r, g, b, a);
@@ -358,8 +359,8 @@ public class TextureBatch implements Disposable {
         transformOrigin.set(x, y);
     }
 
-    public Vec2f translate() {
-        return translate;
+    public Vec2f position() {
+        return position;
     }
 
     public void rotate(double angle) {
