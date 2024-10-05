@@ -128,7 +128,6 @@ public class GlfwCallbacks {
 
 
     public void addWindowPosCallback(GlfwWindowPosCallback callback) {
-        System.out.println(this + " " + windowID);
         callbacksPos.add(callback);
         if(callbackPos == null){
             callbackPos = glfwSetWindowPosCallback(windowID, (ID, x, y) -> {

@@ -89,11 +89,6 @@ public class ShaderBuilder {
             frag.append("}\n");
         }
 
-        System.out.println("[vertex]:");
-        System.out.println(vert);
-        System.out.println("[fragment]:");
-        System.out.println(frag);
-
         return new Shader(vert.toString(), frag.toString());
     }
 

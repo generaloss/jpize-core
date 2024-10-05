@@ -33,8 +33,9 @@ public class Shader implements Disposable {
         fragmentShader.dispose();
 
         this.uniforms = new HashMap<>();
-        detectUniforms(vertexCode);
-        detectUniforms(fragmentCode);
+        this.detectUniforms(vertexCode);
+        this.detectUniforms(fragmentCode);
+        this.bindFragDataLocation(0, "");
     }
 
     public Shader(Resource resVertex, Resource resFragment) {
@@ -58,23 +59,23 @@ public class Shader implements Disposable {
         fragmentShader.dispose();
 
         this.uniforms = new HashMap<>();
-        detectUniforms(vertexCode);
-        detectUniforms(fragmentCode);
-        detectUniforms(geometryCode);
+        this.detectUniforms(vertexCode);
+        this.detectUniforms(fragmentCode);
+        this.detectUniforms(geometryCode);
     }
 
     public Shader(Resource resVertex, Resource resFragment, Resource resGeometry) {
         this(resVertex.readString(), resFragment.readString(), resGeometry.readString());
     }
 
-    private void detectUniforms(String code) {                      // '..\nuniform type name [16] ;\n..'
-        final String[] uniformSplit = code.split("uniform");        // ' type name [16] ;\n..'
+    private void detectUniforms(String code) {                   // '..\nuniform type name [n] ;\n..'
+        final String[] uniformSplit = code.split("uniform");     // ' type name [n] ;\n..'
         for(int i = 1; i < uniformSplit.length; i++){
-            String name = uniformSplit[i].split(";")[0];            // ' type name [16] '
+            String name = uniformSplit[i].split(";")[0];         // ' type name [n] '
             if(name.contains("["))
-                name = name.substring(0, name.lastIndexOf("["));    // ' type name '
-            name = name.strip();                                    // 'type name'
-            name = name.substring(name.lastIndexOf(" ") + 1);       // 'name'
+                name = name.substring(0, name.lastIndexOf("[")); // ' type name '
+            name = name.strip();                                 // 'type name'
+            name = name.substring(name.lastIndexOf(" ") + 1);    // 'name'
 
             uniforms.put(name, program.getUniformLoc(name));
         }
@@ -172,11 +173,11 @@ public class Shader implements Disposable {
 
 
     public void bindAttribute(int index, String name) {
-        program.bindAttributeLoc(index, name);
+        program.bindAttributeLocation(index, name);
     }
 
-    public void bindFragData(int index, String name) {
-        program.bindFragDataLoc(index, name);
+    public void bindFragDataLocation(int index, String name) {
+        program.bindFragDataLocation(index, name);
     }
 
 

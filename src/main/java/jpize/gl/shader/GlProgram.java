@@ -138,11 +138,11 @@ public class GlProgram extends GlObject {
         return glGetUniformi(ID, location);
     }
 
-    public void bindAttributeLoc(int index, String name) {
+    public void bindAttributeLocation(int index, String name) {
         glBindAttribLocation(ID, index, name);
     }
 
-    public void bindFragDataLoc(int index, String name) {
+    public void bindFragDataLocation(int index, String name) {
         glBindFragDataLocation(ID, index, name);
     }
 

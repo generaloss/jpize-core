@@ -223,7 +223,6 @@ public class TextInput implements Iterable<String> {
         final GlfwCallbacks callbacks = GlfwWindow.getCurrentContext().getCallbacks();
         callbacks.addCharCallback(charCallback);
         callbacks.addKeyCallback(keyCallback);
-        System.out.println("enable");
         return this;
     }
 
@@ -234,7 +233,6 @@ public class TextInput implements Iterable<String> {
         final GlfwCallbacks callbacks = GlfwWindow.getCurrentContext().getCallbacks();
         callbacks.removeCharCallback(charCallback);
         callbacks.removeKeyCallback(keyCallback);
-        System.out.println("disable");
         return this;
     }
 

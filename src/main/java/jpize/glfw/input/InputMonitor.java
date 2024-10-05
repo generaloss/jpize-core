@@ -23,12 +23,12 @@ public class InputMonitor {
     
     private void onKey(GlfwWindow window, Key key, int scancode, GlfwAction action, GlfwMods mods) {
         if(action.isDown()) keysDown.set(key.ordinal());
-        if(action.isRelease()) keysRelease.set(key.ordinal());
+        else if(action.isRelease()) keysRelease.set(key.ordinal());
     }
 
     private void onButton(GlfwWindow window, MouseBtn button, GlfwAction action, GlfwMods mods) {
         if(action.isDown()) btnsDown.set(button.ordinal());
-        if(action.isRelease()) btnsRelease.set(button.ordinal());
+        else if(action.isRelease()) btnsRelease.set(button.ordinal());
     }
 
     private void onScroll(GlfwWindow window, float scrollX, float scrollY) {
