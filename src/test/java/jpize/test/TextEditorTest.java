@@ -119,7 +119,7 @@ public class TextEditorTest extends JpizeApplication {
             for(int i = 0; i < input.lines(); i++)
                 numeration.add(String.valueOf(i + 1));
 
-            batch.drawRect(0.3F, 0.32F, 0.35F, 1F,  numerationWidth - 2, numerationY, 2, numerationHeight);
+            batch.drawRect(numerationWidth - 2, numerationY, 2, numerationHeight,  0.3F, 0.32F, 0.35F);
             font.options().color.set(0.3, 0.32, 0.35);
             font.drawText(batch, numeration.toString(), 0, Jpize.getHeight() + scrollY);
 
@@ -133,13 +133,13 @@ public class TextEditorTest extends JpizeApplication {
                 float lineX = numerationWidth + firstLineOffsetX;
                 float lineY = textY - lineHeight * (selection.start.y + 1);
                 float lineWidth = font.getTextWidth(selection.line(0));
-                batch.drawRect(0.05F, 0.35F, 0.75F, 1F,  lineX, lineY, lineWidth, lineHeight);
+                batch.drawRect(lineX, lineY, lineWidth, lineHeight,  0.05F, 0.35F, 0.75F);
 
                 for(int i = 1; i < selection.size(); i++){
                     lineX = numerationWidth;
                     lineY = textY - lineHeight * (selection.start.y + i + 1);
                     lineWidth = font.getTextWidth(selection.line(i));
-                    batch.drawRect(0.05F, 0.35F, 0.75F, 1F,  lineX, lineY, lineWidth, lineHeight);
+                    batch.drawRect(lineX, lineY, lineWidth, lineHeight,  0.05F, 0.35F, 0.75F);
                 }
             }
 
@@ -150,7 +150,7 @@ public class TextEditorTest extends JpizeApplication {
             // render cursor
             final float x = font.getTextWidth(input.getLine(input.getY()).substring(0, input.getX())) + numerationWidth;
             final float y = Jpize.getHeight() - (input.getY() + 1) * lineHeight + scrollY;
-            batch.drawRect(1F, 1F, 1F, 1F, x, y, 3, lineHeight);
+            batch.drawRect(x, y, 3, lineHeight,  1F, 1F, 1F);
         }
         batch.render();
     }

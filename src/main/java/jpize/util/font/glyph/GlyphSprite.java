@@ -104,7 +104,7 @@ public class GlyphSprite {
 
     public void render(TextureBatch batch, float x, float y, float r, float g, float b, float a) {
         if(canRender)
-            batch.draw(page, this.x + x, this.y + y, width, height, region, r, g, b, a);
+            batch.draw(page, region, (this.x + x), (this.y + y), width, height, r, g, b, a);
     }
 
     public void render(TextureBatch batch, float x, float y, Color color) {

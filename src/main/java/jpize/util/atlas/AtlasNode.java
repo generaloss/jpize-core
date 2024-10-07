@@ -1,16 +1,16 @@
-package jpize.util.texture;
+package jpize.util.atlas;
 
 import jpize.util.pixmap.PixmapRGBA;
 
 import java.awt.*;
 
-public class TextureAtlasNode {
+class AtlasNode {
     
     private PixmapRGBA imagePixmap;
     private final Rectangle rectangle;
-    private TextureAtlasNode child1, child2;
+    private AtlasNode child1, child2;
 
-    public TextureAtlasNode(int x, int y, int width, int height) {
+    public AtlasNode(int x, int y, int width, int height) {
         this.rectangle = new Rectangle(x, y, width, height);
     }
     
@@ -36,7 +36,7 @@ public class TextureAtlasNode {
     }
 
 
-    public TextureAtlasNode insert(PixmapRGBA imagePixmap, int paddingLeft, int paddingTop, int paddingRight, int paddingBottom) {
+    public AtlasNode insert(PixmapRGBA imagePixmap, int paddingLeft, int paddingTop, int paddingRight, int paddingBottom) {
         final int x = this.getX();
         final int y = this.getY();
         final int width  = this.getWidth();
@@ -61,28 +61,28 @@ public class TextureAtlasNode {
             }
             
             if(diffWidth > diffHeight){ // X
-                child1 = new TextureAtlasNode(
+                child1 = new AtlasNode(
                     x,
                     y,
                     imageWidth,
                     height
                 );
                 
-                child2 = new TextureAtlasNode(
+                child2 = new AtlasNode(
                     x + imageWidth + paddingLeft,
                     y,
                     width - imageWidth - paddingLeft,
                     height
                 );
             }else{ // Y
-                child1 = new TextureAtlasNode(
+                child1 = new AtlasNode(
                     x,
                     y,
                     width,
                     imageHeight
                 );
                 
-                child2 = new TextureAtlasNode(
+                child2 = new AtlasNode(
                     x,
                     y + imageHeight + paddingTop,
                     width,
@@ -95,7 +95,7 @@ public class TextureAtlasNode {
             if(child1 == null)
                 throw new RuntimeException("[Impossible exception] If you see this exception please write about it on https://github.com/generaloss/jpize-engine/issues");
 
-            final TextureAtlasNode newNode = child1.insert(imagePixmap, paddingLeft, paddingTop, paddingRight, paddingBottom);
+            final AtlasNode newNode = child1.insert(imagePixmap, paddingLeft, paddingTop, paddingRight, paddingBottom);
             if(newNode != null)
                 return newNode;
 

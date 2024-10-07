@@ -102,10 +102,10 @@ public class TextureBatch implements Disposable {
 
         transformMat.set(rotationMat.getMul(scaleMat.getMul(shearMat)));
 
-        final Vec2f vertex1 = new Vec2f(0F,    height).sub(origin) .mulMat3(transformMat) .add(origin).add(x, y).add(position);
-        final Vec2f vertex2 = new Vec2f(0F,    0F    ).sub(origin) .mulMat3(transformMat) .add(origin).add(x, y).add(position);
-        final Vec2f vertex3 = new Vec2f(width, 0F    ).sub(origin) .mulMat3(transformMat) .add(origin).add(x, y).add(position);
-        final Vec2f vertex4 = new Vec2f(width, height).sub(origin) .mulMat3(transformMat) .add(origin).add(x, y).add(position);
+        final Vec2f vertex1 = new Vec2f(0F,    height).sub(origin).mulMat3(transformMat).add(origin).add(x, y).add(position);
+        final Vec2f vertex2 = new Vec2f(0F,    0F    ).sub(origin).mulMat3(transformMat).add(origin).add(x, y).add(position);
+        final Vec2f vertex3 = new Vec2f(width, 0F    ).sub(origin).mulMat3(transformMat).add(origin).add(x, y).add(position);
+        final Vec2f vertex4 = new Vec2f(width, height).sub(origin).mulMat3(transformMat).add(origin).add(x, y).add(position);
 
         this.addVertex(vertex1.x, vertex1.y, (flipX ? u2 : u1), (flipY ? v2 : v1), r, g, b, a);
         this.addVertex(vertex2.x, vertex2.y, (flipX ? u2 : u1), (flipY ? v1 : v2), r, g, b, a);
@@ -153,84 +153,6 @@ public class TextureBatch implements Disposable {
     }
 
 
-    public void draw(Texture2D texture, float x, float y, float width, float height) {
-        if(!scissor.intersects(x, y, width, height))
-            return;
-        if(size == maxSize)
-            this.render();
-
-        if(texture != lastTexture){
-            if(texture == null)
-                return;
-            this.render();
-            lastTexture = texture;
-        }
-
-        this.addTexturedQuad(x, y, width, height, 0F, 0F, 1F, 1F, color.r, color.g, color.b, color.a);
-        size++;
-    }
-
-    public void draw(TextureRegion textureRegion, float x, float y, float width, float height) {
-        if(!scissor.intersects(x, y, width, height))
-            return;
-        if(size == maxSize)
-            this.render();
-
-        final Texture2D texture = textureRegion.getTexture();
-        if(texture != lastTexture){
-            if(texture == null)
-                return;
-            this.render();
-            lastTexture = texture;
-        }
-
-        this.addTexturedQuad(x, y, width, height,
-            textureRegion.u1(), textureRegion.v1(), textureRegion.u2(), textureRegion.v2(),
-            color.r, color.g, color.b, color.a);
-        size++;
-    }
-
-    public void draw(Texture2D texture, float x, float y, float width, float height, Region region) {
-        if(!scissor.intersects(x, y, width, height))
-            return;
-        if(size == maxSize)
-            this.render();
-
-        if(texture != lastTexture){
-            if(texture == null)
-                return;
-            this.render();
-            lastTexture = texture;
-        }
-
-        this.addTexturedQuad(x, y, width, height,
-            region.u1(), region.v1(), region.u2(), region.v2(),
-            color.r, color.g, color.b, color.a);
-        size++;
-    }
-
-    public void draw(TextureRegion textureRegion, float x, float y, float width, float height, Region region) {
-        if(!scissor.intersects(x, y, width, height))
-            return;
-        if(size == maxSize)
-            this.render();
-
-        final Texture2D texture = textureRegion.getTexture();
-        if(texture != lastTexture){
-            if(texture == null)
-                return;
-            this.render();
-            lastTexture = texture;
-        }
-
-        final Region regionInRegion = Region.calcRegionInRegion(textureRegion, region);
-
-        this.addTexturedQuad(x, y, width, height,
-            regionInRegion.u1(), regionInRegion.v1(), regionInRegion.u2(), regionInRegion.v2(),
-            color.r, color.g, color.b, color.a);
-        size++;
-    }
-
     public void draw(Texture2D texture, float x, float y, float width, float height, float r, float g, float b, float a) {
         if(!scissor.intersects(x, y, width, height))
             return;
@@ -252,9 +174,44 @@ public class TextureBatch implements Disposable {
         this.draw(texture, x, y, width, height, color.r, color.g, color.b, color.a);
     }
 
-    public void draw(Texture2D texture, float x, float y, float width, float height, Region region, float r, float g, float b, float a) {
+    public void draw(Texture2D texture, float x, float y, float width, float height) {
+        this.draw(texture, x, y, width, height, color.r, color.g, color.b, color.a);
+    }
+
+
+    public void draw(TextureRegion textureRegion, float x, float y, float width, float height, float r, float g, float b, float a) {
         if(!scissor.intersects(x, y, width, height))
             return;
+        if(size == maxSize)
+            this.render();
+
+        final Texture2D texture = textureRegion.getTexture();
+        if(texture != lastTexture){
+            if(texture == null)
+                return;
+            this.render();
+            lastTexture = texture;
+        }
+
+        this.addTexturedQuad(x, y, width, height,
+            textureRegion.u1(), textureRegion.v1(), textureRegion.u2(), textureRegion.v2(),
+            r, g, b, a);
+        size++;
+    }
+
+    public void draw(TextureRegion textureRegion, float x, float y, float width, float height, Color color) {
+        this.draw(textureRegion, x, y, width, height, color.r, color.g, color.b, color.a);
+    }
+
+    public void draw(TextureRegion textureRegion, float x, float y, float width, float height) {
+        this.draw(textureRegion, x, y, width, height, color.r, color.g, color.b, color.a);
+    }
+
+
+    public void draw(Texture2D texture, Region region, float x, float y, float width, float height, float r, float g, float b, float a) {
+        if(!scissor.intersects(x, y, width, height))
+            return;
+
         if(size == maxSize)
             this.render();
 
@@ -271,46 +228,42 @@ public class TextureBatch implements Disposable {
         size++;
     }
 
-    public void draw(Texture2D texture, float x, float y, float width, float height, Region region, Color color) {
-        this.draw(texture, x, y, width, height, region, color.r, color.g, color.b, color.a);
+    public void draw(Texture2D texture, Region region, float x, float y, float width, float height, Color color) {
+        this.draw(texture, region, x, y, width, height, color.r, color.g, color.b, color.a);
     }
 
-    public void draw(TextureRegion textureRegion, float x, float y, float width, float height, Region region, float r, float g, float b, float a) {
-        if(!scissor.intersects(x, y, width, height))
-            return;
-        if(size == maxSize)
-            this.render();
-
-        final Texture2D texture = textureRegion.getTexture();
-        if(texture != lastTexture){
-            if(texture == null)
-                return;
-            this.render();
-            lastTexture = texture;
-        }
-
-        final Region regionInRegion = Region.calcRegionInRegion(textureRegion, region);
-
-        this.addTexturedQuad(x, y, width, height,
-            regionInRegion.u1(), regionInRegion.v1(), regionInRegion.u2(), regionInRegion.v2(),
-            r, g, b, a);
-        size++;
+    public void draw(Texture2D texture, Region region, float x, float y, float width, float height){
+        this.draw(texture, region, x, y, width, height, color.r, color.g, color.b, color.a);
     }
 
-    public void draw(TextureRegion textureRegion, float x, float y, float width, float height, Region region, Color color) {
-        this.draw(textureRegion, x, y, width, height, region, color.r, color.g, color.b, color.a);
+
+    public void draw(TextureRegion textureRegion, Region region, float x, float y, float width, float height, float r, float g, float b, float a) {
+        this.draw(new TextureRegion(textureRegion, region), x, y, width, height, r, g, b, a);
     }
 
-    public void drawRect(double r, double g, double b, double a, float x, float y, float width, float height) {
+    public void draw(TextureRegion textureRegion, Region region, float x, float y, float width, float height, Color color) {
+        this.draw(textureRegion, region, x, y, width, height, color.r, color.g, color.b, color.a);
+    }
+
+    public void draw(TextureRegion textureRegion, Region region, float x, float y, float width, float height) {
+        this.draw(textureRegion, region, x, y, width, height, color.r, color.g, color.b, color.a);
+    }
+
+
+    public void drawRect(float x, float y, float width, float height, double r, double g, double b, double a) {
         this.draw(TextureUtils.whiteTexture(), x, y, width, height, (float) r, (float) g, (float) b, (float) a);
     }
 
-    public void drawRect(Color color, float x, float y, float width, float height) {
-        this.drawRect(color.r, color.g, color.b, color.a, x, y, width, height);
+    public void drawRect(float x, float y, float width, float height, Color color) {
+        this.drawRect(x, y, width, height, color.r, color.g, color.b, color.a);
     }
 
-    public void drawRect(double alpha, float x, float y, float width, float height) {
-        this.drawRect(0F, 0F, 0F, alpha, x, y, width, height);
+    public void drawRect(float x, float y, float width, float height, double r, double g, double b) {
+        this.drawRect(x, y, width, height, r, g, b, 1D);
+    }
+
+    public void drawRect(float x, float y, float width, float height, double alpha) {
+        this.drawRect(x, y, width, height, 0F, 0F, 0F, alpha);
     }
 
 
