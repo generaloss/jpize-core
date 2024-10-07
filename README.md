@@ -77,8 +77,10 @@ batch.scale(scale);
 // draw texture
 batch.draw(texture, x, y, width, height);
 // draw rectangle
-batch.drawRect(r, g, b, a,  x, y,  width, height);
-batch.drawRect(a,  x, y,  width, height);
+batch.drawRect(x, y,  width, height,  color);
+batch.drawRect(x, y,  width, height,  r, g, b, a);
+batch.drawRect(x, y,  width, height,  r, g, b);
+batch.drawRect(x, y,  width, height,  alpha);
 
 batch.render();
 ```
@@ -94,10 +96,10 @@ Font font = FontLoader.loadTrueType(path_or_resource, size);
 Font font = FontLoader.loadTrueType(path_or_resource, size, charset);
 
 // options
-font.options.scale = 1.5F;
-font.options.rotation = 45;
-font.options.italic = true;
-font.options.invLineWrap = true;
+font.options().scale = 1.5F;
+font.options().rotation = 45;
+font.options().italic = true;
+font.options().invLineWrap = true;
 
 // bounds
 float width = font.getTextWidth(line);
@@ -105,7 +107,8 @@ float height = font.getTextHeight(text);
 Vec2f bounds = font.getBounds(text);
 
 // render
-font.drawText(batch, text, x, y)
+font.drawText(text, x, y);
+font.drawText(batch, text, x, y);
 ```
 
 #### 4. Input:
