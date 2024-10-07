@@ -10,22 +10,6 @@ public class TextureRegion extends Region {
         this.set(textureRegion);
     }
 
-    public TextureRegion(TextureRegion textureRegion1, int x, int y, int width, int height) {
-        this.set(textureRegion1, x, y, width, height);
-    }
-
-    public TextureRegion(TextureRegion textureRegion1, double u1, double v1, double u2, double v2) {
-        this.set(textureRegion1, u1, v1, u2, v2);
-    }
-
-    public TextureRegion(TextureRegion textureRegion1, Region region2) {
-        this.set(textureRegion1, region2);
-    }
-
-    public TextureRegion(Region region1, TextureRegion textureRegion2) {
-        this.set(region1, textureRegion2);
-    }
-
     public TextureRegion(Texture2D texture) {
         super();
         this.setTexture(texture);
@@ -44,53 +28,41 @@ public class TextureRegion extends Region {
     }
 
 
-    public void set(TextureRegion region) {
-        this.setTexture(region.getTexture());
+    public TextureRegion set(TextureRegion region) {
         super.set(region.u1, region.v1, region.u2, region.v2);
+        return this.setTexture(region.getTexture());
     }
 
-    public void set(TextureRegion textureRegion1, int x, int y, int width, int height) {
-        this.setTexture(textureRegion1.getTexture());
-        super.set(textureRegion1, x, y, width, height, texture.getWidth(), texture.getHeight());
-    }
-
-    public void set(TextureRegion textureRegion1, double u1, double v1, double u2, double v2) {
-        this.setTexture(textureRegion1.getTexture());
-        super.set(textureRegion1, u1, v1, u2, v2);
-    }
-
-    public void set(TextureRegion textureRegion1, Region region2) {
-        this.setTexture(textureRegion1.getTexture());
-        super.set(textureRegion1, region2);
-    }
-
-    public void set(Region region1, TextureRegion textureRegion2) {
-        this.setTexture(textureRegion2.getTexture());
-        super.set(region1, textureRegion2);
-    }
-
-    public void set(int x, int y, int width, int height) {
+    public TextureRegion set(int x, int y, int width, int height) {
         super.set(x, y, width, height, texture.getWidth(), texture.getHeight());
+        return this;
     }
 
-    public void set(Texture2D texture, int x, int y, int width, int height) {
-        this.setTexture(texture);
+    public TextureRegion set(Texture2D texture, int x, int y, int width, int height) {
         this.set(x, y, width, height);
+        return this.setTexture(texture);
     }
 
-    public void set(Texture2D texture, double u1, double v1, double u2, double v2) {
-        this.setTexture(texture);
+    public TextureRegion set(Texture2D texture, double u1, double v1, double u2, double v2) {
         this.set(u1, v1, u2, v2);
+        return this.setTexture(texture);
     }
 
-    public void set(Texture2D texture, Region region) {
-        this.setTexture(texture);
+    public TextureRegion set(Texture2D texture, Region region) {
         this.set(region);
+        return this.setTexture(texture);
     }
 
 
-    public void setTexture(Texture2D texture) {
+    public TextureRegion setSubregion(double x, double y, double width, double height) {
+        this.setSubregion(x, y, width, height, texture.getWidth(), texture.getHeight());
+        return this;
+    }
+
+
+    public TextureRegion setTexture(Texture2D texture) {
         this.texture = texture;
+        return this;
     }
 
     public Texture2D getTexture() {

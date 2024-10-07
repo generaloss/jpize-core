@@ -54,8 +54,9 @@ public class TextureAtlas<T> implements Disposable {
             regions.put(image.identifier, new TextureRegion(texture, drawX, drawY, drawWidth, drawHeight));
             sizes.put(image.identifier, new Vec2i(drawWidth, drawHeight));
         }
-
+        // set texture
         texture.setImage(pixmap);
+
         for(AtlasImage<T> image: images)
             image.pixmap.dispose();
         images.clear();

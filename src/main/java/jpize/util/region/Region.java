@@ -27,40 +27,29 @@ public class Region {
         this.set(x, y, width, height, totalWidth, totalHeight);
     }
 
-    public Region(Region region, double u1, double v1, double u2, double v2) {
-        this.set(region, u1, v1, u2, v2);
+
+    public Region set(Region region) {
+        return this.set(region.u1, region.v1, region.u2, region.v2);
     }
 
-    public Region(Region region1, Region region2) {
-        this.set(region1, region2);
-    }
-
-    public Region(Region region, double x, double y, double width, double height, double totalWidth, double totalHeight) {
-        this.set(region, x, y, width, height, totalWidth, totalHeight);
-    }
-
-
-    public void set(Region region) {
-        this.set(region.u1, region.v1, region.u2, region.v2);
-    }
-
-    public void set(float u1, float v1, float u2, float v2) {
+    public Region set(float u1, float v1, float u2, float v2) {
         this.u1 = u1;
         this.v1 = v1;
         this.u2 = u2;
         this.v2 = v2;
+        return this;
     }
 
-    public void set(double u1, double v1, double u2, double v2) {
-        this.set((float) u1, (float) v1, (float) u2, (float) v2);
+    public Region set(double u1, double v1, double u2, double v2) {
+        return this.set((float) u1, (float) v1, (float) u2, (float) v2);
     }
 
-    public void reset() {
-        this.set(0F, 0F, 1F, 1F);
+    public Region reset() {
+        return this.set(0F, 0F, 1F, 1F);
     }
 
-    public void set(double x, double y, double width, double height, double totalWidth, double totalHeight) {
-        this.set(
+    public Region set(double x, double y, double width, double height, double totalWidth, double totalHeight) {
+        return this.set(
             x / totalWidth,
             y / totalHeight,
             (x + width)  / totalWidth,
@@ -68,29 +57,28 @@ public class Region {
         );
     }
 
-    public void set(Region region, double u1, double v1, double u2, double v2) {
-        final float regionWidth = region.getWidth();
-        final float regionHeight = region.getHeight();
-        this.set(
-            region.u1 + (u1 * regionWidth ),
-            region.v1 + (v1 * regionHeight),
-            region.u1 + (u2 * regionWidth ),
-            region.v1 + (v2 * regionHeight)
+    public Region setSubregion(double u1, double v1, double u2, double v2) {
+        final float width = this.getWidth();
+        final float height = this.getHeight();
+        return this.set(
+            this.u1 + (u1 * width ),
+            this.v1 + (v1 * height),
+            this.u1 + (u2 * width ),
+            this.v1 + (v2 * height)
         );
     }
 
-    public void set(Region region1, Region region2) {
-        this.set(region1, region2.u1, region2.v1, region2.u2, region2.v2);
-    }
-
-    public void set(Region region, double x, double y, double width, double height, double totalWidth, double totalHeight) {
-        this.set(
-            region,
+    public Region setSubregion(double x, double y, double width, double height, double totalWidth, double totalHeight) {
+        return this.setSubregion(
             x / totalWidth,
             y / totalHeight,
             (x + width)  / totalWidth,
             (y + height) / totalHeight
         );
+    }
+
+    public Region setSubregion(Region region) {
+        return this.setSubregion(region.u1, region.v1, region.u2, region.v2);
     }
 
 
