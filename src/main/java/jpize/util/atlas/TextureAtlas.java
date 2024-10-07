@@ -7,19 +7,18 @@ import jpize.util.region.TextureRegion;
 import jpize.util.res.Resource;
 import jpize.util.pixmap.PixmapRGBA;
 import jpize.util.pixmap.PixmapIO;
-import jpize.util.region.Region;
 
 import java.util.*;
 
-public class Atlas<T> implements Disposable {
+public class TextureAtlas<T> implements Disposable {
 
     private final List<AtlasImage<T>> images;
-    private final Map<T, Region> regions;
+    private final Map<T, TextureRegion> regions;
     private final Map<T, Vec2i> sizes;
     private PixmapRGBA pixmap;
     private Texture2D texture;
 
-    public Atlas() {
+    public TextureAtlas() {
         this.images = new ArrayList<>();
         this.regions = new HashMap<>();
         this.sizes = new HashMap<>();
@@ -88,11 +87,11 @@ public class Atlas<T> implements Disposable {
     }
 
 
-    public Map<T, Region> getRegionMap() {
+    public Map<T, TextureRegion> getRegionMap() {
         return regions;
     }
 
-    public Region getRegion(T identifier) {
+    public TextureRegion getRegion(T identifier) {
         return regions.get(identifier);
     }
 
