@@ -22,6 +22,10 @@ public class TextureRegion extends Region {
         this.set(textureRegion1, region2);
     }
 
+    public TextureRegion(Region region1, TextureRegion textureRegion2) {
+        this.set(region1, textureRegion2);
+    }
+
     public TextureRegion(Texture2D texture) {
         super();
         this.setTexture(texture);
@@ -58,6 +62,11 @@ public class TextureRegion extends Region {
     public void set(TextureRegion textureRegion1, Region region2) {
         this.setTexture(textureRegion1.getTexture());
         super.set(textureRegion1, region2);
+    }
+
+    public void set(Region region1, TextureRegion textureRegion2) {
+        this.setTexture(textureRegion2.getTexture());
+        super.set(region1, textureRegion2);
     }
 
     public void set(int x, int y, int width, int height) {

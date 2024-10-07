@@ -105,10 +105,14 @@ public class Atlas<T> implements Disposable {
         return pixmap;
     }
 
+    public Texture2D getTexture() {
+        return texture;
+    }
+
+
     public int size() {
         return regions.size();
     }
-
 
     @Override
     public void dispose() {
