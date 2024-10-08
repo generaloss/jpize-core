@@ -9,7 +9,7 @@ public class ScreenQuadShader {
     private static ScreenQuadShader instance;
     private final Shader shader;
 
-    public ScreenQuadShader() {
+    private ScreenQuadShader() {
         this.shader = new Shader(Resource.internal("/shader/screen/screen.vert"), Resource.internal("/shader/screen/screen.frag"));
     }
 

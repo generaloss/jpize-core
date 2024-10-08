@@ -69,8 +69,8 @@ public abstract class Pixmap implements Disposable {
         if(!Vec2i.equals(width, height, this.width, this.height)){
             this.width = width;
             this.height = height;
-            dispose();
-            buffer = MemoryUtil.memCalloc(getBufferSize());
+            MemoryUtil.memFree(buffer);
+            buffer = MemoryUtil.memCalloc(this.getBufferSize());
         }
     }
 
@@ -78,7 +78,7 @@ public abstract class Pixmap implements Disposable {
         if(pixmap == null || pixmap.channels != channels)
             return;
         // resize
-        resize(pixmap.width, pixmap.height);
+        this.resize(pixmap.width, pixmap.height);
         // copy pixels
         for(int i = 0; i < buffer.limit(); i++)
             buffer.put(i, pixmap.buffer.get(i));

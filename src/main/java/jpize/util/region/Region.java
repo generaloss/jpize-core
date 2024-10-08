@@ -1,6 +1,9 @@
 package jpize.util.region;
 
 import jpize.gl.texture.Texture2D;
+import jpize.util.math.vector.Vec2d;
+import jpize.util.math.vector.Vec2f;
+import jpize.util.math.vector.Vec2i;
 
 public class Region {
 
@@ -57,6 +60,7 @@ public class Region {
         );
     }
 
+
     public Region setSubregion(double u1, double v1, double u2, double v2) {
         final float width = this.getWidth();
         final float height = this.getHeight();
@@ -68,7 +72,11 @@ public class Region {
         );
     }
 
-    public Region setSubregion(double x, double y, double width, double height, double totalWidth, double totalHeight) {
+    public Region setSubregion(Region region) {
+        return this.setSubregion(region.u1, region.v1, region.u2, region.v2);
+    }
+
+    public Region setSubregionPx(double x, double y, double width, double height, double totalWidth, double totalHeight) {
         return this.setSubregion(
             x / totalWidth,
             y / totalHeight,
@@ -77,8 +85,16 @@ public class Region {
         );
     }
 
-    public Region setSubregion(Region region) {
-        return this.setSubregion(region.u1, region.v1, region.u2, region.v2);
+    public Region setSubregionPx(double x, double y, double width, double height, Vec2i size) {
+        return this.setSubregionPx(x, y, width, height, size.x, size.y);
+    }
+
+    public Region setSubregionPx(double x, double y, double width, double height, Vec2f size) {
+        return this.setSubregionPx(x, y, width, height, size.x, size.y);
+    }
+
+    public Region setSubregionPx(double x, double y, double width, double height, Vec2d size) {
+        return this.setSubregionPx(x, y, width, height, size.x, size.y);
     }
 
 

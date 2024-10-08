@@ -4,7 +4,7 @@
 
     <groupId>io.github.generaloss</groupId>
     <artifactId>jpize-core</artifactId>
-    <version>24.9.2-dev09</version>
+    <version>24.9.2-dev14</version>
     <name>jpize-core</name>
 
     <description>engine core</description>
@@ -119,7 +119,7 @@
         <dependency>
             <groupId>io.github.generaloss</groupId>
             <artifactId>jpize-utils</artifactId>
-            <version>24.9.2-dev01</version>
+            <version>24.9.2-dev02</version>
         </dependency>
         <!-- lwjgl -->
         <dependency><groupId>org.lwjgl</groupId><artifactId>lwjgl</artifactId></dependency>

@@ -238,7 +238,8 @@ public class TextureBatch implements Disposable {
 
 
     public void draw(TextureRegion textureRegion, Region region, float x, float y, float width, float height, float r, float g, float b, float a) {
-        this.draw(new TextureRegion(textureRegion, region), x, y, width, height, r, g, b, a);
+        final TextureRegion subregion = new TextureRegion(textureRegion).setSubregion(region);
+        this.draw(subregion, x, y, width, height, r, g, b, a);
     }
 
     public void draw(TextureRegion textureRegion, Region region, float x, float y, float width, float height, Color color) {
