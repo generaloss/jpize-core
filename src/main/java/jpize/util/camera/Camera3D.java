@@ -1,6 +1,6 @@
 package jpize.util.camera;
 
-import jpize.util.math.rot.EulerAngles;
+import jpize.util.math.EulerAngles;
 import jpize.util.math.vector.Vec3f;
 
 public abstract class Camera3D extends Camera {
@@ -10,9 +10,8 @@ public abstract class Camera3D extends Camera {
 
     public Camera3D(int width, int height) {
         super(width, height);
-        
-        position = new Vec3f();
-        rotation = new EulerAngles();
+        this.position = new Vec3f();
+        this.rotation = new EulerAngles();
     }
 
 
@@ -23,6 +22,8 @@ public abstract class Camera3D extends Camera {
     public EulerAngles rotation() {
         return rotation;
     }
+
+    public abstract Vec3f getDirection();
 
 
     public float getX() {
@@ -38,9 +39,9 @@ public abstract class Camera3D extends Camera {
     }
 
 
-    public abstract float getFov();
+    public abstract float getFOV();
 
-    public abstract void setFov(float fieldOfView);
+    public abstract void setFOV(float fieldOfView);
 
 
     public abstract float getFar();

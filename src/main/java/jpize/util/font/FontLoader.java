@@ -25,24 +25,24 @@ import static org.lwjgl.stb.STBTruetype.*;
 
 public class FontLoader {
 
-    public static Font loadDefault(int size, Charset charset) {
-        return loadTrueType("/font/droidsans.ttf", size, charset);
+    public static Font loadDefault(int size, Charset charset, boolean linearFilter) {
+        return loadTrueType("/font/droidsans.ttf", size, charset, linearFilter);
     }
 
     public static Font loadDefault() {
-        return loadDefault(64, Charset.DEFAULT_ENG_RUS);
+        return loadDefault(64, Charset.DEFAULT_ENG_RUS, true);
     }
 
-    public static Font loadDefaultBold(int size, Charset charset) {
-        return loadTrueType("/font/droidsans-bold.ttf", size, charset);
+    public static Font loadDefaultBold(int size, Charset charset, boolean linearFilter) {
+        return loadTrueType("/font/droidsans-bold.ttf", size, charset, linearFilter);
     }
 
     public static Font loadDefaultBold() {
-        return loadDefaultBold(64, Charset.DEFAULT_ENG_RUS);
+        return loadDefaultBold(64, Charset.DEFAULT_ENG_RUS, true);
     }
 
 
-    public static Font loadFnt(Resource resource) {
+    public static Font loadFnt(Resource resource, boolean linearFilter) {
         final Map<Integer, Texture2D> pages = new HashMap<>();
         final Map<Integer, Glyph> glyphs = new HashMap<>();
 
@@ -75,8 +75,11 @@ public class FontLoader {
                         relativeTexturePath = Path.of(parentPath + "/" + relativeTexturePath).normalize().toString();
                     }
 
-                    final Resource textureResource = Resource.internal(relativeTexturePath);
-                    pages.put(pageID, new Texture2D(textureResource));
+                    final Texture2D texture = new Texture2D()
+                        .setFilters(linearFilter ? GlFilter.LINEAR : GlFilter.NEAREST)
+                        .setImage(relativeTexturePath);
+
+                    pages.put(pageID, texture);
                 }
                 case "char" -> {
                     final int code = Integer.parseInt(getValue(tokens[1]));
@@ -119,8 +122,8 @@ public class FontLoader {
         return font;
     }
 
-    public static Font loadFnt(String filepath) {
-        return loadFnt(Resource.internal(filepath));
+    public static Font loadFnt(String filepath, boolean linearFilter) {
+        return loadFnt(Resource.internal(filepath), linearFilter);
     }
 
 
@@ -129,7 +132,7 @@ public class FontLoader {
     }
 
 
-    public static Font loadTrueType(Resource resource, int size, Charset charset) {
+    public static Font loadTrueType(Resource resource, int size, Charset charset, boolean linearFilter) {
         final Map<Integer, Texture2D> pages = new HashMap<>();
         final Map<Integer, Glyph> glyphs = new HashMap<>();
 
@@ -148,8 +151,10 @@ public class FontLoader {
 
         // Texture
         final Texture2D texture = new Texture2D()
-            .setFilters(GlFilter.LINEAR)
+            .setFilters(linearFilter ? GlFilter.LINEAR : GlFilter.NEAREST)
             .setImage(pixmap.toPixmapRGBA());
+
+        pixmap.dispose();
 
         pages.put(0, texture);
 
@@ -205,16 +210,16 @@ public class FontLoader {
         return new Font(size, ascent, descent, pages, glyphs);
     }
 
-    public static Font loadTrueType(String filepath, int size, Charset charset) {
-        return loadTrueType(Resource.internal(filepath), size, charset);
+    public static Font loadTrueType(String filepath, int size, Charset charset, boolean linearFilter) {
+        return loadTrueType(Resource.internal(filepath), size, charset, linearFilter);
     }
 
-    public static Font loadTrueType(Resource resource, int size) {
-        return loadTrueType(resource, size, Charset.DEFAULT);
+    public static Font loadTrueType(Resource resource, int size, boolean linearFilter) {
+        return loadTrueType(resource, size, Charset.DEFAULT, linearFilter);
     }
 
-    public static Font loadTrueType(String filePath, int size) {
-        return loadTrueType(filePath, size, Charset.DEFAULT);
+    public static Font loadTrueType(String filePath, int size, boolean linearFilter) {
+        return loadTrueType(filePath, size, Charset.DEFAULT, linearFilter);
     }
 
 }

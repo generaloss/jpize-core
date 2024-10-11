@@ -93,7 +93,10 @@ public class Texture2D extends GlTexture {
     }
 
     public Texture2D setImage(String internalPath) {
-        return setImage(PixmapIO.load(internalPath));
+        final Pixmap pixmap = PixmapIO.load(internalPath);
+        this.setImage(pixmap);
+        pixmap.dispose();
+        return this;
     }
 
 

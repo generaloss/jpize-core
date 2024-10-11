@@ -63,7 +63,8 @@ public class Font extends FontInfo implements Disposable {
         float width = 0;
         float height = 0;
 
-        for(GlyphSprite glyph: this.iterable(text)){
+        final Iterable<GlyphSprite> iterable = this.iterable(text);
+        for(GlyphSprite glyph: iterable){
             final float glyphMaxX = glyph.getX() + ((char) glyph.getCode() == ' ' ? glyph.getAdvanceX() : glyph.getWidth());
             final float glyphMaxY = (glyph.getLineY() + 1) * options.getAdvanceScaled();
 
@@ -71,7 +72,8 @@ public class Font extends FontInfo implements Disposable {
             height = Math.max(height, glyphMaxY);
         }
 
-        return new Vec2f(width, height);
+        final GlyphIterator iterator = ((GlyphIterator) iterable.iterator());
+        return new Vec2f(Math.max(iterator.getCursorX(), width), height);
     }
 
     public float getTextWidth(String text) {
@@ -85,15 +87,15 @@ public class Font extends FontInfo implements Disposable {
 
     public float getTextAdvance(String text) {
         float width = 0;
-        GlyphSprite prevGlyph = null;
-        for(GlyphSprite glyph: this.iterable(text)){
+        final Iterable<GlyphSprite> iterable = this.iterable(text);
+
+        for(GlyphSprite glyph: iterable){
             final float glyphMaxX = glyph.getX() + ((char) glyph.getCode() == ' ' ? glyph.getAdvanceX() : glyph.getWidth());
             width = Math.max(width, glyphMaxX);
-            prevGlyph = glyph;
         }
-        if(prevGlyph != null)
-            width = Math.max(width, prevGlyph.getX() + prevGlyph.getAdvanceX());
-        return width;
+
+        final GlyphIterator iterator = ((GlyphIterator) iterable.iterator());
+        return Math.max(iterator.getCursorX(), width);
     }
 
     public float getTextHeight(String text) {
@@ -115,7 +117,8 @@ public class Font extends FontInfo implements Disposable {
     }
 
     public Iterable<GlyphSprite> iterable(String text) {
-        return () -> new GlyphIterator(this, text);
+        final GlyphIterator iterator = new GlyphIterator(this, text);
+        return () -> iterator;
     }
 
 

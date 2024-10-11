@@ -4,11 +4,13 @@ import jpize.app.Jpize;
 import jpize.util.math.matrix.Frustum;
 import jpize.util.math.matrix.Matrix4f;
 import jpize.util.math.vector.Vec2i;
+import jpize.util.math.vector.Vec3f;
 
 public class PerspectiveCamera extends Camera3D {
 
     private float fovY, near, far;
     private final Matrix4f projection, view, combined, imaginaryView, rollMatrix;
+    private final Vec3f direction;
     private final Frustum frustum;
     private boolean imaginaryX, imaginaryY, imaginaryZ, hasImaginaryAxis;
 
@@ -28,14 +30,22 @@ public class PerspectiveCamera extends Camera3D {
         this.view = new Matrix4f();
         this.projection = new Matrix4f();
         this.combined = new Matrix4f();
+        this.direction = new Vec3f();
 
         this.updateProjectionMatrix();
-        this.updateViewMatrix();
+        this.update();
     }
 
     @Override
     public void update() {
+        // update direction
+        rotation.getDirection(direction);
+        // update view
         this.updateViewMatrix();
+        // update combined
+        combined.set(projection).mul(imaginaryView);
+        // update frustum
+        frustum.setFrustum(combined);
     }
 
     private void updateProjectionMatrix() {
@@ -47,26 +57,20 @@ public class PerspectiveCamera extends Camera3D {
         rollMatrix.setRotationZ(rotation.roll);
 
         // View matrix
-        imaginaryView.setLookAlong(position, rotation.getDir());
+        imaginaryView.setLookAlong(position, direction);
         imaginaryView.set(rollMatrix.copy().mul(imaginaryView));
 
         // View matrix
-        if(hasImaginaryAxis){
+        if(hasImaginaryAxis) {
             view.setLookAlong(
                 imaginaryX ? 0 : position.x,
                 imaginaryY ? 0 : position.y,
                 imaginaryZ ? 0 : position.z,
-                rotation.getDir()
+                direction
             );
             view.set(rollMatrix.mul(view));
         }else
             view.set(imaginaryView);
-
-        // Update combined
-        combined.set(projection).mul(imaginaryView);
-
-        // Update frustum
-        frustum.setFrustum(combined);
     }
 
     @Override
@@ -90,12 +94,17 @@ public class PerspectiveCamera extends Camera3D {
     }
 
     @Override
-    public float getFov() {
+    public Vec3f getDirection() {
+        return direction;
+    }
+
+    @Override
+    public float getFOV() {
         return fovY;
     }
 
     @Override
-    public void setFov(float fieldOfView) {
+    public void setFOV(float fieldOfView) {
         if(this.fovY == fieldOfView)
             return;
 

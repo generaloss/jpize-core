@@ -91,23 +91,23 @@ public class GlfwInput {
     }
 
     public GlfwCursorMode getInputModeCursor() {
-        return GlfwCursorMode.valueOf(getInputMode(GlfwMode.CURSOR));
+        return GlfwCursorMode.valueOf(this.getInputMode(GlfwMode.CURSOR));
     }
 
     public boolean getInputModeStickyKeys() {
-        return getInputMode(GlfwMode.STICKY_KEYS) == Glfw.TRUE;
+        return this.getInputMode(GlfwMode.STICKY_KEYS) == Glfw.TRUE;
     }
 
     public boolean getInputModeStickyMouseButtons() {
-        return getInputMode(GlfwMode.STICKY_MOUSE_BUTTONS) == Glfw.TRUE;
+        return this.getInputMode(GlfwMode.STICKY_MOUSE_BUTTONS) == Glfw.TRUE;
     }
 
     public boolean getInputModeLockKeyMods() {
-        return getInputMode(GlfwMode.LOCK_KEY_MODS) == Glfw.TRUE;
+        return this.getInputMode(GlfwMode.LOCK_KEY_MODS) == Glfw.TRUE;
     }
 
     public boolean getInputModeRawMouseMotion() {
-        return getInputMode(GlfwMode.RAW_MOUSE_MOTION) == Glfw.TRUE;
+        return this.getInputMode(GlfwMode.RAW_MOUSE_MOTION) == Glfw.TRUE;
     }
 
 
@@ -116,27 +116,27 @@ public class GlfwInput {
     }
 
     public void setInputModeCursor(GlfwCursorMode value) {
-        setInputMode(GlfwMode.CURSOR, value.value);
+        this.setInputMode(GlfwMode.CURSOR, value.value);
     }
 
     public void setInputModeStickyKeys(boolean value) {
-        setInputMode(GlfwMode.STICKY_KEYS, value ? Glfw.TRUE : Glfw.FALSE);
+        this.setInputMode(GlfwMode.STICKY_KEYS, value ? Glfw.TRUE : Glfw.FALSE);
     }
 
     public void setInputModeStickyMouseButtons(boolean value) {
-        setInputMode(GlfwMode.STICKY_MOUSE_BUTTONS, value ? Glfw.TRUE : Glfw.FALSE);
+        this.setInputMode(GlfwMode.STICKY_MOUSE_BUTTONS, value ? Glfw.TRUE : Glfw.FALSE);
     }
 
     public void setInputModeLockKeyMods(boolean value) {
-        setInputMode(GlfwMode.LOCK_KEY_MODS, value ? Glfw.TRUE : Glfw.FALSE);
+        this.setInputMode(GlfwMode.LOCK_KEY_MODS, value ? Glfw.TRUE : Glfw.FALSE);
     }
 
     public void setInputModeRawMouseMotion(boolean value) {
-        setInputMode(GlfwMode.RAW_MOUSE_MOTION, value ? Glfw.TRUE : Glfw.FALSE);
+        this.setInputMode(GlfwMode.RAW_MOUSE_MOTION, value ? Glfw.TRUE : Glfw.FALSE);
     }
 
 
-    public Vec2f getCursorPos() {
+    public Vec2f getCursorNativePos() {
         final DoubleBuffer xBuf = MemoryUtil.memAllocDouble(1);
         final DoubleBuffer yBuf = MemoryUtil.memAllocDouble(1);
         glfwGetCursorPos(windowID, xBuf, yBuf);
@@ -144,6 +144,12 @@ public class GlfwInput {
         MemoryUtil.memFree(xBuf);
         MemoryUtil.memFree(yBuf);
         return value;
+    }
+
+    public Vec2f getCursorPos() {
+        final Vec2f position = this.getCursorNativePos();
+        position.y = (window.getHeight() - position.y);
+        return position;
     }
 
     public float getCursorX() {
@@ -163,7 +169,7 @@ public class GlfwInput {
     }
 
     public float getCursorY() {
-        return (window.getHeight() - getCursorNativeY());
+        return (window.getHeight() - this.getCursorNativeY());
     }
 
     public void setCursorPos(double x, double y) {
@@ -203,8 +209,8 @@ public class GlfwInput {
     private final Vec2f prevCursorPos = new Vec2f();
 
     public Vec2f getCursorRelPos() {
-        final Vec2f value = getCursorPos().sub(prevCursorPos);
-        prevCursorPos.set(getCursorPos());
+        final Vec2f value = this.getCursorNativePos().sub(prevCursorPos);
+        prevCursorPos.set(this.getCursorNativePos());
         return value;
     }
 

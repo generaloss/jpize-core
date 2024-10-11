@@ -111,8 +111,12 @@ public class GlyphSprite {
         this.render(batch, x, y, color.r, color.g, color.b, color.a);
     }
 
+    public void render(TextureBatch batch, float x, float y) {
+        this.render(batch, x, y, 1F, 1F, 1F, 1F);
+    }
+
     public void render(TextureBatch batch) {
-        this.render(batch, 0, 0, 1, 1, 1, 1);
+        this.render(batch, 0F, 0F);
     }
 
 

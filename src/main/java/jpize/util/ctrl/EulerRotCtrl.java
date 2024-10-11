@@ -7,8 +7,8 @@ import jpize.glfw.input.GlfwInput;
 import jpize.glfw.monitor.GlfwMonitor;
 import jpize.glfw.window.GlfwAttrib;
 import jpize.glfw.window.GlfwWindow;
+import jpize.util.math.EulerAngles;
 import jpize.util.math.Maths;
-import jpize.util.math.rot.EulerAngles;
 
 public class EulerRotCtrl {
 

@@ -283,7 +283,10 @@ public class TextInput implements Iterable<String> {
     }
 
     public TextInput setLine(CharSequence line) {
-        return this.setLine(position.y, line);
+        this.setLine(position.y, line);
+        if(position.x > line.length())
+            position.x = line.length();
+        return this;
     }
 
     public String removeLine(int y) {

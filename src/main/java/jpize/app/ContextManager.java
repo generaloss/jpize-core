@@ -25,6 +25,8 @@ class ContextManager {
     }
 
     protected static Context getContext(GlfwWindow window) {
+        if(window == null)
+            return null;
         return CONTEXTS.get(window.getID());
     }
 

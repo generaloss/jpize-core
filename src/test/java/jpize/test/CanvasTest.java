@@ -10,11 +10,12 @@ import jpize.util.math.Mathc;
 
 public class CanvasTest extends JpizeApplication {
 
-    private final Canvas canvas;
+    private Canvas canvas;
     private float time;
 
-    public CanvasTest() {
+    public void init() {
         this.canvas = new Canvas();
+        new Thread(() -> System.out.println(Jpize.context())).start();
     }
 
     @Override

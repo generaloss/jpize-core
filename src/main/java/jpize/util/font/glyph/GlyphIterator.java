@@ -7,9 +7,8 @@ public class GlyphIterator implements Iterator<GlyphSprite> {
 
     private final Font font;
     private final CharSequence text;
-    private final int size;
 
-    private int cursor;
+    private int position;
     private int lineY;
     private float cursorX;
     private float cursorY;
@@ -17,7 +16,6 @@ public class GlyphIterator implements Iterator<GlyphSprite> {
     public GlyphIterator(Font font, CharSequence text) {
         this.font = font;
         this.text = this.textWithoutNullGlyphs(text);
-        this.size = this.text.length();
 
         this.cursorY = -(font.options().invLineWrap ? font.options().getAdvance() : 0);
     }
@@ -35,7 +33,7 @@ public class GlyphIterator implements Iterator<GlyphSprite> {
 
     @Override
     public boolean hasNext() {
-        return cursor < size;
+        return position < text.length();
     }
 
     @Override
@@ -69,7 +67,7 @@ public class GlyphIterator implements Iterator<GlyphSprite> {
         // Advance cursor :|
         prevIncX = cursorXAdvance;
         cursorX += prevIncX;
-        cursor++;
+        position++;
 
         return sprite;
     }
@@ -78,7 +76,7 @@ public class GlyphIterator implements Iterator<GlyphSprite> {
         int code = -1;
 
         while(hasNext()){
-            code = text.charAt(cursor);
+            code = text.charAt(position);
             if(code != '\n')
                 break;
 
@@ -87,7 +85,7 @@ public class GlyphIterator implements Iterator<GlyphSprite> {
             cursorY += font.options().getLineWrapSign() * font.options().getAdvance() * font.options().advanceFactor.y;
             lineY++;
 
-            cursor++;
+            position++;
         }
 
         return font.getGlyphs().get(code);
@@ -104,6 +102,31 @@ public class GlyphIterator implements Iterator<GlyphSprite> {
                 builder.append((char) code);
         }
         return builder.toString();
+    }
+
+
+    public Font getFont() {
+        return font;
+    }
+
+    public CharSequence getText() {
+        return text;
+    }
+
+    public int getPosition() {
+        return position;
+    }
+
+    public float getCursorX() {
+        return cursorX;
+    }
+
+    public float getCursorY() {
+        return cursorY;
+    }
+
+    public int getLineY() {
+        return lineY;
     }
 
 }
