@@ -15,68 +15,95 @@ public class Jpize {
     }
 
     public static void run() {
-        ContextManager.run();
+        ContextManager.instance().run();
     }
 
 
     public static GlfwWindow window() {
-        return GlfwWindow.getCurrentContext();
+        final Context context = context();
+        if(context == null)
+            return null;
+        return context.getWindow();
     }
 
     public static GlfwInput input() {
-        return window().getInput();
+        final GlfwWindow window = window();
+        if(window == null)
+            return null;
+        return window.getInput();
     }
 
     public static GlfwCallbacks callbacks() {
-        return window().getCallbacks();
+        final GlfwWindow window = window();
+        if(window == null)
+            return null;
+        return window.getCallbacks();
     }
 
     public static Context context() {
-        return ContextManager.getCurrentContext();
+        return ContextManager.instance().getCurrentContext();
     }
 
 
     public static int getWidth() {
-        return window().getWidth();
+        final GlfwWindow window = window();
+        if(window == null)
+            return 0;
+        return window.getWidth();
     }
 
     public static int getHeight() {
-        return window().getHeight();
+        final GlfwWindow window = window();
+        if(window == null)
+            return 0;
+        return window.getHeight();
     }
 
     public static float getX() {
-        return input().getCursorX();
+        final GlfwInput input = input();
+        if(input == null)
+            return 0;
+        return input.getCursorX();
     }
 
     public static float getY() {
-        return input().getCursorY();
+        final GlfwInput input = input();
+        if(input == null)
+            return 0;
+        return input.getCursorY();
     }
 
     public static float getScroll() {
-        return input().getScrollY();
+        final GlfwInput input = input();
+        if(input == null)
+            return 0;
+        return input.getScrollY();
     }
 
 
     public static int getFPS() {
-        return ContextManager.getFPS();
+        return ContextManager.instance().getFPS();
     }
 
     public static float getDT() {
-        return ContextManager.getDeltaTime();
+        return ContextManager.instance().getDeltaTime();
     }
 
 
     public static SyncExecutor syncExecutor() {
-        return context().getSyncExecutor();
+        final Context context = context();
+        if(context == null)
+            return null;
+        return context.getSyncExecutor();
     }
 
 
     public static void exit() {
-        ContextManager.closeAll();
+        ContextManager.instance().closeAll();
     }
 
     public static void exitOthers() {
-        ContextManager.closeAllThatNotCurrent();
+        ContextManager.instance().closeAllThatNotCurrent();
     }
 
 }

@@ -15,11 +15,11 @@ public class Context {
     private boolean disableRender;
 
     protected Context(GlfwWindow window) {
-        window.makeContextCurrent();
         this.window = window;
+        this.makeCurrent();
         this.capabilities = GL.createCapabilities();
         this.syncExecutor = new SyncExecutor();
-        ContextManager.contextToInit(this);
+        ContextManager.instance().contextToInit(this);
     }
 
     public GlfwWindow getWindow() {
@@ -46,8 +46,13 @@ public class Context {
     }
 
 
+    public void makeCurrent() {
+        ContextManager.instance().makeContextCurrent(window);
+    }
+
+
     protected void init() {
-        window.makeContextCurrent();
+        this.makeCurrent();
         window.getCallbacks().addWindowSizeCallback(this::resize);
         window.show();
         if(app != null){
@@ -58,13 +63,13 @@ public class Context {
     }
 
     private void resize(GlfwWindow window, int width, int height) {
-        window.makeContextCurrent();
+        this.makeCurrent();
         Gl.viewport(width, height);
         if(app != null) app.resize(width, height);
     }
 
     protected void loop() {
-        window.makeContextCurrent();
+        this.makeCurrent();
 
         // close window
         if(window.shouldClose()){
@@ -93,7 +98,7 @@ public class Context {
         // free resources
         if(app != null) app.dispose();
         window.destroy();
-        ContextManager.unregister(this);
+        ContextManager.instance().unregister(this);
     }
 
     public void close() {

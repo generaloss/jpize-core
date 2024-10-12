@@ -15,6 +15,7 @@ public class CanvasTest extends JpizeApplication {
 
     public void init() {
         this.canvas = new Canvas();
+        System.out.println(Jpize.context());
         new Thread(() -> System.out.println(Jpize.context())).start();
     }
 
@@ -39,8 +40,7 @@ public class CanvasTest extends JpizeApplication {
         if(System.getProperty("os.name").equals("Linux"))
             Glfw.glfwInitHintPlatform(GlfwPlatform.X11); // waiting for fixes in lwjgl 3.3.5
 
-        Jpize.create(720, 480, "Window")
-            .build().setApp(new CanvasTest());
+        Jpize.create(720, 480, "Window").build().setApp(new CanvasTest());
 
         Jpize.run();
     }

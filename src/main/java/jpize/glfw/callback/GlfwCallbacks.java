@@ -1,5 +1,7 @@
 package jpize.glfw.callback;
 
+import jpize.app.Context;
+import jpize.app.ContextManager;
 import jpize.glfw.input.GlfwAction;
 import jpize.glfw.input.GlfwMods;
 import jpize.glfw.input.Key;
@@ -50,13 +52,18 @@ public class GlfwCallbacks {
         this.window = window;
         this.windowID = window.getID();
     }
+    
+    private void makeContextCurrent() {
+        final Context context = ContextManager.instance().getContext(windowID);
+        context.makeCurrent();
+    }
 
 
     public void addWindowCloseCallback(GlfwWindowCloseCallback callback) {
         callbacksClose.add(callback);
         if(callbackClose == null){
             callbackClose = glfwSetWindowCloseCallback(windowID, (ID) -> {
-                window.makeContextCurrent();
+                this.makeContextCurrent();
                 callbacksClose.forEach(c -> c.invoke(window));
             });
         }
@@ -71,7 +78,7 @@ public class GlfwCallbacks {
         callbacksContentScale.add(callback);
         if(callbackContentScale == null){
             callbackContentScale = glfwSetWindowContentScaleCallback(windowID, (ID, scaleX, scaleY) -> {
-                window.makeContextCurrent();
+                this.makeContextCurrent();
                 callbacksContentScale.forEach(c -> c.invoke(window, scaleX, scaleY));
             });
         }
@@ -86,7 +93,7 @@ public class GlfwCallbacks {
         callbacksFocus.add(callback);
         if(callbackFocus == null){
             callbackFocus = glfwSetWindowFocusCallback(windowID, (ID, focused) -> {
-                window.makeContextCurrent();
+                this.makeContextCurrent();
                 callbacksFocus.forEach(c -> c.invoke(window, focused));
             });
         }
@@ -101,7 +108,7 @@ public class GlfwCallbacks {
         callbacksIconify.add(callback);
         if(callbackIconify == null){
             callbackIconify = glfwSetWindowIconifyCallback(windowID, (ID, iconified) -> {
-                window.makeContextCurrent();
+                this.makeContextCurrent();
                 callbacksIconify.forEach(c -> c.invoke(window, iconified));
             });
         }
@@ -116,7 +123,7 @@ public class GlfwCallbacks {
         callbacksMaximize.add(callback);
         if(callbackMaximize == null){
             callbackMaximize = glfwSetWindowMaximizeCallback(windowID, (ID, maximized) -> {
-                window.makeContextCurrent();
+                this.makeContextCurrent();
                 callbacksMaximize.forEach(c -> c.invoke(window, maximized));
             });
         }
@@ -131,7 +138,7 @@ public class GlfwCallbacks {
         callbacksPos.add(callback);
         if(callbackPos == null){
             callbackPos = glfwSetWindowPosCallback(windowID, (ID, x, y) -> {
-                window.makeContextCurrent();
+                this.makeContextCurrent();
                 callbacksPos.forEach(c -> c.invoke(window, x, y));
             });
         }
@@ -146,7 +153,7 @@ public class GlfwCallbacks {
         callbacksRefresh.add(callback);
         if(callbackRefresh == null){
             callbackRefresh = glfwSetWindowRefreshCallback(windowID, (ID) -> {
-                window.makeContextCurrent();
+                this.makeContextCurrent();
                 callbacksRefresh.forEach(c -> c.invoke(window));
             });
         }
@@ -161,7 +168,7 @@ public class GlfwCallbacks {
         callbacksSize.add(callback);
         if(callbackSize == null){
             callbackSize = glfwSetWindowSizeCallback(windowID, (ID, width, height) -> {
-                window.makeContextCurrent();
+                this.makeContextCurrent();
                 callbacksSize.forEach(c -> c.invoke(window, width, height));
             });
         }
@@ -176,7 +183,7 @@ public class GlfwCallbacks {
         callbacksFramebufferSize.add(callback);
         if(callbackFramebufferSize == null){
             callbackFramebufferSize = glfwSetFramebufferSizeCallback(windowID, (ID, width, height) -> {
-                window.makeContextCurrent();
+                this.makeContextCurrent();
                 callbacksFramebufferSize.forEach(c -> c.invoke(window, width, height));
             });
         }
@@ -191,7 +198,7 @@ public class GlfwCallbacks {
         callbacksCursorPos.add(callback);
         if(callbackCursorPos == null){
             callbackCursorPos = glfwSetCursorPosCallback(windowID, (windowID, x, y) -> {
-                window.makeContextCurrent();
+                this.makeContextCurrent();
                 callbacksCursorPos.forEach(c -> c.invoke(window, (float) x, (float) y));
             });
         }
@@ -206,7 +213,7 @@ public class GlfwCallbacks {
         callbacksCursorEnter.add(callback);
         if(callbackCursorEnter == null){
             callbackCursorEnter = glfwSetCursorEnterCallback(windowID, (windowID, entered) -> {
-                window.makeContextCurrent();
+                this.makeContextCurrent();
                 callbacksCursorEnter.forEach(c -> c.invoke(window, entered));
             });
         }
@@ -221,7 +228,7 @@ public class GlfwCallbacks {
         callbacksMouseButton.add(callback);
         if(callbackMouseButton == null){
             callbackMouseButton = glfwSetMouseButtonCallback(windowID, (windowID, rawButton, rawAction, rawMods) -> {
-                window.makeContextCurrent();
+                this.makeContextCurrent();
                 final MouseBtn button = MouseBtn.byValue(rawButton);
                 final GlfwAction action = GlfwAction.byValue(rawAction);
                 final GlfwMods mods = new GlfwMods(rawMods);
@@ -239,7 +246,7 @@ public class GlfwCallbacks {
         callbacksScroll.add(callback);
         if(callbackScroll == null){
             callbackScroll = glfwSetScrollCallback(windowID, (windowID, offsetX, offsetY) -> {
-                window.makeContextCurrent();
+                this.makeContextCurrent();
                 callbacksScroll.forEach(c -> c.invoke(window, (float) offsetX, (float) offsetY));
             });
         }
@@ -254,7 +261,7 @@ public class GlfwCallbacks {
         callbacksIMEStatus.add(callback);
         if(callbackIMEStatus == null){
             callbackIMEStatus = glfwSetIMEStatusCallback(windowID, (windowID) -> {
-                window.makeContextCurrent();
+                this.makeContextCurrent();
                 callbacksIMEStatus.forEach(c -> c.invoke(window));
             });
         }
@@ -269,7 +276,7 @@ public class GlfwCallbacks {
         callbacksCharMods.add(callback);
         if(callbackCharMods == null){
             callbackCharMods = glfwSetCharModsCallback(windowID, (windowID, codepoint, rawMods) -> {
-                window.makeContextCurrent();
+                this.makeContextCurrent();
                 final GlfwMods mods = new GlfwMods(rawMods);
                 callbacksCharMods.forEach(c -> c.invoke(window, (char) codepoint, mods));
             });
@@ -285,7 +292,7 @@ public class GlfwCallbacks {
         callbacksKey.add(callback);
         if(callbackKey == null){
             callbackKey = glfwSetKeyCallback(windowID, (windowID, rawKey, scancode, rawAction, rawMods) -> {
-                window.makeContextCurrent();
+                this.makeContextCurrent();
                 final Key key = Key.byValue(rawKey);
                 final GlfwAction action = GlfwAction.byValue(rawAction);
                 final GlfwMods mods = new GlfwMods(rawMods);
@@ -303,7 +310,7 @@ public class GlfwCallbacks {
         callbacksChar.add(callback);
         if(callbackChar == null){
             callbackChar = glfwSetCharCallback(windowID, (windowID, codepoint) -> {
-                window.makeContextCurrent();
+                this.makeContextCurrent();
                 callbacksChar.forEach(c -> c.invoke(window, (char) codepoint));
             });
         }
@@ -318,7 +325,7 @@ public class GlfwCallbacks {
         callbacksPreedit.add(callback);
         if(callbackPreedit == null){
             callbackPreedit = glfwSetPreeditCallback(windowID, (windowID, preeditCount, preeditStringPointer, blockCount, blockSizesPointer, focusedBlock, caret) -> {
-                window.makeContextCurrent();
+                this.makeContextCurrent();
                 callbacksPreedit.forEach(c -> c.invoke(window, preeditCount, preeditStringPointer, blockCount, blockSizesPointer, focusedBlock, caret));
             });
         }
@@ -333,7 +340,7 @@ public class GlfwCallbacks {
         callbacksPreeditCandidate.add(callback);
         if(callbackPreeditCandidate == null){
             callbackPreeditCandidate = glfwSetPreeditCandidateCallback(windowID, (windowID, candidatesCount, selectedIndex, pageStart, pageSize) -> {
-                window.makeContextCurrent();
+                this.makeContextCurrent();
                 callbacksPreeditCandidate.forEach(c -> c.invoke(window, candidatesCount, selectedIndex, pageStart, pageSize));
             });
         }
@@ -348,7 +355,7 @@ public class GlfwCallbacks {
         callbacksDrop.add(callback);
         if(callbackDrop == null){
             callbackDrop = glfwSetDropCallback(windowID, (windowID, capacity, address) -> {
-                window.makeContextCurrent();
+                this.makeContextCurrent();
                 final PointerBuffer pointerBuf = MemoryUtil.memPointerBuffer(address, capacity);
 
                 final String[] files = new String[capacity];

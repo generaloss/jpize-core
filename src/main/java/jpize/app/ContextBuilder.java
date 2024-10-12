@@ -19,14 +19,13 @@ public class ContextBuilder {
     private final String title;
 
     protected ContextBuilder(String title, int width, int height) {
+        ContextManager.instance(); // init
         this.title = title;
         this.width = width;
         this.height = height;
     }
 
     public Context build() {
-        ContextManager.init();
-
         // window hints
         Glfw.defaultWindowHints();
         Glfw.windowHint(GlfwWindowHint.VISIBLE, false);
@@ -42,7 +41,6 @@ public class ContextBuilder {
 
         // context
         final Context context = new Context(window);
-        window.makeContextCurrent();
         // default blending options, enable cullface
         Gl.enable(GlTarget.BLEND, GlTarget.CULL_FACE);
         Gl.blendFunc(GlBlendFactor.SRC_ALPHA, GlBlendFactor.ONE_MINUS_SRC_ALPHA);

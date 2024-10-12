@@ -15,111 +15,117 @@ import java.util.Queue;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-class ContextManager {
+public class ContextManager {
 
-    private static final Map<Long, Context> CONTEXTS = new ConcurrentHashMap<>();
-    private static final Queue<Context> TO_INIT = new ConcurrentLinkedQueue<>();
+    private static ContextManager INSTANCE;
 
-    protected static Context getContext(long windowID) {
-        return CONTEXTS.get(windowID);
-    }
-
-    protected static Context getContext(GlfwWindow window) {
-        if(window == null)
-            return null;
-        return CONTEXTS.get(window.getID());
-    }
-
-    protected static Context getCurrentContext() {
-        return getContext(GlfwWindow.getCurrentContext());
+    public static ContextManager instance() {
+        if(INSTANCE == null)
+            INSTANCE = new ContextManager();
+        return INSTANCE;
     }
 
 
-    protected static void contextToInit(Context context) {
-        TO_INIT.add(context);
-    }
+    private final Queue<Context> contextsToInit = new ConcurrentLinkedQueue<>();
+    private final Map<Long, Context> contexts = new ConcurrentHashMap<>();
+    private final UpsCounter fpsCounter = new UpsCounter();
+    private final DeltaTimeCounter deltaTimeCounter = new DeltaTimeCounter();
+    private long currentContextID;
 
-    private static void register(Context context) {
-        CONTEXTS.put(context.getWindow().getID(), context);
-    }
-
-    protected static void unregister(Context context) {
-        CONTEXTS.remove(context.getWindow().getID());
-    }
-
-
-    private static volatile boolean INIT = false;
-
-    protected static synchronized void init() {
-        if(INIT) return;
-        INIT = true;
+    private ContextManager() {
         Glfw.init();
         Glfw.swapInterval(1);
     }
 
-    protected static void run() {
-        initContexts();
-        startLoop();
-        terminate();
+
+    public Context getContext(long windowID) {
+        return contexts.get(windowID);
     }
 
-    private static void terminate() {
-        if(!INIT) return;
+    public Context getContext(GlfwWindow window) {
+        if(window == null)
+            return null;
+        return this.getContext(window.getID());
+    }
+
+    public Context getCurrentContext() {
+        return this.getContext(currentContextID);
+    }
+
+    public void makeContextCurrent(GlfwWindow window) {
+        if(window == null){
+            currentContextID = 0L;
+            return;
+        }
+        currentContextID = window.getID();
+        window.makeContextCurrent();
+    }
+
+    protected void contextToInit(Context context) {
+        contextsToInit.add(context);
+    }
+
+    protected void unregister(Context context) {
+        contexts.remove(context.getWindow().getID());
+    }
+
+    protected void closeAll() {
+        for(Context context: contexts.values())
+            context.close();
+    }
+
+    protected void closeAllThatNotCurrent() {
+        final Context current = this.getCurrentContext();
+        for(Context context: contexts.values())
+            if(context != current)
+                context.close();
+    }
+
+
+    protected int getFPS() {
+        return fpsCounter.get();
+    }
+
+    protected float getDeltaTime() {
+        return deltaTimeCounter.get();
+    }
+
+
+    public void run() {
+        this.initContexts();
+        this.startLoop();
+        this.terminate();
+    }
+
+    private void initContexts() {
+        while(!contextsToInit.isEmpty()){
+            final Context context = contextsToInit.poll();
+            contexts.put(context.getWindow().getID(), context);
+            context.init();
+        }
+    }
+
+    private void startLoop() {
+        while(!Thread.interrupted()) {
+            this.initContexts();
+            if(contexts.isEmpty())
+                return;
+
+            Glfw.pollEvents();
+            for(Context context: contexts.values())
+                context.loop();
+
+            fpsCounter.update();
+            deltaTimeCounter.update();
+        }
+    }
+
+    private void terminate() {
         Glfw.terminate();
         ReflectUtils.invokeStaticMethod(TextureUtils.class, "dispose");
         ReflectUtils.invokeStaticMethod(ScreenQuad.class, "dispose");
         ReflectUtils.invokeStaticMethod(ScreenQuadShader.class, "dispose");
         ReflectUtils.invokeStaticMethod(BaseShader.class, "disposeShaders");
-        INIT = false;
-    }
-
-
-    private static final UpsCounter FPS_COUNTER = new UpsCounter();
-    private static final DeltaTimeCounter DELTA_TIME_COUNTER = new DeltaTimeCounter();
-
-    protected static int getFPS() {
-        return FPS_COUNTER.get();
-    }
-
-    protected static float getDeltaTime() {
-        return DELTA_TIME_COUNTER.get();
-    }
-
-
-    private static void startLoop() {
-        while(!Thread.interrupted()) {
-            initContexts();
-            if(CONTEXTS.isEmpty())
-                return;
-
-            Glfw.pollEvents();
-            for(Context context: CONTEXTS.values())
-                context.loop();
-
-            FPS_COUNTER.update();
-            DELTA_TIME_COUNTER.update();
-        }
-    }
-
-    private static void initContexts() {
-        while(!TO_INIT.isEmpty()){
-            final Context context = TO_INIT.poll();
-            register(context);
-            context.init();
-        }
-    }
-
-
-    protected static void closeAll() {
-        for(Context context: CONTEXTS.values())
-            context.close();
-    }
-
-    protected static void closeAllThatNotCurrent() {
-        final Context current = getCurrentContext();
-        for(Context context: CONTEXTS.values())
-            if(context != current)
-                context.close();
     }
 
 }
