@@ -182,6 +182,8 @@ public class GlfwMonitor {
     }
 
     public static GlfwMonitor getMonitor(long ID) {
+        if(ID == 0L)
+            return null;
         if(!MONITORS.containsKey(ID))
             MONITORS.put(ID, new GlfwMonitor(ID));
         return MONITORS.get(ID);

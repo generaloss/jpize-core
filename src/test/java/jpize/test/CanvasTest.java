@@ -5,6 +5,7 @@ import jpize.app.JpizeApplication;
 import jpize.gl.Gl;
 import jpize.glfw.Glfw;
 import jpize.glfw.init.GlfwPlatform;
+import jpize.glfw.input.Key;
 import jpize.util.Canvas;
 import jpize.util.math.Mathc;
 
@@ -21,6 +22,9 @@ public class CanvasTest extends JpizeApplication {
 
     @Override
     public void render() {
+        if(Key.F.down())
+            Jpize.window().toggleFullscreen();
+
         Gl.clearColorBuffer();
         canvas.clear();
 

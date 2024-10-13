@@ -4,7 +4,7 @@
 
     <groupId>io.github.generaloss</groupId>
     <artifactId>jpize-core</artifactId>
-    <version>24.9.3-dev01u08</version>
+    <version>24.9.3-dev03u08</version>
     <name>jpize-core</name>
 
     <description>engine core</description>

@@ -348,7 +348,7 @@ public class GlfwWindow {
     }
 
     public boolean isFullscreen() {
-        return getMonitor() != null;
+        return (this.getMonitor() != null);
     }
 
     public void toggleFullscreen() {
