@@ -18,9 +18,14 @@ public class Mesh implements IMesh {
         this.mode = GlPrimitive.TRIANGLES;
     }
 
+    public GlPrimitive getMode() {
+        return mode;
+    }
+
     public void setMode(GlPrimitive mode) {
         this.mode = mode;
     }
+
 
     public void render(int vertexCount) {
         vertexArray.drawArrays(vertexCount, mode);
@@ -31,8 +36,9 @@ public class Mesh implements IMesh {
         render(vertexBuffer.getVertexCount());
     }
 
+
     @Override
-    public VertexBuffer getBuffer() {
+    public VertexBuffer vertices() {
         return vertexBuffer;
     }
 

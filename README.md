@@ -11,7 +11,7 @@
 <dependency>
     <groupId>io.github.generaloss</groupId>
     <artifactId>jpize-core</artifactId>
-    <version>24.9.1.1</version>
+    <version>24.9.3</version>
 </dependency>
 ```
 ### Gradle (Kotlin)
@@ -21,7 +21,7 @@ repositories {
 }
 
 dependencies {
-    implementation("io.github.generaloss:jpize-core:24.9.1.1")
+    implementation("io.github.generaloss:jpize-core:24.9.3")
 }
 ```
 
@@ -35,8 +35,8 @@ public class MyApp extends JpizeApplication {
     public static void main(String[] args) {
         // create window context
         Jpize.create(1280, 720, "Window Title")
-            .icon("/icon.png").build()
-            .setApp(new MyApp());
+            .icon("/icon.png")
+            .build().setApp(new MyApp());
         
         // run created contexts
         Jpize.run();
@@ -89,11 +89,8 @@ batch.render();
 ``` java
 // load
 Font font = FontLoader.loadDefault();
-
-Font font = FontLoader.loadFnt(path_or_resource);
-
-Font font = FontLoader.loadTrueType(path_or_resource, size);
-Font font = FontLoader.loadTrueType(path_or_resource, size, charset);
+Font font = FontLoader.loadFnt(path_or_resource, linearFilter);
+Font font = FontLoader.loadTrueType(path_or_resource, size, charset, linearFilter);
 
 // options
 font.options().scale = 1.5F;
@@ -109,6 +106,7 @@ Vec2f bounds = font.getBounds(text);
 // render
 font.drawText(text, x, y);
 font.drawText(batch, text, x, y);
+Iterable<GlyphSprite> iterable = font.iterable(text);
 ```
 
 #### 4. Input:

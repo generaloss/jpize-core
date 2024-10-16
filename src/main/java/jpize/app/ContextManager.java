@@ -39,7 +39,12 @@ public class ContextManager {
 
 
     public Context getContext(long windowID) {
-        return contexts.get(windowID);
+        return contexts.getOrDefault(windowID,
+            contextsToInit.stream()
+                .filter(context -> windowID == context.getWindow().getID())
+                .findFirst()
+                .orElse(null)
+        );
     }
 
     public Context getContext(GlfwWindow window) {

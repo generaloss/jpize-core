@@ -61,12 +61,12 @@ public class TextureBatch implements Disposable {
         this.mesh.setMode(GlPrimitive.QUADS);
 
         // get vertex size
-        final int vertexSize = mesh.getBuffer().getVertexSize();
-        this.vertexBytes = mesh.getBuffer().getVertexBytes();
+        final int vertexSize = mesh.vertices().getVertexSize();
+        this.vertexBytes = mesh.vertices().getVertexBytes();
 
         // allocate buffers
         this.vertexData = new float[vertexSize];
-        this.mesh.getBuffer().allocateData(QUAD_VERTICES * maxSize * vertexBytes);
+        this.mesh.vertices().allocateData(QUAD_VERTICES * maxSize * vertexBytes);
 
         // matrices
         this.transformMat = new Matrix3f();
@@ -93,7 +93,7 @@ public class TextureBatch implements Disposable {
         vertexData[6] = b;
         vertexData[7] = a;
 
-        mesh.getBuffer().setSubData(vertexBufferOffset, vertexData);
+        mesh.vertices().setSubData(vertexBufferOffset, vertexData);
         vertexBufferOffset += vertexBytes;
     }
 

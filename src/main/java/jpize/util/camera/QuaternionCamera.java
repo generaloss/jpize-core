@@ -1,30 +1,28 @@
 package jpize.util.camera;
 
-import jpize.util.math.EulerAngles;
 import jpize.app.Jpize;
 import jpize.util.math.matrix.Frustum;
 import jpize.util.math.matrix.Matrix4f;
 import jpize.util.math.vector.Vec2i;
 import jpize.util.math.vector.Vec3f;
 
-public class PerspectiveCamera extends Camera3D {
+public class QuaternionCamera extends Camera3D {
 
     private float near, far, fovY;
-    private final EulerAngles rotation;
-    private final Matrix4f projection, view, combined, imaginaryView, rollMatrix;
+    private final Quaternion quaternion;
+    private final Matrix4f projection, view, combined, imaginaryView;
     private final Vec3f direction;
     private final Frustum frustum;
     private boolean imaginaryX, imaginaryY, imaginaryZ, hasImaginaryAxis;
 
-    public PerspectiveCamera(int width, int height, double near, double far, double fovY) {
+    public QuaternionCamera(int width, int height, double near, double far, double fovY) {
         super(width, height);
 
         this.near = (float) near;
         this.far = (float) far;
         this.fovY = (float) fovY;
-        this.rotation = new EulerAngles();
+        this.quaternion = new Quaternion();
         this.imaginaryView = new Matrix4f();
-        this.rollMatrix = new Matrix4f();
         this.frustum = new Frustum();
         this.view = new Matrix4f();
         this.projection = new Matrix4f();
@@ -35,14 +33,14 @@ public class PerspectiveCamera extends Camera3D {
         this.update();
     }
 
-    public PerspectiveCamera(double near, double far, double fovY) {
+    public QuaternionCamera(double near, double far, double fovY) {
         this(Jpize.getWidth(), Jpize.getHeight(), near, far, fovY);
     }
 
     @Override
     public void update() {
         // update direction
-        rotation.getDirection(direction);
+        direction.set(quaternion.y, quaternion.z, quaternion.w);
         // update view
         this.updateViewMatrix();
         // update combined
@@ -56,20 +54,14 @@ public class PerspectiveCamera extends Camera3D {
     }
 
     private void updateViewMatrix() {
-        // Roll camera rotation
-        rollMatrix.setRotationZ(rotation.roll);
-
-        imaginaryView.setLookAlong(position, direction);
-        imaginaryView.set(rollMatrix.copy().mul(imaginaryView));
+        quaternion.getMatrix(imaginaryView);
 
         if(hasImaginaryAxis) {
-            view.setLookAlong(
+            view.translate(
                 (imaginaryX ? 0 : position.x),
                 (imaginaryY ? 0 : position.y),
-                (imaginaryZ ? 0 : position.z),
-                direction
+                (imaginaryZ ? 0 : position.z)
             );
-            view.set(rollMatrix.mul(view));
         }else
             view.set(imaginaryView);
     }
@@ -94,8 +86,8 @@ public class PerspectiveCamera extends Camera3D {
         return frustum;
     }
 
-    public EulerAngles rotation() {
-        return rotation;
+    public Quaternion quaternion() {
+        return quaternion;
     }
 
     @Override
@@ -149,7 +141,7 @@ public class PerspectiveCamera extends Camera3D {
     public Matrix4f getView() {
         return view;
     }
-    
+
     public Matrix4f getImaginaryView() {
         return imaginaryView;
     }
@@ -163,5 +155,5 @@ public class PerspectiveCamera extends Camera3D {
     public Matrix4f getCombined() {
         return combined;
     }
-    
+
 }

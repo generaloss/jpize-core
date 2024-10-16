@@ -129,7 +129,7 @@ public class TextRenderer {
             if(lastTexture != page){
                 lastTexture = page;
 
-                renderer.mesh.getBuffer().setData(vertices.copyOf());
+                renderer.mesh.vertices().setData(vertices.copyOf());
                 vertices.clear();
 
                 renderer.shader.bind();
@@ -142,7 +142,7 @@ public class TextRenderer {
         if(lastTexture == null || vertices.isEmpty())
             return;
 
-        renderer.mesh.getBuffer().setData(vertices.copyOf());
+        renderer.mesh.vertices().setData(vertices.copyOf());
         renderer.shader.bind();
         renderer.shader.setMatrices(renderer.matrix1, renderer.matrix2);
         renderer.shader.setTexture(lastTexture);

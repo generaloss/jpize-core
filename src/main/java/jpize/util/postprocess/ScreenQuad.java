@@ -14,13 +14,13 @@ public class ScreenQuad {
 
     private ScreenQuad() {
         this.mesh = new IndexedMesh(new GlVertAttr(2, GlType.FLOAT), new GlVertAttr(2, GlType.FLOAT)); // pos2, uv2
-        this.mesh.getBuffer().setData(new float[]{
+        this.mesh.vertices().setData(new float[]{
             -1, +1, 0, 1, // 0
             -1, -1, 0, 0, // 1
             +1, -1, 1, 0, // 2
             +1, +1, 1, 1, // 3
         });
-        this.mesh.getIndexBuffer().setData(0, 1, 2, 2, 3, 0);
+        this.mesh.indices().setData(0, 1, 2, 2, 3, 0);
     }
 
 

@@ -31,7 +31,7 @@ public class RenderTest extends JpizeApplication {
         // mesh
         this.mesh = new Mesh(new GlVertAttr(3, GlType.FLOAT), new GlVertAttr(4, GlType.FLOAT));
         this.mesh.setMode(GlPrimitive.QUADS);
-        this.mesh.getBuffer().setData(
+        this.mesh.vertices().setData(
             -1,  1, 4,  1, 0, 0, 1F,
             -1, -1, 4,  1, 0, 0, 1F,
              1, -1, 4,  1, 0, 0, 1F,

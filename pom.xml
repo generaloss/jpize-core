@@ -4,10 +4,10 @@
 
     <groupId>io.github.generaloss</groupId>
     <artifactId>jpize-core</artifactId>
-    <version>24.9.3-dev03u08</version>
+    <version>24.9.3-dev01u10</version>
     <name>jpize-core</name>
 
-    <description>engine core</description>
+    <description>opengl graphics library</description>
     <url>https://github.com/generaloss/jpize-engine</url>
 
     <scm>
@@ -119,7 +119,7 @@
         <dependency>
             <groupId>io.github.generaloss</groupId>
             <artifactId>jpize-utils</artifactId>
-            <version>24.9.3-dev08</version>
+            <version>24.9.3-dev10</version>
         </dependency>
         <!-- lwjgl -->
         <dependency><groupId>org.lwjgl</groupId><artifactId>lwjgl</artifactId></dependency>

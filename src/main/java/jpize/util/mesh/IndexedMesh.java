@@ -23,6 +23,10 @@ public class IndexedMesh implements IMesh {
         this.indexBuffer = new IndexBuffer();
     }
 
+    public GlPrimitive getMode() {
+        return mode;
+    }
+
     public void setMode(GlPrimitive mode) {
         this.mode = mode;
     }
@@ -37,12 +41,13 @@ public class IndexedMesh implements IMesh {
         render(indexBuffer.getIndexCount());
     }
 
+
     @Override
-    public VertexBuffer getBuffer() {
+    public VertexBuffer vertices() {
         return vertexBuffer;
     }
 
-    public IndexBuffer getIndexBuffer() {
+    public IndexBuffer indices() {
         return indexBuffer;
     }
 

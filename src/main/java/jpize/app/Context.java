@@ -54,12 +54,9 @@ public class Context {
     protected void init() {
         this.makeCurrent();
         window.getCallbacks().addWindowSizeCallback(this::resize);
-        window.show();
-        if(app != null){
+        if(app != null)
             app.init();
-            if(disableRender)
-                window.swapBuffers();
-        }
+        window.show();
     }
 
     private void resize(GlfwWindow window, int width, int height) {

@@ -7,6 +7,6 @@ public interface IMesh extends Disposable {
 
     void render();
 
-    VertexBuffer getBuffer();
+    VertexBuffer vertices();
 
 }

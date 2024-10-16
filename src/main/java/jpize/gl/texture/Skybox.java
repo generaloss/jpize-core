@@ -10,18 +10,19 @@ import jpize.util.math.matrix.Matrix4f;
 import jpize.util.res.Resource;
 import jpize.gl.shader.Shader;
 
-public class SkyBox implements Disposable {
+public class Skybox implements Disposable {
 
     private final TextureCubeMap cubeMap;
     private final Shader shader;
     private final IndexedMesh mesh;
+    private final Matrix4f viewMatrix;
     
-    public SkyBox(String positive_x, String negative_x, String positive_y, String negative_y, String positive_z, String negative_z) {
+    public Skybox(String positive_x, String negative_x, String positive_y, String negative_y, String positive_z, String negative_z) {
         this.cubeMap = new TextureCubeMap(positive_x, negative_x, positive_y, negative_y, positive_z, negative_z);
         this.shader = new Shader(Resource.internal("/shader/skybox/skybox.vert"), Resource.internal("/shader/skybox/skybox.frag"));
 
         this.mesh = new IndexedMesh(new GlVertAttr(3, GlType.FLOAT));
-        this.mesh.getBuffer().setData(new float[]{
+        this.mesh.vertices().setData(new float[]{
             -2, -2,  2, // 0
              2, -2,  2, // 1
             -2,  2,  2, // 2
@@ -31,7 +32,7 @@ public class SkyBox implements Disposable {
             -2,  2, -2, // 6
              2,  2, -2  // 7
         });
-        this.mesh.getIndexBuffer().setData(
+        this.mesh.indices().setData(
             7, 6, 2,  2, 3, 7, // Top     2, 6, 7,  7, 3, 2,
             0, 4, 5,  5, 1, 0, // Bottom  5, 4, 0,  0, 1, 5,
             0, 2, 6,  6, 4, 0, // Left    6, 2, 0,  0, 4, 6,
@@ -39,6 +40,8 @@ public class SkyBox implements Disposable {
             3, 2, 0,  0, 1, 3, // Front   0, 2, 3,  3, 1, 0,
             4, 6, 7,  7, 5, 4  // Back    7, 6, 4,  4, 5, 7
         );
+
+        this.viewMatrix = new Matrix4f();
     }
     
 
@@ -54,8 +57,8 @@ public class SkyBox implements Disposable {
     }
 
     public void render(Camera camera) {
-        final Matrix4f view = camera.getView().copy().cullPosition();
-        render(camera.getProjection(), view);
+        viewMatrix.set(camera.getView()).cullPosition();
+        this.render(camera.getProjection(), viewMatrix);
     }
     
     public TextureCubeMap getCubeMap() {
