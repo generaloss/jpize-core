@@ -1,6 +1,7 @@
 package jpize.glfw.monitor;
 
 import jpize.glfw.GlfwEvent;
+import jpize.glfw.GlfwObjectLong;
 import jpize.glfw.callback.GlfwMonitorCallback;
 import jpize.util.math.vector.Vec2f;
 import jpize.util.math.vector.Vec2i;
@@ -19,18 +20,10 @@ import java.util.Map;
 
 import static org.lwjgl.glfw.GLFW.*;
 
-public class GlfwMonitor {
-
-    private static final Map<Long, GlfwMonitor> MONITORS = new HashMap<>();
-
-    private final long ID;
+public class GlfwMonitor extends GlfwObjectLong {
 
     private GlfwMonitor(long ID) {
-        this.ID = ID;
-    }
-
-    public long getID() {
-        return ID;
+        super(ID);
     }
 
 
@@ -91,7 +84,7 @@ public class GlfwMonitor {
     public Vec2i getPhysicalSizeMM() {
         final IntBuffer widthBuf = MemoryUtil.memCallocInt(1);
         final IntBuffer heightBuf = MemoryUtil.memCallocInt(1);
-        glfwGetMonitorPhysicalSize(ID, heightBuf, null);
+        glfwGetMonitorPhysicalSize(ID, widthBuf, heightBuf);
         final Vec2i value = new Vec2i(widthBuf.get(), heightBuf.get());
         MemoryUtil.memFree(widthBuf);
         MemoryUtil.memFree(heightBuf);
@@ -116,7 +109,7 @@ public class GlfwMonitor {
 
 
     public Vec2i getSize() {
-        final GLFWVidMode videoMode = getVideoMode();
+        final GLFWVidMode videoMode = this.getVideoMode();
         return new Vec2i(videoMode.width(), videoMode.height());
     }
 
@@ -128,11 +121,15 @@ public class GlfwMonitor {
         return getVideoMode().height();
     }
 
+    public float getAspect() {
+        return Vec2f.aspect(this.getWidth(), this.getHeight());
+    }
 
-    public Vec2i getPos() {
+
+    public Vec2i getPosition() {
         final IntBuffer xBuf = MemoryUtil.memCallocInt(1);
         final IntBuffer yBuf = MemoryUtil.memCallocInt(1);
-        glfwGetMonitorPos(ID, yBuf, null);
+        glfwGetMonitorPos(ID, xBuf, yBuf);
         final Vec2i value = new Vec2i(xBuf.get(), yBuf.get());
         MemoryUtil.memFree(xBuf);
         MemoryUtil.memFree(yBuf);
@@ -171,15 +168,26 @@ public class GlfwMonitor {
     }
 
 
-    public static GlfwMonitor[] getMonitors() {
-        final PointerBuffer pointerBuf = glfwGetMonitors();
-        final GlfwMonitor[] monitors = new GlfwMonitor[pointerBuf.limit()];
-        for(int i = 0; i < monitors.length; i++){
-            final long ID = MemoryUtil.memGetLong(pointerBuf.get(i));
-            monitors[i] = getMonitor(ID);
-        }
-        return monitors;
+    public float getVerticalDPI() {
+        final int pixels = this.getHeight();
+        final int mm = this.getPhysicalHeightMM();
+        return (float) pixels / mm * 25.4F;
     }
+
+    public float getHorizontalDPI() {
+        final int pixels = this.getWidth();
+        final int mm = this.getPhysicalWidthMM();
+        return (float) pixels / mm * 25.4F;
+    }
+
+    public float getDiagonalDPI() {
+        final float pixels = this.getSize().len();
+        final float mm = this.getPhysicalSizeMM().len();
+        return pixels / mm * 25.4F;
+    }
+
+
+    private static final Map<Long, GlfwMonitor> MONITORS = new HashMap<>();
 
     public static GlfwMonitor getMonitor(long ID) {
         if(ID == 0L)
@@ -193,36 +201,26 @@ public class GlfwMonitor {
         return getMonitor(glfwGetPrimaryMonitor());
     }
 
-
-    public float getVerticalDPI() {
-        final int pixels = getVideoMode().height();
-        final int mm = getPhysicalHeightMM();
-        return (float) pixels / mm * 25.4F;
-    }
-
-    public float getHorizontalDPI() {
-        final int pixels = getVideoMode().width();
-        final int mm = getPhysicalWidthMM();
-        return (float) pixels / mm * 25.4F;
-    }
-
-    public float getDiagonalDPI() {
-        final float pixels = getSize().len();
-        final float mm = getPhysicalSizeMM().len();
-        return pixels / mm * 25.4F;
+    public static GlfwMonitor[] getMonitors() {
+        final PointerBuffer pointerBuf = glfwGetMonitors();
+        final GlfwMonitor[] monitors = new GlfwMonitor[pointerBuf.limit()];
+        for(int i = 0; i < monitors.length; i++){
+            final long ID = MemoryUtil.memGetLong(pointerBuf.get(i));
+            monitors[i] = getMonitor(ID);
+        }
+        return monitors;
     }
 
 
-
-    private static Callback callbackMonitor;
-    private static final List<GlfwMonitorCallback> callbacksMonitor = new ArrayList<>();
+    private static final List<GlfwMonitorCallback> MONITOR_CALLBACKS = new ArrayList<>();
+    private static Callback MONITOR_CALLBACK;
 
     public static void setMonitorCallback(GlfwMonitorCallback callback) {
-        callbacksMonitor.add(callback);
-        if(callbackMonitor != null)
+        MONITOR_CALLBACKS.add(callback);
+        if(MONITOR_CALLBACK != null)
             return;
 
-        callbackMonitor = glfwSetMonitorCallback((ID, eventCode) -> {
+        MONITOR_CALLBACK = glfwSetMonitorCallback((ID, eventCode) -> {
             final GlfwEvent event = GlfwEvent.byValue(eventCode);
             final GlfwMonitor monitor;
 
@@ -233,7 +231,7 @@ public class GlfwMonitor {
             }else{
                 monitor = MONITORS.remove(ID);
             }
-            callbacksMonitor.forEach(c -> c.invoke(monitor, event));
+            MONITOR_CALLBACKS.forEach(c -> c.invoke(monitor, event));
         });
     }
 

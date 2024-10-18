@@ -2,9 +2,11 @@ package jpize.glfw.window;
 
 import jpize.glfw.Glfw;
 import jpize.glfw.GlfwImage;
+import jpize.glfw.GlfwObjectLong;
 import jpize.glfw.callback.GlfwCallbacks;
 import jpize.glfw.input.GlfwInput;
 import jpize.glfw.monitor.GlfwMonitor;
+import jpize.util.Disposable;
 import jpize.util.pixmap.PixmapRGBA;
 import jpize.util.math.vector.Vec2f;
 import jpize.util.math.vector.Vec2i;
@@ -21,20 +23,17 @@ import java.util.Map;
 
 import static org.lwjgl.glfw.GLFW.*;
 
-public class GlfwWindow {
+public class GlfwWindow extends GlfwObjectLong implements Disposable {
 
-    private final long ID;
     private final GlfwInput input;
     private final GlfwCallbacks callbacks;
 
     public GlfwWindow(int width, int height, String title, GlfwMonitor monitor, GlfwWindow share) {
-        final long shareID = (share == null) ? 0L : share.getID();
-        final long monitorID = (monitor == null) ? 0L : monitor.getID();
-
-        this.ID = glfwCreateWindow(width, height, title, monitorID, shareID);
-        if(ID == 0L)
-            throw new RuntimeException("Failed to create the GLFW window.");
-
+        super(glfwCreateWindow(
+            width, height, title,
+            (monitor == null) ? 0L : monitor.getID(),
+            (share == null) ? 0L : share.getID()
+        ));
         this.callbacks = new GlfwCallbacks(this);
         this.input = new GlfwInput(this);
         registerContext(this);
@@ -60,9 +59,13 @@ public class GlfwWindow {
         this(title, width, height, null);
     }
 
-    public long getID() {
-        return ID;
+
+    @Override
+    public void dispose() {
+        unregisterContext(this);
+        glfwDestroyWindow(ID);
     }
+
 
     public GlfwInput getInput() {
         return input;
@@ -72,11 +75,6 @@ public class GlfwWindow {
         return callbacks;
     }
 
-
-    public void destroy() {
-        unregisterContext(this);
-        glfwDestroyWindow(ID);
-    }
 
     public void makeContextCurrent() {
         glfwMakeContextCurrent(ID);

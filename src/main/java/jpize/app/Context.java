@@ -94,7 +94,7 @@ public class Context {
 
         // free resources
         if(app != null) app.dispose();
-        window.destroy();
+        window.dispose();
         ContextManager.instance().unregister(this);
     }
 

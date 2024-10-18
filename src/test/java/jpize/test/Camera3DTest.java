@@ -12,16 +12,20 @@ import jpize.gl.vertex.GlVertAttr;
 import jpize.glfw.Glfw;
 import jpize.glfw.init.GlfwPlatform;
 import jpize.glfw.input.Key;
-import jpize.util.camera.QuaternionCamera;
-import jpize.util.ctrl.EulerRotCtrl;
+import jpize.glfw.monitor.GlfwMonitor;
+import jpize.util.camera.PerspectiveCamera;
+import jpize.util.ctrl.MotionInput;
+import jpize.util.ctrl.RotationInput;
 import jpize.util.math.EulerAngles;
 import jpize.util.mesh.Mesh;
 import jpize.util.res.Resource;
 
 public class Camera3DTest extends JpizeApplication {
 
-    private final QuaternionCamera camera;
-    private final EulerRotCtrl rotCtrl;
+    private final PerspectiveCamera camera;
+    private final EulerAngles rotation;
+    private final RotationInput rotInput;
+    private final MotionInput motionInput;
     private final Mesh mesh;
     private final Skybox skybox;
     private final Shader shader;
@@ -30,21 +34,26 @@ public class Camera3DTest extends JpizeApplication {
         Gl.clearColor(0.5F, 0.6F, 0.7F);
         Gl.disable(GlTarget.CULL_FACE);
 
-        this.camera = new QuaternionCamera(0.1F, 100F, 90F);
+        this.camera = new PerspectiveCamera(0.1F, 100F, 90F);
 
-        this.rotCtrl = new EulerRotCtrl(new EulerAngles());
+        this.rotation = new EulerAngles();
+
+        this.rotInput = new RotationInput(rotation);
+        this.rotInput.lockNextFrame();
+
+        this.motionInput = new MotionInput();
 
         this.mesh = new Mesh(
             new GlVertAttr(3, GlType.FLOAT),
             new GlVertAttr(2, GlType.FLOAT)
         );
         mesh.vertices().setData(
-            -100F, -10F,  100F,   1F, 0F,
-            -100F, -10F, -100F,   0F, 0F,
-             100F, -10F, -100F,   0F, 1F,
-             100F, -10F, -100F,   0F, 1F,
-             100F, -10F,  100F,   1F, 1F,
-            -100F, -10F,  100F,   1F, 0F
+             20F, -10F,  20F,   1F, 1F,
+             20F, -10F, -20F,   0F, 1F,
+            -20F, -10F, -20F,   0F, 0F,
+            -20F, -10F, -20F,   0F, 0F,
+            -20F, -10F,  20F,   1F, 0F,
+             20F, -10F,  20F,   1F, 1F
         );
 
         this.shader = new Shader(Resource.internal("/shader.vert"), Resource.internal("/shader.frag"));
@@ -55,16 +64,24 @@ public class Camera3DTest extends JpizeApplication {
             "/skybox_positive_z.png", "/skybox_negative_z.png");
     }
 
-    private final Texture2D texture_floor = new Texture2D("/floor.png");
+    @Override
+    public void init() {
+        Glfw.init();
+        GlfwMonitor monitor = GlfwMonitor.getPrimaryMonitor();
+    }
+
+    private final Texture2D texture_floor = new Texture2D("/cube4.png");
 
     @Override
     public void update() {
-        camera.quaternion().setRotation(rotCtrl.getTarget());
+        motionInput.update(rotation.yaw);
+        camera.rotation().setRotation(rotation);
+        camera.position().add(motionInput.getMotionDirected().mul(Jpize.getDT() * 10));
         camera.update();
 
         if(Key.F11.down()) {
             Jpize.window().toggleFullscreen();
-            rotCtrl.lockNextFrame();
+            // rotInput.lockNextFrame();
         }
         if(Key.ESCAPE.down()) Jpize.exit();
     }

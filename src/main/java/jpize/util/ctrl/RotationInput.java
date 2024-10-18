@@ -1,6 +1,5 @@
 package jpize.util.ctrl;
 
-import jpize.glfw.Glfw;
 import jpize.glfw.callback.GlfwCursorPosCallback;
 import jpize.glfw.input.GlfwCursorMode;
 import jpize.glfw.input.GlfwInput;
@@ -10,7 +9,7 @@ import jpize.glfw.window.GlfwWindow;
 import jpize.util.math.EulerAngles;
 import jpize.util.math.Maths;
 
-public class EulerRotCtrl {
+public class RotationInput {
 
     private static final float SPEED_MULTIPLIER = 10F / GlfwMonitor.getPrimaryMonitor().getVerticalDPI();
 
@@ -24,7 +23,7 @@ public class EulerRotCtrl {
     private boolean enabled;
     private final GlfwCursorPosCallback posCallback;
 
-    public EulerRotCtrl(EulerAngles target, boolean enabled) {
+    public RotationInput(EulerAngles target, boolean enabled) {
         this.target  = target;
         this.lockNextFrame = false;
         this.speed = 1F;
@@ -34,7 +33,7 @@ public class EulerRotCtrl {
         this.setEnabled(enabled);
     }
 
-    public EulerRotCtrl(EulerAngles target) {
+    public RotationInput(EulerAngles target) {
         this(target, true);
     }
 
@@ -53,9 +52,6 @@ public class EulerRotCtrl {
         final GlfwInput input = window.getInput();
 
         this.enabled = enabled;
-        // raw mouse motion
-        if(Glfw.rawMouseMotionSupported())
-            input.setInputModeRawMouseMotion(enabled);
         // input mode
         input.setInputModeCursor(enabled ? GlfwCursorMode.DISABLED : GlfwCursorMode.NORMAL);
         // mouse position callback
