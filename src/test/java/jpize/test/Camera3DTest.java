@@ -48,12 +48,12 @@ public class Camera3DTest extends JpizeApplication {
             new GlVertAttr(2, GlType.FLOAT)
         );
         mesh.vertices().setData(
-             20F, -10F,  20F,   1F, 1F,
-             20F, -10F, -20F,   0F, 1F,
-            -20F, -10F, -20F,   0F, 0F,
-            -20F, -10F, -20F,   0F, 0F,
-            -20F, -10F,  20F,   1F, 0F,
-             20F, -10F,  20F,   1F, 1F
+             20F, -10F,  20F,  1F, 1F,
+             20F, -10F, -20F,  0F, 1F,
+            -20F, -10F, -20F,  0F, 0F,
+            -20F, -10F, -20F,  0F, 0F,
+            -20F, -10F,  20F,  1F, 0F,
+             20F, -10F,  20F,  1F, 1F
         );
 
         this.shader = new Shader(Resource.internal("/shader.vert"), Resource.internal("/shader.frag"));
@@ -80,21 +80,21 @@ public class Camera3DTest extends JpizeApplication {
         camera.update();
 
         if(Key.F11.down()) {
+            rotInput.lockNextFrame();
             Jpize.window().toggleFullscreen();
-            // rotInput.lockNextFrame();
         }
         if(Key.ESCAPE.down()) Jpize.exit();
     }
 
     @Override
     public void render() {
-        Gl.clearColorBuffer();
-        //
+        Gl.clearColorDepthBuffers();
+
+        Gl.clearColorDepthBuffers();
+
         skybox.render(camera);
-        //
         shader.bind();
         shader.uniform("u_combined", camera.getCombined());
-        //
         shader.uniform("u_texture", texture_floor);
         mesh.render();
     }

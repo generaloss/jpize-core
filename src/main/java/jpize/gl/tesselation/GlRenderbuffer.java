@@ -13,6 +13,8 @@ public class GlRenderbuffer extends GlObject {
 
     private int width, height;
     private GlAttachment attachment;
+    private GlInternalFormat format;
+    private GlType type;
     private final Texture2D texture;
 
     public GlRenderbuffer(int width, int height) {
@@ -21,10 +23,9 @@ public class GlRenderbuffer extends GlObject {
         this.width = width;
         this.height = height;
         this.attachment = GlAttachment.DEPTH_ATTACHMENT;
-
-        this.texture = new Texture2D()
-            .setWrapST(GlWrap.CLAMP_TO_EDGE).setFilters(GlFilter.NEAREST).setMaxLevel(0)
-            .setDefaultImage(width, height);
+        this.format = GlInternalFormat.DEPTH_COMPONENT32;
+        this.type = GlType.FLOAT;
+        this.texture = new Texture2D().setWrapST(GlWrap.CLAMP_TO_EDGE);
     }
 
     public GlRenderbuffer() {
@@ -37,32 +38,41 @@ public class GlRenderbuffer extends GlObject {
         return this;
     }
 
+    public GlRenderbuffer setInternalFormat(GlInternalFormat format) {
+        this.format = format;
+        return this;
+    }
+
+    public GlRenderbuffer setType(GlType type) {
+        this.type = type;
+        return this;
+    }
+
+
+    private void updateTexture() {
+        texture.setImage(0, width, height, format, type);
+    }
+
     public GlRenderbuffer create() {
-        updateTexture();
-        
-        bind();
+        this.updateTexture();
+        this.bind();
         glFramebufferTexture2D(GL_FRAMEBUFFER, attachment.value, GL_TEXTURE_2D, texture.getID(), 0);
-        glRenderbufferStorage(GL_RENDERBUFFER, GlInternalFormat.DEPTH_COMPONENT32.value, width, height);
+        glRenderbufferStorage(GL_RENDERBUFFER, format.value, width, height);
         glFramebufferRenderbuffer(GL_FRAMEBUFFER, attachment.value, GL_RENDERBUFFER, ID);
-        unbind();
+        this.unbind();
         return this;
     }
 
     public void resize(int width, int height) {
         this.width = width;
         this.height = height;
-        updateTexture();
+        this.updateTexture();
 
-        bind();
-        glRenderbufferStorage(GL_RENDERBUFFER, GlInternalFormat.DEPTH_COMPONENT32.value, width, height);
-        unbind();
+        this.bind();
+        glRenderbufferStorage(GL_RENDERBUFFER, format.value, width, height);
+        this.unbind();
     }
 
-    private void updateTexture() {
-        texture.setImage(0, width, height, GlInternalFormat.DEPTH_COMPONENT32, GlType.FLOAT);
-        texture.generateMipmap();
-    }
-    
 
     public Texture2D getTexture() {
         return texture;

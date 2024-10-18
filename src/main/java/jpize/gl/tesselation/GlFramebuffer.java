@@ -18,10 +18,10 @@ public class GlFramebuffer extends GlObject {
 
     private int width, height;
     private GlAttachment attachment;
-    private final Texture2D texture;
     private boolean draw, read;
     private GlInternalFormat format;
     private GlType type;
+    private final Texture2D texture;
 
     public GlFramebuffer(int width, int height) {
         super(glGenFramebuffers());
@@ -31,10 +31,9 @@ public class GlFramebuffer extends GlObject {
         this.attachment = GlAttachment.color(0);
         this.draw = true;
         this.read = true;
-        
-        this.texture = new Texture2D()
-            .setWrapST(GlWrap.CLAMP_TO_EDGE).setFilters(GlFilter.NEAREST).setMaxLevel(0)
-            .setDefaultImage(width, height);
+        this.format = GlInternalFormat.RGBA8;
+        this.type = GlType.UNSIGNED_BYTE;
+        this.texture = new Texture2D().setWrapST(GlWrap.CLAMP_TO_EDGE);
     }
 
     public GlFramebuffer() {
@@ -42,10 +41,10 @@ public class GlFramebuffer extends GlObject {
     }
 
 
-    public GlFramebuffer setAttachment(GlAttachment attachment) {
-        this.attachment = attachment;
-        return this;
+    public GlFramebufferStatus checkStatus() {
+        return GlFramebufferStatus.byValue(glCheckFramebufferStatus(GL_FRAMEBUFFER));
     }
+
 
     public GlFramebuffer setRead(boolean read) {
         this.read = read;
@@ -54,6 +53,11 @@ public class GlFramebuffer extends GlObject {
 
     public GlFramebuffer setWrite(boolean draw) {
         this.draw = draw;
+        return this;
+    }
+
+    public GlFramebuffer setAttachment(GlAttachment attachment) {
+        this.attachment = attachment;
         return this;
     }
 
@@ -68,53 +72,50 @@ public class GlFramebuffer extends GlObject {
     }
 
 
+    private void updateTexture() {
+        texture.setImage(width, height, 0, format, type);
+    }
+
     public GlFramebuffer create() {
-        updateTexture();
-        
-        bind();
+        this.updateTexture();
+        this.bind();
         glFramebufferTexture2D(GL_FRAMEBUFFER, attachment.value, GL_TEXTURE_2D, texture.getID(), 0);
         glDrawBuffer(draw ? attachment.value : GL_NONE);
         glReadBuffer(read ? attachment.value : GL_NONE);
-        unbind();
+        this.unbind();
         return this;
     }
 
     public void resize(int width, int height) {
         this.width = width;
         this.height = height;
-        updateTexture();
-    }
-
-    private void updateTexture() {
-        texture.setImage(0, width, height, GlInternalFormat.DEPTH_COMPONENT32, GlType.FLOAT);
-        texture.generateMipmap();
+        this.updateTexture();
     }
 
 
     public void copyTo(Texture2D texture) {
-        bind();
+        this.bind();
         texture.bind();
         glCopyTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 0, 0, width, height);
-        unbind();
+        this.unbind();
     }
 
     public ByteBuffer getBuffer(Texture2D texture) {
-        bind();
+        this.bind();
         final int width = texture.getWidth();
         final int height = texture.getHeight();
 
         final GlBaseFormat format = texture.getInternalFormat().base;
         final ByteBuffer buffer = BufferUtils.createByteBuffer(width * height * format.channels);
-        glReadPixels(0, 0, width, height, format.value, GlType.UNSIGNED_BYTE.value, buffer);
+        glReadPixels(0, 0, width, height, format.value, type.value, buffer);
 
-        unbind();
+        this.unbind();
         return buffer;
     }
     
 
     public void renderToScreen() {
-        unbind();
-
+        this.unbind();
         ScreenQuadShader.use(texture);
         ScreenQuad.render();
     }
