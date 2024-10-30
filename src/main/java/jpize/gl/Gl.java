@@ -18,8 +18,55 @@ import static org.lwjgl.opengl.GL46.*;
 
 public class Gl {
 
+    public static boolean isEnabled(GlTarget target) {
+        return glIsEnabled(target.value);
+    }
+
+    public static boolean isEnabled(GlTarget target, int index) {
+        return glIsEnabledi(target.value, index);
+    }
+
+    public static void enable(GlTarget target) {
+        glEnable(target.value);
+    }
+
+    public static void enable(GlTarget target, int index) {
+        glEnablei(target.value, index);
+    }
+
+    public static void enable(GlTarget... targets) {
+        for(GlTarget target: targets)
+            enable(target);
+    }
+
+    public static void disable(GlTarget target) {
+        glDisable(target.value);
+    }
+
+    public static void disable(GlTarget target, int index) {
+        glDisablei(target.value, index);
+    }
+
+    public static void disable(GlTarget... targets) {
+        for(GlTarget target: targets)
+            disable(target);
+    }
+
+
     public static void clearColor(float r, float g, float b, float a) {
         glClearColor(r, g, b, a);
+    }
+
+    public static void clearColor(float r, float g, float b) {
+        clearColor(r, g, b, 1F);
+    }
+
+    public static void clearColor(float grayscale, float alpha) {
+        clearColor(grayscale, grayscale, grayscale, alpha);
+    }
+
+    public static void clearColor(float grayscale) {
+        clearColor(grayscale, 1F);
     }
 
     public static void clearColor(double r, double g, double b, double a) {
@@ -59,59 +106,13 @@ public class Gl {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     }
 
-    public static void clearCDSBuffers() {
+    public static void clearAllBuffers() {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
     }
 
 
     public static void clearDepth(float depth) {
         glClearDepth(depth);
-    }
-
-
-    public static boolean isEnabled(GlTarget target) {
-        return glIsEnabled(target.value);
-    }
-
-    public static boolean isEnabled(GlTarget target, int index) {
-        return glIsEnabledi(target.value, index);
-    }
-
-
-    public static void enable(GlTarget target) {
-        glEnable(target.value);
-    }
-
-    public static void enable(GlTarget target, int index) {
-        glEnablei(target.value, index);
-    }
-
-    public static void enable(GlTarget... targets) {
-        for(GlTarget target: targets)
-            enable(target);
-    }
-
-
-    public static void disable(GlTarget target) {
-        glDisable(target.value);
-    }
-
-    public static void disable(GlTarget target, int index) {
-        glDisablei(target.value, index);
-    }
-
-    public static void disable(GlTarget... targets) {
-        for(GlTarget target: targets)
-            disable(target);
-    }
-
-
-    public static void enableCullFace() {
-        enable(GlTarget.CULL_FACE);
-    }
-
-    public static void disableCullFace() {
-        disable(GlTarget.CULL_FACE);
     }
 
 
@@ -154,7 +155,7 @@ public class Gl {
         glViewportIndexedf(index, x, y, width, height);
     }
 
-    public static void viewportIndexed(int index, float[] array) {
+    public static void viewportIndexed(int index, float... array) {
         glViewportIndexedfv(index, array);
     }
 
@@ -162,7 +163,7 @@ public class Gl {
         glViewportIndexedfv(index, buffer);
     }
 
-    public static void viewportArray(int first, float[] array) {
+    public static void viewportArray(int first, float... array) {
         glViewportArrayv(first, array);
     }
 
@@ -192,7 +193,7 @@ public class Gl {
         glScissorIndexed(index, x, y, width, height);
     }
 
-    public static void scissorArray(int first, int[] array) {
+    public static void scissorArray(int first, int... array) {
         glScissorArrayv(first, array);
     }
 

@@ -7,8 +7,6 @@ import jpize.util.postprocess.ScreenQuad;
 import jpize.util.postprocess.ScreenQuadShader;
 import jpize.gl.texture.TextureUtils;
 import jpize.util.ReflectUtils;
-import jpize.util.time.DeltaTimeCounter;
-import jpize.util.time.UpsCounter;
 
 import java.util.Map;
 import java.util.Queue;
@@ -28,8 +26,6 @@ public class ContextManager {
 
     private final Queue<Context> contextsToInit = new ConcurrentLinkedQueue<>();
     private final Map<Long, Context> contexts = new ConcurrentHashMap<>();
-    private final UpsCounter fpsCounter = new UpsCounter();
-    private final DeltaTimeCounter deltaTimeCounter = new DeltaTimeCounter();
     private long currentContextID;
 
     private ContextManager() {
@@ -87,15 +83,6 @@ public class ContextManager {
     }
 
 
-    protected int getFPS() {
-        return fpsCounter.get();
-    }
-
-    protected float getDeltaTime() {
-        return deltaTimeCounter.get();
-    }
-
-
     public void run() {
         this.initContexts();
         this.startLoop();
@@ -119,9 +106,6 @@ public class ContextManager {
             Glfw.pollEvents();
             for(Context context: contexts.values())
                 context.loop();
-
-            fpsCounter.update();
-            deltaTimeCounter.update();
         }
     }
 

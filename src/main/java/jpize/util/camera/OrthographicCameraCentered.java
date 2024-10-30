@@ -22,8 +22,8 @@ public class OrthographicCameraCentered extends Camera2D {
         this.projection = new Matrix4f();
         this.combined = new Matrix4f();
 
-        updateProjectionMatrix();
-        updateViewMatrix();
+        this.updateProjectionMatrix();
+        this.updateViewMatrix();
     }
 
     public OrthographicCameraCentered() {
@@ -33,7 +33,7 @@ public class OrthographicCameraCentered extends Camera2D {
 
     @Override
     public void update() {
-        updateViewMatrix();
+        this.updateViewMatrix();
     }
 
     private void updateProjectionMatrix() {
@@ -45,7 +45,7 @@ public class OrthographicCameraCentered extends Camera2D {
         scalingMatrix.setScale(scale);
         rotationMatrix.setRotationZ(rotation);
         view.set(scalingMatrix.mul(translationMatrix).mul(rotationMatrix));
-        updateCombinedMatrix();
+        this.updateCombinedMatrix();
     }
 
     private void updateCombinedMatrix() {
@@ -57,7 +57,7 @@ public class OrthographicCameraCentered extends Camera2D {
         if(Vec2i.equals(width, height, this.width, this.height))
             return;
         super.resize(width, height);
-        updateProjectionMatrix();
+        this.updateProjectionMatrix();
     }
 
     public void setImaginaryOrigins(boolean x, boolean y) {

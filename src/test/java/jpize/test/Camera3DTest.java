@@ -90,8 +90,6 @@ public class Camera3DTest extends JpizeApplication {
     public void render() {
         Gl.clearColorDepthBuffers();
 
-        Gl.clearColorDepthBuffers();
-
         skybox.render(camera);
         shader.bind();
         shader.uniform("u_combined", camera.getCombined());

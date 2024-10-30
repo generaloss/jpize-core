@@ -29,4 +29,21 @@ public abstract class Camera2D extends Camera {
 
     public abstract float getScale();
 
+
+    public float getScaledWidth() {
+        return super.getWidth() / this.getScale();
+    }
+
+    public float getScaledHeight() {
+        return super.getHeight() / this.getScale();
+    }
+
+    public float getScaledHalfWidth() {
+        return super.getHalfWidth() / this.getScale();
+    }
+
+    public float getScaledHalfHeight() {
+        return super.getHalfHeight() / this.getScale();
+    }
+
 }

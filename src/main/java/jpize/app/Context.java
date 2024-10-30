@@ -2,6 +2,8 @@ package jpize.app;
 
 import jpize.gl.Gl;
 import jpize.glfw.window.GlfwWindow;
+import jpize.util.time.DeltaTimeCounter;
+import jpize.util.time.PerSecondCounter;
 import org.lwjgl.opengl.GL;
 import org.lwjgl.opengl.GLCapabilities;
 
@@ -10,6 +12,8 @@ public class Context {
     private final GlfwWindow window;
     private final GLCapabilities capabilities;
     private final SyncExecutor syncExecutor;
+    private final PerSecondCounter fpsCounter;
+    private final DeltaTimeCounter deltaTimeCounter;
 
     private JpizeApplication app;
     private boolean disableRender;
@@ -19,6 +23,8 @@ public class Context {
         this.makeCurrent();
         this.capabilities = GL.createCapabilities();
         this.syncExecutor = new SyncExecutor();
+        this.fpsCounter = new PerSecondCounter();
+        this.deltaTimeCounter = new DeltaTimeCounter();
         ContextManager.instance().contextToInit(this);
     }
 
@@ -46,6 +52,15 @@ public class Context {
     }
 
 
+    protected int getFPS() {
+        return fpsCounter.get();
+    }
+
+    protected float getDeltaTime() {
+        return deltaTimeCounter.get();
+    }
+
+
     public void makeCurrent() {
         ContextManager.instance().makeContextCurrent(window);
     }
@@ -57,6 +72,9 @@ public class Context {
         if(app != null)
             app.init();
         window.show();
+        // reset delta time counter after init
+        fpsCounter.reset();
+        deltaTimeCounter.reset();
     }
 
     private void resize(GlfwWindow window, int width, int height) {
@@ -86,6 +104,10 @@ public class Context {
         // clear down/release keys
         window.getInput()
             .getInputMonitor().clear();
+
+        // update fps & delta time counters
+        fpsCounter.update();
+        deltaTimeCounter.update();
     }
 
     private void exit() {

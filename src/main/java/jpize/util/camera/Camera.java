@@ -34,4 +34,13 @@ public abstract class Camera {
         return height;
     }
 
+
+    public float getHalfWidth() {
+        return width * 0.5F;
+    }
+
+    public float getHalfHeight() {
+        return height * 0.5F;
+    }
+
 }

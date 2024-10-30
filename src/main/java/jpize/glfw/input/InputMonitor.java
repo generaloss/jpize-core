@@ -11,10 +11,10 @@ public class InputMonitor {
     private float scrollX, scrollY;
 
     public InputMonitor(GlfwWindow window) {
-        keysDown = new BitSet(Key.values().length);
-        keysRelease = new BitSet(Key.values().length);
-        btnsDown = new BitSet(MouseBtn.values().length);
-        btnsRelease = new BitSet(MouseBtn.values().length);
+        this.keysDown = new BitSet(Key.values().length);
+        this.keysRelease = new BitSet(Key.values().length);
+        this.btnsDown = new BitSet(MouseBtn.values().length);
+        this.btnsRelease = new BitSet(MouseBtn.values().length);
 
         window.getCallbacks().addKeyCallback(this::onKey);
         window.getCallbacks().addMouseButtonCallback(this::onButton);

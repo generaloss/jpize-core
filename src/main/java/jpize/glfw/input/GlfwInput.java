@@ -136,20 +136,20 @@ public class GlfwInput {
     }
 
 
-    public Vec2f getCursorNativePos() {
+    public Vec2f getCursorNativePos(Vec2f dst) {
         final DoubleBuffer xBuf = MemoryUtil.memAllocDouble(1);
         final DoubleBuffer yBuf = MemoryUtil.memAllocDouble(1);
         glfwGetCursorPos(windowID, xBuf, yBuf);
-        final Vec2f value = new Vec2f(xBuf.get(), yBuf.get());
+        dst.set(xBuf.get(), yBuf.get());
         MemoryUtil.memFree(xBuf);
         MemoryUtil.memFree(yBuf);
-        return value;
+        return dst;
     }
 
-    public Vec2f getCursorPos() {
-        final Vec2f position = this.getCursorNativePos();
-        position.y = (window.getHeight() - position.y);
-        return position;
+    public Vec2f getCursorPos(Vec2f dst) {
+        this.getCursorNativePos(dst);
+        dst.y = (window.getHeight() - dst.y);
+        return dst;
     }
 
     public float getCursorX() {
@@ -203,15 +203,6 @@ public class GlfwInput {
 
     public void resetPreeditText() {
         glfwResetPreeditText(windowID);
-    }
-
-
-    private final Vec2f prevCursorPos = new Vec2f();
-
-    public Vec2f getCursorRelPos() {
-        final Vec2f value = this.getCursorNativePos().sub(prevCursorPos);
-        prevCursorPos.set(this.getCursorNativePos());
-        return value;
     }
 
 

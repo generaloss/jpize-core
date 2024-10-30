@@ -82,11 +82,11 @@ public class Jpize {
 
 
     public static int getFPS() {
-        return ContextManager.instance().getFPS();
+        return context().getFPS();
     }
 
     public static float getDT() {
-        return ContextManager.instance().getDeltaTime();
+        return context().getDeltaTime();
     }
 
 

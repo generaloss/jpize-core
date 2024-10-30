@@ -294,6 +294,8 @@ public class GlfwCallbacks {
             callbackKey = glfwSetKeyCallback(windowID, (windowID, rawKey, scancode, rawAction, rawMods) -> {
                 this.makeContextCurrent();
                 final Key key = Key.byValue(rawKey);
+                if(key == null) // theoretically impossible, but once it happened
+                    return;
                 final GlfwAction action = GlfwAction.byValue(rawAction);
                 final GlfwMods mods = new GlfwMods(rawMods);
                 callbacksKey.forEach(c -> c.invoke(window, key, scancode, action, mods));

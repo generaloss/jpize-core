@@ -26,8 +26,8 @@ public class RenderTest extends JpizeApplication {
         // boxes
         this.box1 = new AABoxBody(new AABox(-1, -1, -1, 1, 1, 1));
         this.box2 = new AABoxBody(new AABox(-1, -1, -1, 1, 1, 1));
-        this.box1.getPosition().set(-2, 0, 0);
-        this.box2.getPosition().set( 2, 0, 0);
+        this.box1.position().set(-2, 0, 0);
+        this.box2.position().set( 2, 0, 0);
         // mesh
         this.mesh = new Mesh(new GlVertAttr(3, GlType.FLOAT), new GlVertAttr(4, GlType.FLOAT));
         this.mesh.setMode(GlPrimitive.QUADS);

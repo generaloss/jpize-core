@@ -15,14 +15,12 @@ import jpize.util.color.Color;
 import jpize.util.math.matrix.Matrix3f;
 import jpize.util.math.matrix.Matrix4f;
 import jpize.util.math.vector.Vec2f;
-import jpize.gl.tesselation.Scissor;
 import jpize.gl.shader.Shader;
 
 import static jpize.gl.buffer.QuadIndexBuffer.QUAD_VERTICES;
 
 public class TextureBatch implements Disposable {
 
-    // tesselation
     private final Mesh mesh;
     private final Shader shader;
     private final Color color;
@@ -32,18 +30,17 @@ public class TextureBatch implements Disposable {
     // data
     private final int maxSize, vertexBytes;
     private int size, vertexBufferOffset;
-    public final float[] vertexData;
+    public final float[] tmp_vertexData;
     // transform
     private final Vec2f transformOrigin;
     private final Matrix3f transformMat, rotationMat, shearMat, scaleMat;
     private final Vec2f position;
     private boolean flipX, flipY;
-    private final Scissor scissor;
+    private final Vec2f tmp_origin, tmp_vertex1, tmp_vertex2, tmp_vertex3, tmp_vertex4;
 
     public TextureBatch(int maxSize) {
         this.maxSize = maxSize;
         this.color = new Color();
-        this.scissor = new Scissor(this::render);
         this.transformOrigin = new Vec2f(0.5F);
 
         // shader
@@ -65,7 +62,7 @@ public class TextureBatch implements Disposable {
         this.vertexBytes = mesh.vertices().getVertexBytes();
 
         // allocate buffers
-        this.vertexData = new float[vertexSize];
+        this.tmp_vertexData = new float[vertexSize];
         this.mesh.vertices().allocateData(QUAD_VERTICES * maxSize * vertexBytes);
 
         // matrices
@@ -74,43 +71,50 @@ public class TextureBatch implements Disposable {
         this.shearMat = new Matrix3f();
         this.scaleMat = new Matrix3f();
         this.position = new Vec2f();
+
+        // tmp
+        this.tmp_origin  = new Vec2f();
+        this.tmp_vertex1 = new Vec2f();
+        this.tmp_vertex2 = new Vec2f();
+        this.tmp_vertex3 = new Vec2f();
+        this.tmp_vertex4 = new Vec2f();
     }
 
     public TextureBatch() {
-        this(1024);
+        this(2048);
     }
 
 
     private void addVertex(float x, float y, float s, float t, float r, float g, float b, float a) {
-        vertexData[0] = x;
-        vertexData[1] = y;
+        tmp_vertexData[0] = x;
+        tmp_vertexData[1] = y;
 
-        vertexData[2] = s;
-        vertexData[3] = t;
+        tmp_vertexData[2] = s;
+        tmp_vertexData[3] = t;
 
-        vertexData[4] = r;
-        vertexData[5] = g;
-        vertexData[6] = b;
-        vertexData[7] = a;
+        tmp_vertexData[4] = r;
+        tmp_vertexData[5] = g;
+        tmp_vertexData[6] = b;
+        tmp_vertexData[7] = a;
 
-        mesh.vertices().setSubData(vertexBufferOffset, vertexData);
+        mesh.vertices().setSubData(vertexBufferOffset, tmp_vertexData);
         vertexBufferOffset += vertexBytes;
     }
 
     private void addTexturedQuad(float x, float y, float width, float height, float u1, float v1, float u2, float v2, float r, float g, float b, float a) {
-        final Vec2f origin = new Vec2f(width * transformOrigin.x, height * transformOrigin.y);
+        tmp_origin.set(width * transformOrigin.x, height * transformOrigin.y);
 
         transformMat.set(rotationMat.getMul(scaleMat.getMul(shearMat)));
 
-        final Vec2f vertex1 = new Vec2f(0F,    height).sub(origin).mulMat3(transformMat).add(origin).add(x, y).add(position);
-        final Vec2f vertex2 = new Vec2f(0F,    0F    ).sub(origin).mulMat3(transformMat).add(origin).add(x, y).add(position);
-        final Vec2f vertex3 = new Vec2f(width, 0F    ).sub(origin).mulMat3(transformMat).add(origin).add(x, y).add(position);
-        final Vec2f vertex4 = new Vec2f(width, height).sub(origin).mulMat3(transformMat).add(origin).add(x, y).add(position);
+        tmp_vertex1.set(0F,    height).sub(tmp_origin).mulMat3(transformMat).add(tmp_origin).add(x, y).add(position);
+        tmp_vertex2.set(0F,    0F    ).sub(tmp_origin).mulMat3(transformMat).add(tmp_origin).add(x, y).add(position);
+        tmp_vertex3.set(width, 0F    ).sub(tmp_origin).mulMat3(transformMat).add(tmp_origin).add(x, y).add(position);
+        tmp_vertex4.set(width, height).sub(tmp_origin).mulMat3(transformMat).add(tmp_origin).add(x, y).add(position);
 
-        this.addVertex(vertex1.x, vertex1.y, (flipX ? u2 : u1), (flipY ? v2 : v1), r, g, b, a);
-        this.addVertex(vertex2.x, vertex2.y, (flipX ? u2 : u1), (flipY ? v1 : v2), r, g, b, a);
-        this.addVertex(vertex3.x, vertex3.y, (flipX ? u1 : u2), (flipY ? v1 : v2), r, g, b, a);
-        this.addVertex(vertex4.x, vertex4.y, (flipX ? u1 : u2), (flipY ? v2 : v1), r, g, b, a);
+        this.addVertex(tmp_vertex1.x, tmp_vertex1.y, (flipX ? u2 : u1), (flipY ? v2 : v1), r, g, b, a);
+        this.addVertex(tmp_vertex2.x, tmp_vertex2.y, (flipX ? u2 : u1), (flipY ? v1 : v2), r, g, b, a);
+        this.addVertex(tmp_vertex3.x, tmp_vertex3.y, (flipX ? u1 : u2), (flipY ? v1 : v2), r, g, b, a);
+        this.addVertex(tmp_vertex4.x, tmp_vertex4.y, (flipX ? u1 : u2), (flipY ? v2 : v1), r, g, b, a);
     }
 
 
@@ -154,8 +158,6 @@ public class TextureBatch implements Disposable {
 
 
     public void draw(Texture2D texture, float x, float y, float width, float height, float r, float g, float b, float a) {
-        if(!scissor.intersects(x, y, width, height))
-            return;
         if(size == maxSize)
             this.render();
 
@@ -180,8 +182,6 @@ public class TextureBatch implements Disposable {
 
 
     public void draw(TextureRegion textureRegion, float x, float y, float width, float height, float r, float g, float b, float a) {
-        if(!scissor.intersects(x, y, width, height))
-            return;
         if(size == maxSize)
             this.render();
 
@@ -209,9 +209,6 @@ public class TextureBatch implements Disposable {
 
 
     public void draw(Texture2D texture, Region region, float x, float y, float width, float height, float r, float g, float b, float a) {
-        if(!scissor.intersects(x, y, width, height))
-            return;
-
         if(size == maxSize)
             this.render();
 
@@ -272,10 +269,6 @@ public class TextureBatch implements Disposable {
         return size;
     }
 
-    public Scissor getScissor() {
-        return scissor;
-    }
-
     public Color color() {
         return color;
     }
@@ -325,12 +318,20 @@ public class TextureBatch implements Disposable {
         shearMat.setShear(angleX, angleY);
     }
 
-    public void scale(double scale) {
+    public void setScale(double scale) {
         scaleMat.setScale(scale);
     }
 
-    public void scale(float x, float y) {
+    public void setScale(double x, double y) {
         scaleMat.setScale(x, y);
+    }
+
+    public void scale(double scale) {
+        scaleMat.scale(scale);
+    }
+
+    public void scale(double x, double y) {
+        scaleMat.scale(x, y);
     }
 
     public void flipX(boolean flip) {
