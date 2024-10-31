@@ -3,7 +3,7 @@ package jpize.gl.tesselation;
 import jpize.gl.buffer.GlAttachment;
 import jpize.gl.texture.*;
 import jpize.gl.type.GlType;
-import jpize.util.postprocess.ScreenQuad;
+import jpize.util.postprocess.ScreenQuadMesh;
 import jpize.util.postprocess.ScreenQuadShader;
 import org.lwjgl.BufferUtils;
 import jpize.app.Jpize;
@@ -116,8 +116,8 @@ public class GlFramebuffer extends GlObject {
 
     public void renderToScreen() {
         this.unbind();
-        ScreenQuadShader.use(texture);
-        ScreenQuad.render();
+        ScreenQuadShader.bind(texture);
+        ScreenQuadMesh.render();
     }
     
 

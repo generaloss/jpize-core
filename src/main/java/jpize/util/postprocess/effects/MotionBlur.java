@@ -7,7 +7,7 @@ import jpize.gl.tesselation.GlFramebuffer;
 import jpize.util.postprocess.PostProcessEffect;
 import jpize.gl.tesselation.GlRenderbuffer;
 import jpize.gl.texture.Texture2D;
-import jpize.util.postprocess.ScreenQuad;
+import jpize.util.postprocess.ScreenQuadMesh;
 import jpize.gl.shader.Shader;
 
 public class MotionBlur implements PostProcessEffect {
@@ -38,7 +38,7 @@ public class MotionBlur implements PostProcessEffect {
         this.fbo2.unbind();
 
         // shader (quad)
-        this.shader = new Shader(Resource.internal("/shader/motion/motion.vert"), Resource.internal("/shader/motion/motion.frag"));
+        this.shader = new Shader(Resource.internal("/shader/motion_blur/vert.glsl"), Resource.internal("/shader/motion_blur/frag.glsl"));
 
         // texture (previous frame)
         this.backframe = new Texture2D(width, height);
@@ -66,7 +66,7 @@ public class MotionBlur implements PostProcessEffect {
             shader.bind();
             shader.uniform("u_frame", fbo1.getTexture());
             shader.uniform("u_backFrame", backframe);
-            ScreenQuad.render();
+            ScreenQuadMesh.render();
         }
         fbo2.unbind();
         rbo2.unbind();
@@ -78,7 +78,7 @@ public class MotionBlur implements PostProcessEffect {
         shader.bind();
         shader.uniform("u_frame", fbo1.getTexture());
         shader.uniform("u_backFrame", backframe);
-        ScreenQuad.render();
+        ScreenQuadMesh.render();
     }
 
     @Override
@@ -94,7 +94,7 @@ public class MotionBlur implements PostProcessEffect {
             shader.bind();
             shader.uniform("u_frame", fbo1.getTexture());
             shader.uniform("u_backFrame", backframe);
-            ScreenQuad.render();
+            ScreenQuadMesh.render();
         }
         fbo2.unbind();
         rbo2.unbind();
@@ -108,7 +108,7 @@ public class MotionBlur implements PostProcessEffect {
         shader.bind();
         shader.uniform("u_frame", fbo1.getTexture());
         shader.uniform("u_backFrame", backframe);
-        ScreenQuad.render();
+        ScreenQuadMesh.render();
     }
 
     public void resize(int width, int height) {

@@ -2,9 +2,6 @@ package jpize.app;
 
 import jpize.glfw.Glfw;
 import jpize.glfw.window.GlfwWindow;
-import jpize.util.shader.BaseShader;
-import jpize.util.postprocess.ScreenQuad;
-import jpize.util.postprocess.ScreenQuadShader;
 import jpize.gl.texture.TextureUtils;
 import jpize.util.ReflectUtils;
 
@@ -112,9 +109,6 @@ public class ContextManager {
     private void terminate() {
         Glfw.terminate();
         ReflectUtils.invokeStaticMethod(TextureUtils.class, "dispose");
-        ReflectUtils.invokeStaticMethod(ScreenQuad.class, "dispose");
-        ReflectUtils.invokeStaticMethod(ScreenQuadShader.class, "dispose");
-        ReflectUtils.invokeStaticMethod(BaseShader.class, "disposeShaders");
     }
 
 }

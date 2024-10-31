@@ -5,7 +5,7 @@ import jpize.gl.Gl;
 import jpize.gl.tesselation.GlFramebuffer;
 import jpize.util.postprocess.PostProcessEffect;
 import jpize.gl.tesselation.GlRenderbuffer;
-import jpize.util.postprocess.ScreenQuad;
+import jpize.util.postprocess.ScreenQuadMesh;
 import jpize.gl.shader.Shader;
 import jpize.util.res.Resource;
 
@@ -35,7 +35,7 @@ public class GaussianBlur implements PostProcessEffect {
         this.fbo2.create();
 
         // shader (quad)
-        this.shader = new Shader(Resource.internal("/shader/blur/blur.vert"), Resource.internal("/shader/blur/blur.frag"));
+        this.shader = new Shader(Resource.internal("/shader/gaussian_blur/vert.glsl"), Resource.internal("/shader/gaussian_blur/frag.glsl"));
     }
 
 
@@ -64,7 +64,7 @@ public class GaussianBlur implements PostProcessEffect {
             shader.uniform("u_frame", fbo1.getTexture());
             shader.uniform("u_axis", 0);
             shader.uniform("u_radius", radius);
-            ScreenQuad.render();
+            ScreenQuadMesh.render();
         }
         fbo2.unbind();
 
@@ -73,7 +73,7 @@ public class GaussianBlur implements PostProcessEffect {
         shader.uniform("u_frame", fbo2.getTexture());
         shader.uniform("u_axis", 1);
         shader.uniform("u_radius", radius);
-        ScreenQuad.render();
+        ScreenQuadMesh.render();
     }
 
     @Override
@@ -89,7 +89,7 @@ public class GaussianBlur implements PostProcessEffect {
             shader.uniform("u_frame", fbo1.getTexture());
             shader.uniform("u_axis", 0);
             shader.uniform("u_radius", radius);
-            ScreenQuad.render();
+            ScreenQuadMesh.render();
         }
         fbo2.unbind();
 
@@ -100,7 +100,7 @@ public class GaussianBlur implements PostProcessEffect {
         shader.uniform("u_frame", fbo2.getTexture());
         shader.uniform("u_axis", 1);
         shader.uniform("u_radius", radius);
-        ScreenQuad.render();
+        ScreenQuadMesh.render();
     }
 
     public void resize(int width, int height) {

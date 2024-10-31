@@ -1,6 +1,7 @@
 package jpize.util.font;
 
 import jpize.app.Jpize;
+import jpize.gl.shader.Shader;
 import jpize.gl.tesselation.GlPrimitive;
 import jpize.gl.type.GlType;
 import jpize.gl.vertex.GlVertAttr;
@@ -8,13 +9,13 @@ import jpize.util.font.glyph.GlyphSprite;
 import jpize.util.mesh.Mesh;
 import jpize.util.region.Region;
 import jpize.gl.texture.Texture2D;
-import jpize.util.shader.BaseShader;
 import jpize.gl.texture.TextureBatch;
 import jpize.util.array.FloatList;
 import jpize.util.color.Color;
 import jpize.util.math.matrix.Matrix3f;
 import jpize.util.math.matrix.Matrix4f;
 import jpize.util.math.vector.Vec2f;
+import jpize.util.res.Resource;
 import org.lwjgl.glfw.GLFW;
 
 import java.util.HashMap;
@@ -50,7 +51,7 @@ public class TextRenderer {
     }
 
 
-    private record Renderer(Mesh mesh, BaseShader shader, Matrix4f matrix1, Matrix4f matrix2) { }
+    private record Renderer(Mesh mesh, Shader shader, Matrix4f matrixCombined) { }
     private static final Map<Long, Renderer> RENDERERS_BY_CONTEXT = new HashMap<>();
 
     public static void render(Font font, String text, float x, float y) {
@@ -60,15 +61,15 @@ public class TextRenderer {
         if(!RENDERERS_BY_CONTEXT.containsKey(GLFW.glfwGetCurrentContext())){
             final Renderer renderer = new Renderer(
                 new Mesh(new GlVertAttr(2, GlType.FLOAT), new GlVertAttr(2, GlType.FLOAT), new GlVertAttr(4, GlType.FLOAT)),
-                BaseShader.getPos2UvColor(),
-                new Matrix4f(), new Matrix4f()
+                new Shader(Resource.internal("/shader/text/vert.glsl"), Resource.internal("/shader/text/frag.glsl")),
+                new Matrix4f()
             );
             renderer.mesh.setMode(GlPrimitive.QUADS);
             RENDERERS_BY_CONTEXT.put(GLFW.glfwGetCurrentContext(), renderer);
         }
         final Renderer renderer = RENDERERS_BY_CONTEXT.get(GLFW.glfwGetCurrentContext());
 
-        renderer.matrix1.setOrthographic(0, 0, Jpize.getWidth(), Jpize.getHeight());
+        renderer.matrixCombined.setOrthographic(0, 0, Jpize.getWidth(), Jpize.getHeight());
 
         final Color color = font.options().color;
 
@@ -133,8 +134,8 @@ public class TextRenderer {
                 vertices.clear();
 
                 renderer.shader.bind();
-                renderer.shader.setMatrices(renderer.matrix1, renderer.matrix2);
-                renderer.shader.setTexture(lastTexture);
+                renderer.shader.uniform("u_combined", renderer.matrixCombined);
+                renderer.shader.uniform("u_texture", lastTexture);
                 renderer.mesh.render();
             }
         }
@@ -144,8 +145,8 @@ public class TextRenderer {
 
         renderer.mesh.vertices().setData(vertices.copyOf());
         renderer.shader.bind();
-        renderer.shader.setMatrices(renderer.matrix1, renderer.matrix2);
-        renderer.shader.setTexture(lastTexture);
+        renderer.shader.uniform("u_combined", renderer.matrixCombined);
+        renderer.shader.uniform("u_texture", lastTexture);
         renderer.mesh.render();
     }
 

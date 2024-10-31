@@ -45,8 +45,8 @@ public class TextureBatch implements Disposable {
 
         // shader
         this.shader = new Shader(
-            Resource.internal("/shader/batch/batch.vert"),
-            Resource.internal("/shader/batch/batch.frag")
+            Resource.internal("/shader/texture_batch/vert.glsl"),
+            Resource.internal("/shader/texture_batch/frag.glsl")
         );
 
         // mesh

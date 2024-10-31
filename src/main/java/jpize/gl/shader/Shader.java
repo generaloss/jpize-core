@@ -93,108 +93,130 @@ public class Shader implements Disposable {
     }
 
 
-    public void uniformMat4(String uniformName, float[] values) {
+    public Shader uniformMat4(String uniformName, float[] values) {
         program.uniformMat4(getUniformLocation(uniformName), false, values);
+        return this;
     }
 
-    public void uniform(String uniformName, Matrix4f matrix4f) {
+    public Shader uniform(String uniformName, Matrix4f matrix4f) {
         uniformMat4(uniformName, matrix4f.val);
+        return this;
     }
 
-    public void uniformMat3(String uniformName, float[] values) {
+    public Shader uniformMat3(String uniformName, float[] values) {
         program.uniformMat3(getUniformLocation(uniformName), false, values);
+        return this;
     }
 
-    public void uniform(String uniformName, Matrix3f matrix3f) {
+    public Shader uniform(String uniformName, Matrix3f matrix3f) {
         uniformMat3(uniformName, matrix3f.val);
+        return this;
     }
 
-    public void uniform(String uniformName, Vec2f v) {
+    public Shader uniform(String uniformName, Vec2f v) {
         program.uniform(getUniformLocation(uniformName), v.x, v.y);
+        return this;
     }
 
-    public void uniform(String uniformName, Vec3f v) {
+    public Shader uniform(String uniformName, Vec3f v) {
         program.uniform(getUniformLocation(uniformName), v.x, v.y, v.z);
+        return this;
     }
 
-    public void uniform(String uniformName, float x) {
+    public Shader uniform(String uniformName, float x) {
         program.uniform(getUniformLocation(uniformName), x);
+        return this;
     }
 
-    public void uniform(String uniformName, float x, float y) {
+    public Shader uniform(String uniformName, float x, float y) {
         program.uniform(getUniformLocation(uniformName), x, y);
+        return this;
     }
 
-    public void uniform(String uniformName, float x, float y, float z) {
+    public Shader uniform(String uniformName, float x, float y, float z) {
         program.uniform(getUniformLocation(uniformName), x, y, z);
+        return this;
     }
 
-    public void uniform(String uniformName, float x, float y, float z, float w) {
+    public Shader uniform(String uniformName, float x, float y, float z, float w) {
         program.uniform(getUniformLocation(uniformName), x, y, z, w);
+        return this;
     }
 
-    public void uniform(String uniformName, float[] array) {
+    public Shader uniform(String uniformName, float[] array) {
         program.uniform(getUniformLocation(uniformName), array);
+        return this;
     }
 
-    public void uniform(String uniformName, int value) {
+    public Shader uniform(String uniformName, int value) {
         program.uniform(getUniformLocation(uniformName), value);
+        return this;
     }
 
-    public void uniform(String uniformName, boolean value) {
+    public Shader uniform(String uniformName, boolean value) {
         uniform(uniformName, value ? 1 : 0);
+        return this;
     }
 
-    public void uniform(String uniformName, int[] array) {
+    public Shader uniform(String uniformName, int[] array) {
         program.uniform(getUniformLocation(uniformName), array);
+        return this;
     }
 
-    public void uniform(String uniformName, Color color) {
+    public Shader uniform(String uniformName, Color color) {
         program.uniform(getUniformLocation(uniformName), color.r, color.g, color.b, color.a);
+        return this;
     }
 
-    public void uniform(String uniformName, Texture2D texture) {
+    public Shader uniform(String uniformName, Texture2D texture) {
         texture.active(num_sampler2D);
         program.uniform(getUniformLocation(uniformName), num_sampler2D);
         num_sampler2D++;
+        return this;
     }
 
-    public void uniform(String uniformName, Texture2DArray textureArray) {
+    public Shader uniform(String uniformName, Texture2DArray textureArray) {
         textureArray.active(num_sampler2DArray);
         program.uniform(getUniformLocation(uniformName), num_sampler2DArray);
         num_sampler2DArray++;
+        return this;
     }
 
-    public void uniform(String uniformName, TextureCubeMap cubeMap) {
+    public Shader uniform(String uniformName, TextureCubeMap cubeMap) {
         cubeMap.active(num_samplerCube);
         program.uniform(getUniformLocation(uniformName), num_samplerCube);
         num_samplerCube++;
+        return this;
     }
 
 
-    public void bindAttribute(int index, String name) {
+    public Shader bindAttribute(int index, String name) {
         program.bindAttributeLocation(index, name);
+        return this;
     }
 
-    public void bindFragDataLocation(int index, String name) {
+    public Shader bindFragDataLocation(int index, String name) {
         program.bindFragDataLocation(index, name);
+        return this;
     }
 
 
-    public void uniformBlockBinding(String uniformName, int bindingPoint) {
+    public Shader uniformBlockBinding(String uniformName, int bindingPoint) {
         final int index = program.getUniformBlockIndex(uniformName);
         if(index < 0)
             throw new RuntimeException("No uniform buffer called '" + uniformName + "'");
         program.uniformBlockBinding(index, bindingPoint);
+        return this;
     }
 
     
-    public void bind() {
-        program.bind();
-
+    public Shader bind() {
         num_sampler2D = 0;
         num_samplerCube = 0;
         num_sampler2DArray = 0;
+
+        program.bind();
+        return this;
     }
 
     public static void unbind() {

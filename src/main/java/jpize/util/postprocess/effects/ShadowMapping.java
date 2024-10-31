@@ -46,7 +46,7 @@ public class ShadowMapping implements Disposable {
         this.fbo.create();
 
         // shader
-        this.shader = new Shader(Resource.internal("/shader/shadowMapping/shadow.vert"), Resource.internal("/shader/shadowMapping/shadow.frag"));
+        this.shader = new Shader(Resource.internal("/shader/shadow_mapping/vert.glsl"), Resource.internal("/shader/shadow_mapping/frag.glsl"));
 
         this.projectionMatrix = new Matrix4f().setOrthographic(-size.x / 2, size.x / 2, size.y / 2, -size.y / 2, 1, size.z + 1);
         this.spaceMatrix = new Matrix4f();

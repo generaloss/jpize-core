@@ -7,6 +7,8 @@ import jpize.util.Disposable;
 import jpize.util.camera.Camera;
 import jpize.util.mesh.IndexedMesh;
 import jpize.util.math.matrix.Matrix4f;
+import jpize.util.pixmap.Pixmap;
+import jpize.util.pixmap.PixmapIO;
 import jpize.util.res.Resource;
 import jpize.gl.shader.Shader;
 
@@ -16,21 +18,21 @@ public class Skybox implements Disposable {
     private final Shader shader;
     private final IndexedMesh mesh;
     private final Matrix4f viewMatrix;
-    
-    public Skybox(String positive_x, String negative_x, String positive_y, String negative_y, String positive_z, String negative_z) {
+
+    public Skybox(Pixmap positive_x, Pixmap negative_x, Pixmap positive_y, Pixmap negative_y, Pixmap positive_z, Pixmap negative_z) {
         this.cubeMap = new TextureCubeMap(positive_x, negative_x, positive_y, negative_y, positive_z, negative_z);
-        this.shader = new Shader(Resource.internal("/shader/skybox/skybox.vert"), Resource.internal("/shader/skybox/skybox.frag"));
+        this.shader = new Shader(Resource.internal("/shader/skybox/vert.glsl"), Resource.internal("/shader/skybox/frag.glsl"));
 
         this.mesh = new IndexedMesh(new GlVertAttr(3, GlType.FLOAT));
         this.mesh.vertices().setData(new float[]{
             -2, -2,  2, // 0
-             2, -2,  2, // 1
+            2, -2,  2, // 1
             -2,  2,  2, // 2
-             2,  2,  2, // 3
+            2,  2,  2, // 3
             -2, -2, -2, // 4
-             2, -2, -2, // 5
+            2, -2, -2, // 5
             -2,  2, -2, // 6
-             2,  2, -2  // 7
+            2,  2, -2  // 7
         });
         this.mesh.indices().setData(
             7, 6, 2,  2, 3, 7, // Top     2, 6, 7,  7, 3, 2,
@@ -43,7 +45,15 @@ public class Skybox implements Disposable {
 
         this.viewMatrix = new Matrix4f();
     }
-    
+
+    public Skybox(String positive_x, String negative_x, String positive_y, String negative_y, String positive_z, String negative_z) {
+        this(
+            PixmapIO.load(positive_x), PixmapIO.load(negative_x),
+            PixmapIO.load(positive_y), PixmapIO.load(negative_y),
+            PixmapIO.load(positive_z), PixmapIO.load(negative_z)
+        );
+    }
+
 
     public void render(Matrix4f projection, Matrix4f view) {
         Gl.depthMask(false);

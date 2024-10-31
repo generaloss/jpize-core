@@ -6,7 +6,7 @@ import jpize.gl.Gl;
 import jpize.gl.tesselation.GlFramebuffer;
 import jpize.util.postprocess.PostProcessEffect;
 import jpize.gl.tesselation.GlRenderbuffer;
-import jpize.util.postprocess.ScreenQuad;
+import jpize.util.postprocess.ScreenQuadMesh;
 import jpize.gl.shader.Shader;
 
 public class Bloom implements PostProcessEffect {
@@ -42,11 +42,11 @@ public class Bloom implements PostProcessEffect {
         this.blurBuffer.create();
 
         // Shader
-        final Resource vertexShader = Resource.internal("/shader/bloom/bloom.vert");
+        final Resource vertexShaderRes = Resource.internal("/shader/bloom/vert.glsl");
 
-        this.brightShader = new Shader(vertexShader, Resource.internal("/shader/bloom/bloom_bright.frag"));
-        this.blurShader = new Shader(vertexShader, Resource.internal("/shader/bloom/bloom_blur.frag"));
-        this.combineShader = new Shader(vertexShader, Resource.internal("/shader/bloom/bloom_combine.frag"));
+        this.brightShader = new Shader(vertexShaderRes, Resource.internal("/shader/bloom/bright.frag"));
+        this.blurShader = new Shader(vertexShaderRes, Resource.internal("/shader/bloom/blur.frag"));
+        this.combineShader = new Shader(vertexShaderRes, Resource.internal("/shader/bloom/combine.frag"));
     }
 
 
@@ -89,7 +89,7 @@ public class Bloom implements PostProcessEffect {
             brightShader.bind();
             brightShader.uniform("u_frame", colorBuffer.getTexture());
             brightShader.uniform("u_brightness", brightness);
-            ScreenQuad.render();
+            ScreenQuadMesh.render();
         }
         fbo2.unbind();
 
@@ -99,7 +99,7 @@ public class Bloom implements PostProcessEffect {
             blurShader.bind();
             blurShader.uniform("u_frame", fbo2.getTexture());
             blurShader.uniform("u_radius", radius);
-            ScreenQuad.render();
+            ScreenQuadMesh.render();
         }
         blurBuffer.unbind();
 
@@ -109,7 +109,7 @@ public class Bloom implements PostProcessEffect {
         combineShader.uniform("u_bloom", bloom);
         combineShader.uniform("u_exposure", exposure);
         combineShader.uniform("u_gamma", gamma);
-        ScreenQuad.render();
+        ScreenQuadMesh.render();
     }
 
     @Override
