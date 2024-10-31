@@ -15,8 +15,8 @@ public class ScreenQuadShader {
 
     private ScreenQuadShader() {
         this.shader = new Shader(
-            Resource.internal("/shader/screen/screen.vert"),
-            Resource.internal("/shader/screen/screen.frag")
+            Resource.internal("/shader/screen_quad/vert.glsl"),
+            Resource.internal("/shader/screen_quad/frag.glsl")
         );
     }
 
