@@ -9,7 +9,7 @@ import jpize.util.font.glyph.GlyphSprite;
 import jpize.util.mesh.Mesh;
 import jpize.util.region.Region;
 import jpize.gl.texture.Texture2D;
-import jpize.gl.texture.TextureBatch;
+import jpize.util.mesh.TextureBatch;
 import jpize.util.array.FloatList;
 import jpize.util.color.Color;
 import jpize.util.math.matrix.Matrix3f;

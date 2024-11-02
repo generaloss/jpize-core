@@ -3,7 +3,7 @@ package jpize.util.font.glyph;
 import jpize.util.font.Font;
 import jpize.util.region.Region;
 import jpize.gl.texture.Texture2D;
-import jpize.gl.texture.TextureBatch;
+import jpize.util.mesh.TextureBatch;
 import jpize.util.color.Color;
 
 public class GlyphSprite {

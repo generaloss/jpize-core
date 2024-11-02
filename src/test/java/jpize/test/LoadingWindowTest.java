@@ -7,7 +7,7 @@ import jpize.glfw.init.GlfwPlatform;
 import jpize.util.font.Font;
 import jpize.util.font.FontLoader;
 import jpize.gl.texture.Texture2D;
-import jpize.gl.texture.TextureBatch;
+import jpize.util.mesh.TextureBatch;
 
 public class LoadingWindowTest {
 

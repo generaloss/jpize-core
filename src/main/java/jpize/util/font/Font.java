@@ -2,7 +2,7 @@ package jpize.util.font;
 
 import jpize.gl.texture.Texture2D;
 import jpize.util.font.glyph.*;
-import jpize.gl.texture.TextureBatch;
+import jpize.util.mesh.TextureBatch;
 import jpize.util.math.vector.Vec2f;
 import jpize.util.Disposable;
 

@@ -4,7 +4,7 @@ import jpize.app.Jpize;
 import jpize.app.JpizeApplication;
 import jpize.gl.Gl;
 import jpize.gl.texture.Texture2D;
-import jpize.gl.texture.TextureBatch;
+import jpize.util.mesh.TextureBatch;
 import jpize.glfw.Glfw;
 import jpize.glfw.init.GlfwPlatform;
 import jpize.util.Animation;

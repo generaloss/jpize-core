@@ -7,7 +7,7 @@ import jpize.glfw.Glfw;
 import jpize.glfw.init.GlfwPlatform;
 import jpize.glfw.input.Key;
 import jpize.glfw.input.MouseBtn;
-import jpize.gl.texture.TextureBatch;
+import jpize.util.mesh.TextureBatch;
 import jpize.util.ctrl.TextInput;
 import jpize.util.font.Font;
 import jpize.util.font.FontLoader;
