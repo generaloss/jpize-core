@@ -73,7 +73,7 @@ public class ClothSimulation extends JpizeApplication {
                     // Vertical constraint
                     this.constraints.add(new Constraint(particles.get(row * COL + col), particles.get((row + 1) * COL + col)));
                 }
-                if(col < COL - 1 && row < ROW - 1){
+                if(col < COL - 1 && row < ROW - 1 && row > ROW / 2){
                     this.constraints.add(new Constraint(particles.get(row * COL + col), particles.get((row + 1) * COL + (col + 1))));
                 }
             }
@@ -82,7 +82,7 @@ public class ClothSimulation extends JpizeApplication {
 
     @Override
     public void init() {
-        Gl.pointSize(PARTICLE_RADIUS * 2F);
+        Gl.pointSize(PARTICLE_RADIUS);
         Gl.enable(GlTarget.POINT_SMOOTH);
         Gl.lineWidth(CONSTRAINT_WIDTH);
     }
@@ -226,14 +226,15 @@ public class ClothSimulation extends JpizeApplication {
             acceleration.mul(time_step * time_step);
             position.add(velocity).add(acceleration);
             acceleration.zero();
+
+            // reduce momentum
+            previous_position.sub(position).mul(0.99).add(position);
         }
 
         public void constrain_to_bounds(float width, float height) {
             if(is_pinned)
                 return;
-
-            position.setMaxComps(position, 0);
-            position.setMinComps(position, width, height);
+            position.clamp(0F, 0F, width, height);
         }
 
     }
