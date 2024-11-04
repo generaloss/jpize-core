@@ -1,28 +1,30 @@
 package jpize.util.font.glyph;
 
 import jpize.util.font.Font;
+import jpize.util.font.FontRenderOptions;
+import jpize.util.math.vector.Vec2f;
+
 import java.util.Iterator;
 
 public class GlyphIterator implements Iterator<GlyphSprite> {
 
     private final Font font;
+    private final FontRenderOptions renderOptions;
     private final CharSequence text;
 
     private int position;
     private int lineY;
     private float cursorX;
     private float cursorY;
-
-    public GlyphIterator(Font font, CharSequence text) {
-        this.font = font;
-        this.text = this.textWithoutNullGlyphs(text);
-
-        this.cursorY = -(font.options().invLineWrap ? font.options().getAdvance() : 0);
-    }
-
-
     private float prevIncX;
     private float prevIncY;
+
+    public GlyphIterator(Font font, FontRenderOptions renderOptions, CharSequence text) {
+        this.font = font;
+        this.renderOptions = renderOptions;
+        this.text = this.removeUnknownGlyphs(text);
+        this.cursorY = -(renderOptions.isInvLineWrap() ? font.getLineAdvance() : 0);
+    }
 
     @Override
     public void remove() {
@@ -44,19 +46,19 @@ public class GlyphIterator implements Iterator<GlyphSprite> {
         final Glyph glyph = this.findNextGlyph();
 
         // Scale
-        final float scale = font.options().scale;
+        final Vec2f scale = renderOptions.scale();
 
         // Last '\n' for correct bounds
         if(glyph == null)
-            return new GlyphSprite(cursorY, font.options().getAdvance(), scale, lineY);
+            return new GlyphSprite(cursorY, font.getLineAdvance(), scale, lineY);
 
-        final float cursorXAdvance = glyph.advanceX * font.options().advanceFactor.x;
+        final float cursorXAdvance = glyph.advanceX * renderOptions.advanceFactor().x;
 
-        // Wrap line (area width)
-        final double maxWidth = font.options().wrapThreesholdWidth / scale;
+        // Wrap line (max width)
+        final double maxWidth = renderOptions.getWrapWidth() / scale.x;
         if(maxWidth >= 0 && cursorX + cursorXAdvance > maxWidth){
             cursorX = 0;
-            prevIncY = font.options().getLineWrapSign() * font.options().getAdvance() * font.options().advanceFactor.y;
+            prevIncY = renderOptions.getLineWrapSign() * font.getLineAdvance() * renderOptions.advanceFactor().y;
             cursorY += prevIncY;
             lineY++;
         }
@@ -82,7 +84,7 @@ public class GlyphIterator implements Iterator<GlyphSprite> {
 
             // Wrap line
             cursorX = 0;
-            cursorY += font.options().getLineWrapSign() * font.options().getAdvance() * font.options().advanceFactor.y;
+            cursorY += renderOptions.getLineWrapSign() * font.getLineAdvance() * renderOptions.advanceFactor().y;
             lineY++;
 
             position++;
@@ -91,17 +93,30 @@ public class GlyphIterator implements Iterator<GlyphSprite> {
         return font.getGlyphs().get(code);
     }
 
-    private CharSequence textWithoutNullGlyphs(CharSequence text) {
-        if(text == null || text.isEmpty())
+    private CharSequence removeUnknownGlyphs(CharSequence str) {
+        if(str == null || str.isEmpty())
             return "";
 
         final StringBuilder builder = new StringBuilder();
-        for(int i = 0; i < text.length(); i++){
-            final int code = Character.codePointAt(text, i);
+        for(int i = 0; i < str.length(); i++){
+            final int code = Character.codePointAt(str, i);
             if(code == '\n' || font.getGlyphs().containsKey(code))
                 builder.append((char) code);
         }
         return builder.toString();
+    }
+
+
+    public void skipLine() {
+        lineY++;
+        cursorX = 0;
+
+        // Skip characters
+        while(hasNext()){
+            if(text.charAt(position) == '\n')
+                break;
+            position++;
+        }
     }
 
 

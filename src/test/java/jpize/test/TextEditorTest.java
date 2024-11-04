@@ -7,6 +7,8 @@ import jpize.glfw.Glfw;
 import jpize.glfw.init.GlfwPlatform;
 import jpize.glfw.input.Key;
 import jpize.glfw.input.MouseBtn;
+import jpize.util.font.FontRenderOptions;
+import jpize.util.math.vector.Vec2f;
 import jpize.util.mesh.TextureBatch;
 import jpize.util.ctrl.TextInput;
 import jpize.util.font.Font;
@@ -19,21 +21,34 @@ import java.util.StringJoiner;
 
 public class TextEditorTest extends JpizeApplication {
 
-    private final TextInput input = new TextInput().enable().insert(Jpize.input().getClipboardString());
-    private final Font font = FontLoader.loadDefault();
-    private final TextureBatch batch = new TextureBatch();
-    private float editorScale = 1;
+    private final TextInput input;
+    private final Font font;
+    private final FontRenderOptions renderOptions;
+    private final TextureBatch batch;
+
+    private final Vec2f editorScale;
     private float lineHeight;
     private float scroll, animatedScroll, scrollY;
     private float numerationWidth;
-    private final Vec2i selectionStart = new Vec2i();
-    private final Vec2i selectionEnd = new Vec2i();
-    private TextInput.Selection selection = new TextInput.Selection(input, 0, 0, 0, 0);
+    private final Vec2i selectionStart;
+    private final Vec2i selectionEnd;
+    private TextInput.Selection selection;
 
+    public TextEditorTest() {
+        this.input = new TextInput().enable().insert(Jpize.input().getClipboardString());
+        this.font = FontLoader.loadDefault();
+        this.renderOptions = font.getRenderOptions().setInvLineWrap(true);
+        this.batch = new TextureBatch();
+
+        this.editorScale = new Vec2f(1F);
+        this.selectionStart = new Vec2i();
+        this.selectionEnd = new Vec2i();
+        this.selection = new TextInput.Selection(input, 0, 0, 0, 0);
+    }
+
+    @Override
     public void init() {
-        font.options().invLineWrap = true;
-        Gl.clearColor(0.1, 0.11, 0.12);
-        // System.out.println(font.getTextAdvance("i ") + " | " + (font.getTextAdvance("i") + font.getTextAdvance(" ")));
+        Gl.clearColor(0.1F, 0.11F, 0.12F);
 
         // remove selected
         Jpize.callbacks().addKeyCallback((window, key, scancode, action, mods) -> {
@@ -46,22 +61,23 @@ public class TextEditorTest extends JpizeApplication {
         });
     }
 
+    @Override
     public void update() {
         // scroll & scaling
         if(Jpize.getScroll() != 0){
             if(Key.LCTRL.pressed()){
                 final float scaleFactor = 1.2F;
-                editorScale *= Mathc.pow(Jpize.getScroll() > 0 ? scaleFactor : 1 / scaleFactor, Math.abs(Jpize.getScroll()));
+                editorScale.mul(Mathc.pow(Jpize.getScroll() > 0 ? scaleFactor : 1 / scaleFactor, Math.abs(Jpize.getScroll())));
             }else{
-                final float scrollFactor = 1.5F / editorScale;
+                final float scrollFactor = 1.5F / editorScale.y;
                 scroll -= Jpize.getScroll() * scrollFactor;
             }
         }
 
         // cinematic
-        font.options().scale += (editorScale - font.options().scale) / 10;
-        lineHeight = font.options().getLineHeightScaled();
-        numerationWidth = 200 * font.options().scale;
+        renderOptions.scale().add(editorScale.copy().sub(font.getRenderOptions().scale()).div(10));
+        lineHeight = font.getHeightScaled();
+        numerationWidth = 200 * renderOptions.scale().x;
         animatedScroll += (scroll - animatedScroll) / 10;
         scrollY = animatedScroll * lineHeight - Jpize.getHeight() * 0.5F;
 
@@ -72,7 +88,7 @@ public class TextEditorTest extends JpizeApplication {
             final int cursorY = Maths.floor(touchY / lineHeight);
             input.setY(cursorY);
             final String line = input.getLine();
-            final int cursorX = cursorXbyTouch(line, touchX);
+            final int cursorX = cursorXfromTouchX(line, touchX);
             input.setX(cursorX);
             selectionEnd.set(input.getX(), input.getY());
         }
@@ -92,17 +108,22 @@ public class TextEditorTest extends JpizeApplication {
 
     }
 
-    private int cursorXbyTouch(String line, float touchX) {
+    private int cursorXfromTouchX(String line, float touchX) {
         if(line.isEmpty())
             return 0;
 
-        for(int i = 0; i <= line.length(); i++)
-            if(font.getTextWidth(line.substring(0, i)) > touchX)
+        for(int i = 0; i <= line.length(); i++){
+            final char correctionChar = line.charAt(Math.min(i, line.length() - 1));
+            final float halfCharWidth = font.getTextWidth(String.valueOf(correctionChar)) * 0.5F;
+
+            if(font.getTextWidth(line.substring(0, i)) > touchX + halfCharWidth)
                 return (i - 1);
+        }
 
         return line.length();
     }
 
+    @Override
     public void render() {
         Gl.clearColorBuffer();
         batch.setup();
@@ -115,17 +136,17 @@ public class TextEditorTest extends JpizeApplication {
             final float numerationHeight = input.lines() * lineHeight;
             final float numerationY = (Jpize.getHeight() - numerationHeight + scrollY);
 
-            StringJoiner numeration = new StringJoiner("\n");
+            final StringJoiner numeration = new StringJoiner("\n");
             for(int i = 0; i < input.lines(); i++)
                 numeration.add(String.valueOf(i + 1));
 
             batch.drawRect(numerationWidth - 2, numerationY, 2, numerationHeight,  0.3F, 0.32F, 0.35F);
-            font.options().color.set(0.3, 0.32, 0.35);
+            renderOptions.color().set(0.3, 0.32, 0.35);
             font.drawText(batch, numeration.toString(), 0, Jpize.getHeight() + scrollY);
 
             // render selection
             if(!selection.isEmpty()) {
-                final float firstLineOffsetX = font.getTextAdvance(
+                final float firstLineOffsetX = font.getTextWidthWithAdvance(
                     input.getLine(selection.start.y)
                         .substring(0, selection.start.x)
                 );
@@ -144,7 +165,8 @@ public class TextEditorTest extends JpizeApplication {
             }
 
             // render text
-            font.options().color.set(0.95, 0.95, 0.93);
+            renderOptions.color().set(0.95, 0.95, 0.93);
+            renderOptions.enableCullLines(0F, Jpize.getHeight());
             font.drawText(batch, text, numerationWidth, textY);
 
             // render cursor
@@ -155,10 +177,12 @@ public class TextEditorTest extends JpizeApplication {
         batch.render();
     }
 
+    @Override
     public void dispose() {
         batch.dispose();
         font.dispose();
     }
+
 
     public static void main(String[] args) {
         if(System.getProperty("os.name").equals("Linux")) Glfw.glfwInitHintPlatform(GlfwPlatform.X11);

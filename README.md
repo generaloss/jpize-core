@@ -93,15 +93,19 @@ Font font = FontLoader.loadFnt(path_or_resource, linearFilter);
 Font font = FontLoader.loadTrueType(path_or_resource, size, charset, linearFilter);
 
 // options
-font.options().scale = 1.5F;
-font.options().rotation = 45;
-font.options().italic = true;
-font.options().invLineWrap = true;
+FontRenderOptions options = font.getRenderOptions();
+
+options.enableCullLines(0F, Jpize.getHeight());
+options.color().set(0.95, 0.95, 0.93);
+options.scale().set(1.5F);
+options.setRotation(45F);
+options.setItalicAngle(15F);
+options.setInvLineWrap(true);
 
 // bounds
 float width = font.getTextWidth(line);
 float height = font.getTextHeight(text);
-Vec2f bounds = font.getBounds(text);
+Vec2f bounds = font.getTextBounds(text);
 
 // render
 font.drawText(text, x, y);

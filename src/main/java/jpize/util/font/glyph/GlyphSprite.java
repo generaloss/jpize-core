@@ -1,6 +1,7 @@
 package jpize.util.font.glyph;
 
 import jpize.util.font.Font;
+import jpize.util.math.vector.Vec2f;
 import jpize.util.region.Region;
 import jpize.gl.texture.Texture2D;
 import jpize.util.mesh.TextureBatch;
@@ -12,44 +13,38 @@ public class GlyphSprite {
     private final Region region;
     private final Texture2D page;
 
-    private final float x;
-    private final float y;
-    private final float width;
-    private final float height;
+    private final Vec2f position;
+    private final Vec2f size;
 
     private final int lineY;
-    private final boolean canRender;
+    private final boolean hasRenderer;
     private final float advanceX;
     private final float offsetY;
 
-    public GlyphSprite(Font font, Glyph glyph, float cursorX, float cursorY, float scale, int lineY) {
+    public GlyphSprite(Font font, Glyph glyph, float cursorX, float cursorY, Vec2f scale, int lineY) {
         this.code   = glyph.code;
         this.region = glyph.region;
         this.page   = font.getPages().get(glyph.pageID);
 
-        this.x      = scale * (glyph.offset.x + cursorX);
-        this.y      = scale * (glyph.offset.y + cursorY);
-        this.width  = scale * (glyph.width );
-        this.height = scale * (glyph.height);
+        this.position = new Vec2f(cursorX, cursorY).add(glyph.offset).mul(scale);
+        this.size = glyph.size.copy().mul(scale);
 
         this.lineY = lineY;
-        this.canRender = true;
-        this.advanceX = glyph.advanceX * scale;
-        this.offsetY = glyph.offset.y * scale;
+        this.hasRenderer = true;
+        this.advanceX = glyph.advanceX * scale.x;
+        this.offsetY = glyph.offset.y * scale.y;
     }
 
-    public GlyphSprite(float cursorY, float height, float scale, int lineY) {
+    public GlyphSprite(float cursorY, float height, Vec2f scale, int lineY) {
         this.code   = -1;
         this.region = null;
         this.page   = null;
-        
-        this.x      = 0;
-        this.y      = scale * cursorY;
-        this.width  = 0;
-        this.height = scale * height;
+
+        this.position = new Vec2f(0, cursorY).mul(scale);
+        this.size = new Vec2f(0, height).mul(scale);
 
         this.lineY = lineY;
-        this.canRender = false;
+        this.hasRenderer = false;
         this.advanceX = 0;
         this.offsetY = 0;
     }
@@ -69,19 +64,19 @@ public class GlyphSprite {
     
 
     public float getX() {
-        return x;
+        return position.x;
     }
 
     public float getY() {
-        return y;
+        return position.y;
     }
 
     public float getWidth() {
-        return width;
+        return size.x;
     }
 
     public float getHeight() {
-        return height;
+        return size.y;
     }
 
 
@@ -89,8 +84,8 @@ public class GlyphSprite {
         return lineY;
     }
 
-    public boolean isCanRender() {
-        return canRender;
+    public boolean isHasRenderer() {
+        return hasRenderer;
     }
 
     public float getAdvanceX() {
@@ -103,8 +98,9 @@ public class GlyphSprite {
 
 
     public void render(TextureBatch batch, float x, float y, float r, float g, float b, float a) {
-        if(canRender)
-            batch.draw(page, region, (this.x + x), (this.y + y), width, height, r, g, b, a);
+        if(hasRenderer) {
+            batch.draw(page, region, (position.x + x), (position.y + y), size.x, size.y, r, g, b, a);
+        }
     }
 
     public void render(TextureBatch batch, float x, float y, Color color) {

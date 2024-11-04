@@ -116,10 +116,7 @@ public class FontLoader {
             }
         }
 
-        final Font font = new Font(height, ascent, descent, pages, glyphs);
-        font.options().italic = italic;
-
-        return font;
+        return new Font(height, ascent, descent, pages, glyphs, italic);
     }
 
     public static Font loadFnt(String filepath, boolean linearFilter) {
@@ -207,7 +204,7 @@ public class FontLoader {
             }
         }
 
-        return new Font(size, ascent, descent, pages, glyphs);
+        return new Font(size, ascent, descent, pages, glyphs, false);
     }
 
     public static Font loadTrueType(String filepath, int size, Charset charset, boolean linearFilter) {

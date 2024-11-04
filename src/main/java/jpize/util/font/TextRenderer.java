@@ -5,6 +5,7 @@ import jpize.gl.shader.Shader;
 import jpize.gl.tesselation.GlPrimitive;
 import jpize.gl.type.GlType;
 import jpize.gl.vertex.GlVertAttr;
+import jpize.util.font.glyph.GlyphIterator;
 import jpize.util.font.glyph.GlyphSprite;
 import jpize.util.mesh.Mesh;
 import jpize.util.region.Region;
@@ -21,40 +22,46 @@ import org.lwjgl.glfw.GLFW;
 import java.util.HashMap;
 import java.util.Map;
 
-public class TextRenderer {
+public class TextRenderer { //! optimize code
 
-    public static void render(Font font, TextureBatch batch, String text, float x, float y) {
+    public static void render(Font font, FontRenderOptions options, TextureBatch batch, String text, float x, float y) {
         if(text == null || text.isBlank())
             return;
 
-        final Color color = font.options().color;
+        batch.setTransformOrigin(0F, 0F);
+        batch.rotate(options.getRotation());
+        batch.shear(font.isItalic() ? options.getItalicAngle() : 0F, 0F);
 
-        batch.setTransformOrigin(0, 0);
-        batch.rotate(font.options().rotation);
-        batch.shear(font.options().getItalicAngle(), 0);
+        final Vec2f centerPos = font.getTextBounds(text).mul(options.rotationOrigin());
+        centerPos.y *= options.getLineWrapSign();
 
-        final Vec2f centerPos = font.getBounds(text).mul(font.options().rotateOrigin);
-        centerPos.y *= font.options().getLineWrapSign();
+        final Iterable<GlyphSprite> iterable = font.iterable(text);
+        final GlyphIterator iterator = (GlyphIterator) iterable.iterator();
 
-        final float descent = font.options().getDescentScaled();
+        for(GlyphSprite sprite: iterable){
+            // cull lines
+            if(options.isCullLinesEnabled()) {
+                final float lineBottomY = (iterator.getCursorY() * options.scale().y + y);
+                final float lineTopY = (lineBottomY + font.getLineAdvanceScaled());
+                if(lineTopY < options.getCullLinesBottomY() || lineBottomY > options.getCullLinesTopY()){
+                    iterator.skipLine();
+                    continue;
+                }
+            }
 
-        for(GlyphSprite sprite: font.iterable(text)){
-            if((char) sprite.getCode() == ' ' || !sprite.isCanRender())
+            if((char) sprite.getCode() == ' ' || !sprite.isHasRenderer())
                 continue;
 
             final Vec2f renderPos = new Vec2f();
-            renderPos.y -= descent;
-            renderPos.sub(centerPos).rotate(font.options().rotation).add(centerPos).add(x, y);
-            renderPos.y += descent;
-            sprite.render(batch, renderPos.x, renderPos.y, color.r, color.g, color.b, color.a);
+            renderPos.y -= font.getDescentScaled();
+            renderPos.sub(centerPos).rotate(options.getRotation()).add(centerPos).add(x, y);
+            renderPos.y += font.getDescentScaled();
+            sprite.render(batch, renderPos.x, renderPos.y, options.color());
         }
     }
 
 
-    private record Renderer(Mesh mesh, Shader shader, Matrix4f matrixCombined) { }
-    private static final Map<Long, Renderer> RENDERERS_BY_CONTEXT = new HashMap<>();
-
-    public static void render(Font font, String text, float x, float y) {
+    public static void render(Font font, FontRenderOptions options, String text, float x, float y) {
         if(text == null || text.isBlank())
             return;
 
@@ -69,30 +76,28 @@ public class TextRenderer {
         }
         final Renderer renderer = RENDERERS_BY_CONTEXT.get(GLFW.glfwGetCurrentContext());
 
-        renderer.matrixCombined.setOrthographic(0, 0, Jpize.getWidth(), Jpize.getHeight());
+        renderer.matrixCombined.setOrthographic(0F, 0F, Jpize.getWidth(), Jpize.getHeight());
 
-        final Color color = font.options().color;
+        final Color color = options.color();
 
         final Matrix3f mat = new Matrix3f();
-        mat.setRotation(font.options().rotation);
-        mat.shear(font.options().getItalicAngle(), 0);
+        mat.setRotation(options.getRotation());
+        mat.shear(font.isItalic() ? options.getItalicAngle() : 0F, 0F);
 
-        final Vec2f centerPos = font.getBounds(text).mul(font.options().rotateOrigin);
-        centerPos.y *= font.options().getLineWrapSign();
-
-        final float descent = font.options().getDescentScaled();
+        final Vec2f centerPos = font.getTextBounds(text).mul(options.rotationOrigin());
+        centerPos.y *= options.getLineWrapSign();
 
         final FloatList vertices = new FloatList(text.length() * 4);
         Texture2D lastTexture = null;
 
         for(GlyphSprite sprite: font.iterable(text)){
-            if((char) sprite.getCode() == ' ' || !sprite.isCanRender())
+            if((char) sprite.getCode() == ' ' || !sprite.isHasRenderer())
                 continue;
 
             final Vec2f renderPos = new Vec2f(sprite.getX(), sprite.getY());
-            renderPos.y -= descent;
-            renderPos.sub(centerPos).rotate(font.options().rotation).add(centerPos).add(x, y);
-            renderPos.y += descent;
+            renderPos.y -= font.getDescentScaled();
+            renderPos.sub(centerPos).rotate(options.getRotation()).add(centerPos).add(x, y);
+            renderPos.y += font.getDescentScaled();
             renderPos.mulMat3(mat);
 
             final Texture2D page = sprite.getPage();
@@ -149,5 +154,9 @@ public class TextRenderer {
         renderer.shader.uniform("u_texture", lastTexture);
         renderer.mesh.render();
     }
+
+    private static final Map<Long, Renderer> RENDERERS_BY_CONTEXT = new HashMap<>();
+
+    private record Renderer(Mesh mesh, Shader shader, Matrix4f matrixCombined) { }
 
 }
