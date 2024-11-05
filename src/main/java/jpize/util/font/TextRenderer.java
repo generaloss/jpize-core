@@ -28,6 +28,7 @@ public class TextRenderer { //! optimize code
         if(text == null || text.isBlank())
             return;
 
+        // init
         batch.setTransformOrigin(0F, 0F);
         batch.rotate(options.getRotation());
         batch.shear(font.isItalic() ? options.getItalicAngle() : 0F, 0F);
@@ -35,6 +36,7 @@ public class TextRenderer { //! optimize code
         final Vec2f centerPos = font.getTextBounds(text).mul(options.rotationOrigin());
         centerPos.y *= options.getLineWrapSign();
 
+        // context-local instance
         final Iterable<GlyphSprite> iterable = font.iterable(text);
         final GlyphIterator iterator = (GlyphIterator) iterable.iterator();
 
@@ -49,14 +51,18 @@ public class TextRenderer { //! optimize code
                 }
             }
 
-            if((char) sprite.getCode() == ' ' || !sprite.isHasRenderer())
+            if((char) sprite.getCode() == ' ' || !sprite.isRenderable())
                 continue;
 
-            final Vec2f renderPos = new Vec2f();
+            final Vec2f renderPos = new Vec2f(sprite.getX(), sprite.getY());
             renderPos.y -= font.getDescentScaled();
-            renderPos.sub(centerPos).rotate(options.getRotation()).add(centerPos).add(x, y);
+            renderPos
+                .sub(centerPos)
+                .rotate(options.getRotation())
+                .add(centerPos)
+                .add(x, y);
             renderPos.y += font.getDescentScaled();
-            sprite.render(batch, renderPos.x, renderPos.y, options.color());
+            batch.draw(sprite.getPage(), sprite.getRegion(), renderPos.x, renderPos.y, sprite.getWidth(), sprite.getHeight(), options.color());
         }
     }
 
@@ -65,10 +71,11 @@ public class TextRenderer { //! optimize code
         if(text == null || text.isBlank())
             return;
 
+        // context-local instance
         if(!RENDERERS_BY_CONTEXT.containsKey(GLFW.glfwGetCurrentContext())){
             final Renderer renderer = new Renderer(
                 new Mesh(new GlVertAttr(2, GlType.FLOAT), new GlVertAttr(2, GlType.FLOAT), new GlVertAttr(4, GlType.FLOAT)),
-                new Shader(Resource.internal("/shader/text/vert.glsl"), Resource.internal("/shader/text/frag.glsl")),
+                new Shader(Resource.internal("/shader/text_renderer/vert.glsl"), Resource.internal("/shader/text_renderer/frag.glsl")),
                 new Matrix4f()
             );
             renderer.mesh.setMode(GlPrimitive.QUADS);
@@ -76,13 +83,14 @@ public class TextRenderer { //! optimize code
         }
         final Renderer renderer = RENDERERS_BY_CONTEXT.get(GLFW.glfwGetCurrentContext());
 
+        // init
         renderer.matrixCombined.setOrthographic(0F, 0F, Jpize.getWidth(), Jpize.getHeight());
 
         final Color color = options.color();
 
-        final Matrix3f mat = new Matrix3f();
-        mat.setRotation(options.getRotation());
-        mat.shear(font.isItalic() ? options.getItalicAngle() : 0F, 0F);
+        final Matrix3f transformMatrix = new Matrix3f()
+            .setRotation(options.getRotation())
+            .shear(font.isItalic() ? options.getItalicAngle() : 0F, 0F);
 
         final Vec2f centerPos = font.getTextBounds(text).mul(options.rotationOrigin());
         centerPos.y *= options.getLineWrapSign();
@@ -90,23 +98,38 @@ public class TextRenderer { //! optimize code
         final FloatList vertices = new FloatList(text.length() * 4);
         Texture2D lastTexture = null;
 
-        for(GlyphSprite sprite: font.iterable(text)){
-            if((char) sprite.getCode() == ' ' || !sprite.isHasRenderer())
+        // iterate glyphs
+        final Iterable<GlyphSprite> iterable = font.iterable(text);
+        final GlyphIterator iterator = (GlyphIterator) iterable.iterator();
+
+        for(GlyphSprite sprite: iterable){
+            // cull lines
+            if(options.isCullLinesEnabled()) {
+                final float lineBottomY = (iterator.getCursorY() * options.scale().y + y);
+                final float lineTopY = (lineBottomY + font.getLineAdvanceScaled());
+                if(lineTopY < options.getCullLinesBottomY() || lineBottomY > options.getCullLinesTopY()){
+                    iterator.skipLine();
+                    continue;
+                }
+            }
+
+            if((char) sprite.getCode() == ' ' || !sprite.isRenderable())
                 continue;
 
+            // add textured quad
             final Vec2f renderPos = new Vec2f(sprite.getX(), sprite.getY());
             renderPos.y -= font.getDescentScaled();
-            renderPos.sub(centerPos).rotate(options.getRotation()).add(centerPos).add(x, y);
+            renderPos
+                .sub(centerPos)
+                .mulMat3(transformMatrix)
+                .add(centerPos)
+                .add(x, y);
             renderPos.y += font.getDescentScaled();
-            renderPos.mulMat3(mat);
 
             final Texture2D page = sprite.getPage();
             final float width = sprite.getWidth();
             final float height = sprite.getHeight();
             final Region region = sprite.getRegion();
-
-            final float renderX = renderPos.x;
-            final float renderY = renderPos.y;
 
             final float u1 = region.u1();
             final float u2 = region.u2();
@@ -118,10 +141,10 @@ public class TextRenderer { //! optimize code
             final float b = color.b;
             final float a = color.a;
 
-            final Vec2f vertex1 = new Vec2f(0,     height).mulMat3(mat).add(renderX, renderY);
-            final Vec2f vertex2 = new Vec2f(0,     0     ).mulMat3(mat).add(renderX, renderY);
-            final Vec2f vertex3 = new Vec2f(width, 0     ).mulMat3(mat).add(renderX, renderY);
-            final Vec2f vertex4 = new Vec2f(width, height).mulMat3(mat).add(renderX, renderY);
+            final Vec2f vertex1 = new Vec2f(0,     height).mulMat3(transformMatrix).add(renderPos);
+            final Vec2f vertex2 = new Vec2f(0,     0     ).mulMat3(transformMatrix).add(renderPos);
+            final Vec2f vertex3 = new Vec2f(width, 0     ).mulMat3(transformMatrix).add(renderPos);
+            final Vec2f vertex4 = new Vec2f(width, height).mulMat3(transformMatrix).add(renderPos);
 
             vertices.add(
                 vertex1.x, vertex1.y,  u1, v1,  r, g, b, a,
@@ -130,12 +153,14 @@ public class TextRenderer { //! optimize code
                 vertex4.x, vertex4.y,  u2, v1,  r, g, b, a
             );
 
+            // render mesh
             if(lastTexture == null)
                 lastTexture = page;
+
             if(lastTexture != page){
                 lastTexture = page;
 
-                renderer.mesh.vertices().setData(vertices.copyOf());
+                renderer.mesh.vertices().setData(vertices.array());
                 vertices.clear();
 
                 renderer.shader.bind();
@@ -145,6 +170,7 @@ public class TextRenderer { //! optimize code
             }
         }
 
+        // render mesh
         if(lastTexture == null || vertices.isEmpty())
             return;
 

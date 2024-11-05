@@ -4,8 +4,6 @@ import jpize.util.font.Font;
 import jpize.util.math.vector.Vec2f;
 import jpize.util.region.Region;
 import jpize.gl.texture.Texture2D;
-import jpize.util.mesh.TextureBatch;
-import jpize.util.color.Color;
 
 public class GlyphSprite {
 
@@ -17,7 +15,7 @@ public class GlyphSprite {
     private final Vec2f size;
 
     private final int lineY;
-    private final boolean hasRenderer;
+    private final boolean renderable;
     private final float advanceX;
     private final float offsetY;
 
@@ -30,7 +28,7 @@ public class GlyphSprite {
         this.size = glyph.size.copy().mul(scale);
 
         this.lineY = lineY;
-        this.hasRenderer = true;
+        this.renderable = true;
         this.advanceX = glyph.advanceX * scale.x;
         this.offsetY = glyph.offset.y * scale.y;
     }
@@ -44,7 +42,7 @@ public class GlyphSprite {
         this.size = new Vec2f(0, height).mul(scale);
 
         this.lineY = lineY;
-        this.hasRenderer = false;
+        this.renderable = false;
         this.advanceX = 0;
         this.offsetY = 0;
     }
@@ -84,8 +82,8 @@ public class GlyphSprite {
         return lineY;
     }
 
-    public boolean isHasRenderer() {
-        return hasRenderer;
+    public boolean isRenderable() {
+        return renderable;
     }
 
     public float getAdvanceX() {
@@ -94,25 +92,6 @@ public class GlyphSprite {
 
     public float getOffsetY() {
         return offsetY;
-    }
-
-
-    public void render(TextureBatch batch, float x, float y, float r, float g, float b, float a) {
-        if(hasRenderer) {
-            batch.draw(page, region, (position.x + x), (position.y + y), size.x, size.y, r, g, b, a);
-        }
-    }
-
-    public void render(TextureBatch batch, float x, float y, Color color) {
-        this.render(batch, x, y, color.r, color.g, color.b, color.a);
-    }
-
-    public void render(TextureBatch batch, float x, float y) {
-        this.render(batch, x, y, 1F, 1F, 1F, 1F);
-    }
-
-    public void render(TextureBatch batch) {
-        this.render(batch, 0F, 0F);
     }
 
 

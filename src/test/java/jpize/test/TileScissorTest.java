@@ -5,6 +5,8 @@ import jpize.app.JpizeApplication;
 import jpize.gl.Gl;
 import jpize.gl.tesselation.GlScissor;
 import jpize.gl.texture.Texture2D;
+import jpize.util.font.Font;
+import jpize.util.font.FontLoader;
 import jpize.util.mesh.TextureBatch;
 import jpize.glfw.Glfw;
 import jpize.glfw.init.GlfwPlatform;
@@ -20,20 +22,24 @@ public class TileScissorTest extends JpizeApplication {
     private final TextureBatch batch;
     private final OrthographicCameraCentered camera;
     private final Texture2D texture;
-    private float scale = 1F;
+    private final Font font;
+    private final GlScissor<String> scissor;
+
+    private float scale = 0.05F;
     private final Vec2f prev = new Vec2f();
     private final Vec2f position = new Vec2f();
     private final Vec2f cinematic_position = new Vec2f();
-    private final GlScissor<String> scissor;
 
     public TileScissorTest() {
         this.batch = new TextureBatch();
         this.camera = new OrthographicCameraCentered();
+        this.camera.setScale(scale);
         this.texture = new Texture2D(
             new PixmapRGBA(21, 21)
             .fill(0, 0, 20, 20,  1D, 1D, 1D, 1D)
             .fill(0, 0, 17, 17,  0.4D, 0.4D, 0.4D, 1D)
         );
+        this.font = FontLoader.loadDefault();
         this.scissor = new GlScissor<String>()
             .put("scissor_1",  100, 100, camera.getWidth() - 200, camera.getHeight() - 200);
     }
@@ -68,6 +74,8 @@ public class TileScissorTest extends JpizeApplication {
 
         batch.draw(texture, -25, -25, 50, 50);
         batch.render();
+
+        font.drawText("FPS: " + Jpize.getFPS(), 100, 100);
     }
 
     @Override

@@ -6,6 +6,7 @@ import jpize.gl.tesselation.GlPrimitive;
 import jpize.gl.type.GlType;
 import jpize.gl.vertex.GlVertAttr;
 import jpize.util.Disposable;
+import jpize.util.array.FloatList;
 import jpize.util.camera.Camera;
 import jpize.util.color.Color;
 import jpize.util.color.ImmutableColor;
@@ -21,43 +22,28 @@ public class VertexBatch implements Disposable {
     private Matrix4f combinedMat;
     private Shader customShader;
     // data
-    private final int maxSize, vertexBytes;
-    private int size, vertexBufferOffset;
-    public final float[] tmpVertexData;
+    private int size;
+    private final FloatList vertexList;
     // transform
     private final Vec2f position;
 
-    public VertexBatch(int maxSize, GlPrimitive mode) {
-        this.maxSize = maxSize;
-        this.color = new Color();
+    public VertexBatch(GlPrimitive mode) {
 
         // shader
         this.shader = new Shader(
             Resource.internal("/shader/vertex_batch/vert.glsl"),
             Resource.internal("/shader/vertex_batch/frag.glsl")
         );
-
         // mesh
         this.mesh = new Mesh(
             new GlVertAttr(2, GlType.FLOAT), // position
             new GlVertAttr(4, GlType.FLOAT)  // color
         );
         this.mesh.setMode(mode);
-
-        // get vertex size
-        final int vertexSize = mesh.vertices().getVertexSize();
-        this.vertexBytes = mesh.vertices().getVertexBytes();
-
-        // allocate buffers
-        this.tmpVertexData = new float[vertexSize];
-        this.mesh.vertices().allocateData(maxSize * vertexBytes);
-
-        // matrices
+        this.vertexList = new FloatList();
+        // state
+        this.color = new Color();
         this.position = new Vec2f();
-    }
-
-    public VertexBatch(GlPrimitive mode) {
-        this(2048, mode);
     }
 
 
@@ -80,7 +66,7 @@ public class VertexBatch implements Disposable {
         customShader = shader;
     }
 
-    public void render() {
+    public void render(boolean clearCache) {
         if(size == 0 || combinedMat == null)
             return;
 
@@ -90,28 +76,23 @@ public class VertexBatch implements Disposable {
         currentShader.uniform("u_combined", combinedMat);
 
         // render
+        mesh.vertices().setData(vertexList.arrayTrimmed());
         mesh.render(size);
 
         // reset
+        vertexList.clear();
+        if(clearCache)
+            vertexList.trim();
         size = 0;
-        vertexBufferOffset = 0;
+    }
+
+    public void render() {
+        this.render(false);
     }
 
 
     public void addVertex(float x, float y, float r, float g, float b, float a) {
-        if(size == maxSize)
-            this.render();
-
-        tmpVertexData[0] = (x + position.x);
-        tmpVertexData[1] = (y + position.y);
-
-        tmpVertexData[2] = r;
-        tmpVertexData[3] = g;
-        tmpVertexData[4] = b;
-        tmpVertexData[5] = a;
-
-        mesh.vertices().setSubData(vertexBufferOffset, tmpVertexData);
-        vertexBufferOffset += vertexBytes;
+        vertexList.add(x + position.x, y + position.y,  r, g, b, a);
         size++;
     }
 

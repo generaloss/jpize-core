@@ -168,7 +168,6 @@ public class TextEditorTest extends JpizeApplication {
             renderOptions.color().set(0.95, 0.95, 0.93);
             renderOptions.enableCullLines(0F, Jpize.getHeight());
             font.drawText(batch, text, numerationWidth, textY);
-
             // render cursor
             final float x = font.getTextWidth(input.getLine(input.getY()).substring(0, input.getX())) + numerationWidth;
             final float y = Jpize.getHeight() - (input.getY() + 1) * lineHeight + scrollY;

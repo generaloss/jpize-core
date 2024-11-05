@@ -5,6 +5,7 @@ import jpize.gl.tesselation.GlPrimitive;
 import jpize.gl.texture.Texture2D;
 import jpize.gl.texture.TextureUtils;
 import jpize.util.Disposable;
+import jpize.util.array.FloatList;
 import jpize.util.color.ImmutableColor;
 import jpize.util.region.Region;
 import jpize.util.region.TextureRegion;
@@ -29,9 +30,8 @@ public class TextureBatch implements Disposable {
     private Matrix4f combinedMat;
     private Shader customShader;
     // data
-    private final int maxSize, vertexBytes;
-    private int size, vertexBufferOffset;
-    public final float[] tmpVertexData;
+    private int size;
+    private final FloatList vertexList;
     // transform
     private final Vec2f transformOrigin;
     private final Matrix3f transformMat, rotationMat, shearMat, scaleMat;
@@ -39,8 +39,7 @@ public class TextureBatch implements Disposable {
     private boolean flipX, flipY;
     private final Vec2f tmpOrigin, tmpVertex1, tmpVertex2, tmpVertex3, tmpVertex4;
 
-    public TextureBatch(int maxSize) {
-        this.maxSize = maxSize;
+    public TextureBatch() {
         this.color = new Color();
         this.transformOrigin = new Vec2f(0.5F);
 
@@ -60,11 +59,10 @@ public class TextureBatch implements Disposable {
 
         // get vertex size
         final int vertexSize = mesh.vertices().getVertexSize();
-        this.vertexBytes = mesh.vertices().getVertexBytes();
 
         // allocate buffers
-        this.tmpVertexData = new float[vertexSize];
-        this.mesh.vertices().allocateData(QUAD_VERTICES * maxSize * vertexBytes);
+        this.vertexList = new FloatList();
+        this.mesh.vertices().allocateData(QUAD_VERTICES * mesh.vertices().getVertexBytes());
 
         // matrices
         this.transformMat = new Matrix3f();
@@ -81,26 +79,6 @@ public class TextureBatch implements Disposable {
         this.tmpVertex4 = new Vec2f();
     }
 
-    public TextureBatch() {
-        this(2048);
-    }
-
-
-    private void addVertex(float x, float y, float s, float t, float r, float g, float b, float a) {
-        tmpVertexData[0] = x;
-        tmpVertexData[1] = y;
-
-        tmpVertexData[2] = s;
-        tmpVertexData[3] = t;
-
-        tmpVertexData[4] = r;
-        tmpVertexData[5] = g;
-        tmpVertexData[6] = b;
-        tmpVertexData[7] = a;
-
-        mesh.vertices().setSubData(vertexBufferOffset, tmpVertexData);
-        vertexBufferOffset += vertexBytes;
-    }
 
     private void addTexturedQuad(float x, float y, float width, float height, float u1, float v1, float u2, float v2, float r, float g, float b, float a) {
         tmpOrigin.set(width * transformOrigin.x, height * transformOrigin.y);
@@ -112,10 +90,10 @@ public class TextureBatch implements Disposable {
         tmpVertex3.set(width, 0F    ).sub(tmpOrigin).mulMat3(transformMat).add(tmpOrigin).add(x, y).add(position);
         tmpVertex4.set(width, height).sub(tmpOrigin).mulMat3(transformMat).add(tmpOrigin).add(x, y).add(position);
 
-        this.addVertex(tmpVertex1.x, tmpVertex1.y, (flipX ? u2 : u1), (flipY ? v2 : v1), r, g, b, a);
-        this.addVertex(tmpVertex2.x, tmpVertex2.y, (flipX ? u2 : u1), (flipY ? v1 : v2), r, g, b, a);
-        this.addVertex(tmpVertex3.x, tmpVertex3.y, (flipX ? u1 : u2), (flipY ? v1 : v2), r, g, b, a);
-        this.addVertex(tmpVertex4.x, tmpVertex4.y, (flipX ? u1 : u2), (flipY ? v2 : v1), r, g, b, a);
+        vertexList.add(tmpVertex1.x, tmpVertex1.y, (flipX ? u2 : u1), (flipY ? v2 : v1), r, g, b, a);
+        vertexList.add(tmpVertex2.x, tmpVertex2.y, (flipX ? u2 : u1), (flipY ? v1 : v2), r, g, b, a);
+        vertexList.add(tmpVertex3.x, tmpVertex3.y, (flipX ? u1 : u2), (flipY ? v1 : v2), r, g, b, a);
+        vertexList.add(tmpVertex4.x, tmpVertex4.y, (flipX ? u1 : u2), (flipY ? v2 : v1), r, g, b, a);
     }
 
 
@@ -138,8 +116,8 @@ public class TextureBatch implements Disposable {
         customShader = shader;
     }
 
-    public void render() {
-        if(lastTexture == null || size == 0 || combinedMat == null)
+    public void render(boolean clearCache) {
+        if(size == 0 || lastTexture == null || combinedMat == null)
             return;
 
         // shader
@@ -149,18 +127,22 @@ public class TextureBatch implements Disposable {
         currentShader.uniform("u_texture", lastTexture);
 
         // render
-        mesh.render(size * QUAD_VERTICES);
+        mesh.vertices().setData(vertexList.arrayTrimmed());
+        mesh.render();
 
         // reset
+        vertexList.clear();
+        if(clearCache)
+            vertexList.trim();
         size = 0;
-        vertexBufferOffset = 0;
+    }
+
+    public void render() {
+        this.render(false);
     }
 
 
     public void draw(Texture2D texture, float x, float y, float width, float height, float r, float g, float b, float a) {
-        if(size == maxSize)
-            this.render();
-
         if(texture != lastTexture){
             if(texture == null)
                 return;
@@ -182,9 +164,6 @@ public class TextureBatch implements Disposable {
 
 
     public void draw(TextureRegion textureRegion, float x, float y, float width, float height, float r, float g, float b, float a) {
-        if(size == maxSize)
-            this.render();
-
         final Texture2D texture = textureRegion.getTexture();
         if(texture != lastTexture){
             if(texture == null)
@@ -209,9 +188,6 @@ public class TextureBatch implements Disposable {
 
 
     public void draw(Texture2D texture, Region region, float x, float y, float width, float height, float r, float g, float b, float a) {
-        if(size == maxSize)
-            this.render();
-
         if(texture != lastTexture){
             if(texture == null)
                 return;
