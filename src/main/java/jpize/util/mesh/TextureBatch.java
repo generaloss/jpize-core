@@ -19,8 +19,6 @@ import jpize.util.math.matrix.Matrix4f;
 import jpize.util.math.vector.Vec2f;
 import jpize.gl.shader.Shader;
 
-import static jpize.gl.buffer.QuadIndexBuffer.QUAD_VERTICES;
-
 public class TextureBatch implements Disposable {
 
     private final Mesh mesh;
@@ -40,15 +38,11 @@ public class TextureBatch implements Disposable {
     private final Vec2f tmpOrigin, tmpVertex1, tmpVertex2, tmpVertex3, tmpVertex4;
 
     public TextureBatch() {
-        this.color = new Color();
-        this.transformOrigin = new Vec2f(0.5F);
-
         // shader
         this.shader = new Shader(
             Resource.internal("/shader/texture_batch/vert.glsl"),
             Resource.internal("/shader/texture_batch/frag.glsl")
         );
-
         // mesh
         this.mesh = new Mesh(
             new GlVertAttr(2, GlType.FLOAT), // position
@@ -56,21 +50,16 @@ public class TextureBatch implements Disposable {
             new GlVertAttr(4, GlType.FLOAT)  // color
         );
         this.mesh.setMode(GlPrimitive.QUADS);
-
-        // get vertex size
-        final int vertexSize = mesh.vertices().getVertexSize();
-
-        // allocate buffers
         this.vertexList = new FloatList();
-        this.mesh.vertices().allocateData(QUAD_VERTICES * mesh.vertices().getVertexBytes());
-
         // matrices
         this.transformMat = new Matrix3f();
         this.rotationMat = new Matrix3f();
         this.shearMat = new Matrix3f();
         this.scaleMat = new Matrix3f();
+        // state
+        this.color = new Color();
         this.position = new Vec2f();
-
+        this.transformOrigin = new Vec2f(0.5F);
         // tmp
         this.tmpOrigin = new Vec2f();
         this.tmpVertex1 = new Vec2f();

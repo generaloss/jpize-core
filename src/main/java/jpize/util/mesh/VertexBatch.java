@@ -28,7 +28,6 @@ public class VertexBatch implements Disposable {
     private final Vec2f position;
 
     public VertexBatch(GlPrimitive mode) {
-
         // shader
         this.shader = new Shader(
             Resource.internal("/shader/vertex_batch/vert.glsl"),
