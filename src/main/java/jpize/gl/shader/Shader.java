@@ -1,6 +1,6 @@
 package jpize.gl.shader;
 
-import jpize.gl.texture.TextureCubeMap;
+import jpize.gl.texture.TextureCubemap;
 import jpize.gl.texture.Texture2D;
 import jpize.gl.texture.Texture2DArray;
 import jpize.util.Disposable;
@@ -182,7 +182,7 @@ public class Shader implements Disposable {
         return this;
     }
 
-    public Shader uniform(String uniformName, TextureCubeMap cubeMap) {
+    public Shader uniform(String uniformName, TextureCubemap cubeMap) {
         cubeMap.active(num_samplerCube);
         program.uniform(getUniformLocation(uniformName), num_samplerCube);
         num_samplerCube++;

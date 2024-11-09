@@ -57,8 +57,10 @@ public class GlScissor<T> {
 
 
     public GlScissor<T> apply() {
-        if(scissors.isEmpty())
+        if(scissors.isEmpty()){
+            Gl.disable(GlTarget.SCISSOR_TEST);
             return this;
+        }
 
         Gl.enable(GlTarget.SCISSOR_TEST);
         

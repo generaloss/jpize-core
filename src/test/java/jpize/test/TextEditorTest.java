@@ -67,7 +67,7 @@ public class TextEditorTest extends JpizeApplication {
         if(Jpize.getScroll() != 0){
             if(Key.LCTRL.pressed()){
                 final float scaleFactor = 1.2F;
-                editorScale.mul(Mathc.pow(Jpize.getScroll() > 0 ? scaleFactor : 1 / scaleFactor, Math.abs(Jpize.getScroll())));
+                editorScale.mul(Mathc.pow(Jpize.getScroll() > 0 ? scaleFactor : 1F / scaleFactor, Math.abs(Jpize.getScroll())));
             }else{
                 final float scrollFactor = 1.5F / editorScale.y;
                 scroll -= Jpize.getScroll() * scrollFactor;
@@ -77,8 +77,8 @@ public class TextEditorTest extends JpizeApplication {
         // cinematic
         renderOptions.scale().add(editorScale.copy().sub(font.getRenderOptions().scale()).div(10));
         lineHeight = font.getHeightScaled();
-        numerationWidth = 200 * renderOptions.scale().x;
-        animatedScroll += (scroll - animatedScroll) / 10;
+        numerationWidth = 200F * renderOptions.scale().x;
+        animatedScroll += (scroll - animatedScroll) / 10F;
         scrollY = animatedScroll * lineHeight - Jpize.getHeight() * 0.5F;
 
         // cursor point & selection
@@ -140,9 +140,9 @@ public class TextEditorTest extends JpizeApplication {
             for(int i = 0; i < input.lines(); i++)
                 numeration.add(String.valueOf(i + 1));
 
-            batch.drawRect(numerationWidth - 2, numerationY, 2, numerationHeight,  0.3F, 0.32F, 0.35F);
+            batch.drawRect(numerationWidth - 2F, numerationY, 2F, numerationHeight,  0.3F, 0.32F, 0.35F);
             renderOptions.color().set(0.3, 0.32, 0.35);
-            font.drawText(batch, numeration.toString(), 0, Jpize.getHeight() + scrollY);
+            font.drawText(batch, numeration.toString(), 0F, Jpize.getHeight() + scrollY);
 
             // render selection
             if(!selection.isEmpty()) {
@@ -152,13 +152,13 @@ public class TextEditorTest extends JpizeApplication {
                 );
 
                 float lineX = numerationWidth + firstLineOffsetX;
-                float lineY = textY - lineHeight * (selection.start.y + 1);
+                float lineY = textY - lineHeight * (selection.start.y + 1F);
                 float lineWidth = font.getTextWidth(selection.line(0));
                 batch.drawRect(lineX, lineY, lineWidth, lineHeight,  0.05F, 0.35F, 0.75F);
 
                 for(int i = 1; i < selection.size(); i++){
                     lineX = numerationWidth;
-                    lineY = textY - lineHeight * (selection.start.y + i + 1);
+                    lineY = textY - lineHeight * (selection.start.y + i + 1F);
                     lineWidth = font.getTextWidth(selection.line(i));
                     batch.drawRect(lineX, lineY, lineWidth, lineHeight,  0.05F, 0.35F, 0.75F);
                 }
@@ -171,7 +171,7 @@ public class TextEditorTest extends JpizeApplication {
             // render cursor
             final float x = font.getTextWidth(input.getLine(input.getY()).substring(0, input.getX())) + numerationWidth;
             final float y = Jpize.getHeight() - (input.getY() + 1) * lineHeight + scrollY;
-            batch.drawRect(x, y, 3, lineHeight,  1F, 1F, 1F);
+            batch.drawRect(x, y, 3F, lineHeight,  1F, 1F, 1F);
         }
         batch.render();
     }
