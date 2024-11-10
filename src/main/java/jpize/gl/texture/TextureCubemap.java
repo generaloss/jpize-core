@@ -12,7 +12,7 @@ public class TextureCubemap extends GlTexture {
 
     public TextureCubemap() {
         super();
-        this.setFilters(GlFilter.LINEAR);
+        this.setFilters(GlFilter.NEAREST);
     }
 
     public TextureCubemap(Pixmap positiveX, Pixmap negativeX, Pixmap positiveY, Pixmap negativeY, Pixmap positiveZ, Pixmap negativeZ) {
@@ -41,7 +41,6 @@ public class TextureCubemap extends GlTexture {
     }
 
 
-    // tex func
 
     public TextureCubemap active(int active) {
         this.bind();
@@ -65,9 +64,9 @@ public class TextureCubemap extends GlTexture {
     }
 
 
-    // image
 
     public void setImage(GlCubemapTarget target, int level, Pixmap pixmap) {
+        this.bind();
         super.glSetImage2D(target.imageTarget, level, pixmap.getWidth(), pixmap.getHeight(), pixmap.getFormat(), GlType.UNSIGNED_BYTE, pixmap.getBuffer());
     }
 
@@ -98,7 +97,7 @@ public class TextureCubemap extends GlTexture {
     }
 
 
-    public void setDefaultImages(String positiveX, String negativeX, String positiveY, String negativeY, String positiveZ, String negativeZ) {
+    public void setDefaultImages(int level, String positiveX, String negativeX, String positiveY, String negativeY, String positiveZ, String negativeZ) {
         final Pixmap[] pixmaps = {
             PixmapIO.load(positiveX), PixmapIO.load(negativeX),
             PixmapIO.load(positiveY), PixmapIO.load(negativeY),
@@ -111,8 +110,11 @@ public class TextureCubemap extends GlTexture {
             pixmap.dispose();
     }
 
+    public void setDefaultImages(String positiveX, String negativeX, String positiveY, String negativeY, String positiveZ, String negativeZ) {
+        this.setDefaultImages(0, positiveX, negativeX, positiveY, negativeY, positiveZ, negativeZ);
+    }
 
-    // params
+
 
     public TextureCubemap setDepthStencilTextureMode(GlDepthStencilMode mode) {
         this.bind();

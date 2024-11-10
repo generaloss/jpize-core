@@ -38,8 +38,6 @@ public abstract class GlTexture extends GlObject {
     }
 
 
-    // tex func
-
 
     protected void glActiveTexture(int active) {
         GL46.glActiveTexture(GL_TEXTURE0 + active);
@@ -50,8 +48,6 @@ public abstract class GlTexture extends GlObject {
         GL46.glGenerateMipmap(target.value);
     }
 
-
-    // image
 
 
     protected void glSetImage1D(GlTexImg1DTarget target, int level, int width, GlInternalFormat format, GlType type, ByteBuffer pixels) {
@@ -93,8 +89,6 @@ public abstract class GlTexture extends GlObject {
         this.glSetSubImage3D(target, level, width, height, depth, offsetX, offsetY, offsetZ, format, GlType.UNSIGNED_BYTE, pixels);
     }
 
-
-    // tex level parameters
 
 
     protected int glGetWidth(GlTexLevelTarget target, int level) {
@@ -148,8 +142,6 @@ public abstract class GlTexture extends GlObject {
         return GL46.glGetTexLevelParameteri(target.value, level, GL_TEXTURE_BUFFER_OFFSET);
     }
 
-
-    // tex parameters
 
 
     protected void glSetDepthStencilTextureMode(GlTexParamTarget target, GlDepthStencilMode mode) {

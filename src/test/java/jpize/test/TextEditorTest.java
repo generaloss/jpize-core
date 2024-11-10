@@ -4,6 +4,8 @@ import jpize.app.Jpize;
 import jpize.app.JpizeApplication;
 import jpize.gl.Gl;
 import jpize.glfw.Glfw;
+import jpize.glfw.cursor.GlfwCursor;
+import jpize.glfw.cursor.GlfwCursorShape;
 import jpize.glfw.init.GlfwPlatform;
 import jpize.glfw.input.Key;
 import jpize.glfw.input.MouseBtn;
@@ -25,6 +27,7 @@ public class TextEditorTest extends JpizeApplication {
     private final Font font;
     private final FontRenderOptions renderOptions;
     private final TextureBatch batch;
+    private final GlfwCursor cursorArrow, cursorIbeam;
 
     private final Vec2f editorScale;
     private float lineHeight;
@@ -40,6 +43,9 @@ public class TextEditorTest extends JpizeApplication {
         this.renderOptions = font.getRenderOptions().setInvLineWrap(true);
         this.batch = new TextureBatch();
 
+        this.cursorArrow = new GlfwCursor(GlfwCursorShape.ARROW);
+        this.cursorIbeam = new GlfwCursor(GlfwCursorShape.IBEAM);
+
         this.editorScale = new Vec2f(1F);
         this.selectionStart = new Vec2i();
         this.selectionEnd = new Vec2i();
@@ -50,19 +56,75 @@ public class TextEditorTest extends JpizeApplication {
     public void init() {
         Gl.clearColor(0.1F, 0.11F, 0.12F);
 
-        // remove selected
         Jpize.callbacks().addKeyCallback((window, key, scancode, action, mods) -> {
-            if(key == Key.BACKSPACE && !selection.isEmpty() && action.isDown()){
+            if(key == Key.Y && mods.hasCtrl() && action.isPressed()){
+                input.removeLine(input.getY());
+            }
+        });
+
+        input.addCursorCallback((deltaX, deltaY) -> {
+            System.out.println(deltaX + " " + deltaY);
+            if(Key.LCTRL.pressed() && Key.LSHIFT.pressed()){
+                if(Key.LEFT.pressed() || Key.RIGHT.pressed() || Key.UP.pressed() || Key.DOWN.pressed()){
+                    if(selection.isEmpty())
+                        selectionStart.set(input.getX() - deltaX, input.getY() - deltaY);
+                    selectionEnd.set(input.getX(), input.getY());
+                    selection = new TextInput.Selection(input, selectionStart.x, selectionStart.y, selectionEnd.x, selectionEnd.y);
+                }
+            }else if(!selection.isEmpty()){
+                if(Key.LEFT.pressed()){
+                    input.setPos(selection.start);
+                    selection = new TextInput.Selection(input, 0, 0, 0, 0);
+                }else if(Key.RIGHT.pressed()) {
+                    input.setPos(selection.end);
+                    selection = new TextInput.Selection(input, 0, 0, 0, 0);
+                }else if(Key.UP.pressed()){
+                    input.setPos(selection.start);
+                    input.advanceY(-1);
+                    selection = new TextInput.Selection(input, 0, 0, 0, 0);
+                }else if(Key.DOWN.pressed()) {
+                    input.setPos(selection.end);
+                    input.advanceY(1);
+                    selection = new TextInput.Selection(input, 0, 0, 0, 0);
+                }
+            }
+        });
+
+        input.addRemoveCallback((removed) -> {
+            if(!selection.isEmpty()){
+                input.insert(removed);
                 input.setPos(selection.end);
                 input.remove(selection.length + selection.lines.length - 1);
                 selection = new TextInput.Selection(input, 0, 0, 0, 0);
-                input.enable();
+            }
+        });
+
+        input.addInputCallback((inputText) -> {
+            if(!selection.isEmpty()){
+                input.remove(inputText.length());
+                input.setPos(selection.end);
+                input.remove(selection.length + selection.lines.length - 1);
+                input.insert(inputText);
+                selection = new TextInput.Selection(input, 0, 0, 0, 0);
             }
         });
     }
 
     @Override
     public void update() {
+        // copying
+        if(!selection.isEmpty() && Key.LCTRL.pressed()){
+            if(Key.C.down()){
+                Jpize.input().setClipboardString(selection.toString());
+
+            }else if(Key.X.down()){
+                Jpize.input().setClipboardString(selection.toString());
+                input.setPos(selection.end);
+                input.remove(selection.length + selection.lines.length - 1);
+                selection = new TextInput.Selection(input, 0, 0, 0, 0);
+            }
+        }
+
         // scroll & scaling
         if(Jpize.getScroll() != 0){
             if(Key.LCTRL.pressed()){
@@ -97,15 +159,22 @@ public class TextEditorTest extends JpizeApplication {
         }
         if(MouseBtn.LEFT.pressed() || MouseBtn.LEFT.up()) {
             selection = input.selection(selectionStart, selectionEnd);
-
-            if(!selection.isEmpty())
-                input.disable();
-            else if(MouseBtn.LEFT.up()){
-                if(selection.isEmpty())
-                    input.enable();
-            }
+            if(Jpize.getY() < 0)
+                scroll += (0.3F / editorScale.y);
+            if(Jpize.getY() > Jpize.getHeight())
+                scroll -= (0.3F / editorScale.y);
         }
 
+        // selection hotkeys
+        if(Key.LCTRL.pressed() && Key.A.down()){
+            input.setEndY();
+            input.setEndX();
+            selection = input.selection(0, 0, input.getX(), input.getY());
+        }
+
+        // cursor
+        final boolean isCursor2 = (Jpize.getX() >= numerationWidth);
+        Jpize.input().setCursor(isCursor2 ? cursorIbeam : cursorArrow);
     }
 
     private int cursorXfromTouchX(String line, float touchX) {
@@ -168,6 +237,7 @@ public class TextEditorTest extends JpizeApplication {
             renderOptions.color().set(0.95, 0.95, 0.93);
             renderOptions.enableCullLines(0F, Jpize.getHeight());
             font.drawText(batch, text, numerationWidth, textY);
+
             // render cursor
             final float x = font.getTextWidth(input.getLine(input.getY()).substring(0, input.getX())) + numerationWidth;
             final float y = Jpize.getHeight() - (input.getY() + 1) * lineHeight + scrollY;
@@ -180,6 +250,8 @@ public class TextEditorTest extends JpizeApplication {
     public void dispose() {
         batch.dispose();
         font.dispose();
+        cursorArrow.dispose();
+        cursorIbeam.dispose();
     }
 
 

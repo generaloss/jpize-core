@@ -14,13 +14,11 @@ import jpize.util.math.Maths;
 import jpize.util.math.vector.Vec2i;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.StringJoiner;
+import java.util.*;
 
 public class TextInput implements Iterable<String> {
 
-    private boolean enabled;
+    private boolean enabled, enabledCharInput, enabledKeyInput;
     private final StringList lines;
     private final Vec2i position;
     private int multilineX;
@@ -29,15 +27,86 @@ public class TextInput implements Iterable<String> {
     private Charset specialCharset;
     private final GlfwCharCallback charCallback;
     private final GlfwKeyCallback keyCallback;
+    private final List<CursorCallback> cursorCallbacks;
+    private final List<RemoveCallback> removeCallbacks;
+    private final List<InputCallback> inputCallbacks;
 
     public TextInput() {
+        this.enabledCharInput = true;
+        this.enabledKeyInput = true;
+
         this.lines = new StringList("");
         this.position = new Vec2i();
         this.tabSpaces = 4;
         this.maxLines = -1;
         this.specialCharset = Charset.SPECIAL_SYMBOLS.copy();
+
         this.charCallback = this::onChar;
         this.keyCallback = this::onKey;
+
+        this.cursorCallbacks = new ArrayList<>();
+        this.removeCallbacks = new ArrayList<>();
+        this.inputCallbacks = new ArrayList<>();
+    }
+
+
+    public interface CursorCallback {
+        void invoke(int deltaX, int deltaY);
+    }
+
+    public TextInput addCursorCallback(CursorCallback callback) {
+        cursorCallbacks.add(callback);
+        return this;
+    }
+
+    public TextInput removeCursorCallback(CursorCallback callback) {
+        cursorCallbacks.remove(callback);
+        return this;
+    }
+
+    private void invokeCursorCallbacks(int deltaX, int deltaY) {
+        for(CursorCallback callback: cursorCallbacks)
+            callback.invoke(deltaX, deltaY);
+    }
+
+
+    public interface RemoveCallback {
+        void invoke(String removed);
+    }
+
+    public TextInput addRemoveCallback(RemoveCallback callback) {
+        removeCallbacks.add(callback);
+        return this;
+    }
+
+    public TextInput removeRemoveCallback(RemoveCallback callback) {
+        removeCallbacks.remove(callback);
+        return this;
+    }
+
+    private void invokeRemoveCallbacks(String removed) {
+        for(RemoveCallback callback: removeCallbacks)
+            callback.invoke(removed);
+    }
+
+
+    public interface InputCallback {
+        void invoke(String inputText);
+    }
+
+    public TextInput addInputCallback(InputCallback callback) {
+        inputCallbacks.add(callback);
+        return this;
+    }
+
+    public TextInput removeInputCallback(InputCallback callback) {
+        inputCallbacks.remove(callback);
+        return this;
+    }
+
+    private void invokeInputCallbacks(String inputText) {
+        for(InputCallback callback: inputCallbacks)
+            callback.invoke(inputText);
     }
 
 
@@ -46,6 +115,9 @@ public class TextInput implements Iterable<String> {
             return this;
 
         final String[] lines = string.toString().split("\n");
+
+        if(this.lines.isEmpty())
+            insertLine(0, "");
 
         final String line = this.getLine(y);
         final String part1 = line.substring(0, x);
@@ -69,53 +141,59 @@ public class TextInput implements Iterable<String> {
         return this;
     }
 
-    public TextInput insert(CharSequence string) {
-        this.insert(position.x, position.y, string);
-        this.advanceX(string.length());
+    public TextInput insert(CharSequence str) {
+        if(str == null)
+            return this.insert("");
+        this.insert(position.x, position.y, str);
+        this.advanceX(str.length());
         return this;
     }
 
 
-    public boolean removeSlice(int x, int y, int length) {
+    public String removeSlice(int x, int y, int length) {
         final String line = this.getLine(y);
         final int lineLength = line.length();
         if(x > lineLength - 1 || x + length > lineLength)
-            return false;
+            return "";
 
+        final String removed = line.substring(x, x + length);
         this.setLine(y, line.substring(0, x) + line.substring(x + length));
-        return true;
+        return removed;
     }
 
-    public boolean remove() {
+    public String remove() {
         if(position.x == 0){
             if(position.y == 0)
-                return false;
+                return "";
 
             final String line = lines.remove(position.y);
             final String part2 = line.substring(position.x);
             position.y--;
             this.setEndX();
             this.setLine(position.y, this.getLine(position.y) + part2);
-            return true;
+            return "\n";
         }
 
-        final boolean removed = this.removeSlice(position.x - 1, position.y, 1);
-        if(removed)
+        final String removed = this.removeSlice(position.x - 1, position.y, 1);
+        if(!removed.isEmpty())
             this.advanceX(-1);
         return removed;
     }
 
-    public int remove(int count) {
+    public String remove(int count) {
         if(count < 1)
-            return 0;
+            return "";
 
+        final StringBuilder removedBuilder = new StringBuilder();
         while(count > 0){
-            if(!this.remove())
+            final String removed = this.remove();
+            removedBuilder.append(removed);
+            if(removed.isEmpty())
                 break;
             count--;
         }
 
-        return count;
+        return removedBuilder.toString();
     }
 
     private boolean isWordEnd(char newc, char oldc) {
@@ -167,52 +245,74 @@ public class TextInput implements Iterable<String> {
 
 
     private void onChar(GlfwWindow window, char codepoint) {
-        this.insert(String.valueOf(codepoint));
+        if(!enabledCharInput)
+            return;
+
+        final String character = String.valueOf(codepoint);
+        this.insert(character);
+        this.invokeInputCallbacks(character);
     }
 
     private void onKey(GlfwWindow window, Key key, int scancode, GlfwAction action, GlfwMods mods) {
-        if(action.isRelease())
+        if(!enabledKeyInput || action.isRelease())
             return;
+
+        final Vec2i prevPosition = position.copy();
 
         if(mods.hasCtrl()){
             switch(key){
-                case V -> insert(Jpize.input().getClipboardString());
+                case V -> {
+                    final String text = Jpize.input().getClipboardString();
+                    this.insert(text);
+                    this.invokeInputCallbacks(text);
+                }
                 case LEFT -> {
                     final int length = this.wordLength(true);
-                    if(length == 0) advanceX(-1);
-                    else advanceX(-length);
+                    if(length == 0) this.advanceX(-1);
+                    else this.advanceX(-length);
                 }
                 case RIGHT -> {
                     final int length = this.wordLength(false);
-                    if(length == 0) advanceX(1);
-                    else advanceX(length);
+                    if(length == 0) this.advanceX(1);
+                    else this.advanceX(length);
                 }
-                case HOME -> setHomeY();
-                case END -> setEndY();
-                case ENTER -> insert(position.x, position.y, "\n");
+                case HOME -> this.setHomeY();
+                case END -> this.setEndY();
+                case ENTER -> {
+                    this.insert(position.x, position.y, "\n");
+                    this.invokeInputCallbacks("\n");
+                }
                 case BACKSPACE -> {
                     final int length = this.wordLength(true);
-                    if(length == 0) remove();
-                    else remove(length);
+                    if(length == 0) this.invokeRemoveCallbacks(this.remove());
+                    else this.invokeRemoveCallbacks(this.remove(length));
                 }
             }
         }else{
             switch(key){
-                case UP -> advanceY(-1);
-                case DOWN -> advanceY(1);
-                case LEFT -> advanceX(-1);
-                case RIGHT -> advanceX(1);
-                case HOME -> setHomeX();
-                case END -> setEndX();
-                case TAB -> insert(" ".repeat(tabSpaces));
-                case ENTER -> insert("\n");
-                case BACKSPACE -> remove();
+                case UP -> this.advanceY(-1);
+                case DOWN -> this.advanceY(1);
+                case LEFT -> this.advanceX(-1);
+                case RIGHT -> this.advanceX(1);
+                case HOME -> this.setHomeX();
+                case END -> this.setEndX();
+                case TAB -> this.insert(" ".repeat(tabSpaces));
+                case ENTER -> {
+                    this.insert("\n");
+                    this.invokeInputCallbacks("\n");
+                }
+                case BACKSPACE -> this.invokeRemoveCallbacks(this.remove());
             }
         }
+
+        final int deltaX = position.x - prevPosition.x;
+        final int deltaY = position.y - prevPosition.y;
+        if(deltaX != 0 || deltaY != 0)
+            this.invokeCursorCallbacks(deltaX, deltaY);
     }
 
 
-    public boolean enabled() {
+    public boolean isEnabled() {
         return enabled;
     }
 
@@ -243,6 +343,25 @@ public class TextInput implements Iterable<String> {
     }
 
 
+    public boolean isEnabledCharInput() {
+        return enabledCharInput;
+    }
+
+    public TextInput setCharInputEnabled(boolean enabled) {
+        this.enabledCharInput = enabled;
+        return this;
+    }
+
+    public boolean isEnableKeyInput() {
+        return enabledKeyInput;
+    }
+
+    public TextInput setKeyInputEnabled(boolean enabled) {
+        this.enabledKeyInput = enabled;
+        return this;
+    }
+
+
     public int lines() {
         return lines.size();
     }
@@ -252,6 +371,8 @@ public class TextInput implements Iterable<String> {
     }
 
     public String getLine(int y) {
+        if(y >= lines.size())
+            return "";
         return lines.get(y);
     }
 
@@ -290,9 +411,15 @@ public class TextInput implements Iterable<String> {
     }
 
     public String removeLine(int y) {
+        if(lines.isEmpty())
+            return "";
+
         final String line = lines.remove(y);
         if(position.y >= this.lines())
-            setEndY();
+            this.setEndY();
+
+        if(position.x >= this.lineLength())
+            this.setEndX();
         return line;
     }
 
@@ -456,6 +583,7 @@ public class TextInput implements Iterable<String> {
     }
 
     public static class Selection implements Iterable<String>{
+
         public final boolean invert, oneline;
         public final Vec2i start, end;
         public final String[] lines;
@@ -521,9 +649,18 @@ public class TextInput implements Iterable<String> {
         }
 
         @Override
+        public String toString() {
+            final StringJoiner joiner = new StringJoiner("\n");
+            for(String line: lines)
+                joiner.add(line);
+            return joiner.toString();
+        }
+
+        @Override
         public @NotNull Iterator<String> iterator() {
             return Arrays.stream(lines).iterator();
         }
+
     }
 
     public Selection selection(int x1, int y1, int x2, int y2) {
