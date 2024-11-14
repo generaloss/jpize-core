@@ -39,7 +39,7 @@ public class AnimationTest extends JpizeApplication {
         Gl.clearColorBuffer();
         batch.setup();
 
-        time += Jpize.getDT();
+        time += Jpize.getDeltaTime();
         batch.draw(animation.getKeyFrame(time), 100, 100, 300, 300);
 
         batch.render();

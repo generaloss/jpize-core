@@ -1,5 +1,6 @@
-package jpize.util.ctrl;
+package jpize.util.input;
 
+import jpize.glfw.Glfw;
 import jpize.glfw.callback.GlfwCursorPosCallback;
 import jpize.glfw.input.GlfwCursorMode;
 import jpize.glfw.input.GlfwInput;
@@ -23,8 +24,10 @@ public class RotationInput {
     private boolean enabled;
     private final GlfwCursorPosCallback posCallback;
 
+    private float prevX, prevY;
+
     public RotationInput(EulerAngles target, boolean enabled) {
-        this.target  = target;
+        this.target = target;
         this.lockNextFrame = false;
         this.speed = 1F;
         this.smoothness = 0F;
@@ -47,44 +50,24 @@ public class RotationInput {
     }
 
 
-    public void setEnabled(boolean enabled) {
-        final GlfwWindow window = GlfwWindow.getCurrentContext();
-        final GlfwInput input = window.getInput();
-
-        this.enabled = enabled;
-        // input mode
-        input.setInputModeCursor(enabled ? GlfwCursorMode.DISABLED : GlfwCursorMode.NORMAL);
-        // mouse position callback
-        if(enabled) window.getCallbacks().addCursorPosCallback(posCallback);
-        else window.getCallbacks().removeCursorPosCallback(posCallback);
-    }
-
-    public void toggleEnabled() {
-        setEnabled(!enabled);
-    }
-
-    public boolean isEnabled() {
-        return enabled;
-    }
-
-
-    private float oldX, oldY;
-
     private void onCursorPos(GlfwWindow window, float x, float y) {
-        final float dx = (x - oldX);
-        final float dy = (y - oldY);
-        oldX = x;
-        oldY = y;
+        final float dx = (x - prevX);
+        final float dy = (y - prevY);
+
+        final GlfwInput input = window.getInput();
+        this.setCursorPosCentered(window, input);
+        prevX = input.getCursorX();
+        prevY = input.getCursorY();
 
         if(GlfwWindow.getCurrentContext().getAttrib(GlfwAttrib.FOCUSED) && enabled){
 
             if(!lockNextFrame){
-                final float invSmoothness = (1 - smoothness);
+                final float invSmoothness = (1F - smoothness);
 
                 yaw   -= SPEED_MULTIPLIER * speed * Maths.sigFlag(mirrorHorizontal) * dx;
                 pitch -= SPEED_MULTIPLIER * speed * Maths.sigFlag(mirrorVertical  ) * dy;
                 if(clampPitch)
-                    pitch = Maths.clamp(pitch, -90, 90);
+                    pitch = Maths.clamp(pitch, -90F, 90F);
 
                 target.yaw   += (  yaw - target.yaw  ) * invSmoothness;
                 target.pitch += (pitch - target.pitch) * invSmoothness;
@@ -93,6 +76,42 @@ public class RotationInput {
             }
             lockNextFrame = false;
         }
+    }
+
+    private void setCursorPosCentered(GlfwWindow window, GlfwInput input) {
+        input.setCursorPos(window.getWidth() * 0.5, window.getHeight() * 0.5);
+    }
+
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+
+        final GlfwWindow window = GlfwWindow.getCurrentContext();
+        final GlfwInput input = window.getInput();
+        // input mode
+        input.setInputModeCursor(enabled ? GlfwCursorMode.HIDDEN : GlfwCursorMode.NORMAL);
+        if(Glfw.rawMouseMotionSupported())
+            input.setInputModeRawMouseMotion(enabled);
+        this.setCursorPosCentered(window, input);
+        // callback
+        if(enabled) window.getCallbacks().addCursorPosCallback(posCallback);
+        else window.getCallbacks().removeCursorPosCallback(posCallback);
+    }
+
+    public void toggleEnabled() {
+        this.setEnabled(!enabled);
+    }
+
+    public void enable() {
+        this.setEnabled(true);
+    }
+
+    public void disable() {
+        this.setEnabled(false);
+    }
+
+    public boolean isEnabled() {
+        return enabled;
     }
 
 

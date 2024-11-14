@@ -6,7 +6,7 @@ import jpize.gl.Gl;
 import jpize.glfw.Glfw;
 import jpize.glfw.init.GlfwPlatform;
 import jpize.glfw.input.Key;
-import jpize.util.ctrl.TextInput;
+import jpize.util.input.TextInput;
 import jpize.util.font.Font;
 import jpize.util.font.FontLoader;
 import jpize.gl.texture.Texture2D;

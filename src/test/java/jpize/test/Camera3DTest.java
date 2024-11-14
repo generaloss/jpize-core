@@ -14,8 +14,8 @@ import jpize.glfw.init.GlfwPlatform;
 import jpize.glfw.input.Key;
 import jpize.glfw.monitor.GlfwMonitor;
 import jpize.util.camera.PerspectiveCamera;
-import jpize.util.ctrl.MotionInput;
-import jpize.util.ctrl.RotationInput;
+import jpize.util.input.MotionInput;
+import jpize.util.input.RotationInput;
 import jpize.util.math.EulerAngles;
 import jpize.util.mesh.Mesh;
 import jpize.util.res.Resource;
@@ -39,6 +39,8 @@ public class Camera3DTest extends JpizeApplication {
         this.rotation = new EulerAngles();
 
         this.rotInput = new RotationInput(rotation);
+        this.rotInput.setClampPitch(false);
+        this.rotInput.setSmoothness(0.01F);
         this.rotInput.lockNextFrame();
 
         this.motionInput = new MotionInput();
@@ -76,7 +78,7 @@ public class Camera3DTest extends JpizeApplication {
     public void update() {
         motionInput.update(rotation.yaw);
         camera.rotation().setRotation(rotation);
-        camera.position().add(motionInput.getMotionDirected().mul(Jpize.getDT() * 10));
+        camera.position().add(motionInput.getMotionDirected().mul(Jpize.getDeltaTime() * 10));
         camera.update();
 
         if(Key.F11.down()) {
@@ -112,7 +114,7 @@ public class Camera3DTest extends JpizeApplication {
 
     public static void main(String[] args) {
         if(System.getProperty("os.name").equals("Linux"))
-            Glfw.glfwInitHintPlatform(GlfwPlatform.X11);
+            Glfw.glfwInitHintPlatform(GlfwPlatform.WAYLAND);
 
         Jpize.create(1280, 720, "Quaternion Camera")
             .build().setApp(new Camera3DTest());

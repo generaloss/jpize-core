@@ -1,4 +1,4 @@
-package jpize.util.ctrl;
+package jpize.util.input;
 
 import jpize.util.math.vector.Vec3f;
 import jpize.util.math.vector.Vec3i;

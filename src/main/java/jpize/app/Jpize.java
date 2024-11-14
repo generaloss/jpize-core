@@ -85,7 +85,7 @@ public class Jpize {
         return context().getFPS();
     }
 
-    public static float getDT() {
+    public static float getDeltaTime() {
         return context().getDeltaTime();
     }
 

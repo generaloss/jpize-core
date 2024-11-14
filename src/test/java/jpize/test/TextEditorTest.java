@@ -12,7 +12,7 @@ import jpize.glfw.input.MouseBtn;
 import jpize.util.font.FontRenderOptions;
 import jpize.util.math.vector.Vec2f;
 import jpize.util.mesh.TextureBatch;
-import jpize.util.ctrl.TextInput;
+import jpize.util.input.TextInput;
 import jpize.util.font.Font;
 import jpize.util.font.FontLoader;
 import jpize.util.math.Mathc;

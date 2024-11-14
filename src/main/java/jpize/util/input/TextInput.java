@@ -1,4 +1,4 @@
-package jpize.util.ctrl;
+package jpize.util.input;
 
 import jpize.app.Jpize;
 import jpize.glfw.callback.GlfwCallbacks;
