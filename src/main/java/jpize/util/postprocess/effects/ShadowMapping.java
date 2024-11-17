@@ -41,14 +41,14 @@ public class ShadowMapping implements Disposable {
         this.fbo.setRead(false);
 
         this.fbo.setInternalFormat(GlInternalFormat.DEPTH_COMPONENT32).setType(GlType.FLOAT);
-        this.fbo.getTexture().setWrapST(GlWrap.CLAMP_TO_BORDER).setFilters(GlFilter.NEAREST).setBorderColor(1, 1, 1);
+        this.fbo.getTexture().setWrapST(GlWrap.CLAMP_TO_BORDER).setFilters(GlFilter.NEAREST).setBorderColor(1F, 1F, 1F, 1F);
 
         this.fbo.create();
 
         // shader
         this.shader = new Shader(Resource.internal("/shader/shadow_mapping/vert.glsl"), Resource.internal("/shader/shadow_mapping/frag.glsl"));
 
-        this.projectionMatrix = new Matrix4f().setOrthographic(-size.x / 2, size.x / 2, size.y / 2, -size.y / 2, 1, size.z + 1);
+        this.projectionMatrix = new Matrix4f().setOrthographic(-size.x * 0.5F, size.x * 0.5F, size.y * 0.5F, -size.y * 0.5F, 1F, size.z + 1F);
         this.spaceMatrix = new Matrix4f();
         this.lookAtMatrix = new Matrix4f();
     }

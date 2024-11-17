@@ -7,6 +7,7 @@ import jpize.glfw.Glfw;
 import jpize.glfw.init.GlfwPlatform;
 import jpize.util.atlas.TextureAtlas;
 import jpize.util.mesh.TextureBatch;
+import jpize.util.res.Resource;
 
 public class AtlasTest extends JpizeApplication {
 
@@ -17,8 +18,14 @@ public class AtlasTest extends JpizeApplication {
         Gl.clearColor(0.3, 0.4, 0.7);
         this.batch = new TextureBatch();
         this.atlas = new TextureAtlas<>();
-        atlas.put("a", "/icon.png");
-        atlas.build(512, 512);
+        for(Resource s: Resource.external("src/test/resources/blocks").listRes())
+            atlas.put(s.simpleName(), "/blocks/" + s.name());
+
+        atlas.setPadding(5, 3, 5, 3);
+
+        atlas.setFillPaddings(true);
+
+        atlas.build(128, 128);
     }
 
     @Override
