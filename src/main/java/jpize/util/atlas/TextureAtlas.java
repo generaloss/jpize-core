@@ -15,26 +15,27 @@ public class TextureAtlas<T> implements Disposable {
     private final List<AtlasImage<T>> images;
     private final Map<T, TextureRegion> regions;
     private final Map<T, Vec2i> sizes;
-    private PixmapRGBA pixmap;
-    private Texture2D texture;
+    private final PixmapRGBA pixmap;
+    private final Texture2D texture;
 
     public TextureAtlas() {
         this.images = new ArrayList<>();
         this.regions = new HashMap<>();
         this.sizes = new HashMap<>();
+        this.pixmap = new PixmapRGBA(0, 0);
+        this.texture = new Texture2D();
     }
 
     public void build(int width, int height, int paddingLeft, int paddingTop, int paddingRight, int paddingBottom) {
         // sort images by perimeter
-        final int atlasHalfPerimeter = width + height;
         images.sort(Comparator.comparingInt(
-            image -> (atlasHalfPerimeter - image.halfPerimeter)
+            image -> -image.halfPerimeter
         ));
 
         regions.clear();
         sizes.clear();
-        pixmap = new PixmapRGBA(width, height);
-        texture = new Texture2D(width, height);
+        pixmap.resize(width, height);
+        texture.setDefaultImage(width, height);
 
         final AtlasNode root = new AtlasNode(0, 0, width - paddingLeft, height - paddingTop);
 
@@ -63,15 +64,15 @@ public class TextureAtlas<T> implements Disposable {
     }
 
     public void build(int width, int height, int paddingRight, int paddingBottom) {
-        build(width, height, 0, 0, paddingRight, paddingBottom);
+        this.build(width, height, 0, 0, paddingRight, paddingBottom);
     }
 
     public void build(int width, int height, int padding) {
-        build(width, height, padding, padding);
+        this.build(width, height, padding, padding);
     }
 
     public void build(int width, int height) {
-        build(width, height, 0);
+        this.build(width, height, 0);
     }
 
 
@@ -80,11 +81,11 @@ public class TextureAtlas<T> implements Disposable {
     }
 
     public void put(T identifier, Resource res) {
-        put(identifier, PixmapIO.load(res));
+        this.put(identifier, PixmapIO.load(res));
     }
 
     public void put(T identifier, String internalpath) {
-        put(identifier, Resource.internal(internalpath));
+        this.put(identifier, Resource.internal(internalpath));
     }
 
 

@@ -16,13 +16,13 @@ public class ScreenQuadMesh {
     private ScreenQuadMesh() {
         this.mesh = new IndexedMesh(
             new GlVertAttr(2, GlType.FLOAT), // position
-            new GlVertAttr(2, GlType.FLOAT)  // uv
+            new GlVertAttr(2, GlType.FLOAT)  // texcoord
         );
         this.mesh.vertices().setData(
-            -1F,  1F,  0F, 1F, // 0
-            -1F, -1F,  0F, 0F, // 1
-             1F, -1F,  1F, 0F, // 2
-             1F,  1F,  1F, 1F  // 3
+            -1F,  1F,  0F, 0F, // 0
+            -1F, -1F,  0F, 1F, // 1
+             1F, -1F,  1F, 1F, // 2
+             1F,  1F,  1F, 0F  // 3
         );
         this.mesh.indices().setData(
             0, 1, 2,
@@ -42,7 +42,7 @@ public class ScreenQuadMesh {
         BY_CONTEXT.get(context).mesh.render();
     }
 
-    public static void dispose() {
+    private static void dispose() {
         for(ScreenQuadMesh quad: BY_CONTEXT.values())
             quad.mesh.dispose();
     }

@@ -89,7 +89,7 @@ public class Texture2D extends GlTexture {
     }
 
     public Texture2D setImage(Pixmap pixmap) {
-        return setImage(0, pixmap);
+        return this.setImage(0, pixmap);
     }
 
     public Texture2D setImage(String internalPath) {
@@ -107,23 +107,23 @@ public class Texture2D extends GlTexture {
     }
 
     public Texture2D setDefaultImage(int width, int height, int level, ByteBuffer pixels) {
-        return setImage(width, height, level, GlInternalFormat.RGBA8, GlType.UNSIGNED_BYTE, pixels);
+        return this.setImage(width, height, level, GlInternalFormat.RGBA8, GlType.UNSIGNED_BYTE, pixels);
     }
 
     public Texture2D setDefaultImage(int width, int height, ByteBuffer pixels) {
-        return setDefaultImage(width, height, 0, pixels);
+        return this.setDefaultImage(width, height, 0, pixels);
     }
 
     public Texture2D setImage(int width, int height, int level, GlInternalFormat format, GlType type) {
-        return setImage(width, height, level, format, type, null);
+        return this.setImage(width, height, level, format, type, null);
     }
 
     public Texture2D setDefaultImage(int width, int height, int level) {
-        return setImage(width, height, level, GlInternalFormat.RGBA8, GlType.UNSIGNED_BYTE);
+        return this.setImage(width, height, level, GlInternalFormat.RGBA8, GlType.UNSIGNED_BYTE);
     }
 
     public Texture2D setDefaultImage(int width, int height) {
-        return setDefaultImage(width, height, 0);
+        return this.setDefaultImage(width, height, 0);
     }
 
 
@@ -138,7 +138,7 @@ public class Texture2D extends GlTexture {
 
     public GlDepthStencilMode getDepthStencilTextureMode() {
         this.bind();
-        return glGetDepthStencilTextureMode(PARAM_TARGET);
+        return super.glGetDepthStencilTextureMode(PARAM_TARGET);
     }
 
 
@@ -150,7 +150,7 @@ public class Texture2D extends GlTexture {
 
     public int getBaseLevel() {
         this.bind();
-        return glGetBaseLevel(PARAM_TARGET);
+        return super.glGetBaseLevel(PARAM_TARGET);
     }
 
 
@@ -162,7 +162,7 @@ public class Texture2D extends GlTexture {
 
     public GlCompareFunc getCompareFunc() {
         this.bind();
-        return glGetCompareFunc(PARAM_TARGET);
+        return super.glGetCompareFunc(PARAM_TARGET);
     }
 
 
@@ -174,7 +174,7 @@ public class Texture2D extends GlTexture {
 
     public GlCompareMode getCompareMode() {
         this.bind();
-        return glGetCompareMode(PARAM_TARGET);
+        return super.glGetCompareMode(PARAM_TARGET);
     }
 
 
@@ -186,7 +186,7 @@ public class Texture2D extends GlTexture {
 
     public float getLodBias() {
         this.bind();
-        return glGetMaxAnisotropy(PARAM_TARGET);
+        return super.glGetMaxAnisotropy(PARAM_TARGET);
     }
 
 
@@ -210,18 +210,18 @@ public class Texture2D extends GlTexture {
     }
 
     public Texture2D setFilters(GlFilter minAndMag) {
-        return setFilters(minAndMag, minAndMag);
+        return this.setFilters(minAndMag, minAndMag);
     }
 
 
     public GlFilter getMinFilter() {
         this.bind();
-        return glGetMinFilter(PARAM_TARGET);
+        return super.glGetMinFilter(PARAM_TARGET);
     }
 
     public GlFilter getMagFilter() {
         this.bind();
-        return glGetMagFilter(PARAM_TARGET);
+        return super.glGetMagFilter(PARAM_TARGET);
     }
 
 
@@ -233,7 +233,7 @@ public class Texture2D extends GlTexture {
 
     public int getMinLod() {
         this.bind();
-        return glGetMinLod(PARAM_TARGET);
+        return super.glGetMinLod(PARAM_TARGET);
     }
 
 
@@ -245,7 +245,7 @@ public class Texture2D extends GlTexture {
 
     public int getMaxLod() {
         this.bind();
-        return glGetMaxLod(PARAM_TARGET);
+        return super.glGetMaxLod(PARAM_TARGET);
     }
 
 
@@ -257,7 +257,7 @@ public class Texture2D extends GlTexture {
 
     public int getMaxLevel() {
         this.bind();
-        return glGetMaxLevel(PARAM_TARGET);
+        return super.glGetMaxLevel(PARAM_TARGET);
     }
 
 
@@ -269,7 +269,7 @@ public class Texture2D extends GlTexture {
 
     public int getSqizzleR() {
         this.bind();
-        return glGetSqizzleR(PARAM_TARGET);
+        return super.glGetSqizzleR(PARAM_TARGET);
     }
 
 
@@ -281,7 +281,7 @@ public class Texture2D extends GlTexture {
 
     public int getSqizzleG() {
         this.bind();
-        return glGetSqizzleG(PARAM_TARGET);
+        return super.glGetSqizzleG(PARAM_TARGET);
     }
 
 
@@ -293,7 +293,7 @@ public class Texture2D extends GlTexture {
 
     public int getSqizzleB() {
         this.bind();
-        return glGetSqizzleB(PARAM_TARGET);
+        return super.glGetSqizzleB(PARAM_TARGET);
     }
 
 
@@ -305,7 +305,7 @@ public class Texture2D extends GlTexture {
 
     public int getSqizzleA() {
         this.bind();
-        return glGetSqizzleA(PARAM_TARGET);
+        return super.glGetSqizzleA(PARAM_TARGET);
     }
 
 
@@ -343,27 +343,27 @@ public class Texture2D extends GlTexture {
     }
 
     public Texture2D setWrapST(GlWrap wrap) {
-        return setWrap(wrap, wrap);
+        return this.setWrap(wrap, wrap);
     }
 
     public Texture2D setWrapSTR(GlWrap wrap) {
-        return setWrap(wrap, wrap, wrap);
+        return this.setWrap(wrap, wrap, wrap);
     }
 
 
     public GlWrap getWrapS() {
         this.bind();
-        return glGetWrapS(PARAM_TARGET);
+        return super.glGetWrapS(PARAM_TARGET);
     }
 
     public GlWrap getWrapT() {
         this.bind();
-        return glGetWrapT(PARAM_TARGET);
+        return super.glGetWrapT(PARAM_TARGET);
     }
 
     public GlWrap getWrapR() {
         this.bind();
-        return glGetWrapR(PARAM_TARGET);
+        return super.glGetWrapR(PARAM_TARGET);
     }
 
 
@@ -375,7 +375,7 @@ public class Texture2D extends GlTexture {
 
     public float[] getBorderColor() {
         this.bind();
-        return glGetBorderColor(PARAM_TARGET);
+        return super.glGetBorderColor(PARAM_TARGET);
     }
 
 
@@ -387,7 +387,7 @@ public class Texture2D extends GlTexture {
 
     public float[] getSwizzle() {
         this.bind();
-        return glGetSwizzle(PARAM_TARGET);
+        return super.glGetSwizzle(PARAM_TARGET);
     }
 
 
@@ -399,7 +399,7 @@ public class Texture2D extends GlTexture {
 
     public float getMaxAnisotropy() {
         this.bind();
-        return glGetMaxAnisotropy(PARAM_TARGET);
+        return super.glGetMaxAnisotropy(PARAM_TARGET);
     }
 
 
@@ -417,11 +417,11 @@ public class Texture2D extends GlTexture {
     }
 
     public int getWidth() {
-        return getWidth(0);
+        return this.getWidth(0);
     }
 
     public int getHeight() {
-        return getHeight(0);
+        return this.getHeight(0);
     }
 
     public float aspect() {
@@ -438,7 +438,7 @@ public class Texture2D extends GlTexture {
     }
 
     public GlInternalFormat getInternalFormat() {
-        return getInternalFormat(0);
+        return this.getInternalFormat(0);
     }
 
 
@@ -448,7 +448,7 @@ public class Texture2D extends GlTexture {
     }
 
     public int getRedSize() {
-        return getRedSize(0);
+        return this.getRedSize(0);
     }
 
     public int getGreenSize(int level) {
@@ -457,7 +457,7 @@ public class Texture2D extends GlTexture {
     }
 
     public int getGreenSize() {
-        return getGreenSize(0);
+        return this.getGreenSize(0);
     }
 
     public int getBlueSize(int level) {
@@ -466,7 +466,7 @@ public class Texture2D extends GlTexture {
     }
 
     public int getBlueSize() {
-        return getBlueSize(0);
+        return this.getBlueSize(0);
     }
 
     public int getAlphaSize(int level) {
@@ -475,7 +475,7 @@ public class Texture2D extends GlTexture {
     }
 
     public int getAlphaSize() {
-        return getAlphaSize(0);
+        return this.getAlphaSize(0);
     }
 
 
@@ -485,7 +485,7 @@ public class Texture2D extends GlTexture {
     }
 
     public int getDepthSize() {
-        return getDepthSize(0);
+        return this.getDepthSize(0);
     }
 
     public int getCompressedImageSize(int level) {
@@ -494,7 +494,7 @@ public class Texture2D extends GlTexture {
     }
 
     public int getCompressedImageSize() {
-        return getCompressedImageSize(0);
+        return this.getCompressedImageSize(0);
     }
 
     public boolean isCompressed(int level) {
@@ -503,7 +503,7 @@ public class Texture2D extends GlTexture {
     }
 
     public boolean isCompressed() {
-        return isCompressed(0);
+        return this.isCompressed(0);
     }
 
     public int getBufferOffset(int level) {
@@ -512,7 +512,7 @@ public class Texture2D extends GlTexture {
     }
 
     public int getBufferOffset() {
-        return getBufferOffset(0);
+        return this.getBufferOffset(0);
     }
 
 }

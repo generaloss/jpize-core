@@ -4,6 +4,7 @@ import jpize.gl.GlObject;
 
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
+import java.util.Arrays;
 
 import static org.lwjgl.opengl.GL41.*;
 
@@ -14,9 +15,43 @@ public class GlProgram extends GlObject {
     }
 
 
-    public void attach(GlShader shader) {
-        glAttachShader(ID, shader.getID());
+    public void attach(int shaderID) {
+        glAttachShader(ID, shaderID);
     }
+
+    public void attach(GlShader shader) {
+        this.attach(shader.getID());
+    }
+
+    public int[] getAttached(int maxCount) {
+        final int[] countBuf = new int[1];
+        int[] shaderIDsBuf = new int[maxCount];
+        glGetAttachedShaders(ID, countBuf, shaderIDsBuf);
+        return Arrays.copyOf(shaderIDsBuf, countBuf[0]);
+    }
+
+    public int[] getAttached() {
+        return this.getAttached(3);
+    }
+
+    public void detach(int shaderID) {
+        glDetachShader(ID, shaderID);
+    }
+
+    public void detach(GlShader shader) {
+        this.detach(shader.getID());
+    }
+
+    public void detachAll(int maxCount) {
+        final int[] attached = this.getAttached(maxCount);
+        for(int attachedID: attached)
+            this.detach(attachedID);
+    }
+
+    public void detachAll() {
+        this.detachAll(3);
+    }
+
 
     public void link() {
         glLinkProgram(ID);

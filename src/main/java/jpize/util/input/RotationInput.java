@@ -16,7 +16,7 @@ public class RotationInput {
 
     private EulerAngles target;
     private float yaw, pitch;
-    private boolean lockNextFrame;
+    private boolean lockNextInput;
 
     private boolean mirrorHorizontal, mirrorVertical;
     private float speed, smoothness;
@@ -28,7 +28,7 @@ public class RotationInput {
 
     public RotationInput(EulerAngles target, boolean enabled) {
         this.target = target;
-        this.lockNextFrame = false;
+        this.lockNextInput = false;
         this.speed = 1F;
         this.smoothness = 0F;
         this.clampPitch = true;
@@ -60,8 +60,7 @@ public class RotationInput {
         prevY = input.getCursorY();
 
         if(GlfwWindow.getCurrentContext().getAttrib(GlfwAttrib.FOCUSED) && enabled){
-
-            if(!lockNextFrame){
+            if(!lockNextInput){
                 final float invSmoothness = (1F - smoothness);
 
                 yaw   -= SPEED_MULTIPLIER * speed * Maths.sigFlag(mirrorHorizontal) * dx;
@@ -74,7 +73,7 @@ public class RotationInput {
                 if(clampPitch)
                     target.clampPitch();
             }
-            lockNextFrame = false;
+            lockNextInput = false;
         }
     }
 
@@ -159,8 +158,8 @@ public class RotationInput {
     }
 
 
-    public void lockNextFrame() {
-        lockNextFrame = true;
+    public void lockNextInput() {
+        lockNextInput = true;
     }
     
 }

@@ -12,7 +12,8 @@ public class TextureCubemap extends GlTexture {
 
     public TextureCubemap() {
         super();
-        this.setFilters(GlFilter.NEAREST);
+        this.setFilters(GlFilter.LINEAR);
+        this.setWrapSTR(GlWrap.CLAMP_TO_EDGE);
     }
 
     public TextureCubemap(Pixmap positiveX, Pixmap negativeX, Pixmap positiveY, Pixmap negativeY, Pixmap positiveZ, Pixmap negativeZ) {

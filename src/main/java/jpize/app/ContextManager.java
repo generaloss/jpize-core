@@ -4,6 +4,8 @@ import jpize.glfw.Glfw;
 import jpize.glfw.window.GlfwWindow;
 import jpize.gl.texture.TextureUtils;
 import jpize.util.ReflectUtils;
+import jpize.util.postprocess.ScreenQuadMesh;
+import jpize.util.postprocess.ScreenQuadShader;
 
 import java.util.Map;
 import java.util.Queue;
@@ -109,6 +111,8 @@ public class ContextManager {
     private void terminate() {
         Glfw.terminate();
         ReflectUtils.invokeStaticMethod(TextureUtils.class, "dispose");
+        ReflectUtils.invokeStaticMethod(ScreenQuadShader.class, "dispose");
+        ReflectUtils.invokeStaticMethod(ScreenQuadMesh.class, "dispose");
     }
 
 }

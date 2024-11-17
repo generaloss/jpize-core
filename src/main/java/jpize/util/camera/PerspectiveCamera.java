@@ -85,7 +85,7 @@ public class PerspectiveCamera extends Camera3D {
         this.hasImaginaryAxis = (imaginaryX || imaginaryY || imaginaryZ);
     }
 
-    public Frustum getFrustum() {
+    public Frustum frustum() {
         return frustum;
     }
 

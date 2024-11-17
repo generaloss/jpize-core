@@ -51,8 +51,8 @@ public class RenderTest extends JpizeApplication {
             .mainFrag("gl_FragColor = pow(f_color, vec4(0.75));")
             .build();
 
-        shader.getProgram().setBinaryRetrievable(true);
-        System.out.println(shader.getProgram().getBinaryLength());
+        shader.setBinaryRetrievable(true);
+        System.out.println(shader.getBinaryLength());
     }
 
     public void render() {
