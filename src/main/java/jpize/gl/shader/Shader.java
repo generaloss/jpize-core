@@ -52,6 +52,7 @@ public class Shader extends GlProgram {
         vertexShader.dispose();
         fragmentShader.dispose();
 
+        uniforms.clear();
         this.detectUniforms(vertexCode);
         this.detectUniforms(fragmentCode);
         return this;
@@ -74,6 +75,7 @@ public class Shader extends GlProgram {
         vertexShader.dispose();
         fragmentShader.dispose();
 
+        uniforms.clear();
         this.detectUniforms(vertexCode);
         this.detectUniforms(fragmentCode);
         this.detectUniforms(geometryCode);
@@ -86,7 +88,6 @@ public class Shader extends GlProgram {
 
 
     private void detectUniforms(String code) {                   // '..\nuniform type name [n] ;\n..'
-        uniforms.clear();
         final String[] uniformSplit = code.split("uniform");     // ' type name [n] ;\n..'
         for(int i = 1; i < uniformSplit.length; i++){
             String name = uniformSplit[i].split(";")[0];         // ' type name [n] '
