@@ -71,28 +71,28 @@ public class TextureRegion extends Region {
         return this;
     }
 
-    public TextureRegion setSubregionPx(double x, double y, double width, double height, double totalWidth, double totalHeight) {
-        super.setSubregionPx(x, y, width, height, totalWidth, totalHeight);
+    public TextureRegion setSubregionInPixels(double x, double y, double width, double height, double totalWidth, double totalHeight) {
+        super.setSubregionInPixels(x, y, width, height, totalWidth, totalHeight);
         return this;
     }
 
-    public Region setSubregionPx(double x, double y, double width, double height, Vec2i size) {
-        super.setSubregionPx(x, y, width, height, size);
+    public Region setSubregionInPixels(double x, double y, double width, double height, Vec2i size) {
+        super.setSubregionInPixels(x, y, width, height, size);
         return this;
     }
 
-    public Region setSubregionPx(double x, double y, double width, double height, Vec2f size) {
-        super.setSubregionPx(x, y, width, height, size);
+    public Region setSubregionInPixels(double x, double y, double width, double height, Vec2f size) {
+        super.setSubregionInPixels(x, y, width, height, size);
         return this;
     }
 
-    public Region setSubregionPx(double x, double y, double width, double height, Vec2d size) {
-        super.setSubregionPx(x, y, width, height, size);
+    public Region setSubregionInPixels(double x, double y, double width, double height, Vec2d size) {
+        super.setSubregionInPixels(x, y, width, height, size);
         return this;
     }
 
-    public TextureRegion setSubregionPx(double x, double y, double width, double height) {
-        super.setSubregionPx(x, y, width, height, texture.getWidth(), texture.getHeight());
+    public TextureRegion setSubregionInPixels(double x, double y, double width, double height) {
+        super.setSubregionInPixels(x, y, width, height, texture.getWidth(), texture.getHeight());
         return this;
     }
 
@@ -117,13 +117,21 @@ public class TextureRegion extends Region {
         return texture;
     }
 
-    
+
+    public float getPixelX() {
+        return super.getPixelX(texture);
+    }
+
+    public float getPixelY() {
+        return super.getPixelY(texture);
+    }
+
     public float getPixelWidth() {
-        return getWidthPx(texture);
+        return super.getPixelWidth(texture);
     }
 
     public float getPixelHeight() {
-        return getHeightPx(texture);
+        return super.getPixelHeight(texture);
     }
 
 
