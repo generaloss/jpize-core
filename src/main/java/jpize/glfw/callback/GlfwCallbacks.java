@@ -362,7 +362,7 @@ public class GlfwCallbacks {
 
                 final String[] files = new String[capacity];
                 for(int i = 0; i < capacity; i++)
-                    files[i] = MemoryUtil.memUTF8(pointerBuf.get(i)); //! MemoryUtil.memByteBufferNT1(pointerBuf.get(i))
+                    files[i] = MemoryUtil.memUTF8(pointerBuf.get(i));
 
                 callbacksDrop.forEach(c -> c.invoke(window, files));
             });

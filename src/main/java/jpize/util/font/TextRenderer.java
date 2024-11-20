@@ -22,7 +22,7 @@ import org.lwjgl.glfw.GLFW;
 import java.util.HashMap;
 import java.util.Map;
 
-public class TextRenderer { //! optimize code
+public class TextRenderer {
 
     public static void render(Font font, FontRenderOptions options, TextureBatch batch, String text, float x, float y) {
         if(text == null || text.isBlank())
