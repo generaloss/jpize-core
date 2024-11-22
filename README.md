@@ -1,29 +1,7 @@
 # [Core Module](https://github.com/generaloss/jpize-core)
 ![jpize](logo.svg)
 
----
-
-## Getting Started
-
-### Maven
-```xml
-<!-- jpize-core -->
-<dependency>
-    <groupId>io.github.generaloss</groupId>
-    <artifactId>jpize-core</artifactId>
-    <version>24.11.1</version>
-</dependency>
-```
-### Gradle (Kotlin)
-```kotlin
-repositories {
-    mavenCentral()
-}
-
-dependencies {
-    implementation("io.github.generaloss:jpize-core:24.11.1")
-}
-```
+[![Maven Central](https://img.shields.io/maven-central/v/io.github.generaloss/jpize-core.svg)](https://mvnrepository.com/artifact/io.github.generaloss/jpize-core)
 
 ---
 
@@ -151,4 +129,4 @@ Jpize.getDT()
 ---
 
 ## Bugs and Feedback
-For bugs, questions and discussions please use the [GitHub Issues](https://github.com/generaloss/jpize-engine/issues).
+For bugs, questions and discussions please use the [GitHub Issues](https://github.com/generaloss/jpize-core/issues).

@@ -92,9 +92,6 @@ class AtlasNode {
 
             return child1.insert(imagePixmap, paddingLeft, paddingTop, paddingRight, paddingBottom);
         }else{
-            if(child1 == null)
-                throw new RuntimeException("[Impossible exception] If you see this exception please write about it on https://github.com/generaloss/jpize-engine/issues");
-
             final AtlasNode newNode = child1.insert(imagePixmap, paddingLeft, paddingTop, paddingRight, paddingBottom);
             if(newNode != null)
                 return newNode;

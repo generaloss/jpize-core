@@ -8,12 +8,12 @@
     <name>jpize-core</name>
 
     <description>opengl graphics library</description>
-    <url>https://github.com/generaloss/jpize-engine</url>
+    <url>https://github.com/generaloss/jpize-core</url>
 
     <scm>
-        <connection>scm:git:git://github.com/generaloss/jpize-engine.git</connection>
-        <developerConnection>scm:git:ssh://github.com:generaloss/jpize-engine.git</developerConnection>
-        <url>https://github.com/generaloss/jpize-engine/tree/master</url>
+        <connection>scm:git:git://github.com/generaloss/jpize-core.git</connection>
+        <developerConnection>scm:git:ssh://github.com:generaloss/jpize-core.git</developerConnection>
+        <url>https://github.com/generaloss/jpize-core/tree/master</url>
     </scm>
 
     <developers>
