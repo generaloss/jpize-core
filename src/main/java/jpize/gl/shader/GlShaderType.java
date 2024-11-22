@@ -15,4 +15,10 @@ public enum GlShaderType {
         this.value = value;
     }
 
+    public static GlShaderType byValue(int value) {
+        if(value == GEOMETRY.value)
+            return GEOMETRY;
+        return values()[value - FRAGMENT.value];
+    }
+
 }

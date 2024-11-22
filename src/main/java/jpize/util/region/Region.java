@@ -76,7 +76,7 @@ public class Region {
         return this.setSubregion(region.u1, region.v1, region.u2, region.v2);
     }
 
-    public Region setSubregionPx(double x, double y, double width, double height, double totalWidth, double totalHeight) {
+    public Region setSubregionInPixels(double x, double y, double width, double height, double totalWidth, double totalHeight) {
         return this.setSubregion(
             x / totalWidth,
             y / totalHeight,
@@ -85,16 +85,16 @@ public class Region {
         );
     }
 
-    public Region setSubregionPx(double x, double y, double width, double height, Vec2i size) {
-        return this.setSubregionPx(x, y, width, height, size.x, size.y);
+    public Region setSubregionInPixels(double x, double y, double width, double height, Vec2i size) {
+        return this.setSubregionInPixels(x, y, width, height, size.x, size.y);
     }
 
-    public Region setSubregionPx(double x, double y, double width, double height, Vec2f size) {
-        return this.setSubregionPx(x, y, width, height, size.x, size.y);
+    public Region setSubregionInPixels(double x, double y, double width, double height, Vec2f size) {
+        return this.setSubregionInPixels(x, y, width, height, size.x, size.y);
     }
 
-    public Region setSubregionPx(double x, double y, double width, double height, Vec2d size) {
-        return this.setSubregionPx(x, y, width, height, size.x, size.y);
+    public Region setSubregionInPixels(double x, double y, double width, double height, Vec2d size) {
+        return this.setSubregionInPixels(x, y, width, height, size.x, size.y);
     }
 
 
@@ -143,12 +143,20 @@ public class Region {
     public float aspect() {
         return this.getWidth() / this.getHeight();
     }
-    
-    public float getWidthPx(Texture2D texture) {
+
+    public float getPixelX(Texture2D texture) {
+        return u1 * texture.getWidth();
+    }
+
+    public float getPixelY(Texture2D texture) {
+        return v1 * texture.getHeight();
+    }
+
+    public float getPixelWidth(Texture2D texture) {
         return this.getWidth() * texture.getWidth();
     }
     
-    public float getHeightPx(Texture2D texture) {
+    public float getPixelHeight(Texture2D texture) {
         return this.getHeight() * texture.getHeight();
     }
 

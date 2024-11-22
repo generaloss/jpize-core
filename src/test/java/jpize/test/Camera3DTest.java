@@ -40,8 +40,8 @@ public class Camera3DTest extends JpizeApplication {
 
         this.rotInput = new RotationInput(rotation);
         this.rotInput.setClampPitch(false);
-        this.rotInput.setSmoothness(0.01F);
-        this.rotInput.lockNextFrame();
+        this.rotInput.setSpeed(0.4F);
+        this.rotInput.lockNextInput();
 
         this.motionInput = new MotionInput();
 
@@ -82,7 +82,7 @@ public class Camera3DTest extends JpizeApplication {
         camera.update();
 
         if(Key.F11.down()) {
-            rotInput.lockNextFrame();
+            rotInput.lockNextInput();
             Jpize.window().toggleFullscreen();
         }
         if(Key.ESCAPE.down()) Jpize.exit();
@@ -114,7 +114,7 @@ public class Camera3DTest extends JpizeApplication {
 
     public static void main(String[] args) {
         if(System.getProperty("os.name").equals("Linux"))
-            Glfw.glfwInitHintPlatform(GlfwPlatform.WAYLAND);
+            Glfw.glfwInitHintPlatform(GlfwPlatform.X11);
 
         Jpize.create(1280, 720, "Quaternion Camera")
             .build().setApp(new Camera3DTest());
