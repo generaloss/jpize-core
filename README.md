@@ -116,7 +116,7 @@ Jpize.getHeight()
 
 // FPS & Delta Time
 Jpize.getFPS()
-Jpize.getDT()
+Jpize.getDeltaTime()
 ```
 
 ---
