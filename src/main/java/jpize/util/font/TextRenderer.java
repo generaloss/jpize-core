@@ -5,8 +5,6 @@ import jpize.gl.shader.Shader;
 import jpize.gl.tesselation.GlPrimitive;
 import jpize.gl.type.GlType;
 import jpize.gl.vertex.GlVertAttr;
-import jpize.util.font.glyph.GlyphIterator;
-import jpize.util.font.glyph.GlyphSprite;
 import jpize.util.mesh.Mesh;
 import jpize.util.region.Region;
 import jpize.gl.texture.Texture2D;

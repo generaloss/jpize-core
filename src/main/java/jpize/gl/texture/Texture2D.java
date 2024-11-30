@@ -30,12 +30,12 @@ public class Texture2D extends GlTexture {
         this.setImage(pixmap);
     }
 
-    public Texture2D(String filepath) {
-        this(PixmapIO.load(filepath));
-    }
-
     public Texture2D(Resource res) {
         this(PixmapIO.load(res));
+    }
+
+    public Texture2D(String internalPath) {
+        this(PixmapIO.load(internalPath));
     }
 
 
@@ -81,6 +81,11 @@ public class Texture2D extends GlTexture {
 
     // image
 
+    public Texture2D setImage(int width, int height, int level, GlInternalFormat format, GlType type, ByteBuffer pixels) {
+        this.bind();
+        super.glSetImage2D(GlTexImg2DTarget.TEXTURE_2D, 0, width, height, format, type, pixels);
+        return this;
+    }
 
     public Texture2D setImage(int level, Pixmap pixmap) {
         this.bind();
@@ -92,19 +97,25 @@ public class Texture2D extends GlTexture {
         return this.setImage(0, pixmap);
     }
 
-    public Texture2D setImage(String internalPath) {
-        final Pixmap pixmap = PixmapIO.load(internalPath);
+    public Texture2D setImage(int level, Resource res) {
+        final Pixmap pixmap = PixmapIO.load(res);
         this.setImage(pixmap);
         pixmap.dispose();
         return this;
     }
 
-
-    public Texture2D setImage(int width, int height, int level, GlInternalFormat format, GlType type, ByteBuffer pixels) {
-        this.bind();
-        super.glSetImage2D(GlTexImg2DTarget.TEXTURE_2D, 0, width, height, format, type, pixels);
-        return this;
+    public Texture2D setImage(Resource res) {
+        return this.setImage(0, res);
     }
+
+    public Texture2D setImage(int level, String internalPath) {
+        return this.setImage(level, Resource.internal(internalPath));
+    }
+
+    public Texture2D setImage(String internalPath) {
+        return this.setImage(0, internalPath);
+    }
+
 
     public Texture2D setDefaultImage(int width, int height, int level, ByteBuffer pixels) {
         return this.setImage(width, height, level, GlInternalFormat.RGBA8, GlType.UNSIGNED_BYTE, pixels);
@@ -125,7 +136,6 @@ public class Texture2D extends GlTexture {
     public Texture2D setDefaultImage(int width, int height) {
         return this.setDefaultImage(width, height, 0);
     }
-
 
     // params
 

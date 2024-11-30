@@ -1,4 +1,4 @@
-package jpize.util.postprocess.effects;
+package jpize.util.postprocess;
 
 import jpize.app.Jpize;
 import jpize.util.Disposable;

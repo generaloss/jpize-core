@@ -6,9 +6,12 @@ import jpize.gl.Gl;
 import jpize.glfw.Glfw;
 import jpize.glfw.init.GlfwPlatform;
 import jpize.util.font.Font;
-import jpize.util.font.FontLoader;
 import jpize.util.font.FontRenderOptions;
 import jpize.util.mesh.TextureBatch;
+import jpize.util.res.Resource;
+
+import java.io.IOException;
+import java.util.zip.ZipFile;
 
 public class TextTest extends JpizeApplication {
 
@@ -16,13 +19,14 @@ public class TextTest extends JpizeApplication {
     private final Font font;
     private final FontRenderOptions options;
 
-    public TextTest() {
+    public TextTest() throws IOException {
         this.batch = new TextureBatch();
-        this.font = FontLoader.loadDefault();
+        final ZipFile zip = new ZipFile("src/test/resources/font.zip");
+        this.font = new Font().loadFnt(Resource.zip(zip, zip.getEntry("font.fnt")), false);
         this.options = font.getRenderOptions();
 
         options.setInvLineWrap(true);
-        options.scale().set(1F, 1F);
+        options.scale().set(5F, 5F);
         options.advanceFactor().set(1F, 1F);
         options.color().set(1F, 0.8F, 1F);
         options.setRotation(0F);
@@ -44,7 +48,7 @@ public class TextTest extends JpizeApplication {
     }
 
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         if(System.getProperty("os.name").equals("Linux"))
             Glfw.glfwInitHintPlatform(GlfwPlatform.X11);
 

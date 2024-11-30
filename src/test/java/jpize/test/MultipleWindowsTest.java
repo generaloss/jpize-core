@@ -8,7 +8,6 @@ import jpize.glfw.init.GlfwPlatform;
 import jpize.glfw.input.Key;
 import jpize.util.input.TextInput;
 import jpize.util.font.Font;
-import jpize.util.font.FontLoader;
 import jpize.gl.texture.Texture2D;
 import jpize.util.pixmap.PixmapRGBA;
 import jpize.util.mesh.TextureBatch;
@@ -40,7 +39,7 @@ public class MultipleWindowsTest {
     }
 
     public static class Window2 extends JpizeApplication {
-        final Font font = FontLoader.loadDefaultBold();
+        final Font font = new Font().loadDefaultBold();
         final TextInput textProc = new TextInput().enable();
         public void init() {
             textProc.insert("I want pizza");

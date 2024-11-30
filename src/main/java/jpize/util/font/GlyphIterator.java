@@ -1,7 +1,4 @@
-package jpize.util.font.glyph;
-
-import jpize.util.font.Font;
-import jpize.util.font.FontRenderOptions;
+package jpize.util.font;
 
 import java.util.Iterator;
 
@@ -83,7 +80,7 @@ public class GlyphIterator implements Iterator<GlyphSprite> {
             position++;
         }
 
-        return font.getGlyphs().get(code);
+        return font.glyphs().get(code);
     }
 
     private CharSequence removeUnknownGlyphs(CharSequence str) {
@@ -93,7 +90,7 @@ public class GlyphIterator implements Iterator<GlyphSprite> {
         final StringBuilder builder = new StringBuilder();
         for(int i = 0; i < str.length(); i++){
             final int code = Character.codePointAt(str, i);
-            if(code == '\n' || font.getGlyphs().containsKey(code))
+            if(code == '\n' || font.glyphs().containsKey(code))
                 builder.append((char) code);
         }
         return builder.toString();

@@ -32,8 +32,8 @@ public class GlfwImage {
         this(PixmapIO.load(resource));
     }
 
-    public GlfwImage(String filepath) {
-        this(PixmapIO.load(filepath));
+    public GlfwImage(String internalPath) {
+        this(PixmapIO.load(internalPath));
     }
 
 
@@ -91,10 +91,10 @@ public class GlfwImage {
         return array;
     }
 
-    public static GlfwImage[] loadArray(String... filepaths) {
-        final GlfwImage[] array = new GlfwImage[filepaths.length];
+    public static GlfwImage[] loadArray(String... internalPaths) {
+        final GlfwImage[] array = new GlfwImage[internalPaths.length];
         for(int i = 0; i < array.length; i++)
-            array[i] = new GlfwImage(filepaths[i]);
+            array[i] = new GlfwImage(internalPaths[i]);
         return array;
     }
 

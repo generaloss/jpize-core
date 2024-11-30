@@ -1,12 +1,10 @@
-package jpize.util.postprocess.effects;
+package jpize.util.postprocess;
 
 import jpize.app.Jpize;
 import jpize.util.res.Resource;
 import jpize.gl.Gl;
 import jpize.gl.tesselation.GlFramebuffer;
-import jpize.util.postprocess.PostProcessEffect;
 import jpize.gl.tesselation.GlRenderbuffer;
-import jpize.util.postprocess.ScreenQuadMesh;
 import jpize.gl.shader.Shader;
 
 public class Bloom implements PostProcessEffect {

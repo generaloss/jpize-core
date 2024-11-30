@@ -14,7 +14,6 @@ import jpize.glfw.init.GlfwPlatform;
 import jpize.glfw.input.Key;
 import jpize.util.camera.PerspectiveCamera;
 import jpize.util.font.Font;
-import jpize.util.font.FontLoader;
 import jpize.util.input.MotionInput;
 import jpize.util.input.RotationInput;
 import jpize.util.math.EulerAngles;
@@ -67,7 +66,7 @@ public class Camera3DTest extends JpizeApplication {
             "/skybox_positive_y.png", "/skybox_negative_y.png",
             "/skybox_positive_z.png", "/skybox_negative_z.png");
 
-        this.font = FontLoader.loadDefault();
+        this.font = new Font().loadDefault();
     }
 
     private final Texture2D texture_floor = new Texture2D("/cube4.png");
@@ -90,12 +89,14 @@ public class Camera3DTest extends JpizeApplication {
     public void render() {
         Gl.clearColorDepthBuffers();
 
+        Gl.enable(GlTarget.DEPTH_TEST);
         skybox.render(camera);
         shader.bind();
         shader.uniform("u_combined", camera.getCombined());
         shader.uniform("u_texture", texture_floor);
         mesh.render();
 
+        Gl.disable(GlTarget.DEPTH_TEST);
         font.drawText("Test text", 100, 100);
     }
 

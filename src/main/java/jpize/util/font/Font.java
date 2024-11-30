@@ -1,44 +1,38 @@
 package jpize.util.font;
 
 import jpize.gl.texture.Texture2D;
-import jpize.util.font.glyph.*;
 import jpize.util.mesh.TextureBatch;
 import jpize.util.math.vector.Vec2f;
 import jpize.util.Disposable;
+import jpize.util.res.Resource;
 
+import java.util.HashMap;
 import java.util.Map;
 
-public class Font extends FontInfo implements Disposable {
+public class Font implements Disposable {
 
     private final Map<Integer, Texture2D> pages;
     private final Map<Integer, Glyph> glyphs;
-    private boolean italic;
     private FontRenderOptions renderOptions;
+    private float height;
+    private float ascent;
+    private float descent;
+    private boolean italic;
 
-    protected Font(float height, float ascent, float descent, Map<Integer, Texture2D> pages, Map<Integer, Glyph> glyphs, boolean italic) {
-        super(height, ascent, descent);
-        this.pages = pages;
-        this.glyphs = glyphs;
-        this.italic = italic;
+    public Font() {
+        this.pages = new HashMap<>();
+        this.glyphs = new HashMap<>();
         this.renderOptions = new FontRenderOptions();
     }
 
-    public Map<Integer, Texture2D> getPages() {
+    public Map<Integer, Texture2D> pages() {
         return pages;
     }
 
-    public Map<Integer, Glyph> getGlyphs() {
+    public Map<Integer, Glyph> glyphs() {
         return glyphs;
     }
 
-    public boolean isItalic() {
-        return italic;
-    }
-
-    public Font setItalic(boolean italic) {
-        this.italic = italic;
-        return this;
-    }
 
     public FontRenderOptions getRenderOptions() {
         return renderOptions;
@@ -50,25 +44,101 @@ public class Font extends FontInfo implements Disposable {
     }
 
 
+    public float getHeight() {
+        return height;
+    }
+
+    public void setHeight(float height) {
+        this.height = height;
+    }
+
+    public float getAscent() {
+        return ascent;
+    }
+
+    public void setAscent(float ascent) {
+        this.ascent = ascent;
+    }
+
+    public float getDescent() {
+        return descent;
+    }
+
+    public void setDescent(float descent) {
+        this.descent = descent;
+    }
+
+    public boolean isItalic() {
+        return italic;
+    }
+
+    public Font setItalic(boolean italic) {
+        this.italic = italic;
+        return this;
+    }
+
+
     public float getHeightScaled() {
-        return (super.height * renderOptions.scale().y);
+        return (height * renderOptions.scale().y);
     }
 
     public float getAscentScaled() {
-        return (super.ascent * renderOptions.scale().y);
+        return (ascent * renderOptions.scale().y);
     }
 
     public float getDescentScaled() {
-        return (super.descent * renderOptions.scale().y);
+        return (descent * renderOptions.scale().y);
     }
 
     public float getLineAdvance() {
-        return (super.height + renderOptions.getLineGap());
+        return (height + renderOptions.getLineGap());
     }
 
     public float getLineAdvanceScaled() {
         return (this.getLineAdvance() * renderOptions.scale().y);
     }
+
+
+    public Font loadDefault(int size, Charset charset, boolean linearFilter) {
+        return FontLoader.loadDefault(this, size, charset, linearFilter);
+    }
+
+    public Font loadDefault() {
+        return FontLoader.loadDefault(this);
+    }
+
+    public Font loadDefaultBold(int size, Charset charset, boolean linearFilter) {
+        return FontLoader.loadDefaultBold(this, size, charset, linearFilter);
+    }
+
+    public Font loadDefaultBold() {
+        return FontLoader.loadDefaultBold(this, 64, Charset.DEFAULT_ENG_RUS, true);
+    }
+
+    public Font loadFnt(Resource resource, boolean linearFilter) {
+        return FontLoader.loadFnt(this, resource, linearFilter);
+    }
+
+    public Font loadFnt(String internalPath, boolean linearFilter) {
+        return FontLoader.loadFnt(this, internalPath, linearFilter);
+    }
+
+    public Font loadTrueType(Resource resource, int size, Charset charset, boolean linearFilter) {
+        return FontLoader.loadTrueType(this, resource, size, charset, linearFilter);
+    }
+
+    public Font loadTrueType(String internalPath, int size, Charset charset, boolean linearFilter) {
+        return FontLoader.loadTrueType(this, internalPath, size, charset, linearFilter);
+    }
+
+    public Font loadTrueType(Resource resource, int size, boolean linearFilter) {
+        return FontLoader.loadTrueType(this, resource, size, linearFilter);
+    }
+
+    public Font loadTrueType(String internalPath, int size, boolean linearFilter) {
+        return FontLoader.loadTrueType(this, internalPath, size, linearFilter);
+    }
+
 
 
     public void drawText(TextureBatch batch, String text, float x, float y) {
@@ -142,7 +212,7 @@ public class Font extends FontInfo implements Disposable {
     public float getTextHeight(String text) {
         float height = 0;
         for(GlyphSprite glyph: this.iterable(text)){
-            final float glyphMaxY = Math.abs(glyph.getY() + super.descent + glyph.getHeight()) - super.descent;
+            final float glyphMaxY = Math.abs(glyph.getY() + descent + glyph.getHeight()) - descent;
             height = Math.max(height, glyphMaxY);
         }
         return height;

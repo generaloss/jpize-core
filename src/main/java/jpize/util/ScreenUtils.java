@@ -44,8 +44,8 @@ public class ScreenUtils{
         saveScreenshot(resource.extension(), resource.outStream());
     }
 
-    public static void saveScreenshot(String filepath){
-        saveScreenshot(Resource.external(filepath));
+    public static void saveScreenshot(String internalPath){
+        saveScreenshot(Resource.external(internalPath));
     }
 
 }

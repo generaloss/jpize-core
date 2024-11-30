@@ -1,6 +1,5 @@
-package jpize.util.font.glyph;
+package jpize.util.font;
 
-import jpize.util.font.Font;
 import jpize.util.math.vector.Vec2f;
 import jpize.util.region.Region;
 import jpize.gl.texture.Texture2D;
@@ -22,7 +21,7 @@ public class GlyphSprite {
     public GlyphSprite(Font font, Glyph glyph, float cursorX, float cursorY, Vec2f scale, int lineY) {
         this.code   = glyph.code;
         this.region = glyph.region;
-        this.page   = font.getPages().get(glyph.pageID);
+        this.page   = font.pages().get(glyph.pageID);
 
         this.position = new Vec2f(cursorX, cursorY).add(glyph.offset).mul(scale);
         this.size = glyph.size.copy().mul(scale);

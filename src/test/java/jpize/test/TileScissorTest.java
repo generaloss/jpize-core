@@ -6,7 +6,6 @@ import jpize.gl.Gl;
 import jpize.gl.tesselation.GlScissor;
 import jpize.gl.texture.Texture2D;
 import jpize.util.font.Font;
-import jpize.util.font.FontLoader;
 import jpize.util.mesh.TextureBatch;
 import jpize.glfw.Glfw;
 import jpize.glfw.init.GlfwPlatform;
@@ -39,7 +38,7 @@ public class TileScissorTest extends JpizeApplication {
             .fill(0, 0, 20, 20,  1D, 1D, 1D, 1D)
             .fill(0, 0, 17, 17,  0.4D, 0.4D, 0.4D, 1D)
         );
-        this.font = FontLoader.loadDefault();
+        this.font = new Font().loadDefault();
         this.scissor = new GlScissor<String>()
             .put("scissor_1",  100, 100, camera.getWidth() - 200, camera.getHeight() - 200);
     }

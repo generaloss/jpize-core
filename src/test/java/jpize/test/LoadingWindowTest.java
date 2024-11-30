@@ -5,7 +5,6 @@ import jpize.app.JpizeApplication;
 import jpize.glfw.Glfw;
 import jpize.glfw.init.GlfwPlatform;
 import jpize.util.font.Font;
-import jpize.util.font.FontLoader;
 import jpize.gl.texture.Texture2D;
 import jpize.util.mesh.TextureBatch;
 
@@ -16,7 +15,7 @@ public class LoadingWindowTest {
     private static class LoadingWindow extends JpizeApplication {
         TextureBatch batch = new TextureBatch();
         Texture2D bg = new Texture2D("/bg.png");
-        Font font = FontLoader.loadDefault();
+        Font font = new Font().loadDefault();
         public void init() {
             // show window because usually the window shows after init()
             Jpize.window().show();

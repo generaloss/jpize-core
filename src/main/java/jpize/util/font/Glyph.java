@@ -1,4 +1,4 @@
-package jpize.util.font.glyph;
+package jpize.util.font;
 
 import jpize.util.region.Region;
 import jpize.util.math.vector.Vec2f;

@@ -92,10 +92,10 @@ public class ContextBuilder {
         return this;
     }
 
-    public ContextBuilder icon(String... filepaths) {
-        if(filepaths == null || filepaths.length == 0)
+    public ContextBuilder icon(String... internalPaths) {
+        if(internalPaths == null || internalPaths.length == 0)
             return this;
-        this.icons = GlfwImage.loadArray(filepaths);
+        this.icons = GlfwImage.loadArray(internalPaths);
         return this;
     }
 

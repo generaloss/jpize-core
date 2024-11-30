@@ -66,9 +66,9 @@ batch.render();
 #### 3. Fonts:
 ``` java
 // load
-Font font = FontLoader.loadDefault();
-Font font = FontLoader.loadFnt(path_or_resource, linearFilter);
-Font font = FontLoader.loadTrueType(path_or_resource, size, charset, linearFilter);
+Font font = new Font().loadDefault();
+Font font = new Font().loadFnt(path_or_resource, linearFilter);
+Font font = new Font().loadTrueType(path_or_resource, size, charset, linearFilter);
 
 // options
 FontRenderOptions options = font.getRenderOptions();

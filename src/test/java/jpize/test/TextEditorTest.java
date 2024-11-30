@@ -14,7 +14,6 @@ import jpize.util.math.vector.Vec2f;
 import jpize.util.mesh.TextureBatch;
 import jpize.util.input.TextInput;
 import jpize.util.font.Font;
-import jpize.util.font.FontLoader;
 import jpize.util.math.Mathc;
 import jpize.util.math.Maths;
 import jpize.util.math.vector.Vec2i;
@@ -39,7 +38,7 @@ public class TextEditorTest extends JpizeApplication {
 
     public TextEditorTest() {
         this.input = new TextInput().enable().insert(Jpize.input().getClipboardString());
-        this.font = FontLoader.loadDefault();
+        this.font = new Font().loadDefault();
         this.renderOptions = font.getRenderOptions().setInvLineWrap(true);
         this.batch = new TextureBatch();
 
