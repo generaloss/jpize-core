@@ -69,9 +69,10 @@ class FontLoader {
                     // page path
                     final Path path = Path.of(resource.path());
                     if(path.getParent() != null){
-                        final String parentPath = Utils.osGeneralizePath(path.getParent().toString());
-                        pageRelativePath = Path.of(parentPath + "/" + pageRelativePath).normalize().toString();
+                        final Path pagePath = Path.of(path.getParent() + "/" + pageRelativePath);
+                        pageRelativePath = pagePath.normalize().toString();
                     }
+                    pageRelativePath = Utils.osGeneralizePath(pageRelativePath);
 
                     // page resource
                     final Resource pageResource;
