@@ -12,8 +12,9 @@ import jpize.gl.vertex.GlVertAttr;
 import jpize.glfw.Glfw;
 import jpize.glfw.init.GlfwPlatform;
 import jpize.glfw.input.Key;
-import jpize.glfw.monitor.GlfwMonitor;
 import jpize.util.camera.PerspectiveCamera;
+import jpize.util.font.Font;
+import jpize.util.font.FontLoader;
 import jpize.util.input.MotionInput;
 import jpize.util.input.RotationInput;
 import jpize.util.math.EulerAngles;
@@ -29,6 +30,7 @@ public class Camera3DTest extends JpizeApplication {
     private final Mesh mesh;
     private final Skybox skybox;
     private final Shader shader;
+    private final Font font;
 
     public Camera3DTest() {
         Gl.clearColor(0.5F, 0.6F, 0.7F);
@@ -64,12 +66,8 @@ public class Camera3DTest extends JpizeApplication {
             "/skybox_positive_x.png", "/skybox_negative_x.png",
             "/skybox_positive_y.png", "/skybox_negative_y.png",
             "/skybox_positive_z.png", "/skybox_negative_z.png");
-    }
 
-    @Override
-    public void init() {
-        Glfw.init();
-        GlfwMonitor monitor = GlfwMonitor.getPrimaryMonitor();
+        this.font = FontLoader.loadDefault();
     }
 
     private final Texture2D texture_floor = new Texture2D("/cube4.png");
@@ -97,6 +95,8 @@ public class Camera3DTest extends JpizeApplication {
         shader.uniform("u_combined", camera.getCombined());
         shader.uniform("u_texture", texture_floor);
         mesh.render();
+
+        font.drawText("Test text", 100, 100);
     }
 
     @Override
@@ -109,6 +109,7 @@ public class Camera3DTest extends JpizeApplication {
         shader.dispose();
         mesh.dispose();
         skybox.dispose();
+        font.dispose();
     }
 
 
