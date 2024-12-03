@@ -26,7 +26,7 @@ public class TextTest extends JpizeApplication {
         this.options = font.getRenderOptions();
 
         options.setInvLineWrap(true);
-        options.scale().set(5F, 5F);
+        options.scale().set(4F);
         options.advanceFactor().set(1F, 1F);
         options.color().set(1F, 0.8F, 1F);
         options.setRotation(0F);

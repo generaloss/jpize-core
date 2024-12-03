@@ -14,9 +14,11 @@ import jpize.glfw.init.GlfwPlatform;
 import jpize.glfw.input.Key;
 import jpize.util.camera.PerspectiveCamera;
 import jpize.util.font.Font;
+import jpize.util.font.FontRenderOptions;
 import jpize.util.input.MotionInput;
 import jpize.util.input.RotationInput;
 import jpize.util.math.EulerAngles;
+import jpize.util.math.vector.Vec2f;
 import jpize.util.mesh.Mesh;
 import jpize.util.res.Resource;
 
@@ -66,7 +68,7 @@ public class Camera3DTest extends JpizeApplication {
             "/skybox_positive_y.png", "/skybox_negative_y.png",
             "/skybox_positive_z.png", "/skybox_negative_z.png");
 
-        this.font = new Font().loadDefault();
+        this.font = new Font().loadDefault(64, false);
     }
 
     private final Texture2D texture_floor = new Texture2D("/cube4.png");
@@ -90,13 +92,26 @@ public class Camera3DTest extends JpizeApplication {
         Gl.clearColorDepthBuffers();
 
         Gl.enable(GlTarget.DEPTH_TEST);
+
+        // skybox
         skybox.render(camera);
+        // quad
         shader.bind();
         shader.uniform("u_combined", camera.getCombined());
         shader.uniform("u_texture", texture_floor);
-        mesh.render();
+        //mesh.render();
+        // 3D text
+        final FontRenderOptions options = font.getRenderOptions();
+        options.scale().set(0.05);
+        options.matrix()
+                .identity()
+                .rotateX(-(Vec2f.angleDeg(-camera.getZ(), camera.getY()) + 90))
+                .rotateY(-(Vec2f.angleDeg(camera.getX(), camera.getZ()) + 90));
+        font.drawText(camera, "Test text 3D", -font.getTextWidth("Test text 3D") * 0.5F, 1F, 0F);
 
         Gl.disable(GlTarget.DEPTH_TEST);
+
+        options.scale().set(1);
         font.drawText("Test text", 100, 100);
     }
 

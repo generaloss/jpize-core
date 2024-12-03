@@ -1,6 +1,7 @@
 package jpize.util.font;
 
 import jpize.util.color.Color;
+import jpize.util.math.matrix.Matrix4f;
 import jpize.util.math.vector.Vec2f;
 
 public class FontRenderOptions {
@@ -20,7 +21,7 @@ public class FontRenderOptions {
 
 
     private float rotation;
-    
+
     public float getRotation() {
         return rotation;
     }
@@ -28,6 +29,13 @@ public class FontRenderOptions {
     public FontRenderOptions setRotation(float rotation) {
         this.rotation = rotation;
         return this;
+    }
+    
+    
+    private final Matrix4f matrix = new Matrix4f();
+    
+    public Matrix4f matrix() {
+        return matrix;
     }
 
 

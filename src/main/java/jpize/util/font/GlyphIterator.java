@@ -15,9 +15,9 @@ public class GlyphIterator implements Iterator<GlyphSprite> {
     private float prevIncreaseX;
     private float prevIncreaseY;
 
-    public GlyphIterator(Font font, FontRenderOptions options, CharSequence text) {
+    public GlyphIterator(Font font, CharSequence text) {
         this.font = font;
-        this.options = options;
+        this.options = font.getRenderOptions();
         this.text = this.removeUnknownGlyphs(text);
         this.cursorY = -(options.isInvLineWrap() ? font.getLineAdvance() : 0);
     }

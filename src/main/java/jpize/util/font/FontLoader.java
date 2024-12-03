@@ -27,12 +27,20 @@ class FontLoader {
     }
 
 
-    public static Font loadDefault(Font font, int size, Charset charset, boolean linearFilter) {
+    public static Font loadDefault(Font font, int size, boolean linearFilter, Charset charset) {
         return FontLoader.loadTrueType(font, "/font/droidsans.ttf", size, charset, linearFilter);
     }
 
+    public static Font loadDefault(Font font, int size, boolean linearFilter) {
+        return loadDefault(font, size, linearFilter, Charset.DEFAULT_ENG_RUS);
+    }
+
+    public static Font loadDefault(Font font, int size) {
+        return loadDefault(font, size, true);
+    }
+
     public static Font loadDefault(Font font) {
-        return loadDefault(font, 64, Charset.DEFAULT_ENG_RUS, true);
+        return loadDefault(font, 64);
     }
 
     public static Font loadDefaultBold(Font font, int size, Charset charset, boolean linearFilter) {

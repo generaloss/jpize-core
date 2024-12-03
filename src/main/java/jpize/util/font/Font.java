@@ -1,6 +1,7 @@
 package jpize.util.font;
 
 import jpize.gl.texture.Texture2D;
+import jpize.util.camera.Camera3D;
 import jpize.util.mesh.TextureBatch;
 import jpize.util.math.vector.Vec2f;
 import jpize.util.Disposable;
@@ -99,8 +100,16 @@ public class Font implements Disposable {
     }
 
 
-    public Font loadDefault(int size, Charset charset, boolean linearFilter) {
-        return FontLoader.loadDefault(this, size, charset, linearFilter);
+    public Font loadDefault(int size, boolean linearFilter, Charset charset) {
+        return FontLoader.loadDefault(this, size, linearFilter, charset);
+    }
+
+    public Font loadDefault(int size, boolean linearFilter) {
+        return FontLoader.loadDefault(this, size, linearFilter);
+    }
+
+    public Font loadDefault(int size) {
+        return FontLoader.loadDefault(this, size);
     }
 
     public Font loadDefault() {
@@ -142,15 +151,19 @@ public class Font implements Disposable {
 
 
     public void drawText(TextureBatch batch, String text, float x, float y) {
-        TextRenderer.render(this, renderOptions, batch, text, x, y);
+        TextRenderer.render(this, batch, text, x, y);
     }
 
     public void drawText(String text, float x, float y) {
-        TextRenderer.render(this, renderOptions, text, x, y);
+        TextRenderer.render(this, text, x, y);
+    }
+
+    public void drawText(Camera3D camera, String text, float x, float y, float z) {
+        TextRenderer.render(this, camera, text, x, y, z);
     }
 
     public Iterable<GlyphSprite> iterable(String text) {
-        final GlyphIterator iterator = new GlyphIterator(this, renderOptions, text);
+        final GlyphIterator iterator = new GlyphIterator(this, text);
         return () -> iterator;
     }
 
