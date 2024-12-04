@@ -1,8 +1,8 @@
 #version 330
 
-in vec2 uv;
+in vec2 f_uv;
 uniform sampler2D u_texture;
 
 void main() {
-    gl_FragColor = texture(u_texture, uv);
+    gl_FragColor = texture(u_texture, f_uv);
 }

@@ -1,13 +1,13 @@
 #version 330
 
-in vec2 uv;
+in vec2 f_uv;
 
 uniform sampler2D u_frame;
 uniform int u_axis;
 uniform float u_radius;
 
 void main() {
-    vec2 p = uv;
+    vec2 p = f_uv;
     vec2 res = textureSize(u_frame, 0.0);
 
     float x,y, rr = u_radius * u_radius, d, w, w0;

@@ -28,7 +28,7 @@ class FontLoader {
 
 
     public static Font loadDefault(Font font, int size, boolean linearFilter, Charset charset) {
-        return FontLoader.loadTrueType(font, "/font/droidsans.ttf", size, charset, linearFilter);
+        return FontLoader.loadTTF(font, "/font/droidsans.ttf", size, linearFilter, charset);
     }
 
     public static Font loadDefault(Font font, int size, boolean linearFilter) {
@@ -43,16 +43,24 @@ class FontLoader {
         return loadDefault(font, 64);
     }
 
-    public static Font loadDefaultBold(Font font, int size, Charset charset, boolean linearFilter) {
-        return FontLoader.loadTrueType(font, "/font/droidsans-bold.ttf", size, charset, linearFilter);
+    public static Font loadDefaultBold(Font font, int size, boolean linearFilter, Charset charset) {
+        return FontLoader.loadTTF(font, "/font/droidsans-bold.ttf", size, linearFilter, charset);
+    }
+
+    public static Font loadDefaultBold(Font font, int size, boolean linearFilter) {
+        return loadDefaultBold(font, size, linearFilter, Charset.DEFAULT_ENG_RUS);
+    }
+
+    public static Font loadDefaultBold(Font font, int size) {
+        return loadDefaultBold(font, size, true);
     }
 
     public static Font loadDefaultBold(Font font) {
-        return loadDefaultBold(font, 64, Charset.DEFAULT_ENG_RUS, true);
+        return loadDefaultBold(font, 64);
     }
 
 
-    public static Font loadFnt(Font font, Resource resource, boolean linearFilter) {
+    public static Font loadFNT(Font font, Resource resource, boolean linearFilter) {
         // clear font
         font.pages().clear();
         font.glyphs().clear();
@@ -138,15 +146,16 @@ class FontLoader {
         return font;
     }
 
-    public static Font loadFnt(Font font, String internalPath, boolean linearFilter) {
-        return loadFnt(font, Resource.internal(internalPath), linearFilter);
+    public static Font loadFNT(Font font, String internalPath, boolean linearFilter) {
+        return loadFNT(font, Resource.internal(internalPath), linearFilter);
     }
 
 
-    public static Font loadTrueType(Font font, Resource resource, int size, Charset charset, boolean linearFilter) {
+    public static Font loadTTF(Font font, Resource resource, int size, boolean linearFilter, Charset charset) {
         // clear font
         font.pages().clear();
         font.glyphs().clear();
+        font.setHeight(size);
 
         // pixmap
         final int quadSize = size * Mathc.ceil(Math.sqrt(charset.size())) * 2;
@@ -218,16 +227,16 @@ class FontLoader {
         return font;
     }
 
-    public static Font loadTrueType(Font font, String internalPath, int size, Charset charset, boolean linearFilter) {
-        return loadTrueType(font, Resource.internal(internalPath), size, charset, linearFilter);
+    public static Font loadTTF(Font font, String internalPath, int size, boolean linearFilter, Charset charset) {
+        return loadTTF(font, Resource.internal(internalPath), size, linearFilter, charset);
     }
 
-    public static Font loadTrueType(Font font, Resource resource, int size, boolean linearFilter) {
-        return loadTrueType(font, resource, size, Charset.DEFAULT, linearFilter);
+    public static Font loadTTF(Font font, Resource resource, int size, boolean linearFilter) {
+        return loadTTF(font, resource, size, linearFilter, Charset.DEFAULT);
     }
 
-    public static Font loadTrueType(Font font, String internalPath, int size, boolean linearFilter) {
-        return loadTrueType(font, internalPath, size, Charset.DEFAULT, linearFilter);
+    public static Font loadTTF(Font font, String internalPath, int size, boolean linearFilter) {
+        return loadTTF(font, internalPath, size, linearFilter, Charset.DEFAULT);
     }
 
 }
