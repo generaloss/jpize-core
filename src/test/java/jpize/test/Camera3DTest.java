@@ -105,8 +105,8 @@ public class Camera3DTest extends JpizeApplication {
         options.scale().set(0.05);
         options.matrix()
                 .identity()
-                .rotateX(-(Vec2f.angleDeg(-camera.getZ(), camera.getY()) + 90))
-                .rotateY(-(Vec2f.angleDeg(camera.getX(), camera.getZ()) + 90));
+                .rotateX(-Vec2f.angleBetweenDeg(1F, 0F, camera.getZ(), camera.getY()))
+                ;//.rotateY(-(Vec2f.angleDeg(camera.getX(), camera.getZ()) + 90));
         font.drawText(camera, "Test text 3D", -font.getTextWidth("Test text 3D") * 0.5F, 1F, 0F);
 
         Gl.disable(GlTarget.DEPTH_TEST);
