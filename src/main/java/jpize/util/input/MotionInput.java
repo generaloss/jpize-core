@@ -28,7 +28,7 @@ public class MotionInput {
         if(Key.SPACE.pressed()) motion.add(UP);
         if(Key.LSHIFT.pressed()) motion.sub(UP);
 
-        directedMotion.set(motion).rotateY(yawDegrees);
+        directedMotion.set(motion).rotateY(-yawDegrees);
     }
 
     public Vec3i getMotion() {

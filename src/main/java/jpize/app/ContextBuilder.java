@@ -33,6 +33,7 @@ public class ContextBuilder {
         Glfw.windowHint(GlfwWindowHint.DECORATED, decorated);
         Glfw.windowHint(GlfwWindowHint.RESIZABLE, resizable);
         Glfw.windowHint(GlfwWindowHint.SAMPLES, samples);
+        Glfw.windowHint(GlfwWindowHint.FOCUS_ON_SHOW, focusOnShow);
         // window
         final GlfwWindow window = new GlfwWindow(width, height, title, monitor, shared);
         // icon
@@ -117,6 +118,13 @@ public class ContextBuilder {
 
     public ContextBuilder samples(int samples) {
         this.samples = samples;
+        return this;
+    }
+
+    private boolean focusOnShow = false;
+
+    public ContextBuilder focusOnShow(boolean focusOnShow) {
+        this.focusOnShow = focusOnShow;
         return this;
     }
 

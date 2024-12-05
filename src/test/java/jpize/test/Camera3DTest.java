@@ -18,17 +18,13 @@ import jpize.util.font.FontRenderOptions;
 import jpize.util.input.MotionInput;
 import jpize.util.input.RotationInput;
 import jpize.util.math.EulerAngles;
-import jpize.util.math.Quaternion;
-import jpize.util.math.matrix.Matrix4;
 import jpize.util.math.vector.Vec2f;
-import jpize.util.math.vector.Vec3f;
 import jpize.util.mesh.Mesh;
 import jpize.util.res.Resource;
 
 public class Camera3DTest extends JpizeApplication {
 
     private final PerspectiveCamera camera;
-    private final EulerAngles rotation;
     private final RotationInput rotInput;
     private final MotionInput motionInput;
     private final Mesh mesh;
@@ -42,12 +38,9 @@ public class Camera3DTest extends JpizeApplication {
 
         this.camera = new PerspectiveCamera(0.1F, 100F, 90F);
 
-        this.rotation = new EulerAngles();
-
-        this.rotInput = new RotationInput(rotation);
+        this.rotInput = new RotationInput(new EulerAngles());
         this.rotInput.setClampPitch(false);
-        this.rotInput.setSpeed(0.4F);
-        this.rotInput.lockNextInput();
+        this.rotInput.setSpeed(0.1F);
 
         this.motionInput = new MotionInput();
 
@@ -78,13 +71,13 @@ public class Camera3DTest extends JpizeApplication {
 
     @Override
     public void update() {
-        motionInput.update(rotation.yaw);
-        camera.rotation().setRotation(rotation);
+        camera.rotation().setRotation(rotInput.getTarget());
+        motionInput.update(camera.rotation().getYaw());
         camera.position().add(motionInput.getMotionDirected().mul(Jpize.getDeltaTime() * 10));
         camera.update();
 
         if(Key.F11.down()) {
-            rotInput.lockNextInput();
+            rotInput.lockInputs();
             Jpize.window().toggleFullscreen();
         }
         if(Key.ESCAPE.down()) Jpize.exit();
@@ -107,8 +100,8 @@ public class Camera3DTest extends JpizeApplication {
         final FontRenderOptions options = font.getRenderOptions();
         options.scale().set(0.2);
 
-        float angleY = Vec2f.angleDeg(camera.getX(), camera.getZ()) + 90;
-        float angleX = Vec2f.angleBetweenDeg(Vec2f.len(camera.getX(), camera.getZ()), camera.getY(), 0, 1) - 90;
+        float angleY = Vec2f.angle(camera.getX(), camera.getZ()) + 90;
+        float angleX = Vec2f.angleBetween(Vec2f.len(camera.getX(), camera.getZ()), camera.getY(), 0, 1) - 90;
         float angleZ = camera.rotation().getYaw();
 
         options.matrix().setRotationXYZ(angleX, angleY, 0);

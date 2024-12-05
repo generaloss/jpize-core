@@ -4,35 +4,30 @@ import jpize.glfw.Glfw;
 import jpize.glfw.callback.GlfwCursorPosCallback;
 import jpize.glfw.input.GlfwCursorMode;
 import jpize.glfw.input.GlfwInput;
-import jpize.glfw.monitor.GlfwMonitor;
-import jpize.glfw.window.GlfwAttrib;
 import jpize.glfw.window.GlfwWindow;
 import jpize.util.math.EulerAngles;
 import jpize.util.math.Maths;
 
 public class RotationInput {
 
-    private static final float SPEED_MULTIPLIER = 10F / GlfwMonitor.getPrimaryMonitor().getVerticalDPI();
-
     private EulerAngles target;
     private float yaw, pitch;
-    private boolean lockNextInput;
+    private int lockInputs;
 
     private boolean mirrorHorizontal, mirrorVertical;
     private float speed, smoothness;
     private boolean clampPitch;
     private boolean enabled;
-    private final GlfwCursorPosCallback posCallback;
+    private final GlfwCursorPosCallback cursorCallback;
 
     private float prevX, prevY;
 
     public RotationInput(EulerAngles target, boolean enabled) {
-        this.target = target;
-        this.lockNextInput = false;
-        this.speed = 1F;
-        this.smoothness = 0F;
-        this.clampPitch = true;
-        this.posCallback = this::onCursorPos;
+        this.cursorCallback = this::onCursorCallback;
+        this.setTarget(target);
+        this.lockInputs();
+        this.setSpeed(1F);
+        this.setClampPitch(true);
         this.setEnabled(enabled);
     }
 
@@ -50,35 +45,33 @@ public class RotationInput {
     }
 
 
-    private void onCursorPos(GlfwWindow window, float x, float y) {
-        final float dx = (x - prevX);
-        final float dy = (y - prevY);
-
+    private void onCursorCallback(GlfwWindow window, float x, float y) {
         final GlfwInput input = window.getInput();
-        this.setCursorPosCentered(window, input);
+        final float dx = (input.getCursorX() - prevX);
+        final float dy = (input.getCursorNativeY() - prevY);
+        this.centerCursor(window, input);
         prevX = input.getCursorX();
-        prevY = input.getCursorY();
+        prevY = input.getCursorNativeY();
 
-        if(GlfwWindow.getCurrentContext().getAttrib(GlfwAttrib.FOCUSED) && enabled){
-            if(!lockNextInput){
-                final float invSmoothness = (1F - smoothness);
+        if(lockInputs < 1){
+            final float invSmoothness = (1F - smoothness);
 
-                yaw   -= SPEED_MULTIPLIER * speed * Maths.sigFlag(mirrorHorizontal) * dx;
-                pitch -= SPEED_MULTIPLIER * speed * Maths.sigFlag(mirrorVertical  ) * dy;
-                if(clampPitch)
-                    pitch = Maths.clamp(pitch, -90F, 90F);
+            yaw   += dx * speed * Maths.sigFlag(mirrorHorizontal);
+            pitch += dy * speed * Maths.sigFlag(mirrorVertical  );
+            if(clampPitch)
+                pitch = Maths.clamp(pitch, -90F, 90F);
 
-                target.yaw   += (  yaw - target.yaw  ) * invSmoothness;
-                target.pitch += (pitch - target.pitch) * invSmoothness;
-                if(clampPitch)
-                    target.clampPitch();
-            }
-            lockNextInput = false;
+            target.yaw   += (  yaw - target.yaw  ) * invSmoothness;
+            target.pitch += (pitch - target.pitch) * invSmoothness;
+            if(clampPitch)
+                target.clampPitch();
+        }else{
+            lockInputs--;
         }
     }
 
-    private void setCursorPosCentered(GlfwWindow window, GlfwInput input) {
-        input.setCursorPos(window.getWidth() * 0.5, window.getHeight() * 0.5);
+    private void centerCursor(GlfwWindow window, GlfwInput input) {
+        input.setCursorPos(window.getWidth() * 0.5D, window.getHeight() * 0.5D);
     }
 
 
@@ -87,14 +80,17 @@ public class RotationInput {
 
         final GlfwWindow window = GlfwWindow.getCurrentContext();
         final GlfwInput input = window.getInput();
-        // input mode
+
         input.setInputModeCursor(enabled ? GlfwCursorMode.HIDDEN : GlfwCursorMode.NORMAL);
         if(Glfw.rawMouseMotionSupported())
             input.setInputModeRawMouseMotion(enabled);
-        this.setCursorPosCentered(window, input);
-        // callback
-        if(enabled) window.getCallbacks().addCursorPosCallback(posCallback);
-        else window.getCallbacks().removeCursorPosCallback(posCallback);
+
+        if(enabled){
+            this.centerCursor(window, input);
+            window.getCallbacks().addCursorPosCallback(cursorCallback);
+        }else{
+            window.getCallbacks().removeCursorPosCallback(cursorCallback);
+        }
     }
 
     public void toggleEnabled() {
@@ -158,8 +154,12 @@ public class RotationInput {
     }
 
 
-    public void lockNextInput() {
-        lockNextInput = true;
+    public void lockInputs(int count) {
+        lockInputs = count;
+    }
+
+    public void lockInputs() {
+        this.lockInputs(10);
     }
     
 }
