@@ -4,7 +4,7 @@
 
     <groupId>io.github.generaloss</groupId>
     <artifactId>jpize-core</artifactId>
-    <version>24.11.5.2.0501</version>
+    <version>24.12.1</version>
     <name>jpize-core</name>
 
     <description>opengl graphics library</description>
@@ -119,7 +119,7 @@
         <dependency>
             <groupId>io.github.generaloss</groupId>
             <artifactId>jpize-utils</artifactId>
-            <version>24.11.5.05</version>
+            <version>24.12.1</version>
         </dependency>
         <!-- lwjgl -->
         <dependency><groupId>org.lwjgl</groupId><artifactId>lwjgl</artifactId></dependency>
