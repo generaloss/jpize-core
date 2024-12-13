@@ -4,7 +4,7 @@
 
     <groupId>io.github.generaloss</groupId>
     <artifactId>jpize-core</artifactId>
-    <version>24.12.2</version>
+    <version>24.12.3</version>
     <name>jpize-core</name>
 
     <description>opengl graphics library</description>
@@ -18,7 +18,8 @@
 
     <developers>
         <developer>
-            <name>generaloss</name>
+            <id>generaloss</id>
+            <name>Pavel Vladimirovich</name>
             <email>generaloss@proton.me</email>
         </developer>
     </developers>
@@ -119,7 +120,7 @@
         <dependency>
             <groupId>io.github.generaloss</groupId>
             <artifactId>jpize-utils</artifactId>
-            <version>24.12.2</version>
+            <version>24.12.3</version>
         </dependency>
         <!-- lwjgl -->
         <dependency><groupId>org.lwjgl</groupId><artifactId>lwjgl</artifactId></dependency>
