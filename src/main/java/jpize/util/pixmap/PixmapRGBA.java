@@ -3,6 +3,8 @@ package jpize.util.pixmap;
 import jpize.gl.texture.GlInternalFormat;
 import jpize.util.color.Color;
 import jpize.util.color.AbstractColor;
+import jpize.util.math.Maths;
+import jpize.util.math.vector.Vec2f;
 
 import java.nio.ByteBuffer;
 import java.util.function.BiConsumer;
@@ -11,8 +13,9 @@ public class PixmapRGBA extends Pixmap {
 
     private boolean blending;
 
-    private Color dst_tryBlend_color1;
-    private Color dst_tryBlend_dst;
+    private Color tmp_blendColor1;
+    private Color tmp_blendDst;
+    private Color tmp_colorizeColor;
     private final Color tmp_colorArg = new Color();
 
     public PixmapRGBA(ByteBuffer buffer, int width, int height) {
@@ -30,9 +33,9 @@ public class PixmapRGBA extends Pixmap {
 
     public PixmapRGBA enableBlending() {
         this.blending = true;
-        if(dst_tryBlend_color1 == null){
-            dst_tryBlend_color1 = new Color();
-            dst_tryBlend_dst = new Color();
+        if(tmp_blendColor1 == null){
+            tmp_blendColor1 = new Color();
+            tmp_blendDst = new Color();
         }
         return this;
     }
@@ -51,9 +54,9 @@ public class PixmapRGBA extends Pixmap {
         if(!blending)
             return color;
 
-        this.getPixel(dst_tryBlend_color1, x, y);
-        Color.blend(dst_tryBlend_dst, dst_tryBlend_color1, color);
-        return dst_tryBlend_dst;
+        this.getPixel(tmp_blendColor1, x, y);
+        Color.blend(tmp_blendDst, tmp_blendColor1, color);
+        return tmp_blendDst;
     }
 
 
@@ -270,55 +273,223 @@ public class PixmapRGBA extends Pixmap {
     }
 
 
-    /*public int samplePixel(double x, double y) {
+    public PixmapRGBA samplePixel(Color dst, double x, double y) {
+        return this.getPixel(dst, (int) (x * width), (int) (y * height));
+    }
+
+    public int samplePixelRGBA(double x, double y) {
+        return this.getPixelRGBA((int) (x * width), (int) (y * height));
+    }
+
+    public int samplePixelARGB(double x, double y) {
+        return this.getPixelARGB((int) (x * width), (int) (y * height));
+    }
+
+    public int samplePixelABGR(double x, double y) {
         return this.getPixelABGR((int) (x * width), (int) (y * height));
     }
 
-    public PixmapRGBA samplePixel(Color dst, double x, double y) {
-        return this.getPixel(dst, (int) (x * width), (int) (y * height));
-    }*/
+
+    public PixmapRGBA drawLine(int beginX, int beginY, int endX, int endY, AbstractColor color) {
+        final int dx = (endX - beginX);
+        final int dy = (endY - beginY);
+
+        final float steps = Math.max(Math.abs(dx), Math.abs(dy));
+        final float increaseX = (dx / steps);
+        final float increaseY = (dy / steps);
+
+        float x = beginX;
+        float y = beginY;
+
+        for(int i = 0; i <= steps; i++) {
+            this.setPixel(Maths.round(x), Maths.round(y), color);
+
+            x += increaseX;
+            y += increaseY;
+        }
+        return this;
+    }
+
+    public PixmapRGBA drawLine(int beginX, int beginY, int endX, int endY, float red, float green, float blue, float alpha) {
+        tmp_colorArg.set(red, green, blue, alpha);
+        return this.drawLine(beginX, beginY, endX, endY, tmp_colorArg);
+    }
+
+    public PixmapRGBA drawLine(int beginX, int beginY, int endX, int endY, double red, double green, double blue, double alpha) {
+        tmp_colorArg.set(red, green, blue, alpha);
+        return this.drawLine(beginX, beginY, endX, endY, tmp_colorArg);
+    }
+
+    public PixmapRGBA drawLinei(int beginX, int beginY, int endX, int endY, int red, int green, int blue, int alpha) {
+        tmp_colorArg.seti(red, green, blue, alpha);
+        return this.drawLine(beginX, beginY, endX, endY, tmp_colorArg);
+    }
+
+    public PixmapRGBA drawLine(int beginX, int beginY, int endX, int endY, float red, float green, float blue) {
+        tmp_colorArg.set(red, green, blue);
+        return this.drawLine(beginX, beginY, endX, endY, tmp_colorArg);
+    }
+
+    public PixmapRGBA drawLine(int beginX, int beginY, int endX, int endY, double red, double green, double blue) {
+        tmp_colorArg.set(red, green, blue);
+        return this.drawLine(beginX, beginY, endX, endY, tmp_colorArg);
+    }
+
+    public PixmapRGBA drawLinei(int beginX, int beginY, int endX, int endY, int red, int green, int blue) {
+        tmp_colorArg.seti(red, green, blue);
+        return this.drawLine(beginX, beginY, endX, endY, tmp_colorArg);
+    }
+
+    public PixmapRGBA drawLineRGB(int beginX, int beginY, int endX, int endY, int color) {
+        tmp_colorArg.setRGB(color);
+        return this.drawLine(beginX, beginY, endX, endY, tmp_colorArg);
+    }
+
+    public PixmapRGBA drawLineRGBA(int beginX, int beginY, int endX, int endY, int color) {
+        tmp_colorArg.setRGBA(color);
+        return this.drawLine(beginX, beginY, endX, endY, tmp_colorArg);
+    }
+
+    public PixmapRGBA drawLineARGB(int beginX, int beginY, int endX, int endY, int color) {
+        tmp_colorArg.setARGB(color);
+        return this.drawLine(beginX, beginY, endX, endY, tmp_colorArg);
+    }
 
 
-    // public PixmapRGBA drawLine(int beginX, int beginY, int endX, int endY, double r, double g, double b, double a) {
-    //     final Vec2d vec = new Vec2d(endX - beginX, endY - beginY);
-    //     final double angle = Math.atan2(vec.y, vec.x);
-    //     final float offsetX = Mathc.cos(angle);
-    //     final float offsetY = Mathc.sin(angle);
+    public PixmapRGBA drawDottedLine(int beginX, int beginY, int endX, int endY, double lineLength, AbstractColor color) {
+        final int dx = (endX - beginX);
+        final int dy = (endY - beginY);
 
-    //     float x = beginX;
-    //     float y = beginY;
-    //     float length = 0;
+        final float steps = Math.max(Math.abs(dx), Math.abs(dy));
+        final float increaseX = (dx / steps);
+        final float increaseY = (dy / steps);
+        final float increaseLength = Vec2f.len(increaseX, increaseY);
 
-    //     while(length < vec.len()){
-    //         this.setPixel(Maths.round(x), Maths.round(y), r, g, b, a);
+        float x = beginX;
+        float y = beginY;
+        float length = 0;
 
-    //         x += offsetX;
-    //         y += offsetY;
-    //         length++;
-    //     }
-    //     return this;
-    // }
+        for(int i = 0; i <= steps; i++) {
+            if(length % lineLength < lineLength * 0.5F)
+                this.setPixel(Maths.round(x), Maths.round(y), color);
 
-    // public PixmapRGBA drawDottedLine(int beginX, int beginY, int endX, int endY, double lineLength, double r, double g, double b, double a) {
-    //     final Vec2d vec = new Vec2d(endX - beginX, endY - beginY);
-    //     final double angle = Math.atan2(vec.y, vec.x);
-    //     final float offsetX = Mathc.cos(angle);
-    //     final float offsetY = Mathc.sin(angle);
+            x += increaseX;
+            y += increaseY;
+            length += increaseLength;
+        }
+        return this;
+    }
 
-    //     float x = beginX;
-    //     float y = beginY;
-    //     float length = 0;
+    public PixmapRGBA drawDottedLine(int beginX, int beginY, int endX, int endY, double lineLength, float red, float green, float blue, float alpha) {
+        tmp_colorArg.set(red, green, blue, alpha);
+        return this.drawDottedLine(beginX, beginY, endX, endY, lineLength, tmp_colorArg);
+    }
 
-    //     while(length < vec.len()){
-    //         if(Math.sin(length / lineLength) >= 0)
-    //             this.setPixel(Maths.round(x), Maths.round(y), r, g, b, a);
+    public PixmapRGBA drawDottedLine(int beginX, int beginY, int endX, int endY, double lineLength, double red, double green, double blue, double alpha) {
+        tmp_colorArg.set(red, green, blue, alpha);
+        return this.drawDottedLine(beginX, beginY, endX, endY, lineLength, tmp_colorArg);
+    }
 
-    //         x += offsetX;
-    //         y += offsetY;
-    //         length++;
-    //     }
-    //     return this;
-    // }
+    public PixmapRGBA drawDottedLinei(int beginX, int beginY, int endX, int endY, double lineLength, int red, int green, int blue, int alpha) {
+        tmp_colorArg.seti(red, green, blue, alpha);
+        return this.drawDottedLine(beginX, beginY, endX, endY, lineLength, tmp_colorArg);
+    }
+
+    public PixmapRGBA drawDottedLine(int beginX, int beginY, int endX, int endY, double lineLength, float red, float green, float blue) {
+        tmp_colorArg.set(red, green, blue);
+        return this.drawDottedLine(beginX, beginY, endX, endY, lineLength, tmp_colorArg);
+    }
+
+    public PixmapRGBA drawDottedLine(int beginX, int beginY, int endX, int endY, double lineLength, double red, double green, double blue) {
+        tmp_colorArg.set(red, green, blue);
+        return this.drawDottedLine(beginX, beginY, endX, endY, lineLength, tmp_colorArg);
+    }
+
+    public PixmapRGBA drawDottedLinei(int beginX, int beginY, int endX, int endY, double lineLength, int red, int green, int blue) {
+        tmp_colorArg.seti(red, green, blue);
+        return this.drawDottedLine(beginX, beginY, endX, endY, lineLength, tmp_colorArg);
+    }
+
+    public PixmapRGBA drawDottedLineRGB(int beginX, int beginY, int endX, int endY, double lineLength, int color) {
+        tmp_colorArg.setRGB(color);
+        return this.drawDottedLine(beginX, beginY, endX, endY, lineLength, tmp_colorArg);
+    }
+
+    public PixmapRGBA drawDottedLineRGBA(int beginX, int beginY, int endX, int endY, double lineLength, int color) {
+        tmp_colorArg.setRGBA(color);
+        return this.drawDottedLine(beginX, beginY, endX, endY, lineLength, tmp_colorArg);
+    }
+
+    public PixmapRGBA drawDottedLineARGB(int beginX, int beginY, int endX, int endY, double lineLength, int color) {
+        tmp_colorArg.setARGB(color);
+        return this.drawDottedLine(beginX, beginY, endX, endY, lineLength, tmp_colorArg);
+    }
+
+
+    public PixmapRGBA colorize(AbstractColor color) {
+        if(tmp_colorizeColor == null)
+            tmp_colorizeColor = new Color();
+
+        for(int x = 0; x < width; x++){
+            for(int y = 0; y < height; y++){
+
+                this.getPixel(tmp_colorizeColor, x, y);
+                tmp_colorizeColor.set(
+                    (tmp_colorizeColor.red   * 0.2126F + color.getRed()  ) * 0.5F,
+                    (tmp_colorizeColor.green * 0.7152F + color.getGreen()) * 0.5F,
+                    (tmp_colorizeColor.blue  * 0.0722F + color.getBlue() ) * 0.5F
+                );
+                this.setPixel(x, y, tmp_colorizeColor);
+            }
+        }
+        return this;
+    }
+
+    public PixmapRGBA colorize(float red, float green, float blue, float alpha) {
+        tmp_colorArg.set(red, green, blue, alpha);
+        return this.colorize(tmp_colorArg);
+    }
+
+    public PixmapRGBA colorize(double red, double green, double blue, double alpha) {
+        tmp_colorArg.set(red, green, blue, alpha);
+        return this.colorize(tmp_colorArg);
+    }
+
+    public PixmapRGBA colorizei(int red, int green, int blue, int alpha) {
+        tmp_colorArg.seti(red, green, blue, alpha);
+        return this.colorize(tmp_colorArg);
+    }
+
+    public PixmapRGBA colorize(float red, float green, float blue) {
+        tmp_colorArg.set(red, green, blue);
+        return this.colorize(tmp_colorArg);
+    }
+
+    public PixmapRGBA colorize(double red, double green, double blue) {
+        tmp_colorArg.set(red, green, blue);
+        return this.colorize(tmp_colorArg);
+    }
+
+    public PixmapRGBA colorizei(int red, int green, int blue) {
+        tmp_colorArg.seti(red, green, blue);
+        return this.colorize(tmp_colorArg);
+    }
+
+    public PixmapRGBA colorizeRGB(int color) {
+        tmp_colorArg.setRGB(color);
+        return this.colorize(tmp_colorArg);
+    }
+
+    public PixmapRGBA colorizeRGBA(int color) {
+        tmp_colorArg.setRGBA(color);
+        return this.colorize(tmp_colorArg);
+    }
+
+    public PixmapRGBA colorizeARGB(int color) {
+        tmp_colorArg.setARGB(color);
+        return this.colorize(tmp_colorArg);
+    }
+
 
     // public PixmapRGBA drawPixmap(PixmapRGBA pixmap) {
     //     if(pixmap == null)
@@ -373,71 +544,30 @@ public class PixmapRGBA extends Pixmap {
     //     return drawPixmap(pixmap, scale, scale);
     // }
 
-    // public PixmapRGBA drawPixmap(PixmapRGBA pixmap, int x, int y, double scaleX, double scaleY) {
-    //     if(pixmap == null || scaleX <= 0 || scaleY <= 0)
-    //         return this;
+    public PixmapRGBA drawPixmap(PixmapRGBA pixmap, int x, int y, double scaleX, double scaleY) {
+        if(pixmap == null || scaleX <= 0 || scaleY <= 0)
+            return this;
 
-    //     final double widthScaled  = (x + pixmap.width  * scaleX);
-    //     final double heightScaled = (y + pixmap.height * scaleY);
-    //     final double iEnd = (widthScaled  > width  ? width  : widthScaled);
-    //     final double jEnd = (heightScaled > height ? height : heightScaled);
+        final double widthScaled  = (x + pixmap.width  * scaleX);
+        final double heightScaled = (y + pixmap.height * scaleY);
+        final double iEnd = (widthScaled  > width  ? width  : widthScaled);
+        final double jEnd = (heightScaled > height ? height : heightScaled);
 
-    //     for(int i = Math.max(0, x); i < iEnd; i++){
-    //         for(int j = Math.max(0, y); j < jEnd; j++){
-    //             final int px = (int) ((i - x) / scaleX);
-    //             final int py = (int) ((j - y) / scaleY);
+        for(int i = Math.max(0, x); i < iEnd; i++){
+            for(int j = Math.max(0, y); j < jEnd; j++){
+                final int px = (int) ((i - x) / scaleX);
+                final int py = (int) ((j - y) / scaleY);
 
-    //             this.setPixel(i, j, pixmap.getPixelColor(px, py));
-    //         }
-    //     }
-    //     return this;
-    // }
+                final Color dstColor = new Color();
+                pixmap.getPixel(dstColor, px, py);
+                this.setPixel(i, j, dstColor);
+            }
+        }
+        return this;
+    }
 
     // public PixmapRGBA drawPixmap(PixmapRGBA pixmap, int x, int y, double scale) {
     //     return this.drawPixmap(pixmap, x, y, scale, scale);
-    // }
-
-    // public PixmapRGBA colorize(double r, double g, double b) {
-    //     final Color color = new Color();
-    //     for(int x = 0; x < width; x++){
-    //         for(int y = 0; y < height; y++){
-    //             this.getPixelColor(x, y, color);
-    //             color.set(
-    //                 (color.red   * 0.2126 + r) / 2,
-    //                 (color.green * 0.7152 + g) / 2,
-    //                 (color.blue  * 0.0722 + b) / 2
-    //             );
-
-    //             this.setPixel(x, y, color);
-    //         }
-    //     }
-    //     return this;
-    // }
-
-
-    // public PixmapRGBA getMipmapped() {
-    //     final PixmapRGBA pixmap = new PixmapRGBA(width / 2, height / 2);
-    
-    //     for(int x = 0; x < pixmap.width; x++)
-    //         for(int y = 0; y < pixmap.height; y++)
-    //             pixmap.setPixel(x, y, 1, 0, 0, 1F);
-
-    //     return pixmap;
-    // }
-
-
-    // public ByteBuffer getAlphaMultipliedBuffer() {
-    //     final ByteBuffer buffer = this.buffer.duplicate();
-
-    //     for(int i = 0; i < buffer.capacity(); i += 4){
-    //         final float alpha = (buffer.get(i + 3) & 0xFF) / 255F;
-
-    //         buffer.put(i    , (byte) ((int) ((buffer.get(i    ) & 0xFF) * alpha) & 0xFF));
-    //         buffer.put(i + 1, (byte) ((int) ((buffer.get(i + 1) & 0xFF) * alpha) & 0xFF));
-    //         buffer.put(i + 2, (byte) ((int) ((buffer.get(i + 2) & 0xFF) * alpha) & 0xFF));
-    //     }
-
-    //     return buffer;
     // }
 
 

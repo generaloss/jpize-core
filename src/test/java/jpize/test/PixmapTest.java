@@ -3,25 +3,31 @@ package jpize.test;
 import jpize.app.Jpize;
 import jpize.app.JpizeApplication;
 import jpize.gl.Gl;
-import jpize.gl.texture.Texture2D;
 import jpize.glfw.Glfw;
 import jpize.glfw.init.GlfwPlatform;
 import jpize.util.pixmap.Canvas;
+import jpize.util.pixmap.PixmapIO;
+import jpize.util.pixmap.PixmapRGBA;
 
 public class PixmapTest extends JpizeApplication {
 
-    private Texture2D texture;
+    private PixmapRGBA texture;
     private Canvas canvas;
 
     public void init() {
+        this.texture = PixmapIO.load("/accented.png");
         this.canvas = new Canvas();
     }
 
     @Override
     public void render() {
         Gl.clearColorBuffer();
-        canvas.clearRGBA(0x44AAFFAA);
-        canvas.fillRGBA(0, 0, (int) Jpize.getX(), (int) Jpize.input().getCursorNativeY(), 0xFF0000AA);
+        canvas.clear();
+        canvas.drawPixmap(texture, 0, 0, (float) canvas.getWidth() / texture.getWidth(), (float) canvas.getHeight() / texture.getHeight());
+        final int x = (int) Jpize.getX();
+        final int y = (int) Jpize.input().getCursorNativeY();
+        canvas.drawLineRGBA(Jpize.getWidth() / 2, Jpize.getHeight() / 2, x, y, 0xFFFFFFFF);
+        canvas.colorize(1F, 0F, 0F);
         canvas.render();
     }
 
@@ -32,6 +38,7 @@ public class PixmapTest extends JpizeApplication {
 
     @Override
     public void dispose() {
+        texture.dispose();
         canvas.dispose();
     }
 
