@@ -15,7 +15,7 @@ public class PixmapIO {
         final int height = image.getHeight();
         
         final PixmapRGBA pixmap = new PixmapRGBA(width, height);
-        final ByteBuffer buffer = pixmap.getBuffer();
+        final ByteBuffer buffer = pixmap.buffer();
         
         final int[] pixels = new int[width * height];
         image.getRGB(0, 0, width, height, pixels, 0, width);
@@ -106,11 +106,13 @@ public class PixmapIO {
     
     
     public static void save(PixmapRGBA pixmap, OutputStream stream) {
-        final BufferedImage bufferedImage = new BufferedImage(pixmap.getWidth(), pixmap.getHeight(), BufferedImage.TYPE_INT_ARGB);
+        final BufferedImage bufferedImage = new BufferedImage(
+                pixmap.getWidth(), pixmap.getHeight(), BufferedImage.TYPE_INT_ARGB);
+
         for(int x = 0; x < pixmap.getWidth(); x++)
             for(int y = 0; y < pixmap.getHeight(); y++)
-                bufferedImage.setRGB(x, y, pixmap.getPixelBGRA(x, y));
-        
+                bufferedImage.setRGB(x, y, pixmap.getPixelARGB(x, y));
+
         try{
             ImageIO.write(bufferedImage, "PNG", stream);
         }catch(IOException e){

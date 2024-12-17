@@ -21,17 +21,17 @@ public class PixmapA extends Pixmap {
 
 
     public float getPixelValue(int x, int y) {
-        return (buffer.get(getIndex(x, y)) & 0xFF) / 255F;
+        return (buffer.get(getChannelIndex(x, y)) & 0xFF) / 255F;
     }
 
     public void setPixel(int x, int y, double value) {
-        if(!super.outOfBounds(x, y))
-            buffer.put(getIndex(x, y), Maths.toByteRange(value));
+        if(!super.isOutOfBounds(x, y))
+            buffer.put(getChannelIndex(x, y), Maths.toByteRange(value));
     }
 
     public void setPixel(int x, int y, int value) {
-        if(!super.outOfBounds(x, y))
-            buffer.put(getIndex(x, y), (byte) (value & 0xFF));
+        if(!super.isOutOfBounds(x, y))
+            buffer.put(getChannelIndex(x, y), (byte) (value & 0xFF));
     }
 
 

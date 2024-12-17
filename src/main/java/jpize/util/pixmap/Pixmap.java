@@ -25,9 +25,10 @@ public abstract class Pixmap implements Disposable {
         this(MemoryUtil.memCalloc(width * height * channels), width, height, channels);
     }
 
-    public ByteBuffer getBuffer() {
+    public ByteBuffer buffer() {
         return buffer;
     }
+
 
     public int getWidth() {
         return width;
@@ -52,16 +53,22 @@ public abstract class Pixmap implements Disposable {
             buffer.put(i + channel, (byte) (value * 255));
     }
 
-    public boolean outOfBounds(int x, int y) {
-        return x < 0 || y < 0 || x >= width || y >= height;
+    public boolean isOutOfBounds(int x, int y) {
+        return (x < 0 || y < 0 || x >= width || y >= height);
+    }
+
+
+    public int getPositionIndex(int x, int y) {
+        return (y * width + x);
+    }
+
+    public int getChannelIndex(int positionIndex, int channel) {
+        return (positionIndex * channels + channel);
     }
 
     public int getIndex(int x, int y, int channel) {
-        return (y * width + x) * channels + channel;
-    }
-
-    public int getIndex(int x, int y) {
-        return (y * width + x) * channels;
+        final int positionIndex = this.getPositionIndex(x, y);
+        return this.getChannelIndex(positionIndex, channel);
     }
 
 

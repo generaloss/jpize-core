@@ -68,7 +68,7 @@ public class TextureCubemap extends GlTexture {
 
     public void setImage(GlCubemapTarget target, int level, Pixmap pixmap) {
         this.bind();
-        super.glSetImage2D(target.imageTarget, level, pixmap.getWidth(), pixmap.getHeight(), pixmap.getFormat(), GlType.UNSIGNED_BYTE, pixmap.getBuffer());
+        super.glSetImage2D(target.imageTarget, level, pixmap.getWidth(), pixmap.getHeight(), pixmap.getFormat(), GlType.UNSIGNED_BYTE, pixmap.buffer());
     }
 
     public void setImage(GlCubemapTarget target, Pixmap pixmap) {

@@ -9,7 +9,7 @@ import jpize.util.Disposable;
 import jpize.util.array.FloatList;
 import jpize.util.camera.Camera;
 import jpize.util.color.Color;
-import jpize.util.color.ImmutableColor;
+import jpize.util.color.AbstractColor;
 import jpize.util.math.matrix.Matrix4f;
 import jpize.util.math.vector.Vec2f;
 import jpize.util.res.Resource;
@@ -95,24 +95,17 @@ public class VertexBatch implements Disposable {
         size++;
     }
 
-    public void addVertex(float x, float y, Color color) {
-        this.addVertex(x, y, color.r, color.g, color.b, color.a);
-    }
-
-    public void addVertex(float x, float y, ImmutableColor color) {
-        this.addVertex(x, y, color.r, color.g, color.b, color.a);
+    public void addVertex(float x, float y, AbstractColor color) {
+        this.addVertex(x, y, color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha());
     }
 
     public void addVertex(Vec2f position, float r, float g, float b, float a) {
         this.addVertex(position.x, position.y, r, g, b, a);
     }
 
-    public void addVertex(Vec2f position, Color color) {
-        this.addVertex(position.x, position.y, color.r, color.g, color.b, color.a);
-    }
-
-    public void addVertex(Vec2f position, ImmutableColor color) {
-        this.addVertex(position.x, position.y, color.r, color.g, color.b, color.a);
+    public void addVertex(Vec2f position, AbstractColor color) {
+        this.addVertex(position.x, position.y,
+                color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha());
     }
 
 
@@ -129,27 +122,35 @@ public class VertexBatch implements Disposable {
     }
 
     public void resetColor() {
-        color.set(1F, 1F, 1F, 1F);
+        color.reset();
     }
 
-    public void setColor(Color color) {
+    public void setColor(AbstractColor color) {
         this.color.set(color);
     }
 
-    public void setColor(ImmutableColor color) {
+    public void setColor(double red, double green, double blue, double alpha) {
+        color.set(red, green, blue, alpha);
+    }
+
+    public void setColori(int red, int green, int blue, int alpha) {
+        color.seti(red, green, blue, alpha);
+    }
+
+    public void setColor(double red, double green, double blue) {
+        color.set(red, green, blue);
+    }
+
+    public void setColori(int red, int green, int blue) {
+        color.seti(red, green, blue);
+    }
+
+    public void setColor(int color) {
         this.color.set(color);
     }
 
-    public void setColor(double r, double g, double b, double a) {
-        color.set(r, g, b, a);
-    }
-
-    public void setColor(double r, double g, double b) {
-        color.set(r, g, b, 1F);
-    }
-
-    public void setAlpha(double a) {
-        color.setA(a);
+    public void setAlpha(double alpha) {
+        color.setAlpha(alpha);
     }
 
 

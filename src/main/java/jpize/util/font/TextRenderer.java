@@ -141,10 +141,10 @@ public class TextRenderer {
             final float v1 = region.v1();
             final float v2 = region.v2();
 
-            final float r = color.r;
-            final float g = color.g;
-            final float b = color.b;
-            final float a = color.a;
+            final float r = color.getRed();
+            final float g = color.getGreen();
+            final float b = color.getBlue();
+            final float a = color.getAlpha();
 
             final Vec2f vertex1 = new Vec2f(0F,    height).mulMat3(transformMatrix).add(renderPos);
             final Vec2f vertex2 = new Vec2f(0F,    0F    ).mulMat3(transformMatrix).add(renderPos);
@@ -254,10 +254,10 @@ public class TextRenderer {
             final float v1 = region.v1();
             final float v2 = region.v2();
 
-            final float r = color.r;
-            final float g = color.g;
-            final float b = color.b;
-            final float a = color.a;
+            final float r = color.getRed();
+            final float g = color.getGreen();
+            final float b = color.getBlue();
+            final float a = color.getAlpha();
 
             final Vec3f vertex1 = new Vec3f(0F,    height).mulMat4(options.matrix()).mulMat3(shearMatrix).add(renderPos);
             final Vec3f vertex2 = new Vec3f(0F,    0F    ).mulMat4(options.matrix()).mulMat3(shearMatrix).add(renderPos);

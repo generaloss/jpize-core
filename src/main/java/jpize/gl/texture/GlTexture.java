@@ -60,7 +60,7 @@ public abstract class GlTexture extends GlObject {
     }
 
     protected void glSetImage2D(GlTexImg2DTarget target, int level, Pixmap pixmap) {
-        this.glSetImage2D(target, level, pixmap.getWidth(), pixmap.getHeight(), pixmap.getFormat(), GlType.UNSIGNED_BYTE, pixmap.getBuffer());
+        this.glSetImage2D(target, level, pixmap.getWidth(), pixmap.getHeight(), pixmap.getFormat(), GlType.UNSIGNED_BYTE, pixmap.buffer());
     }
 
 
@@ -84,11 +84,30 @@ public abstract class GlTexture extends GlObject {
     }
 
     protected void glSetSubImage3D(GlTexImg3DTarget target, int level, int width, int height, int depth, int offsetX, int offsetY, int offsetZ, Pixmap pixmap) {
-        final ByteBuffer pixels = (pixmap == null ? null : pixmap.getBuffer());
+        final ByteBuffer pixels = (pixmap == null ? null : pixmap.buffer());
         final GlBaseFormat format = (pixmap == null ? GlBaseFormat.RGBA : pixmap.getFormat().base);
         this.glSetSubImage3D(target, level, width, height, depth, offsetX, offsetY, offsetZ, format, GlType.UNSIGNED_BYTE, pixels);
     }
 
+
+    protected void glGetImage(GlTexTarget target, int level, GlBaseFormat format, GlType type, ByteBuffer pixels) {
+        GL46.glGetTexImage(target.value, level, format.value, type.value, pixels);
+    }
+
+    protected void glGetImage(GlTexTarget target, int level, int width, int height, Pixmap pixmap) {
+        pixmap.resize(width, height);
+        this.glGetImage(target, level, pixmap.getFormat().base, GlType.UNSIGNED_BYTE, pixmap.buffer());
+    }
+
+
+    protected void glGetSubImage(int level, int x, int y, int z, int width, int height, int depth, GlBaseFormat format, GlType type, ByteBuffer pixels) {
+        GL46.glGetTextureSubImage(ID, level, x, y, z, width, height, depth, format.value, type.value, pixels);
+    }
+
+    protected void glGetSubImage(int level, int x, int y, int width, int height, Pixmap pixmap) {
+        pixmap.resize(width, height);
+        this.glGetSubImage(level, x, y, 0, width, height, 1, pixmap.getFormat().base, GlType.UNSIGNED_BYTE, pixmap.buffer());
+    }
 
 
     protected int glGetWidth(GlTexLevelTarget target, int level) {

@@ -137,6 +137,28 @@ public class Texture2D extends GlTexture {
         return this.setDefaultImage(width, height, 0);
     }
 
+
+    public Texture2D getImage(int level, Pixmap pixmap) {
+        this.bind();
+        final int width = this.getWidth(level);
+        final int height = this.getHeight(level);
+        super.glGetImage(TARGET, level, width, height, pixmap);
+        return this;
+    }
+
+    public Texture2D getImage(Pixmap pixmap) {
+        return this.getImage(0, pixmap);
+    }
+
+    public Texture2D getSubImage(int level, int x, int y, int width, int height, Pixmap pixmap) {
+        super.glGetSubImage(level, x, y, width, height, pixmap);
+        return this;
+    }
+
+    public Texture2D getSubImage(int x, int y, int width, int height, Pixmap pixmap) {
+        return this.getSubImage(0, x, y, width, height, pixmap);
+    }
+
     // params
 
 

@@ -52,7 +52,7 @@ public class GlfwImage {
     }
 
     public GlfwImage set(PixmapRGBA pixmap) {
-        this.image.set(pixmap.getWidth(), pixmap.getHeight(), pixmap.getBuffer());
+        this.image.set(pixmap.getWidth(), pixmap.getHeight(), pixmap.buffer());
         return this;
     }
 

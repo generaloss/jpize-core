@@ -34,9 +34,7 @@ public class TileScissorTest extends JpizeApplication {
         this.camera = new OrthographicCameraCentered();
         this.camera.setScale(scale);
         this.texture = new Texture2D(
-            new PixmapRGBA(21, 21)
-            .fill(0, 0, 20, 20,  1D, 1D, 1D, 1D)
-            .fill(0, 0, 17, 17,  0.4D, 0.4D, 0.4D, 1D)
+            new PixmapRGBA(21, 21).fillRGB(0, 0, 20, 20, 0xFFFFFF).fillRGB(0, 0, 17, 17, 0x666666)
         );
         this.font = new Font().loadDefault();
         this.scissor = new GlScissor<String>()

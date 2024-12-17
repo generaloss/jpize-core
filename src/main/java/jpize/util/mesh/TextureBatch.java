@@ -6,14 +6,14 @@ import jpize.gl.texture.Texture2D;
 import jpize.gl.texture.TextureUtils;
 import jpize.util.Disposable;
 import jpize.util.array.FloatList;
-import jpize.util.color.ImmutableColor;
+import jpize.util.color.Color;
+import jpize.util.color.AbstractColor;
 import jpize.util.region.Region;
 import jpize.util.region.TextureRegion;
 import jpize.util.res.Resource;
 import jpize.gl.type.GlType;
 import jpize.gl.vertex.GlVertAttr;
 import jpize.util.camera.Camera;
-import jpize.util.color.Color;
 import jpize.util.math.matrix.Matrix3f;
 import jpize.util.math.matrix.Matrix4f;
 import jpize.util.math.vector.Vec2f;
@@ -143,12 +143,14 @@ public class TextureBatch implements Disposable {
         size++;
     }
 
-    public void draw(Texture2D texture, float x, float y, float width, float height, Color color) {
-        this.draw(texture, x, y, width, height, color.r, color.g, color.b, color.a);
+    public void draw(Texture2D texture, float x, float y, float width, float height, AbstractColor color) {
+        this.draw(texture, x, y, width, height,
+                color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha());
     }
 
     public void draw(Texture2D texture, float x, float y, float width, float height) {
-        this.draw(texture, x, y, width, height, color.r, color.g, color.b, color.a);
+        this.draw(texture, x, y, width, height,
+                color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha());
     }
 
 
@@ -168,11 +170,13 @@ public class TextureBatch implements Disposable {
     }
 
     public void draw(TextureRegion textureRegion, float x, float y, float width, float height, Color color) {
-        this.draw(textureRegion, x, y, width, height, color.r, color.g, color.b, color.a);
+        this.draw(textureRegion, x, y, width, height,
+                color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha());
     }
 
     public void draw(TextureRegion textureRegion, float x, float y, float width, float height) {
-        this.draw(textureRegion, x, y, width, height, color.r, color.g, color.b, color.a);
+        this.draw(textureRegion, x, y, width, height,
+                color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha());
     }
 
 
@@ -191,11 +195,13 @@ public class TextureBatch implements Disposable {
     }
 
     public void draw(Texture2D texture, Region region, float x, float y, float width, float height, Color color) {
-        this.draw(texture, region, x, y, width, height, color.r, color.g, color.b, color.a);
+        this.draw(texture, region, x, y, width, height,
+                color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha());
     }
 
     public void draw(Texture2D texture, Region region, float x, float y, float width, float height){
-        this.draw(texture, region, x, y, width, height, color.r, color.g, color.b, color.a);
+        this.draw(texture, region, x, y, width, height,
+                color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha());
     }
 
 
@@ -205,20 +211,24 @@ public class TextureBatch implements Disposable {
     }
 
     public void draw(TextureRegion textureRegion, Region region, float x, float y, float width, float height, Color color) {
-        this.draw(textureRegion, region, x, y, width, height, color.r, color.g, color.b, color.a);
+        this.draw(textureRegion, region, x, y, width, height,
+                color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha());
     }
 
     public void draw(TextureRegion textureRegion, Region region, float x, float y, float width, float height) {
-        this.draw(textureRegion, region, x, y, width, height, color.r, color.g, color.b, color.a);
+        this.draw(textureRegion, region, x, y, width, height,
+                color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha());
     }
 
 
     public void drawRect(float x, float y, float width, float height, double r, double g, double b, double a) {
-        this.draw(TextureUtils.whiteTexture(), x, y, width, height, (float) r, (float) g, (float) b, (float) a);
+        this.draw(TextureUtils.whiteTexture(), x, y, width, height,
+                (float) r, (float) g, (float) b, (float) a);
     }
 
     public void drawRect(float x, float y, float width, float height, Color color) {
-        this.drawRect(x, y, width, height, color.r, color.g, color.b, color.a);
+        this.drawRect(x, y, width, height, color.getRed(),
+                color.getGreen(), color.getBlue(), color.getAlpha());
     }
 
     public void drawRect(float x, float y, float width, float height, double r, double g, double b) {
@@ -234,32 +244,41 @@ public class TextureBatch implements Disposable {
         return size;
     }
 
+
     public Color color() {
         return color;
     }
 
     public void resetColor() {
-        color.set(1F, 1F, 1F, 1F);
+        color.reset();
     }
 
-    public void setColor(Color color) {
+    public void setColor(AbstractColor color) {
         this.color.set(color);
     }
 
-    public void setColor(ImmutableColor color) {
+    public void setColor(double red, double green, double blue, double alpha) {
+        color.set(red, green, blue, alpha);
+    }
+
+    public void setColori(int red, int green, int blue, int alpha) {
+        color.seti(red, green, blue, alpha);
+    }
+
+    public void setColor(double red, double green, double blue) {
+        color.set(red, green, blue);
+    }
+
+    public void setColori(int red, int green, int blue) {
+        color.seti(red, green, blue);
+    }
+
+    public void setColor(int color) {
         this.color.set(color);
     }
 
-    public void setColor(double r, double g, double b, double a) {
-        color.set(r, g, b, a);
-    }
-
-    public void setColor(double r, double g, double b) {
-        color.set(r, g, b, 1F);
-    }
-
-    public void setAlpha(double a) {
-        color.setA(a);
+    public void setAlpha(double alpha) {
+        color.setAlpha(alpha);
     }
 
 

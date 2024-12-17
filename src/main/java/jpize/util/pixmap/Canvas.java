@@ -1,7 +1,6 @@
-package jpize.util;
+package jpize.util.pixmap;
 
 import jpize.app.Jpize;
-import jpize.util.pixmap.PixmapRGBA;
 import jpize.gl.texture.Texture2D;
 import jpize.util.postprocess.ScreenQuadMesh;
 import jpize.util.postprocess.ScreenQuadShader;
@@ -12,6 +11,7 @@ public class Canvas extends PixmapRGBA {
 
     public Canvas() {
         super(Jpize.getWidth(), Jpize.getHeight());
+        super.enableBlending();
         this.frame = new Texture2D(this);
     }
 

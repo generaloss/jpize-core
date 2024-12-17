@@ -72,7 +72,7 @@ public class TextureAtlas<T> implements Disposable {
             final int imageWidth = image.pixmap.getWidth();
             final int imageHeight = image.pixmap.getHeight();
 
-            pixmap.drawPixmap(image.pixmap, x1, y1);
+            //! pixmap.drawPixmap(image.pixmap, x1, y1);
             if(fillPaddings)
                 fillPaddings(x1, y1, imageWidth, imageHeight);
 
@@ -87,29 +87,29 @@ public class TextureAtlas<T> implements Disposable {
         // left
         for(int p = 1; p <= paddingLeft; p++){
             for(int y = y1 - Math.min(p - 1, paddingBottom); y <= y2 + Math.min(p, paddingTop); y++){
-                final int color = pixmap.getPixelABGR(x1, Maths.clamp(y, y1, y2));
-                pixmap.setPixel(x1 - p, y, color);
+                final int color = pixmap.getPixelRGBA(x1, Maths.clamp(y, y1, y2));
+                pixmap.setPixelRGBA(x1 - p, y, color);
             }
         }
         // top
         for(int p = 1; p <= paddingTop; p++){
             for(int x = x1 - Math.min(p - 1, paddingLeft); x <= x2 + Math.min(p, paddingRight); x++){
-                final int color = pixmap.getPixelABGR(Maths.clamp(x, x1, x2), y2);
-                pixmap.setPixel(x, y2 + p, color);
+                final int color = pixmap.getPixelRGBA(Maths.clamp(x, x1, x2), y2);
+                pixmap.setPixelRGBA(x, y2 + p, color);
             }
         }
         // right
         for(int p = 1; p <= paddingRight; p++){
             for(int y = y1 - Math.min(p, paddingBottom); y <= y2 + Math.min(p - 1, paddingTop); y++){
-                final int color = pixmap.getPixelABGR(x2, Maths.clamp(y, y1, y2));
-                pixmap.setPixel(x2 + p, y, color);
+                final int color = pixmap.getPixelRGBA(x2, Maths.clamp(y, y1, y2));
+                pixmap.setPixelRGBA(x2 + p, y, color);
             }
         }
         // bottom
         for(int p = 1; p <= paddingBottom; p++){
             for(int x = x1 - Math.min(p, paddingLeft); x <= x2 + Math.min(p - 1, paddingRight); x++){
-                final int color = pixmap.getPixelABGR(Maths.clamp(x, x1, x2), y1);
-                pixmap.setPixel(x, y1 - p, color);
+                final int color = pixmap.getPixelRGBA(Maths.clamp(x, x1, x2), y1);
+                pixmap.setPixelRGBA(x, y1 - p, color);
             }
         }
     }

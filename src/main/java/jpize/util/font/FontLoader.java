@@ -165,7 +165,7 @@ class FontLoader {
         final PixmapA pixmap = new PixmapA(bitmapWidth, bitmapHeight);
         final ByteBuffer fontFileData = resource.readByteBuffer();
         final STBTTBakedChar.Buffer charData = STBTTBakedChar.malloc(charset.maxChar() + 1);
-        stbtt_BakeFontBitmap(fontFileData, size, pixmap.getBuffer(), bitmapWidth, bitmapHeight, charset.minChar(), charData);
+        stbtt_BakeFontBitmap(fontFileData, size, pixmap.buffer(), bitmapWidth, bitmapHeight, charset.minChar(), charData);
 
         // texture
         final Texture2D texture = new Texture2D()

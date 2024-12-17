@@ -7,6 +7,7 @@ import jpize.gl.tesselation.GlPolygonMode;
 import jpize.gl.texture.GlBlendFactor;
 import jpize.gl.texture.GlInternalFormat;
 import jpize.util.color.Color;
+import jpize.util.color.AbstractColor;
 import org.lwjgl.opengl.GL;
 import org.lwjgl.opengl.GLCapabilities;
 
@@ -17,6 +18,17 @@ import java.nio.IntBuffer;
 import static org.lwjgl.opengl.GL46.*;
 
 public class Gl {
+
+    public static GlError getError() {
+        return GlError.byValue(glGetError());
+    }
+
+    public static void checkError(){
+        final GlError error = getError();
+        if(error != GlError.NO_ERROR)
+            System.err.println("[GL] Error: " + error.description);
+    }
+
 
     public static boolean isEnabled(GlTarget target) {
         return glIsEnabled(target.value);
@@ -85,8 +97,8 @@ public class Gl {
         clearColor(grayscale, 1D);
     }
 
-    public static void clearColor(Color color) {
-        clearColor(color.r, color.g, color.b, color.a);
+    public static void clearColor(AbstractColor color) {
+        clearColor(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha());
     }
 
 

@@ -3,7 +3,7 @@ package jpize.gl.shader;
 import jpize.gl.texture.TextureCubemap;
 import jpize.gl.texture.Texture2D;
 import jpize.gl.texture.Texture2DArray;
-import jpize.util.color.Color;
+import jpize.util.color.AbstractColor;
 import jpize.util.math.matrix.Matrix3f;
 import jpize.util.math.matrix.Matrix4f;
 import jpize.util.math.vector.Vec2f;
@@ -177,8 +177,9 @@ public class Shader extends GlProgram {
         return this;
     }
 
-    public Shader uniform(String uniformName, Color color) {
-        super.uniform(this.getUniformLocation(uniformName), color.r, color.g, color.b, color.a);
+    public Shader uniform(String uniformName, AbstractColor color) {
+        super.uniform(this.getUniformLocation(uniformName),
+                color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha());
         return this;
     }
 
