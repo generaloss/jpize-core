@@ -12,6 +12,8 @@ import java.util.function.BiConsumer;
 public class PixmapRGBA extends Pixmap {
 
     private boolean blending;
+    private Color tmp_color_1;
+    private Color tmp_color_2;
 
     // CONSTRUCTOR
     public PixmapRGBA(ByteBuffer buffer, int width, int height) {
@@ -29,76 +31,76 @@ public class PixmapRGBA extends Pixmap {
 
     // SET PIXEL
     public PixmapRGBA setPixel(int x, int y, int color) {
-        if(outOfBounds(x, y))
+        if(super.outOfBounds(x, y))
             return this;
 
-        final Color blendColor = blend(
-            getPixelColor(x, y),
+        final Color blendColor = Color.blend(
+            this.getPixelColor(x, y),
             new Color(color >> 24 & 0xFF, color >> 16 & 0xFF, color >> 8 & 0xFF, color & 0xFF)
         );
-        buffer.put(getIndex(x, y, 0), (byte) ((color >> 24) & 0xFF));
-        buffer.put(getIndex(x, y, 1), (byte) ((color >> 16) & 0xFF));
-        buffer.put(getIndex(x, y, 2), (byte) ((color >> 8) & 0xFF));
-        buffer.put(getIndex(x, y, 3), (byte) ((color) & 0xFF));
+        buffer.put(this.getIndex(x, y, 0), (byte) ((color >> 24) & 0xFF));
+        buffer.put(this.getIndex(x, y, 1), (byte) ((color >> 16) & 0xFF));
+        buffer.put(this.getIndex(x, y, 2), (byte) ((color >> 8) & 0xFF));
+        buffer.put(this.getIndex(x, y, 3), (byte) ((color) & 0xFF));
         return this;
     }
 
     public PixmapRGBA setPixel(int x, int y, Color color) {
-        if(outOfBounds(x, y))
+        if(super.outOfBounds(x, y))
             return this;
 
-        final Color blendColor = blend(getPixelColor(x, y), color);
-        buffer.put(getIndex(x, y, 0), (byte) ((int) (blendColor.r * 255) & 0xFF));
-        buffer.put(getIndex(x, y, 1), (byte) ((int) (blendColor.g * 255) & 0xFF));
-        buffer.put(getIndex(x, y, 2), (byte) ((int) (blendColor.b * 255) & 0xFF));
-        buffer.put(getIndex(x, y, 3), (byte) ((int) (blendColor.a * 255) & 0xFF));
+        final Color blendColor = this.blend(this.getPixelColor(tmp_color_1, x, y), color);
+        buffer.put(this.getIndex(x, y, 0), (byte) ((int) (blendColor.red   * 255) & 0xFF));
+        buffer.put(this.getIndex(x, y, 1), (byte) ((int) (blendColor.green * 255) & 0xFF));
+        buffer.put(this.getIndex(x, y, 2), (byte) ((int) (blendColor.blue  * 255) & 0xFF));
+        buffer.put(this.getIndex(x, y, 3), (byte) ((int) (blendColor.alpha * 255) & 0xFF));
         return this;
     }
 
     public PixmapRGBA setPixel(int x, int y, double r, double g, double b, double a) {
-        if(outOfBounds(x, y))
+        if(super.outOfBounds(x, y))
             return this;
 
-        Color blendColor = blend(getPixelColor(x, y), new Color(r, g, b, a));
-        buffer.put(getIndex(x, y, 0), (byte) ((int) (blendColor.r * 255) & 0xFF));
-        buffer.put(getIndex(x, y, 1), (byte) ((int) (blendColor.g * 255) & 0xFF));
-        buffer.put(getIndex(x, y, 2), (byte) ((int) (blendColor.b * 255) & 0xFF));
-        buffer.put(getIndex(x, y, 3), (byte) ((int) (blendColor.a * 255) & 0xFF));
+        final Color blendColor = this.blend(this.getPixelColor(x, y), new Color(r, g, b, a));
+        buffer.put(this.getIndex(x, y, 0), (byte) ((int) (blendColor.red   * 255) & 0xFF));
+        buffer.put(this.getIndex(x, y, 1), (byte) ((int) (blendColor.green * 255) & 0xFF));
+        buffer.put(this.getIndex(x, y, 2), (byte) ((int) (blendColor.blue  * 255) & 0xFF));
+        buffer.put(this.getIndex(x, y, 3), (byte) ((int) (blendColor.alpha * 255) & 0xFF));
         return this;
     }
 
     public PixmapRGBA setPixel(int x, int y, int r, int g, int b, int a) {
-        if(outOfBounds(x, y))
+        if(super.outOfBounds(x, y))
             return this;
 
-        Color blendColor = blend(getPixelColor(x, y), new Color(r, g, b, a));
-        buffer.put(getIndex(x, y, 0), (byte) (r & 0xFF));
-        buffer.put(getIndex(x, y, 1), (byte) (g & 0xFF));
-        buffer.put(getIndex(x, y, 2), (byte) (b & 0xFF));
-        buffer.put(getIndex(x, y, 3), (byte) (a & 0xFF));
+        final Color blendColor = this.blend(this.getPixelColor(x, y), new Color(r, g, b, a));
+        buffer.put(this.getIndex(x, y, 0), (byte) (r & 0xFF));
+        buffer.put(this.getIndex(x, y, 1), (byte) (g & 0xFF));
+        buffer.put(this.getIndex(x, y, 2), (byte) (b & 0xFF));
+        buffer.put(this.getIndex(x, y, 3), (byte) (a & 0xFF));
         return this;
     }
 
     public PixmapRGBA setPixel(int x, int y, double r, double g, double b) {
-        if(outOfBounds(x, y))
+        if(super.outOfBounds(x, y))
             return this;
 
-        Color blendColor = blend(getPixelColor(x, y), new Color(r, g, b));
-        buffer.put(getIndex(x, y, 0), (byte) ((int) (blendColor.r * 255) & 0xFF));
-        buffer.put(getIndex(x, y, 1), (byte) ((int) (blendColor.g * 255) & 0xFF));
-        buffer.put(getIndex(x, y, 2), (byte) ((int) (blendColor.b * 255) & 0xFF));
+        final Color blendColor = this.blend(this.getPixelColor(x, y), new Color(r, g, b));
+        buffer.put(this.getIndex(x, y, 0), (byte) ((int) (blendColor.red   * 255) & 0xFF));
+        buffer.put(this.getIndex(x, y, 1), (byte) ((int) (blendColor.green * 255) & 0xFF));
+        buffer.put(this.getIndex(x, y, 2), (byte) ((int) (blendColor.blue  * 255) & 0xFF));
         buffer.put((byte) 255);
         return this;
     }
 
     public PixmapRGBA setPixel(int x, int y, int r, int g, int b) {
-        if(outOfBounds(x, y))
+        if(super.outOfBounds(x, y))
             return this;
 
-        Color blendColor = blend(getPixelColor(x, y), new Color(r, g, b));
-        buffer.put(getIndex(x, y, 0), (byte) (r & 0xFF));
-        buffer.put(getIndex(x, y, 1), (byte) (g & 0xFF));
-        buffer.put(getIndex(x, y, 2), (byte) (b & 0xFF));
+        final Color blendColor = this.blend(this.getPixelColor(x, y), new Color(r, g, b));
+        buffer.put(this.getIndex(x, y, 0), (byte) (r & 0xFF));
+        buffer.put(this.getIndex(x, y, 1), (byte) (g & 0xFF));
+        buffer.put(this.getIndex(x, y, 2), (byte) (b & 0xFF));
         buffer.put((byte) 255);
         return this;
     }
@@ -114,10 +116,10 @@ public class PixmapRGBA extends Pixmap {
             return new Color(color2);
 
         color1.set(
-            color1.r * (1 - color2.a) + color2.r * (color2.a),
-            color1.g * (1 - color2.a) + color2.g * (color2.a),
-            color1.b * (1 - color2.a) + color2.b * (color2.a),
-            Math.max(color1.a, color2.a)
+            color1.red   * (1 - color2.alpha) + color2.red   * (color2.alpha),
+            color1.green * (1 - color2.alpha) + color2.green * (color2.alpha),
+            color1.blue  * (1 - color2.alpha) + color2.blue  * (color2.alpha),
+            Math.max(color1.alpha, color2.alpha)
         );
 
         return color1;
@@ -128,10 +130,10 @@ public class PixmapRGBA extends Pixmap {
             return new Color(r2, g2, b2, a2);
 
         color1.set(
-            color1.r * (1 - a2) + r2 * (a2),
-            color1.g * (1 - a2) + g2 * (a2),
-            color1.b * (1 - a2) + b2 * (a2),
-            Math.max(color1.a, a2)
+            color1.red   * (1 - a2) + r2 * (a2),
+            color1.green * (1 - a2) + g2 * (a2),
+            color1.blue  * (1 - a2) + b2 * (a2),
+            Math.max(color1.alpha, a2)
         );
 
         return color1;
@@ -151,75 +153,75 @@ public class PixmapRGBA extends Pixmap {
 
     // GET PIXEL
     public int getPixelABGR(int x, int y) {
-        int r = buffer.get(getIndex(x, y, 0)) & 0xFF;
-        int g = buffer.get(getIndex(x, y, 1)) & 0xFF;
-        int b = buffer.get(getIndex(x, y, 2)) & 0xFF;
-        int a = buffer.get(getIndex(x, y, 3)) & 0xFF;
-        return r << 24 | g << 16 | b << 8 | a;
+        final int r = buffer.get(this.getIndex(x, y, 0)) & 0xFF;
+        final int g = buffer.get(this.getIndex(x, y, 1)) & 0xFF;
+        final int b = buffer.get(this.getIndex(x, y, 2)) & 0xFF;
+        final int a = buffer.get(this.getIndex(x, y, 3)) & 0xFF;
+        return (a | b << 8 | g << 16 | r << 24);
     }
     
     public int getPixelBGRA(int x, int y) {
-        int r = buffer.get(getIndex(x, y, 0)) & 0xFF;
-        int g = buffer.get(getIndex(x, y, 1)) & 0xFF;
-        int b = buffer.get(getIndex(x, y, 2)) & 0xFF;
-        int a = buffer.get(getIndex(x, y, 3)) & 0xFF;
-        return a << 24 | r << 16 | g << 8 | b;
+        final int r = buffer.get(this.getIndex(x, y, 0)) & 0xFF;
+        final int g = buffer.get(this.getIndex(x, y, 1)) & 0xFF;
+        final int b = buffer.get(this.getIndex(x, y, 2)) & 0xFF;
+        final int a = buffer.get(this.getIndex(x, y, 3)) & 0xFF;
+        return (b | g << 8 | r << 16 | a << 24);
     }
     
     public int getPixelRGBA(int x, int y) {
-        int r = buffer.get(getIndex(x, y, 0)) & 0xFF;
-        int g = buffer.get(getIndex(x, y, 1)) & 0xFF;
-        int b = buffer.get(getIndex(x, y, 2)) & 0xFF;
-        int a = buffer.get(getIndex(x, y, 3)) & 0xFF;
-        return a << 24 | b << 16 | g << 8 | r;
+        final int r = buffer.get(this.getIndex(x, y, 0)) & 0xFF;
+        final int g = buffer.get(this.getIndex(x, y, 1)) & 0xFF;
+        final int b = buffer.get(this.getIndex(x, y, 2)) & 0xFF;
+        final int a = buffer.get(this.getIndex(x, y, 3)) & 0xFF;
+        return (r | g << 8 | b << 16 | a << 24);
     }
 
-    public Color getPixelColor(int x, int y) {
-        return new Color(
-            (buffer.get(getIndex(x, y, 0)) & 0xFF) / 255F,
-            (buffer.get(getIndex(x, y, 1)) & 0xFF) / 255F,
-            (buffer.get(getIndex(x, y, 2)) & 0xFF) / 255F,
-            (buffer.get(getIndex(x, y, 3)) & 0xFF) / 255F
+    public Color getPixelColor(Color dst, int x, int y) {
+        return dst.seti(
+            (buffer.get(this.getIndex(x, y, 0)) & 0xFF),
+            (buffer.get(this.getIndex(x, y, 1)) & 0xFF),
+            (buffer.get(this.getIndex(x, y, 2)) & 0xFF),
+            (buffer.get(this.getIndex(x, y, 3)) & 0xFF)
         );
     }
 
     public PixmapRGBA getPixelColor(int x, int y, Color color) {
         color.set(
-            (buffer.get(getIndex(x, y, 0)) & 0xFF) / 255F,
-            (buffer.get(getIndex(x, y, 1)) & 0xFF) / 255F,
-            (buffer.get(getIndex(x, y, 2)) & 0xFF) / 255F,
-            (buffer.get(getIndex(x, y, 3)) & 0xFF) / 255F
+            (buffer.get(this.getIndex(x, y, 0)) & 0xFF) / 255F,
+            (buffer.get(this.getIndex(x, y, 1)) & 0xFF) / 255F,
+            (buffer.get(this.getIndex(x, y, 2)) & 0xFF) / 255F,
+            (buffer.get(this.getIndex(x, y, 3)) & 0xFF) / 255F
         );
         return this;
     }
 
     // SAMPLE PIXEL
     public int samplePixel(double x, double y) {
-        return getPixelABGR((int) (x * width), (int) (y * height));
+        return this.getPixelABGR((int) (x * width), (int) (y * height));
     }
 
-    public Color samplePixelColor(double x, double y) {
-        return getPixelColor((int) (x * width), (int) (y * height));
+    public Color samplePixelColor(Color dst, double x, double y) {
+        return this.getPixelColor(dst, (int) (x * width), (int) (y * height));
     }
 
     // FILL
     public PixmapRGBA fill(int beginX, int beginY, int endX, int endY, int color) {
-        float iEnd = Math.min(endX + 1, width);
-        float jEnd = Math.min(endY + 1, height);
+        final float iEnd = Math.min(endX + 1, width);
+        final float jEnd = Math.min(endY + 1, height);
 
         for(int i = Math.max(0, beginX); i < iEnd; i++)
             for(int j = Math.max(0, beginY); j < jEnd; j++)
-                setPixel(i, j, color);
+                this.setPixel(i, j, color);
         return this;
     }
 
     public PixmapRGBA fill(int beginX, int beginY, int endX, int endY, Color color) {
-        float iEnd = Math.min(endX + 1, width);
-        float jEnd = Math.min(endY + 1, height);
+        final float iEnd = Math.min(endX + 1, width);
+        final float jEnd = Math.min(endY + 1, height);
 
         for(int i = Math.max(0, beginX); i < iEnd; i++)
             for(int j = Math.max(0, beginY); j < jEnd; j++)
-                setPixel(i, j, color);
+                this.setPixel(i, j, color);
         return this;
     }
 
@@ -229,33 +231,33 @@ public class PixmapRGBA extends Pixmap {
 
         for(int i = Math.max(0, beginX); i < iEnd; i++)
             for(int j = Math.max(0, beginY); j < jEnd; j++)
-                setPixel(i, j, r, g, b, a);
+                this.setPixel(i, j, r, g, b, a);
         return this;
     }
 
     public PixmapRGBA fill(int beginX, int beginY, int endX, int endY, int r, int g, int b, int a) {
-        float iEnd = Math.min(endX + 1, width);
-        float jEnd = Math.min(endY + 1, height);
+        final float iEnd = Math.min(endX + 1, width);
+        final float jEnd = Math.min(endY + 1, height);
 
         for(int i = Math.max(0, beginX); i < iEnd; i++)
             for(int j = Math.max(0, beginY); j < jEnd; j++)
-                setPixel(i, j, r, g, b, a);
+                this.setPixel(i, j, r, g, b, a);
         return this;
     }
 
     // DRAW LINE
     public PixmapRGBA drawLine(int beginX, int beginY, int endX, int endY, double r, double g, double b, double a) {
-        Vec2d vec = new Vec2d(endX - beginX, endY - beginY);
-        double angle = Math.atan2(vec.y, vec.x);
-        float offsetX = Mathc.cos(angle);
-        float offsetY = Mathc.sin(angle);
+        final Vec2d vec = new Vec2d(endX - beginX, endY - beginY);
+        final double angle = Math.atan2(vec.y, vec.x);
+        final float offsetX = Mathc.cos(angle);
+        final float offsetY = Mathc.sin(angle);
 
         float x = beginX;
         float y = beginY;
         float length = 0;
 
         while(length < vec.len()){
-            setPixel(Maths.round(x), Maths.round(y), r, g, b, a);
+            this.setPixel(Maths.round(x), Maths.round(y), r, g, b, a);
 
             x += offsetX;
             y += offsetY;
@@ -266,10 +268,10 @@ public class PixmapRGBA extends Pixmap {
 
     // DRAW DOTTED LINE
     public PixmapRGBA drawDottedLine(int beginX, int beginY, int endX, int endY, double lineLength, double r, double g, double b, double a) {
-        Vec2d vec = new Vec2d(endX - beginX, endY - beginY);
-        double angle = Math.atan2(vec.y, vec.x);
-        float offsetX = Mathc.cos(angle);
-        float offsetY = Mathc.sin(angle);
+        final Vec2d vec = new Vec2d(endX - beginX, endY - beginY);
+        final double angle = Math.atan2(vec.y, vec.x);
+        final float offsetX = Mathc.cos(angle);
+        final float offsetY = Mathc.sin(angle);
 
         float x = beginX;
         float y = beginY;
@@ -277,7 +279,7 @@ public class PixmapRGBA extends Pixmap {
 
         while(length < vec.len()){
             if(Math.sin(length / lineLength) >= 0)
-                setPixel(Maths.round(x), Maths.round(y), r, g, b, a);
+                this.setPixel(Maths.round(x), Maths.round(y), r, g, b, a);
 
             x += offsetX;
             y += offsetY;
@@ -295,7 +297,7 @@ public class PixmapRGBA extends Pixmap {
 
         for(int i = 0; i < iEnd; i++)
             for(int j = 0; j < jEnd; j++)
-                setPixel(i, j, pixmap.getPixelColor(i, j));
+                this.setPixel(i, j, pixmap.getPixelColor(tmp_color_2, i, j));
         return this;
     }
 
@@ -307,10 +309,10 @@ public class PixmapRGBA extends Pixmap {
 
         for(int i = Math.max(0, x); i < iEnd; i++){
             for(int j = Math.max(0, y); j < jEnd; j++){
-                int px = Maths.round(i - x);
-                int py = Maths.round(j - y);
+                final int px = Maths.round(i - x);
+                final int py = Maths.round(j - y);
 
-                setPixel(i, j, pixmap.getPixelColor(px, py));
+                this.setPixel(i, j, pixmap.getPixelColor(px, py));
             }
         }
         return this;
@@ -319,15 +321,18 @@ public class PixmapRGBA extends Pixmap {
     public PixmapRGBA drawPixmap(PixmapRGBA pixmap, double scaleX, double scaleY) {
         if(pixmap == null || scaleX <= 0 || scaleY <= 0)
             return this;
-        double iEnd = (iEnd = pixmap.width * scaleX) > width ? width : iEnd;
-        double jEnd = (jEnd = pixmap.height * scaleY) > height ? height : jEnd;
+
+        final double widthScaled  = (pixmap.width  * scaleX);
+        final double heightScaled = (pixmap.height * scaleY);
+        final double iEnd = (widthScaled  > width  ? width  : widthScaled);
+        final double jEnd = (heightScaled > height ? height : heightScaled);
 
         for(int i = 0; i < iEnd; i++){
             for(int j = 0; j < jEnd; j++){
-                int px = (int) (i / scaleX);
-                int py = (int) (j / scaleY);
+                final int px = (int) (i / scaleX);
+                final int py = (int) (j / scaleY);
 
-                setPixel(i, j, pixmap.getPixelColor(px, py));
+                this.setPixel(i, j, pixmap.getPixelColor(px, py));
             }
         }
         return this;
@@ -340,22 +345,25 @@ public class PixmapRGBA extends Pixmap {
     public PixmapRGBA drawPixmap(PixmapRGBA pixmap, int x, int y, double scaleX, double scaleY) {
         if(pixmap == null || scaleX <= 0 || scaleY <= 0)
             return this;
-        double iEnd = (iEnd = x + pixmap.width * scaleX) > width ? width : iEnd;
-        double jEnd = (jEnd = y + pixmap.height * scaleY) > height ? height : jEnd;
+
+        final double widthScaled  = (x + pixmap.width  * scaleX);
+        final double heightScaled = (y + pixmap.height * scaleY);
+        final double iEnd = (widthScaled  > width  ? width  : widthScaled);
+        final double jEnd = (heightScaled > height ? height : heightScaled);
 
         for(int i = Math.max(0, x); i < iEnd; i++){
             for(int j = Math.max(0, y); j < jEnd; j++){
-                int px = (int) ((i - x) / scaleX);
-                int py = (int) ((j - y) / scaleY);
+                final int px = (int) ((i - x) / scaleX);
+                final int py = (int) ((j - y) / scaleY);
 
-                setPixel(i, j, pixmap.getPixelColor(px, py));
+                this.setPixel(i, j, pixmap.getPixelColor(px, py));
             }
         }
         return this;
     }
 
     public PixmapRGBA drawPixmap(PixmapRGBA pixmap, int x, int y, double scale) {
-        return drawPixmap(pixmap, x, y, scale, scale);
+        return this.drawPixmap(pixmap, x, y, scale, scale);
     }
 
     // UTILS
@@ -363,14 +371,14 @@ public class PixmapRGBA extends Pixmap {
         final Color color = new Color();
         for(int x = 0; x < width; x++){
             for(int y = 0; y < height; y++){
-                getPixelColor(x, y, color);
+                this.getPixelColor(x, y, color);
                 color.set(
-                    (color.r * 0.2126 + r) / 2,
-                    (color.g * 0.7152 + g) / 2,
-                    (color.b * 0.0722 + b) / 2
+                    (color.red   * 0.2126 + r) / 2,
+                    (color.green * 0.7152 + g) / 2,
+                    (color.blue  * 0.0722 + b) / 2
                 );
 
-                setPixel(x, y, color);
+                this.setPixel(x, y, color);
             }
         }
         return this;
@@ -399,10 +407,10 @@ public class PixmapRGBA extends Pixmap {
 
     public PixmapRGBA clear(Color color) {
         for(int i = 0; i < buffer.capacity(); i += 4){
-            buffer.put(i,     (byte) (color.r * 255));
-            buffer.put(i + 1, (byte) (color.g * 255));
-            buffer.put(i + 2, (byte) (color.b * 255));
-            buffer.put(i + 3, (byte) (color.a * 255));
+            buffer.put(i,     (byte) (color.red   * 255));
+            buffer.put(i + 1, (byte) (color.green * 255));
+            buffer.put(i + 2, (byte) (color.blue  * 255));
+            buffer.put(i + 3, (byte) (color.alpha * 255));
         }
         return this;
     }

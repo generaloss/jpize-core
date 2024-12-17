@@ -25,12 +25,12 @@ public class PixmapA extends Pixmap {
     }
 
     public void setPixel(int x, int y, double value) {
-        if(!outOfBounds(x, y))
+        if(!super.outOfBounds(x, y))
             buffer.put(getIndex(x, y), Maths.toByteRange(value));
     }
 
     public void setPixel(int x, int y, int value) {
-        if(!outOfBounds(x, y))
+        if(!super.outOfBounds(x, y))
             buffer.put(getIndex(x, y), (byte) (value & 0xFF));
     }
 
@@ -40,7 +40,7 @@ public class PixmapA extends Pixmap {
 
         for(int x = 0; x < width; x++)
             for(int y = 0; y < height; y++){
-                final float a = getPixelValue(x, y);
+                final float a = this.getPixelValue(x, y);
                 pixmap.setPixel(x, y, r, g, b, a);
             }
 
@@ -48,7 +48,7 @@ public class PixmapA extends Pixmap {
     }
 
     public PixmapRGBA toPixmapRGBA() {
-        return toPixmapRGBA(1F, 1F, 1F);
+        return this.toPixmapRGBA(1F, 1F, 1F);
     }
 
 
