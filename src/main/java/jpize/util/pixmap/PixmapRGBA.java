@@ -216,13 +216,13 @@ public class PixmapRGBA extends Pixmap {
 
 
     public PixmapRGBA fill(int beginX, int beginY, int endX, int endY, AbstractColor color) {
-        beginX = Math.max(0, beginX);
-        beginY = Math.max(0, beginY);
-        endX = Math.min(endX, width  - 1);
-        endY = Math.min(endY, height - 1);
+        final int x1 = Math.max(Math.min(beginX, endX), 0);
+        final int y1 = Math.max(Math.min(beginY, endY), 0);
+        final int x2 = Math.min(Math.max(beginX, endX), width  - 1);
+        final int y2 = Math.min(Math.max(beginY, endY), height - 1);
 
-        for(int x = beginX; x <= endX; x++)
-            for(int y = beginY; y <= endY; y++)
+        for(int x = x1; x <= x2; x++)
+            for(int y = y1; y <= y2; y++)
                 this.setPixel(x, y, color);
         return this;
     }
@@ -426,6 +426,127 @@ public class PixmapRGBA extends Pixmap {
     }
 
 
+    private void drawCircleOctants(int xc, int yc, int x, int y, AbstractColor color) {
+        this.setPixel(xc + x, yc + y, color);
+        this.setPixel(xc + x, yc - y, color);
+        this.setPixel(xc - x, yc - y, color);
+        this.setPixel(xc - x, yc + y, color);
+        this.setPixel(xc + y, yc + x, color);
+        this.setPixel(xc + y, yc - x, color);
+        this.setPixel(xc - y, yc - x, color);
+        this.setPixel(xc - y, yc + x, color);
+    }
+
+    public PixmapRGBA drawCircle(int xc, int yc, int r, AbstractColor color) {
+        int x = 0;
+        int y = r;
+        int d = (3 - 2 * r);
+        this.drawCircleOctants(xc, yc, x, y, color);
+
+        while(y >= x){
+            if(d > 0){
+                y--;
+                d += (x - y) * 4 + 10;
+            }else{
+                d += (x * 4 + 6);
+            }
+            x++;
+            this.drawCircleOctants(xc, yc, x, y, color);
+        }
+        return this;
+    }
+
+
+    private void fillCircleOctants(int xc, int yc, int x, int y, AbstractColor color) {
+        for(int xx = xc - x; xx <= xc + x; xx++)
+            this.setPixel(xx, yc + y, color);
+        for(int xx = xc - x; xx <= xc + x; xx++)
+            this.setPixel(xx, yc - y, color);
+        for(int xx = xc - y; xx <= xc + y; xx++)
+            this.setPixel(xx, yc + x, color);
+        for(int xx = xc - y; xx <= xc + y; xx++)
+            this.setPixel(xx, yc - x, color);
+    }
+
+    public PixmapRGBA fillCircle(int xc, int yc, int r, AbstractColor color) {
+        int x = 0;
+        int y = r;
+        int d = (3 - 2 * r);
+        this.fillCircleOctants(xc, yc, x, y, color);
+
+        while(y >= x){
+            if(d > 0){
+                y--;
+                d += (x - y) * 4 + 10;
+            }else{
+                d += (x * 4 + 6);
+            }
+            x++;
+            this.fillCircleOctants(xc, yc, x, y, color);
+        }
+        return this;
+    }
+
+
+    public PixmapRGBA drawPixmap(PixmapRGBA pixmap, int offsetX, int offsetY, double scaleX, double scaleY) {
+        if(pixmap == null)
+            return this;
+
+        final int pixmapWidth  = (int) (pixmap.width  * scaleX + offsetX);
+        final int pixmapHeight = (int) (pixmap.height * scaleY + offsetY);
+
+        final int x1 = Math.max(offsetX, 0);
+        final int y1 = Math.max(offsetY, 0);
+        final int x2 = Math.min(pixmapWidth , width );
+        final int y2 = Math.min(pixmapHeight, height);
+
+        if(blending || scaleX != 1D) {
+            // average implementation
+            for(int x = x1; x < x2; x++){
+                for(int y = y1; y < y2; y++){
+                    final int px = (int) ((x - offsetX) / scaleX);
+                    final int py = (int) ((y - offsetY) / scaleY);
+
+                    pixmap.getPixel(tmp_colorArg, px, py);
+                    this.setPixel(x, y, tmp_colorArg);
+                }
+            }
+            return this;
+        }
+
+        // faster implementation
+        final int sliceLength = ((x2 - offsetX) * super.channels);
+        for(int y = y1; y < y2; y++){
+            final int sliceIndex = pixmap.getIndex(0, Maths.round((y - offsetY) / scaleY), 0);
+            final ByteBuffer slice = pixmap.buffer().slice(sliceIndex, sliceLength);
+
+            final int index = super.getIndex(x1, y, 0);
+            buffer.put(index, slice, 0, sliceLength);
+        }
+        return this;
+    }
+
+    public PixmapRGBA drawPixmap(PixmapRGBA pixmap, int offsetX, int offsetY, double scale) {
+        return this.drawPixmap(pixmap, offsetX, offsetY, scale, scale);
+    }
+
+    public PixmapRGBA drawPixmap(PixmapRGBA pixmap, int offsetX, int offsetY) {
+        return this.drawPixmap(pixmap, offsetX, offsetY, 1D, 1D);
+    }
+
+    public PixmapRGBA drawPixmap(PixmapRGBA pixmap, double scaleX, double scaleY) {
+        return this.drawPixmap(pixmap, 0, 0, scaleX, scaleY);
+    }
+
+    public PixmapRGBA drawPixmap(PixmapRGBA pixmap, double scale) {
+        return this.drawPixmap(pixmap, 0, 0, scale, scale);
+    }
+
+    public PixmapRGBA drawPixmap(PixmapRGBA pixmap) {
+        return this.drawPixmap(pixmap, 0, 0, 1D, 1D);
+    }
+
+
     public PixmapRGBA colorize(AbstractColor color) {
         if(tmp_colorizeColor == null)
             tmp_colorizeColor = new Color();
@@ -434,10 +555,15 @@ public class PixmapRGBA extends Pixmap {
             for(int y = 0; y < height; y++){
 
                 this.getPixel(tmp_colorizeColor, x, y);
+                final float brightness = (
+                    tmp_colorizeColor.red   * 0.2126F +
+                        tmp_colorizeColor.green * 0.7152F +
+                        tmp_colorizeColor.blue  * 0.0722F
+                );
                 tmp_colorizeColor.set(
-                    (tmp_colorizeColor.red   * 0.2126F + color.getRed()  ) * 0.5F,
-                    (tmp_colorizeColor.green * 0.7152F + color.getGreen()) * 0.5F,
-                    (tmp_colorizeColor.blue  * 0.0722F + color.getBlue() ) * 0.5F
+                    brightness * color.getRed(),
+                    brightness * color.getGreen(),
+                    brightness * color.getBlue()
                 );
                 this.setPixel(x, y, tmp_colorizeColor);
             }
@@ -488,64 +614,6 @@ public class PixmapRGBA extends Pixmap {
     public PixmapRGBA colorizeARGB(int color) {
         tmp_colorArg.setARGB(color);
         return this.colorize(tmp_colorArg);
-    }
-
-
-    public PixmapRGBA drawPixmap(PixmapRGBA pixmap, int offsetX, int offsetY, double scaleX, double scaleY) {
-        if(pixmap == null)
-            return this;
-
-        final int startX = Math.max(offsetX, 0);
-        final int startY = Math.max(offsetY, 0);
-        final int pixmapWidth  = Maths.round(pixmap.width  * scaleX + offsetX);
-        final int pixmapHeight = Maths.round(pixmap.height * scaleY + offsetY);
-        final int endX = Math.min(pixmapWidth , width );
-        final int endY = Math.min(pixmapHeight, height);
-
-        if(blending || scaleX != 1D) {
-            // average implementation
-            for(int x = startX; x < endX; x++){
-                for(int y = startY; y < endY; y++){
-                    final int px = Maths.round((x - offsetX) / scaleX);
-                    final int py = Maths.round((y - offsetY) / scaleY);
-
-                    pixmap.getPixel(tmp_colorArg, px, py);
-                    this.setPixel(x, y, tmp_colorArg);
-                }
-            }
-            return this;
-        }
-
-        // faster implementation
-        final int sliceLength = ((endX - offsetX) * super.channels);
-        for(int y = startY; y < endY; y++){
-            final int sliceIndex = pixmap.getIndex(0, Maths.round((y - offsetY) / scaleY), 0);
-            final ByteBuffer slice = pixmap.buffer().slice(sliceIndex, sliceLength);
-
-            final int index = super.getIndex(startX, y, 0);
-            buffer.put(index, slice, 0, sliceLength);
-        }
-        return this;
-    }
-
-    public PixmapRGBA drawPixmap(PixmapRGBA pixmap, int offsetX, int offsetY, double scale) {
-        return this.drawPixmap(pixmap, offsetX, offsetY, scale, scale);
-    }
-
-    public PixmapRGBA drawPixmap(PixmapRGBA pixmap, int offsetX, int offsetY) {
-        return this.drawPixmap(pixmap, offsetX, offsetY, 1D, 1D);
-    }
-
-    public PixmapRGBA drawPixmap(PixmapRGBA pixmap, double scaleX, double scaleY) {
-        return this.drawPixmap(pixmap, 0, 0, scaleX, scaleY);
-    }
-
-    public PixmapRGBA drawPixmap(PixmapRGBA pixmap, double scale) {
-        return this.drawPixmap(pixmap, 0, 0, scale, scale);
-    }
-
-    public PixmapRGBA drawPixmap(PixmapRGBA pixmap) {
-        return this.drawPixmap(pixmap, 0, 0, 1D, 1D);
     }
 
 
