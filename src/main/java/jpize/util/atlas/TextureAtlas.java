@@ -72,7 +72,7 @@ public class TextureAtlas<T> implements Disposable {
             final int imageWidth = image.pixmap.getWidth();
             final int imageHeight = image.pixmap.getHeight();
 
-            //! pixmap.drawPixmap(image.pixmap, x1, y1);
+            pixmap.drawPixmap(image.pixmap, x1, y1);
             if(fillPaddings)
                 fillPaddings(x1, y1, imageWidth, imageHeight);
 

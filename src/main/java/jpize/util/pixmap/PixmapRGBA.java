@@ -491,84 +491,62 @@ public class PixmapRGBA extends Pixmap {
     }
 
 
-    // public PixmapRGBA drawPixmap(PixmapRGBA pixmap) {
-    //     if(pixmap == null)
-    //         return this;
-    //     final float iEnd = Math.min(pixmap.width, width);
-    //     final float jEnd = Math.min(pixmap.height, height);
-
-    //     for(int i = 0; i < iEnd; i++)
-    //         for(int j = 0; j < jEnd; j++)
-    //             this.setPixel(i, j, pixmap.getPixelColor(tmp_color_2, i, j));
-    //     return this;
-    // }
-
-    // public PixmapRGBA drawPixmap(PixmapRGBA pixmap, int x, int y) {
-    //     if(pixmap == null)
-    //         return this;
-    //     float iEnd = (iEnd = x + pixmap.width) > width ? width : iEnd;
-    //     float jEnd = (jEnd = y + pixmap.height) > height ? height : jEnd;
-
-    //     for(int i = Math.max(0, x); i < iEnd; i++){
-    //         for(int j = Math.max(0, y); j < jEnd; j++){
-    //             final int px = Maths.round(i - x);
-    //             final int py = Maths.round(j - y);
-
-    //             this.setPixel(i, j, pixmap.getPixelColor(px, py));
-    //         }
-    //     }
-    //     return this;
-    // }
-
-    // public PixmapRGBA drawPixmap(PixmapRGBA pixmap, double scaleX, double scaleY) {
-    //     if(pixmap == null || scaleX <= 0 || scaleY <= 0)
-    //         return this;
-
-    //     final double widthScaled  = (pixmap.width  * scaleX);
-    //     final double heightScaled = (pixmap.height * scaleY);
-    //     final double iEnd = (widthScaled  > width  ? width  : widthScaled);
-    //     final double jEnd = (heightScaled > height ? height : heightScaled);
-
-    //     for(int i = 0; i < iEnd; i++){
-    //         for(int j = 0; j < jEnd; j++){
-    //             final int px = (int) (i / scaleX);
-    //             final int py = (int) (j / scaleY);
-
-    //             this.setPixel(i, j, pixmap.getPixelColor(px, py));
-    //         }
-    //     }
-    //     return this;
-    // }
-
-    // public PixmapRGBA drawPixmap(PixmapRGBA pixmap, double scale) {
-    //     return drawPixmap(pixmap, scale, scale);
-    // }
-
-    public PixmapRGBA drawPixmap(PixmapRGBA pixmap, int x, int y, double scaleX, double scaleY) {
-        if(pixmap == null || scaleX <= 0 || scaleY <= 0)
+    public PixmapRGBA drawPixmap(PixmapRGBA pixmap, int offsetX, int offsetY, double scaleX, double scaleY) {
+        if(pixmap == null)
             return this;
 
-        final double widthScaled  = (x + pixmap.width  * scaleX);
-        final double heightScaled = (y + pixmap.height * scaleY);
-        final double iEnd = (widthScaled  > width  ? width  : widthScaled);
-        final double jEnd = (heightScaled > height ? height : heightScaled);
+        final int startX = Math.max(offsetX, 0);
+        final int startY = Math.max(offsetY, 0);
+        final int pixmapWidth  = Maths.round(pixmap.width  * scaleX + offsetX);
+        final int pixmapHeight = Maths.round(pixmap.height * scaleY + offsetY);
+        final int endX = Math.min(pixmapWidth , width );
+        final int endY = Math.min(pixmapHeight, height);
 
-        for(int i = Math.max(0, x); i < iEnd; i++){
-            for(int j = Math.max(0, y); j < jEnd; j++){
-                final int px = (int) ((i - x) / scaleX);
-                final int py = (int) ((j - y) / scaleY);
+        if(blending || scaleX != 1D) {
+            // average implementation
+            for(int x = startX; x < endX; x++){
+                for(int y = startY; y < endY; y++){
+                    final int px = Maths.round((x - offsetX) / scaleX);
+                    final int py = Maths.round((y - offsetY) / scaleY);
 
-                final Color dstColor = new Color();
-                pixmap.getPixel(dstColor, px, py);
-                this.setPixel(i, j, dstColor);
+                    pixmap.getPixel(tmp_colorArg, px, py);
+                    this.setPixel(x, y, tmp_colorArg);
+                }
             }
+            return this;
+        }
+
+        // faster implementation
+        final int sliceLength = ((endX - offsetX) * super.channels);
+        for(int y = startY; y < endY; y++){
+            final int sliceIndex = pixmap.getIndex(0, Maths.round((y - offsetY) / scaleY), 0);
+            final ByteBuffer slice = pixmap.buffer().slice(sliceIndex, sliceLength);
+
+            final int index = super.getIndex(startX, y, 0);
+            buffer.put(index, slice, 0, sliceLength);
         }
         return this;
     }
 
-    // public PixmapRGBA drawPixmap(PixmapRGBA pixmap, int x, int y, double scale) {
-    //     return this.drawPixmap(pixmap, x, y, scale, scale);
-    // }
+    public PixmapRGBA drawPixmap(PixmapRGBA pixmap, int offsetX, int offsetY, double scale) {
+        return this.drawPixmap(pixmap, offsetX, offsetY, scale, scale);
+    }
+
+    public PixmapRGBA drawPixmap(PixmapRGBA pixmap, int offsetX, int offsetY) {
+        return this.drawPixmap(pixmap, offsetX, offsetY, 1D, 1D);
+    }
+
+    public PixmapRGBA drawPixmap(PixmapRGBA pixmap, double scaleX, double scaleY) {
+        return this.drawPixmap(pixmap, 0, 0, scaleX, scaleY);
+    }
+
+    public PixmapRGBA drawPixmap(PixmapRGBA pixmap, double scale) {
+        return this.drawPixmap(pixmap, 0, 0, scale, scale);
+    }
+
+    public PixmapRGBA drawPixmap(PixmapRGBA pixmap) {
+        return this.drawPixmap(pixmap, 0, 0, 1D, 1D);
+    }
 
 
     public PixmapRGBA forEach(BiConsumer<Integer, Integer> biConsumer) {
