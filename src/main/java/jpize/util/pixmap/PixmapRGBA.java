@@ -51,7 +51,7 @@ public class PixmapRGBA extends Pixmap {
     }
 
     protected AbstractColor tryBlend(AbstractColor color, int x, int y) {
-        if(!blending)
+        if(!blending || color.getAlpha() == 1F)
             return color;
 
         this.getPixel(tmp_blendColor1, x, y);

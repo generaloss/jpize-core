@@ -6,6 +6,7 @@ import jpize.gl.Gl;
 import jpize.glfw.Glfw;
 import jpize.glfw.init.GlfwPlatform;
 import jpize.util.color.Color;
+import jpize.util.math.vector.Vec2i;
 import jpize.util.pixmap.Canvas;
 import jpize.util.pixmap.PixmapIO;
 import jpize.util.pixmap.PixmapRGBA;
@@ -18,23 +19,22 @@ public class PixmapTest extends JpizeApplication {
     public void init() {
         this.texture = PixmapIO.load("/blocks/oak_leaves.png");
         this.canvas = new Canvas();
-        canvas.fillCircle(500, 500, 500, new Color(1, 0, 0));
     }
 
     @Override
     public void render() {
         Gl.clearColorBuffer();
-        //canvas.clear();
-        //canvas.drawPixmap(texture,
-        //        (double) canvas.getWidth() / texture.getWidth(),
-        //        (double) canvas.getHeight() / texture.getHeight());
+        canvas.clear();
+        canvas.drawPixmap(texture,
+                (double) canvas.getWidth() / texture.getWidth(),
+                (double) canvas.getHeight() / texture.getHeight());
         final int x = (int) Jpize.getX();
         final int y = (int) Jpize.input().getCursorNativeY();
-        //canvas.enableBlending();
-        //canvas.fillRGBA(Jpize.getWidth() / 2, Jpize.getHeight() / 2, x, y, 0xFFFFFF99);
-        //canvas.disableBlending();
-        //canvas.colorize(0.9F, 0.6F, 0.0F);
-
+        canvas.colorize(0.9F, 0.6F, 0.0F);
+        canvas.enableBlending();
+        canvas.drawCircle(Jpize.getWidth() / 2, Jpize.getHeight() / 2, (int) Vec2i.dst(Jpize.getWidth() / 2, Jpize.getHeight() / 2, x, y), new Color(1, 0, 0));
+        canvas.fillRGBA(Jpize.getWidth() / 2, Jpize.getHeight() / 2, x, y, 0xFFFFFF99);
+        canvas.disableBlending();
 
         canvas.render();
     }
