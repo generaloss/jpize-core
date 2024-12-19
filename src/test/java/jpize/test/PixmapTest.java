@@ -18,12 +18,13 @@ public class PixmapTest extends JpizeApplication {
     public void init() {
         this.texture = PixmapIO.load("/blocks/oak_leaves.png");
         this.canvas = new Canvas();
+        canvas.fillCircle(500, 500, 500, new Color(1, 0, 0));
     }
 
     @Override
     public void render() {
         Gl.clearColorBuffer();
-        canvas.clear();
+        //canvas.clear();
         //canvas.drawPixmap(texture,
         //        (double) canvas.getWidth() / texture.getWidth(),
         //        (double) canvas.getHeight() / texture.getHeight());
@@ -33,7 +34,7 @@ public class PixmapTest extends JpizeApplication {
         //canvas.fillRGBA(Jpize.getWidth() / 2, Jpize.getHeight() / 2, x, y, 0xFFFFFF99);
         //canvas.disableBlending();
         //canvas.colorize(0.9F, 0.6F, 0.0F);
-        canvas.drawCircle(x, y, 500, new Color(1, 0, 0));
+
 
         canvas.render();
     }

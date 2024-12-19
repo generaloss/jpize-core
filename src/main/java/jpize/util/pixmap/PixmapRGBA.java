@@ -426,22 +426,22 @@ public class PixmapRGBA extends Pixmap {
     }
 
 
-    private void drawCircleOctants(int xc, int yc, int x, int y, AbstractColor color) {
-        this.setPixel(xc + x, yc + y, color);
-        this.setPixel(xc + x, yc - y, color);
-        this.setPixel(xc - x, yc - y, color);
-        this.setPixel(xc - x, yc + y, color);
-        this.setPixel(xc + y, yc + x, color);
-        this.setPixel(xc + y, yc - x, color);
-        this.setPixel(xc - y, yc - x, color);
-        this.setPixel(xc - y, yc + x, color);
+    private void drawCircleOctants(int centerX, int centerY, int x, int y, AbstractColor color) {
+        this.setPixel(centerX + x, centerY + y, color);
+        this.setPixel(centerX + x, centerY - y, color);
+        this.setPixel(centerX - x, centerY - y, color);
+        this.setPixel(centerX - x, centerY + y, color);
+        this.setPixel(centerX + y, centerY + x, color);
+        this.setPixel(centerX + y, centerY - x, color);
+        this.setPixel(centerX - y, centerY - x, color);
+        this.setPixel(centerX - y, centerY + x, color);
     }
 
-    public PixmapRGBA drawCircle(int xc, int yc, int r, AbstractColor color) {
+    public PixmapRGBA drawCircle(int centerX, int centerY, int radius, AbstractColor color) {
         int x = 0;
-        int y = r;
-        int d = (3 - 2 * r);
-        this.drawCircleOctants(xc, yc, x, y, color);
+        int y = radius;
+        int d = (3 - 2 * radius);
+        this.drawCircleOctants(centerX, centerY, x, y, color);
 
         while(y >= x){
             if(d > 0){
@@ -451,28 +451,82 @@ public class PixmapRGBA extends Pixmap {
                 d += (x * 4 + 6);
             }
             x++;
-            this.drawCircleOctants(xc, yc, x, y, color);
+            this.drawCircleOctants(centerX, centerY, x, y, color);
         }
         return this;
     }
 
-
-    private void fillCircleOctants(int xc, int yc, int x, int y, AbstractColor color) {
-        for(int xx = xc - x; xx <= xc + x; xx++)
-            this.setPixel(xx, yc + y, color);
-        for(int xx = xc - x; xx <= xc + x; xx++)
-            this.setPixel(xx, yc - y, color);
-        for(int xx = xc - y; xx <= xc + y; xx++)
-            this.setPixel(xx, yc + x, color);
-        for(int xx = xc - y; xx <= xc + y; xx++)
-            this.setPixel(xx, yc - x, color);
+    public PixmapRGBA drawCircle(int centerX, int centerY, int radius, float red, float green, float blue, float alpha) {
+        tmp_colorArg.set(red, green, blue, alpha);
+        return this.drawCircle(centerX, centerY, radius, tmp_colorArg);
     }
 
-    public PixmapRGBA fillCircle(int xc, int yc, int r, AbstractColor color) {
+    public PixmapRGBA drawCircle(int centerX, int centerY, int radius, double red, double green, double blue, double alpha) {
+        tmp_colorArg.set(red, green, blue, alpha);
+        return this.drawCircle(centerX, centerY, radius, tmp_colorArg);
+    }
+
+    public PixmapRGBA drawCirclei(int centerX, int centerY, int radius, int red, int green, int blue, int alpha) {
+        tmp_colorArg.seti(red, green, blue, alpha);
+        return this.drawCircle(centerX, centerY, radius, tmp_colorArg);
+    }
+
+    public PixmapRGBA drawCircle(int centerX, int centerY, int radius, float red, float green, float blue) {
+        tmp_colorArg.set(red, green, blue);
+        return this.drawCircle(centerX, centerY, radius, tmp_colorArg);
+    }
+
+    public PixmapRGBA drawCircle(int centerX, int centerY, int radius, double red, double green, double blue) {
+        tmp_colorArg.set(red, green, blue);
+        return this.drawCircle(centerX, centerY, radius, tmp_colorArg);
+    }
+
+    public PixmapRGBA drawCirclei(int centerX, int centerY, int radius, int red, int green, int blue) {
+        tmp_colorArg.seti(red, green, blue);
+        return this.drawCircle(centerX, centerY, radius, tmp_colorArg);
+    }
+
+    public PixmapRGBA drawCircleRGB(int centerX, int centerY, int radius, int color) {
+        tmp_colorArg.setRGB(color);
+        return this.drawCircle(centerX, centerY, radius, tmp_colorArg);
+    }
+
+    public PixmapRGBA drawCircleRGBA(int centerX, int centerY, int radius, int color) {
+        tmp_colorArg.setRGBA(color);
+        return this.drawCircle(centerX, centerY, radius, tmp_colorArg);
+    }
+
+    public PixmapRGBA drawCircleARGB(int centerX, int centerY, int radius, int color) {
+        tmp_colorArg.setARGB(color);
+        return this.drawCircle(centerX, centerY, radius, tmp_colorArg);
+    }
+
+
+    private void fillCircleOctants(int centerX, int centerY, int x, int y, AbstractColor color) {
+        int max_i = (centerX + x);
+        int arg_y = (centerY + y);
+        for(int i = centerX - x; i <= max_i; i++)
+            this.setPixel(i, arg_y, color);
+
+        arg_y = (centerY - y);
+        for(int i = centerX - x; i <= max_i; i++)
+            this.setPixel(i, arg_y, color);
+
+        max_i = (centerX + y);
+        arg_y = (centerY + x);
+        for(int i = centerX - y; i <= max_i; i++)
+            this.setPixel(i, arg_y, color);
+
+        arg_y = (centerY - x);
+        for(int i = centerX - y; i <= max_i; i++)
+            this.setPixel(i, arg_y, color);
+    }
+
+    public PixmapRGBA fillCircle(int centerX, int centerY, int radius, AbstractColor color) {
         int x = 0;
-        int y = r;
-        int d = (3 - 2 * r);
-        this.fillCircleOctants(xc, yc, x, y, color);
+        int y = radius;
+        int d = (3 - 2 * radius);
+        this.fillCircleOctants(centerX, centerY, x, y, color);
 
         while(y >= x){
             if(d > 0){
@@ -482,9 +536,54 @@ public class PixmapRGBA extends Pixmap {
                 d += (x * 4 + 6);
             }
             x++;
-            this.fillCircleOctants(xc, yc, x, y, color);
+            this.fillCircleOctants(centerX, centerY, x, y, color);
         }
         return this;
+    }
+
+    public PixmapRGBA fillCircle(int centerX, int centerY, int radius, float red, float green, float blue, float alpha) {
+        tmp_colorArg.set(red, green, blue, alpha);
+        return this.fillCircle(centerX, centerY, radius, tmp_colorArg);
+    }
+
+    public PixmapRGBA fillCircle(int centerX, int centerY, int radius, double red, double green, double blue, double alpha) {
+        tmp_colorArg.set(red, green, blue, alpha);
+        return this.fillCircle(centerX, centerY, radius, tmp_colorArg);
+    }
+
+    public PixmapRGBA fillCirclei(int centerX, int centerY, int radius, int red, int green, int blue, int alpha) {
+        tmp_colorArg.seti(red, green, blue, alpha);
+        return this.fillCircle(centerX, centerY, radius, tmp_colorArg);
+    }
+
+    public PixmapRGBA fillCircle(int centerX, int centerY, int radius, float red, float green, float blue) {
+        tmp_colorArg.set(red, green, blue);
+        return this.fillCircle(centerX, centerY, radius, tmp_colorArg);
+    }
+
+    public PixmapRGBA fillCircle(int centerX, int centerY, int radius, double red, double green, double blue) {
+        tmp_colorArg.set(red, green, blue);
+        return this.fillCircle(centerX, centerY, radius, tmp_colorArg);
+    }
+
+    public PixmapRGBA fillCirclei(int centerX, int centerY, int radius, int red, int green, int blue) {
+        tmp_colorArg.seti(red, green, blue);
+        return this.fillCircle(centerX, centerY, radius, tmp_colorArg);
+    }
+
+    public PixmapRGBA fillCircleRGB(int centerX, int centerY, int radius, int color) {
+        tmp_colorArg.setRGB(color);
+        return this.fillCircle(centerX, centerY, radius, tmp_colorArg);
+    }
+
+    public PixmapRGBA fillCircleRGBA(int centerX, int centerY, int radius, int color) {
+        tmp_colorArg.setRGBA(color);
+        return this.fillCircle(centerX, centerY, radius, tmp_colorArg);
+    }
+
+    public PixmapRGBA fillCircleARGB(int centerX, int centerY, int radius, int color) {
+        tmp_colorArg.setARGB(color);
+        return this.fillCircle(centerX, centerY, radius, tmp_colorArg);
     }
 
 
