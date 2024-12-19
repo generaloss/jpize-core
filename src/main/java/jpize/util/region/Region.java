@@ -7,7 +7,10 @@ import jpize.util.math.vector.Vec2i;
 
 public class Region {
 
-    protected float u1, v1, u2, v2;
+    public float u1;
+    public float v1;
+    public float u2;
+    public float v2;
 
     public Region(Region region) {
         this.set(region);
