@@ -17,11 +17,10 @@ public class NinePatchTest extends JpizeApplication {
     public void init() {
         Gl.clearColor(0.3, 0.6, 0.9);
         this.batch = new TextureBatch();
-
-        this.ninePatch = new NinePatch();
-        this.ninePatch.scale().set(1);
-        this.ninePatch.load("/dialog.9.png");
-        this.ninePatch.setStretchMode(StretchMode.STRETCH);
+        this.ninePatch = new NinePatch()
+            .load("/dialog.9.png")
+            .setStretchMode(StretchMode.STRETCH)
+            .setScale(1F);
     }
 
     @Override

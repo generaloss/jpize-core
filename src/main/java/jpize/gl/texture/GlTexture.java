@@ -19,8 +19,12 @@ public abstract class GlTexture extends GlObject {
     }
 
 
+    public GlTexture(int ID) {
+        super(ID);
+    }
+
     public GlTexture() {
-        super(GL46.glGenTextures());
+        this(GL46.glGenTextures());
     }
 
 

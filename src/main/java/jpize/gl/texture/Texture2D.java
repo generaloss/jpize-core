@@ -20,6 +20,10 @@ public class Texture2D extends GlTexture {
         this.setFilters(GlFilter.NEAREST);
     }
 
+    public Texture2D(int ID) {
+        super(ID);
+    }
+
     public Texture2D(int width, int height) {
         this();
         this.setDefaultImage(width, height);
