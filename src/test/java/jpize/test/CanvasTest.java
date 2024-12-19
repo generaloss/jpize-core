@@ -11,7 +11,7 @@ import jpize.util.pixmap.Canvas;
 import jpize.util.pixmap.PixmapIO;
 import jpize.util.pixmap.PixmapRGBA;
 
-public class PixmapTest extends JpizeApplication {
+public class CanvasTest extends JpizeApplication {
 
     private PixmapRGBA texture;
     private Canvas canvas;
@@ -52,9 +52,9 @@ public class PixmapTest extends JpizeApplication {
 
     public static void main(String[] args) {
         if(System.getProperty("os.name").equals("Linux"))
-            Glfw.glfwInitHintPlatform(GlfwPlatform.X11); // waiting for fixes in lwjgl 3.3.5
+            Glfw.glfwInitHintPlatform(GlfwPlatform.X11); // waiting for fixes in lwjgl 3.3.6
 
-        Jpize.create(1080, 1080, "Window").build().setApp(new PixmapTest());
+        Jpize.create(1080, 1080, "Window").build().setApp(new CanvasTest());
 
         Jpize.run();
     }

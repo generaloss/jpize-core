@@ -276,7 +276,7 @@ public class ClothSimulation extends JpizeApplication {
 
     public static void main(String[] args) {
         if(System.getProperty("os.name").equals("Linux"))
-            Glfw.glfwInitHintPlatform(GlfwPlatform.X11);
+            Glfw.glfwInitHintPlatform(GlfwPlatform.X11); // waiting for fixes in lwjgl 3.3.6
 
         Jpize.create(1080, 720, "Cloth Simulation")
             .samples(8)

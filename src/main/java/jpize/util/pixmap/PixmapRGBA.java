@@ -1,6 +1,7 @@
 package jpize.util.pixmap;
 
 import jpize.gl.texture.GlInternalFormat;
+import jpize.gl.texture.Texture2D;
 import jpize.util.color.Color;
 import jpize.util.color.AbstractColor;
 import jpize.util.math.Maths;
@@ -28,6 +29,11 @@ public class PixmapRGBA extends Pixmap {
 
     public PixmapRGBA(int width, int height) {
         super(width, height, 4);
+    }
+
+    public PixmapRGBA(Texture2D texture) {
+        super(texture.getWidth(), texture.getHeight(), 4);
+        texture.getImage(0, this);
     }
 
 
@@ -123,10 +129,10 @@ public class PixmapRGBA extends Pixmap {
     public PixmapRGBA getPixel(Color dst, int x, int y) {
         final int posIndex = this.getPositionIndex(x, y);
         dst.seti(
-                (buffer.get(this.getChannelIndex(posIndex, 0)) & 0xFF),
-                (buffer.get(this.getChannelIndex(posIndex, 1)) & 0xFF),
-                (buffer.get(this.getChannelIndex(posIndex, 2)) & 0xFF),
-                (buffer.get(this.getChannelIndex(posIndex, 3)) & 0xFF)
+            (buffer.get(this.getChannelIndex(posIndex, 0)) & 0xFF),
+            (buffer.get(this.getChannelIndex(posIndex, 1)) & 0xFF),
+            (buffer.get(this.getChannelIndex(posIndex, 2)) & 0xFF),
+            (buffer.get(this.getChannelIndex(posIndex, 3)) & 0xFF)
         );
         return this;
     }
