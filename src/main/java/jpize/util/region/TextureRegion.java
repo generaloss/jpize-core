@@ -9,6 +9,8 @@ public class TextureRegion extends Region {
     
     private Texture2D texture;
 
+    public TextureRegion() { }
+
     public TextureRegion(TextureRegion textureRegion) {
         this.set(textureRegion);
     }

@@ -79,10 +79,14 @@ public class NinePatch implements Disposable {
         return this;
     }
 
-    public NinePatch setStretchMode(StretchMode mode) {
-        this.stretchModeX = mode;
-        this.stretchModeY = mode;
+    public NinePatch setStretchMode(StretchMode modeX, StretchMode modeY) {
+        this.stretchModeX = modeX;
+        this.stretchModeY = modeY;
         return this;
+    }
+
+    public NinePatch setStretchMode(StretchMode mode) {
+        return this.setStretchMode(mode, mode);
     }
 
 
@@ -225,8 +229,6 @@ public class NinePatch implements Disposable {
                 unstretchableHeight += height;
             }
         }
-
-        System.out.println(stretchableWidth + ", " + unstretchableHeight);
     }
 
 

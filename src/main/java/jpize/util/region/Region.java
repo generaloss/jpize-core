@@ -12,21 +12,21 @@ public class Region {
     public float u2;
     public float v2;
 
+    public Region() {
+        this.u2 = 1F;
+        this.v2 = 1F;
+    }
+
     public Region(Region region) {
         this.set(region);
     }
-    
+
     public Region(float u1, float v1, float u2, float v2) {
         this.set(u1, v1, u2, v2);
     }
 
     public Region(double u1, double v1, double u2, double v2) {
         this.set(u1, v1, u2, v2);
-    }
-
-    public Region() {
-        this.u2 = 1F;
-        this.v2 = 1F;
     }
 
     public Region(double x, double y, double width, double height, double totalWidth, double totalHeight) {
