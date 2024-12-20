@@ -51,16 +51,6 @@ public class NinePatch implements Disposable {
         return scale;
     }
 
-    public NinePatch setScale(double scaleX, double scaleY) {
-        this.scale.set(scaleX, scaleY);
-        return this;
-    }
-
-    public NinePatch setScale(double scaleXY) {
-        return this.setScale(scaleXY, scaleXY);
-    }
-
-
     public StretchMode getStretchModeX() {
         return stretchModeX;
     }
@@ -95,10 +85,7 @@ public class NinePatch implements Disposable {
     }
 
 
-    public NinePatch load(Texture2D texture) {
-        if(this.texture != null)
-            this.dispose();
-
+    public void load(Texture2D texture) {
         this.texture = texture;
 
         // load pixels
@@ -111,7 +98,7 @@ public class NinePatch implements Disposable {
         pixmap.dispose();
 
         if(sizesX.length < 3 || sizesY.length < 3)
-            throw new IllegalStateException("Invalid marked stretchable area");
+            return;
 
         stretchablesX = (sizesX.length - 1) / 2;
         stretchablesY = (sizesY.length - 1) / 2;
@@ -121,15 +108,14 @@ public class NinePatch implements Disposable {
         // create patches
         this.createPatches(sizesX, sizesY);
         this.updateSizes();
-        return this;
     }
 
-    public NinePatch load(Pixmap pixmap) {
-        return this.load(new Texture2D(pixmap));
+    public void load(Pixmap pixmap) {
+        this.load(new Texture2D(pixmap));
     }
 
-    public NinePatch load(String internalPath) {
-        return this.load(new Texture2D(internalPath));
+    public void load(String internalPath) {
+        this.load(new Texture2D(internalPath));
     }
 
 
@@ -284,15 +270,7 @@ public class NinePatch implements Disposable {
 
     @Override
     public void dispose() {
-        for(Patch[] patchesY: patches){
-            for(Patch patch: patchesY){
-                final Texture2D patchTexture = patch.region.getTexture();
-                if(patchTexture != texture)
-                    patchTexture.dispose();
-            }
-        }
         texture.dispose();
-        patches = null;
     }
 
 }
