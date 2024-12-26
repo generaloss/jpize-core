@@ -15,18 +15,22 @@ import java.util.function.Function;
 
 public class NinePatch implements Disposable {
 
-    private final Vec2f scale;
+    private final Vec2f scale, extraScale;
     private StretchMode stretchModeX, stretchModeY;
     private Texture2D texture;
     private Patch[][] patches;
 
     private int unstretchableWidth, unstretchableHeight;
     private int stretchableWidth, stretchableHeight;
-    private int stretchablesX, stretchablesY;
     private int unstretchablesX, unstretchablesY;
+    private int stretchablesX, stretchablesY;
+
+    private float contentX_u, contentX_s, contentY_u, contentY_s;
+    private float contentWidth_u, contentWidth_s, contentHeight_u, contentHeight_s;
 
     public NinePatch() {
         this.scale = new Vec2f(1F);
+        this.extraScale = new Vec2f(1F);
         this.setStretchModeX(StretchMode.STRETCH);
         this.setStretchModeY(StretchMode.STRETCH);
     }
@@ -99,6 +103,36 @@ public class NinePatch implements Disposable {
     }
 
 
+    public float getContentX() {
+        final float contentX = (contentX_u * unstretchableWidth + contentX_s * stretchableWidth);
+        return (contentX * scale.x * extraScale.x);
+    }
+
+    public float getContentY() {
+        final float contentY = (contentY_u * unstretchableHeight + contentY_s * stretchableHeight);
+        return (contentY * scale.y * extraScale.y);
+    }
+
+    public float getContentWidth() {
+        final float contentWidth = (contentWidth_u * unstretchableWidth + contentWidth_s * stretchableWidth);
+        return (contentWidth * scale.x * extraScale.x);
+    }
+
+    public float getContentHeight() {
+        final float contentHeight = (contentHeight_u * unstretchableHeight + contentHeight_s * stretchableHeight);
+        return (contentHeight * scale.y * extraScale.y);
+    }
+
+
+
+    public NinePatch load(String internalPath) {
+        return this.load(new Texture2D(internalPath));
+    }
+
+    public NinePatch load(Pixmap pixmap) {
+        return this.load(new Texture2D(pixmap));
+    }
+
     public NinePatch load(Texture2D texture) {
         if(this.texture != null)
             this.dispose();
@@ -109,63 +143,64 @@ public class NinePatch implements Disposable {
         final PixmapRGBA pixmap = new PixmapRGBA(texture.getWidth(), texture.getHeight());
         texture.getImage(pixmap);
 
-        // get lenghts
-        final int[] sizesX = this.getAxisSizes(pixmap, pixmap.getWidth() , x -> pixmap.getPixelRGBA(x, 0));
-        final int[] sizesY = this.getAxisSizes(pixmap, pixmap.getHeight(), y -> pixmap.getPixelRGBA(0, y));
-        pixmap.dispose();
+        // get patches offset & size
+        final int[] patchSizesX = NinePatch.getAxisSizes(pixmap, pixmap.getWidth() ,
+            x -> pixmap.getPixelRGBA(x, 0));
+        final int[] patchSizesY = NinePatch.getAxisSizes(pixmap, pixmap.getHeight(),
+            y -> pixmap.getPixelRGBA(0, y));
 
-        if(sizesX.length < 3 || sizesY.length < 3)
-            throw new IllegalStateException("Invalid marked stretchable area");
+        if(patchSizesX.length < 3 || patchSizesY.length < 3)
+            throw new IllegalStateException("Invalid marked patches");
 
-        stretchablesX = (sizesX.length - 1) / 2;
-        stretchablesY = (sizesY.length - 1) / 2;
-        unstretchablesX = (sizesX.length - stretchablesX);
-        unstretchablesY = (sizesY.length - stretchablesY);
+        stretchablesX = (patchSizesX.length - 1) / 2;
+        stretchablesY = (patchSizesY.length - 1) / 2;
+        unstretchablesX = (patchSizesX.length - stretchablesX);
+        unstretchablesY = (patchSizesY.length - stretchablesY);
 
         // create patches
-        this.createPatches(sizesX, sizesY);
+        this.createPatches(patchSizesX, patchSizesY);
         this.updateSizes();
+
+        this.getContentSize(pixmap);
+
+        pixmap.dispose();
         return this;
     }
 
-    public NinePatch load(Pixmap pixmap) {
-        return this.load(new Texture2D(pixmap));
-    }
+    private void getContentSize(PixmapRGBA pixmap) {
+        final int pixmapBoundY = (pixmap.getHeight() - 1);
+        final int pixmapBoundX = (pixmap.getWidth() - 1);
 
-    public NinePatch load(String internalPath) {
-        return this.load(new Texture2D(internalPath));
-    }
+        final int[] contentSizesX = NinePatch.getAxisSizes(pixmap, pixmap.getWidth(),
+            x -> pixmap.getPixelRGBA(x, pixmapBoundY));
 
+        final int[] contentSizesY = NinePatch.getAxisSizes(pixmap, pixmap.getHeight(),
+            y -> pixmap.getPixelRGBA(pixmapBoundX, y));
 
-    private int[] getAxisSizes(PixmapRGBA pixels, int size, Function<Integer, Integer> indexToColorRgbaFunc) {
-        final IntList partsList = new IntList();
-        boolean prevStretchable = false;
-        int prevPosition = 0;
+        if((contentSizesX.length != 3 && contentSizesX.length != 1) ||
+            (contentSizesY.length != 3 && contentSizesY.length != 1))
+            throw new IllegalStateException("Invalid marked content area");
 
-        int x = 0;
-        while(x < size){
-            final int color = indexToColorRgbaFunc.apply(x);
-            final boolean stretchable = (
-                    (color & 0xFF) == 255 &&
-                    (color & 0xFFFFFF00) == 0 // is black
-            );
-            if(prevStretchable != stretchable){
-                prevStretchable = stretchable;
+        // contentX = (contentSizesX.length == 1 ? 0 : contentSizesX[0]);
+        // contentY = (contentSizesY.length == 1 ? 0 : contentSizesY[0]);
+        // contentWidth  = (contentSizesX[1 - 1 / contentSizesX.length]);
+        // contentHeight = (contentSizesY[1 - 1 / contentSizesY.length]);
 
-                partsList.add(x - prevPosition);
-                prevPosition = x;
-            }
-            x++;
+        if(contentSizesX.length == 1) {
+            contentX_u = 0F;
+            contentX_s = 0F;
+        }else{
+            contentX_u = 0F;
+            contentX_s = 0F;
         }
-        partsList.add(x - prevPosition);
 
-        if(partsList.get(0) == 1 || partsList.getLast() == 1)
-            throw new IllegalStateException("Invalid marked stretchable area");
-
-        partsList.elementSub(0, 1);
-        partsList.elementSub(partsList.size() - 1, 1);
-        partsList.trim();
-        return partsList.array();
+        if(contentSizesY.length == 1) {
+            contentY_u = 0F;
+            contentY_s = 0F;
+        }else{
+            contentY_u = 0F;
+            contentY_s = 0F;
+        }
     }
 
     private void createPatches(int[] sizesX, int[] sizesY) {
@@ -231,14 +266,52 @@ public class NinePatch implements Disposable {
         }
     }
 
+    private static int[] getAxisSizes(PixmapRGBA pixels, int size, Function<Integer, Integer> indexToColorRgbaFunc) {
+        final IntList partsList = new IntList(3);
+        boolean prevStretchable = false;
+        int prevPosition = 0;
+        System.out.println("a");
+        int x = 0;
+        while(x < size){
+            final int color = indexToColorRgbaFunc.apply(x);
+            final boolean stretchable = (
+                (color & 0xFF) == 255 &&
+                    (color & 0xFFFFFF00) == 0 // is black
+            );
+            System.out.println("is black: " + stretchable);
+            if(prevStretchable != stretchable){
+                prevStretchable = stretchable;
+
+                partsList.add(x - prevPosition);
+                prevPosition = x;
+            }
+            x++;
+        }
+        partsList.add(x - prevPosition);
+
+        partsList.elementSub(0, 1);
+        partsList.elementSub(partsList.lastIdx(), 1);
+
+        return partsList.arrayTrimmed();
+    }
+
 
     public void draw(TextureBatch batch, float x, float y, float width, float height) {
         if(patches == null)
             return;
 
-        // clamp draw size to minimum
-        width = Math.max(width, this.getMinWidth());
-        height = Math.max(height, this.getMinHeight());
+        // min size
+        final float minWidth = this.getMinWidth();
+        final float minHeight = this.getMinHeight();
+        extraScale.set(1F);
+        if(width < minWidth){
+            extraScale.x = (width / minWidth);
+            width = minWidth;
+        }
+        if(height < minHeight){
+            extraScale.y = (height / minHeight);
+            height = minHeight;
+        }
 
         // total stretched patches size
         final float stretchedWidth  = (width  - unstretchableWidth  * scale.x) / stretchablesX;
@@ -251,8 +324,8 @@ public class NinePatch implements Disposable {
 
             for(final Patch patch : patchesY){
                 // set patch draw size
-                patch.width  = (patch.stretchableX ? stretchedWidth  : patch.region.getPixelWidth()  * scale.x);
-                patch.height = (patch.stretchableY ? stretchedHeight : patch.region.getPixelHeight() * scale.y);
+                patch.width  = (patch.stretchableX ? stretchedWidth  : patch.region.getPixelWidth()  * scale.x) * extraScale.x;
+                patch.height = (patch.stretchableY ? stretchedHeight : patch.region.getPixelHeight() * scale.y) * extraScale.y;
 
                 // setup region with stretch mode
                 if(patch.stretchableX){
@@ -277,7 +350,9 @@ public class NinePatch implements Disposable {
                 }
 
                 // draw
-                batch.draw(patch.region, offsetX, offsetY, patch.width, patch.height);
+                if(patch.width > 0 && patch.height > 0)
+                    batch.draw(patch.region, offsetX, offsetY, patch.width, patch.height);
+
                 offsetY += patch.height;
             }
             offsetX += patchesY[0].width;

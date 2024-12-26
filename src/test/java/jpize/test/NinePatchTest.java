@@ -18,9 +18,9 @@ public class NinePatchTest extends JpizeApplication {
         Gl.clearColor(0.3, 0.6, 0.9);
         this.batch = new TextureBatch();
         this.ninePatch = new NinePatch()
-            .load("/dialog.9.png")
+            .load("/button.9.png")
             .setStretchMode(StretchMode.STRETCH)
-            .setScale(1F);
+            .setScale(15F);
     }
 
     @Override
@@ -28,6 +28,11 @@ public class NinePatchTest extends JpizeApplication {
         Gl.clearColorBuffer();
         batch.setup();
         ninePatch.draw(batch, 50, 50, Jpize.getX() - 50, Jpize.getY() - 50);
+        batch.drawRect(
+            50 + ninePatch.getContentX(), 50 + ninePatch.getContentY(),
+            ninePatch.getContentWidth() * (Jpize.getX() - 50), ninePatch.getContentHeight() * (Jpize.getY() - 50),
+            0.5
+        );
         batch.render();
     }
 
