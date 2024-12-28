@@ -29,8 +29,8 @@ public class NinePatchTest extends JpizeApplication {
         batch.setup();
         ninePatch.draw(batch, 50, 50, Jpize.getX() - 50, Jpize.getY() - 50);
         batch.drawRect(
-            50 + ninePatch.getContentX(), 50 + ninePatch.getContentY(),
-            ninePatch.getContentWidth() * (Jpize.getX() - 50), ninePatch.getContentHeight() * (Jpize.getY() - 50),
+            50 + ninePatch.getContentX(Jpize.getX() - 50), 50 + ninePatch.getContentY(Jpize.getY() - 50),
+            ninePatch.getContentWidth(Jpize.getX() - 50), ninePatch.getContentHeight(Jpize.getY() - 50),
             0.5
         );
         batch.render();
