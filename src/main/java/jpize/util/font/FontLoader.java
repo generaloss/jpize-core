@@ -2,23 +2,23 @@ package jpize.util.font;
 
 import jpize.util.Utils;
 import jpize.util.math.Mathc;
+import jpize.util.pixmap.PixmapRGBA;
 import jpize.util.res.*;
 import jpize.gl.texture.GlFilter;
 import jpize.util.region.Region;
 import jpize.gl.texture.Texture2D;
-import jpize.util.pixmap.PixmapA;
+import jpize.util.pixmap.PixmapAlpha;
 import jpize.util.io.FastReader;
 import org.lwjgl.stb.STBTTAlignedQuad;
 import org.lwjgl.stb.STBTTBakedChar;
 import org.lwjgl.stb.STBTTFontinfo;
+import org.lwjgl.stb.STBTruetype;
 import org.lwjgl.system.MemoryStack;
 
 import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import java.nio.file.Path;
-
-import static org.lwjgl.stb.STBTruetype.*;
 
 class FontLoader {
 
@@ -158,21 +158,23 @@ class FontLoader {
         font.setHeight(size);
 
         // pixmap
-        final int quadSize = size * Mathc.ceil(Math.sqrt(charset.size())) * 2;
-        final int bitmapWidth =  quadSize;
-        final int bitmapHeight = quadSize;
+        final int bitmapSize = size * Mathc.ceil(Math.sqrt(charset.size())) * 2;
 
-        final PixmapA pixmap = new PixmapA(bitmapWidth, bitmapHeight);
+        final PixmapAlpha pixmapAlpha = new PixmapAlpha(bitmapSize, bitmapSize);
         final ByteBuffer fontFileData = resource.readByteBuffer();
         final STBTTBakedChar.Buffer charData = STBTTBakedChar.malloc(charset.maxChar() + 1);
-        stbtt_BakeFontBitmap(fontFileData, size, pixmap.buffer(), bitmapWidth, bitmapHeight, charset.minChar(), charData);
+        STBTruetype.stbtt_BakeFontBitmap(fontFileData, size, pixmapAlpha.buffer(), bitmapSize, bitmapSize, charset.minChar(), charData);
+
+        final PixmapRGBA pixmapRgba = new PixmapRGBA(bitmapSize, bitmapSize);
+        pixmapRgba.clearRGB(0xFFFFFF);
+        pixmapRgba.setAlphaChannel(pixmapAlpha);
 
         // texture
         final Texture2D texture = new Texture2D()
             .setFilters(linearFilter ? GlFilter.LINEAR : GlFilter.NEAREST)
-            .setImage(pixmap.toPixmapRGBA());
+            .setImage(pixmapRgba);
 
-        pixmap.dispose();
+        pixmapAlpha.dispose();
 
         font.pages().put(0, texture);
 
@@ -180,15 +182,15 @@ class FontLoader {
         try(final MemoryStack stack = MemoryStack.stackPush()){
             // creating font
             final STBTTFontinfo fontInfo = STBTTFontinfo.create();
-            stbtt_InitFont(fontInfo, fontFileData);
+            STBTruetype.stbtt_InitFont(fontInfo, fontFileData);
 
             // getting ascent & descent
             final IntBuffer ascentBuffer = stack.mallocInt(1);
             final IntBuffer descentBuffer = stack.mallocInt(1);
 
-            stbtt_GetFontVMetrics(fontInfo, ascentBuffer, descentBuffer, null);
+            STBTruetype.stbtt_GetFontVMetrics(fontInfo, ascentBuffer, descentBuffer, null);
 
-            final float pixelScale = stbtt_ScaleForPixelHeight(fontInfo, size);
+            final float pixelScale = STBTruetype.stbtt_ScaleForPixelHeight(fontInfo, size);
             font.setAscent(ascentBuffer.get() * pixelScale);
             font.setDescent(descentBuffer.get() * pixelScale);
 
@@ -199,15 +201,15 @@ class FontLoader {
                 final int code = charset.get(i);
 
                 // getting advanceX
-                final FloatBuffer advanceXBuffer = stack.floats(0);
-                final FloatBuffer advanceYBuffer = stack.floats(0);
-                stbtt_GetBakedQuad(charData, bitmapWidth, bitmapHeight, code - charset.minChar(), advanceXBuffer, advanceYBuffer, quad, false);
-                final float advanceX = advanceXBuffer.get();
+                final FloatBuffer advanceBufferX = stack.floats(0);
+                final FloatBuffer advanceBufferY = stack.floats(0);
+                STBTruetype.stbtt_GetBakedQuad(charData, bitmapSize, bitmapSize, code - charset.minChar(), advanceBufferX, advanceBufferY, quad, false);
+                final float advanceX = advanceBufferX.get();
 
-                // calculating glyph region on the texture & glyph width and height
+                // glyph texture region & glyph size
                 final Region regionOnTexture = new Region(quad.s0(), quad.t0(), quad.s1(), quad.t1());
-                float glyphHeight = quad.y1() - quad.y0();
-                float glyphWidth = quad.x1() - quad.x0();
+                float glyphHeight = (quad.y1() - quad.y0());
+                float glyphWidth  = (quad.x1() - quad.x0());
 
                 // adding glyph to the font
                 font.glyphs().put(code, new Glyph(

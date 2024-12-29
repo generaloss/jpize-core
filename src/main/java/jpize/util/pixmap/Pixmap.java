@@ -2,6 +2,7 @@ package jpize.util.pixmap;
 
 import jpize.util.Disposable;
 import jpize.gl.texture.GlInternalFormat;
+import jpize.util.math.Maths;
 import jpize.util.math.vector.Vec2i;
 import org.lwjgl.system.MemoryUtil;
 
@@ -89,6 +90,28 @@ public abstract class Pixmap implements Disposable {
         // copy pixels
         for(int i = 0; i < buffer.limit(); i++)
             buffer.put(i, pixmap.buffer.get(i));
+    }
+
+
+    public int getPixelChannel(int x, int y, int channel) {
+        if(this.isOutOfBounds(x, y))
+            return 0;
+        return buffer.get(this.getIndex(x, y, channel)) & 0xFF;
+    }
+
+    public float getPixelChannelValue(int x, int y, int channel) {
+        return this.getPixelChannel(x, y, channel) / 255F;
+    }
+
+
+    public void setPixelChannel(int x, int y, int channel, int value) {
+        if(this.isOutOfBounds(x, y))
+            return;
+        buffer.put(this.getIndex(x, y, channel), (byte) (value & 0xFF));
+    }
+
+    public void setPixelChannelValue(int x, int y, int channel, double value) {
+        this.setPixelChannel(x, y, channel, Maths.round(value * 255));
     }
 
 

@@ -16,21 +16,25 @@ import java.util.function.Function;
 public class NinePatch implements Disposable {
 
     private final Vec2f scale, extraScale;
+    private boolean drawCenter;
     private StretchMode stretchModeX, stretchModeY;
     private Texture2D texture;
-    private Patch[][] patches;
+    private Patch[][] patchesXY;
 
-    private int unstretWidth, unstretHeight;
-    private int stretWidth, stretHeight;
-    private int unstretchablesX, unstretchablesY;
-    private int stretchablesX, stretchablesY;
+    private int totalStaticWidth, totalStaticHeight;
+    private int totalDynamicWidth, totalDynamicHeight;
+    private int staticNumberX, staticNumberY;
+    private int dynamicNumberX, dynamicNumberY;
 
-    private float contentUnstrFactorX, contentStretFactorX, contentUnstrFactorY, contentStretFactorY;
-    private float contentUnstrFactorWidth, contentStretFactorWidth, contentUnstrFactorHeight, contentStretFactorHeight;
+    private float contentStaticX, contentDynamicX;
+    private float contentStaticY, contentDynamicY;
+    private float contentStaticWidth, contentDynamicWidth;
+    private float contentStaticHeight, contentDynamicHeight;
 
     public NinePatch() {
         this.scale = new Vec2f(1F);
         this.extraScale = new Vec2f(1F);
+        this.drawCenter = true;
         this.setStretchModeX(StretchMode.STRETCH);
         this.setStretchModeY(StretchMode.STRETCH);
     }
@@ -65,6 +69,16 @@ public class NinePatch implements Disposable {
     }
 
 
+    public boolean isDrawCenter() {
+        return drawCenter;
+    }
+
+    public NinePatch setDrawCenter(boolean drawCenter) {
+        this.drawCenter = drawCenter;
+        return this;
+    }
+
+
     public StretchMode getStretchModeX() {
         return stretchModeX;
     }
@@ -95,72 +109,80 @@ public class NinePatch implements Disposable {
 
 
     public float getMinWidth() {
-        return (stretWidth + unstretWidth) * scale.x;
+        return (totalDynamicWidth + totalStaticWidth) * scale.x;
     }
 
     public float getMinHeight() {
-        return (stretHeight + unstretHeight) * scale.y;
+        return (totalDynamicHeight + totalStaticHeight) * scale.y;
     }
 
 
-    public float getUnstretchedWidth() {
-        return (unstretWidth * scale.x);
+    public float getStaticWidth() {
+        return (totalStaticWidth * scale.x);
     }
 
-    public float getUnstretchedHeight() {
-        return (unstretHeight * scale.y);
+    public float getStaticHeight() {
+        return (totalStaticHeight * scale.y);
     }
 
-    private float getStretchedWidth(float width, float unstretchedWidth) {
+    private float getDynamicWidth(float width, float unstretchedWidth) {
         return (width - unstretchedWidth);
     }
 
-    private float getStretchedHeight(float height, float unstretchedHeight) {
+    private float getDynamicHeight(float height, float unstretchedHeight) {
         return (height - unstretchedHeight);
     }
 
-    public float getStretchedWidth(float width) {
-        return this.getStretchedWidth(width, this.getUnstretchedWidth());
+    public float getDynamicWidth(float width) {
+        return this.getDynamicWidth(width, this.getStaticWidth());
     }
 
-    public float getStretchedHeight(float height) {
-        return this.getStretchedHeight(height, this.getUnstretchedHeight());
+    public float getDynamicHeight(float height) {
+        return this.getDynamicHeight(height, this.getStaticHeight());
     }
 
 
     public float getContentX(float width) {
-        final float unstretchedWidth = this.getUnstretchedWidth();
-        final float stretchedWidth = this.getStretchedWidth(width, unstretchedWidth);
+        if(width < 1)
+            return 0;
+        final float staticWidth = this.getStaticWidth() * extraScale.x;
+        final float dynamicWidth = this.getDynamicWidth(width, staticWidth);
         return (
-            contentUnstrFactorX * unstretchedWidth +
-            contentStretFactorX * stretchedWidth
-        ) * 0.5F;
+            contentStaticX * staticWidth +
+            contentDynamicX * dynamicWidth
+        );
     }
 
     public float getContentY(float height) {
-        final float unstretchedHeight = this.getUnstretchedHeight();
-        final float stretchedHeight = this.getStretchedHeight(height, unstretchedHeight);
+        if(height < 1)
+            return 0;
+        final float staticHeight = this.getStaticHeight() * extraScale.y;
+        final float dynamicHeight = this.getDynamicHeight(height, staticHeight);
         return (
-            contentUnstrFactorY * unstretchedHeight +
-            contentStretFactorY * stretchedHeight
-        ) * 0.5F;
+            contentStaticY * staticHeight +
+            contentDynamicY * dynamicHeight
+        );
     }
 
     public float getContentWidth(float width) {
-        final float unstretchedWidth = this.getUnstretchedWidth();
-        final float stretchedWidth  = this.getStretchedWidth(width, unstretchedWidth);
+        if(width < 1)
+            return 0;
+        final float staticWidth = this.getStaticWidth() * extraScale.x;
+        final float dynamicWidth = this.getDynamicWidth(width, staticWidth);
         return (
-            contentUnstrFactorWidth * unstretchedWidth +
-            contentStretFactorWidth * stretchedWidth
+            contentStaticWidth * staticWidth +
+            contentDynamicWidth * dynamicWidth
         );
     }
 
     public float getContentHeight(float height) {
-        final float unstretchedHeight = this.getUnstretchedHeight();
-        final float stretchedHeight  = this.getStretchedHeight(height, unstretchedHeight);
+        if(height < 1)
+            return 0;
+        final float staticHeight = this.getStaticHeight() * extraScale.y;
+        final float dynamicHeight = this.getDynamicHeight(height, staticHeight);
         return (
-            contentUnstrFactorHeight * unstretchedHeight +
-            contentStretFactorHeight * stretchedHeight
+            contentStaticHeight * staticHeight +
+            contentDynamicHeight * dynamicHeight
         );
     }
 
@@ -185,71 +207,71 @@ public class NinePatch implements Disposable {
         texture.getImage(pixmap);
 
         // get patches offset & size
-        final int[] patchSizesX = NinePatch.getPatchSizes(pixmap, pixmap.getWidth() ,
+        final int[] patchSizesX = NinePatch.getPatchSizes(
+            pixmap, pixmap.getWidth(),
             x -> pixmap.getPixelRGBA(x, 0)
         );
-        final int[] patchSizesY = NinePatch.getPatchSizes(pixmap, pixmap.getHeight(),
+        final int[] patchSizesY = NinePatch.getPatchSizes(
+            pixmap, pixmap.getHeight(),
             y -> pixmap.getPixelRGBA(0, y)
         );
 
         if(patchSizesX.length < 3 || patchSizesY.length < 3)
             throw new IllegalStateException("Invalid marked patches");
 
-        stretchablesX = (patchSizesX.length - 1) / 2;
-        stretchablesY = (patchSizesY.length - 1) / 2;
-        unstretchablesX = (patchSizesX.length - stretchablesX);
-        unstretchablesY = (patchSizesY.length - stretchablesY);
+        // total sizes
+        totalStaticWidth = 0;
+        totalStaticHeight = 0;
+        totalDynamicWidth = 0;
+        totalDynamicHeight = 0;
+        for(int i = 0; i < patchSizesX.length; i++){
+            final int width = patchSizesX[i];
+            if(i % 2 == 0){
+                totalStaticWidth += width;
+            }else{
+                totalDynamicWidth += width;
+            }
+        }
+        for(int i = 0; i < patchSizesY.length; i++){
+            final int height = patchSizesY[i];
+            if(i % 2 == 0){
+                totalStaticHeight += height;
+            }else{
+                totalDynamicHeight += height;
+            }
+        }
 
-        // create patches
+        // number
+        dynamicNumberX = (patchSizesX.length - 1) / 2;
+        dynamicNumberY = (patchSizesY.length - 1) / 2;
+        staticNumberX = (patchSizesX.length - dynamicNumberX);
+        staticNumberY = (patchSizesY.length - dynamicNumberY);
+
+        // patches & content
         this.createPatches(patchSizesX, patchSizesY);
-        this.updateSizes();
-
         this.getContentSize(pixmap, patchSizesX, patchSizesY);
 
         pixmap.dispose();
         return this;
     }
 
-    private void getContentSize(PixmapRGBA pixmap, int[] patchSizesX, int[] patchSizesY) {
-        final int pixmapBoundY = (pixmap.getHeight() - 1);
-        final float[] contentSizesX = NinePatch.getContentSizes(pixmap, pixmap.getWidth() - 1,
-            x -> pixmap.getPixelRGBA(x, 0),
-            x -> pixmap.getPixelRGBA(x, pixmapBoundY)
-        );
-
-        contentUnstrFactorX = contentSizesX[0];
-        contentStretFactorX = contentSizesX[1];
-        contentUnstrFactorWidth = contentSizesX[2];
-        contentStretFactorWidth = contentSizesX[3];
-
-        System.out.println(contentSizesX[0] + " / " + unstretWidth);
-        final int pixmapBoundX = (pixmap.getWidth() - 1);
-        final float[] contentSizesY = NinePatch.getContentSizes(pixmap, pixmap.getHeight() - 1,
-            y -> pixmap.getPixelRGBA(0, y),
-            y -> pixmap.getPixelRGBA(pixmapBoundX, y)
-        );
-
-        contentUnstrFactorY = contentSizesY[0];
-        contentStretFactorY = contentSizesY[1];
-        contentUnstrFactorHeight = contentSizesY[2];
-        contentStretFactorHeight = contentSizesY[3];
-    }
-
     private void createPatches(int[] sizesX, int[] sizesY) {
-        patches = new Patch[sizesX.length][sizesY.length];
+        patchesXY = new Patch[sizesX.length][sizesY.length];
+
         int x = 1;
-        boolean stretchableX = false;
+        boolean isDynamicX = false;
 
         for(int i = 0; i < sizesX.length; i++){
             final int width = sizesX[i];
             int y = 1;
-            boolean stretchableY = false;
+            boolean isDynamicY = false;
 
             for(int j = 0; j < sizesY.length; j++){
                 final int height = sizesY[j];
 
                 final TextureRegion region;
-                if(stretchableX || stretchableY){
+                if(isDynamicX || isDynamicY){
+                    // create dynamic patch
                     final PixmapRGBA patchPixmap = new PixmapRGBA(width, height);
                     texture.getSubImage(x, y, width, height, patchPixmap);
 
@@ -259,85 +281,86 @@ public class NinePatch implements Disposable {
                     region = new TextureRegion(patchTexture);
                     patchPixmap.dispose();
                 }else{
-                    region = new TextureRegion(texture, x, y, width, height);
+                  // create static patch
+                  region = new TextureRegion(texture, x, y, width, height);
                 }
-                final Patch patch = new Patch(region, stretchableX, stretchableY);
+                patchesXY[i][sizesY.length - 1 - j] = new Patch(region, isDynamicX, isDynamicY);
 
-                patches[i][sizesY.length - 1 - j] = patch;
-                stretchableY = !stretchableY;
-
+                isDynamicY = !isDynamicY;
                 y += height;
             }
-            stretchableX = !stretchableX;
+            isDynamicX = !isDynamicX;
             x += width;
         }
     }
 
-    private void updateSizes() {
-        stretWidth = 0;
-        stretHeight = 0;
-        unstretWidth = 0;
-        unstretHeight = 0;
+    private void getContentSize(PixmapRGBA pixmap, int[] patchSizesX, int[] patchSizesY) {
+        final int pixmapBoundY = (pixmap.getHeight() - 1);
+        final float[] contentSizesX = NinePatch.getContentSizes(
+            pixmap, pixmap.getWidth() - 1, false,
+            x -> pixmap.getPixelRGBA(x, 0),
+            x -> pixmap.getPixelRGBA(x, pixmapBoundY)
+        );
 
-        for(Patch[] patchesY : patches){
-            final Patch patch = patchesY[1];
-            final int width = (int) patch.region.getPixelWidth();
-            if(patch.stretchableX){
-                stretWidth += width;
-            }else{
-                unstretWidth += width;
-            }
-        }
-        for(Patch patch : patches[1]){
-            final int height = (int) patch.region.getPixelHeight();
-            if(patch.stretchableY){
-                stretHeight += height;
-            }else{
-                unstretHeight += height;
-            }
-        }
+        contentStaticX      = contentSizesX[0] / totalStaticWidth;
+        contentDynamicX     = contentSizesX[1] / totalDynamicWidth;
+        contentStaticWidth  = contentSizesX[2] / totalStaticWidth;
+        contentDynamicWidth = contentSizesX[3] / totalDynamicWidth;
+
+        final int pixmapBoundX = (pixmap.getWidth() - 1);
+        final float[] contentSizesY = NinePatch.getContentSizes(
+            pixmap, pixmap.getHeight() - 1, true,
+            y -> pixmap.getPixelRGBA(0, y),
+            y -> pixmap.getPixelRGBA(pixmapBoundX, y)
+        );
+
+        contentStaticY       = contentSizesY[0] / totalStaticHeight;
+        contentDynamicY      = contentSizesY[1] / totalDynamicHeight;
+        contentStaticHeight  = contentSizesY[2] / totalStaticHeight;
+        contentDynamicHeight = contentSizesY[3] / totalDynamicHeight;
     }
 
     private static int[] getPatchSizes(PixmapRGBA pixels, int size, Function<Integer, Integer> colorFunc) {
         final IntList partsList = new IntList(3);
-        boolean prevStretchable = false;
+
+        boolean prevIsDynamic = false;
         int prevPosition = 0;
 
-        int x = 0;
-        while(x < size){
-            final int color = colorFunc.apply(x);
-            final boolean stretchable = (
+        int position = 0;
+        while(position < size){
+            final int color = colorFunc.apply(position);
+            final boolean isDynamic = (
                 (color & 0xFF) == 255 &&
                     (color & 0xFFFFFF00) == 0 // is black
             );
-            if(prevStretchable != stretchable){
-                prevStretchable = stretchable;
+            if(prevIsDynamic != isDynamic){
+                prevIsDynamic = isDynamic;
 
-                partsList.add(x - prevPosition);
-                prevPosition = x;
+                partsList.add(position - prevPosition);
+                prevPosition = position;
             }
-            x++;
+            position++;
         }
-        partsList.add(x - prevPosition);
 
+        partsList.add(position - prevPosition);
+
+        // remove corners
         partsList.elementSub(0, 1);
         partsList.elementSub(partsList.lastIdx(), 1);
 
         return partsList.arrayTrimmed();
     }
 
-    private static float[] getContentSizes(PixmapRGBA pixels, int size,
-                                         Function<Integer, Integer> colorFuncPatch,
-                                         Function<Integer, Integer> icolorFuncContent) {
+    private static float[] getContentSizes(PixmapRGBA pixels, int size, boolean invert,
+                                           Function<Integer, Integer> colorFuncPatch,
+                                           Function<Integer, Integer> colorFuncContent) {
         final float[] result = new float[4];
 
         boolean prevIsContent = false;
-        float stretchablePixels = 0;
-        float unstretchablePixels = 0;
 
-        int x = 1;
-        while(x < size){
-            final int colorContent = icolorFuncContent.apply(x);
+        int position = (invert ? (size - 1) : 1);
+        while(position < size || position > 1){
+            final int colorContent = colorFuncContent.apply(position);
             final boolean isContent = (
                 (colorContent & 0xFF) == 255 &&
                 (colorContent & 0xFFFFFF00) == 0 // is black
@@ -347,16 +370,11 @@ public class NinePatch implements Disposable {
                 break;
             prevIsContent = isContent;
 
-            final int colorPatch = colorFuncPatch.apply(x);
+            final int colorPatch = colorFuncPatch.apply(position);
             final boolean isStretchablePatch = (
                 (colorPatch & 0xFF) == 255 &&
                 (colorPatch & 0xFFFFFF00) == 0 // is black
             );
-            if(isStretchablePatch){
-                stretchablePixels++;
-            }else{
-                unstretchablePixels++;
-            }
 
             if(isContent) {
                 if(isStretchablePatch){
@@ -372,92 +390,89 @@ public class NinePatch implements Disposable {
                 }
             }
 
-            x++;
+            position += (invert ? -1 : 1);
         }
-
-        result[0] /= unstretchablePixels;
-        result[1] /= stretchablePixels;
-        result[2] /= unstretchablePixels;
-        result[3] /= stretchablePixels;
 
         return result;
     }
 
 
-
     public void draw(TextureBatch batch, float x, float y, float width, float height) {
-        if(patches == null || width < 1 || height < 1)
+        if(patchesXY == null || width < 1F || height < 1F)
             return;
 
-        // min size
-        final float minWidth = this.getMinWidth();
-        final float minHeight = this.getMinHeight();
+        // extra scale
         extraScale.set(1F);
+        final float minWidth  = this.getMinWidth();
         if(width < minWidth){
             extraScale.x = (width / minWidth);
             width = minWidth;
         }
+        final float minHeight = this.getMinHeight();
         if(height < minHeight){
             extraScale.y = (height / minHeight);
             height = minHeight;
         }
 
-        final float stretchedWidth = this.getStretchedWidth(width) / stretchablesX;
-        final float stretchedHeight = this.getStretchedWidth(height) / stretchablesY;
+        final float dynamicWidth = this.getDynamicWidth(width) / totalDynamicWidth;
+        final float dynamicHeight = this.getDynamicHeight(height) / totalDynamicHeight;
 
         // iterate patches
         float offsetX = x;
-        for(final Patch[] patchesY : patches){
+        for(final Patch[] patchesY : patchesXY){
             float offsetY = y;
 
             for(final Patch patch : patchesY){
-                // set patch draw size
-                patch.width  = (patch.stretchableX ? stretchedWidth  : patch.region.getPixelWidth()  * scale.x) * extraScale.x;
-                patch.height = (patch.stretchableY ? stretchedHeight : patch.region.getPixelHeight() * scale.y) * extraScale.y;
+                // set draw size
+                patch.setDrawWidth(patch.getPixelWidth() * extraScale.x *
+                    (patch.isDynamicX() ? dynamicWidth : scale.x)
+                );
+                patch.setDrawHeight(patch.getPixelHeight() * extraScale.y *
+                    (patch.isDynamicY() ? dynamicHeight : scale.y)
+                );
 
                 // setup region with stretch mode
-                if(patch.stretchableX){
+                if(patch.isDynamicX()) {
                     if(stretchModeX == StretchMode.TILE) {
-                        patch.region.u2 =
-                            stretchedWidth * stretchablesX / (stretWidth * scale.x);
-                    }else if(stretchModeX == StretchMode.TILE_FIT){
-                        patch.region.u2 = Math.max(1, Maths.round(
-                            stretchedWidth * stretchablesX / (stretWidth * scale.x)
-                        ));
+                        patch.getRegion().u2 = (dynamicWidth / scale.x);
+                    }else if(stretchModeX == StretchMode.TILE_FIT) {
+                        patch.getRegion().u2 = Math.max(1F, Maths.round(dynamicWidth / scale.x));
                     }
                 }
-                if(patch.stretchableY){
+                if(patch.isDynamicY()) {
                     if(stretchModeX == StretchMode.TILE) {
-                        patch.region.v2 =
-                            stretchedHeight * stretchablesY / (stretHeight * scale.y);
-                    }else if(stretchModeX == StretchMode.TILE_FIT){
-                        patch.region.v2 = Math.max(1, Maths.round(
-                            stretchedHeight * stretchablesY / (stretHeight * scale.y)
-                        ));
+                        patch.getRegion().v2 = (dynamicHeight / scale.y);
+                    }else if(stretchModeX == StretchMode.TILE_FIT) {
+                        patch.getRegion().v2 = Math.max(1F, Maths.round(dynamicHeight / scale.y));
                     }
                 }
 
                 // draw
-                if(patch.width > 0 && patch.height > 0)
-                    batch.draw(patch.region, offsetX, offsetY, patch.width, patch.height);
+                final boolean isDrawPatch = (
+                    patch.getDrawWidth() > 0F && patch.getDrawHeight() > 0F &&
+                    (drawCenter || !patch.isDynamicX() || !patch.isDynamicY())
+                );
+                if(isDrawPatch) {
+                    batch.draw(patch.getRegion(), offsetX, offsetY, patch.getDrawWidth(), patch.getDrawHeight());
+                }
 
-                offsetY += patch.height;
+                offsetY += patch.getDrawHeight();
             }
-            offsetX += patchesY[0].width;
+            offsetX += patchesY[0].getDrawWidth();
         }
     }
 
     @Override
     public void dispose() {
-        for(Patch[] patchesY: patches){
+        for(Patch[] patchesY: patchesXY){
             for(Patch patch: patchesY){
-                final Texture2D patchTexture = patch.region.getTexture();
+                final Texture2D patchTexture = patch.getRegion().getTexture();
                 if(patchTexture != texture)
                     patchTexture.dispose();
             }
         }
+        patchesXY = null;
         texture.dispose();
-        patches = null;
     }
 
 }

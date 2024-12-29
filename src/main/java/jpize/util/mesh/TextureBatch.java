@@ -235,7 +235,7 @@ public class TextureBatch implements Disposable {
         this.drawRect(x, y, width, height, r, g, b, 1D);
     }
 
-    public void drawRect(float x, float y, float width, float height, double alpha) {
+    public void drawBlackRect(float x, float y, float width, float height, double alpha) {
         this.drawRect(x, y, width, height, 0F, 0F, 0F, alpha);
     }
 

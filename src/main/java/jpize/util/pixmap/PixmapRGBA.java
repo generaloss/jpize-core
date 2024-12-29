@@ -56,7 +56,7 @@ public class PixmapRGBA extends Pixmap {
         return this;
     }
 
-    protected AbstractColor tryBlend(AbstractColor color, int x, int y) {
+    protected AbstractColor tryToBlend(AbstractColor color, int x, int y) {
         if(!blending || color.getAlpha() == 1F)
             return color;
 
@@ -66,17 +66,56 @@ public class PixmapRGBA extends Pixmap {
     }
 
 
+    public PixmapRGBA getPixel(Color dst, int x, int y) {
+        final int posIndex = super.getPositionIndex(x, y);
+        dst.seti(
+            (buffer.get(super.getChannelIndex(posIndex, 0)) & 0xFF),
+            (buffer.get(super.getChannelIndex(posIndex, 1)) & 0xFF),
+            (buffer.get(super.getChannelIndex(posIndex, 2)) & 0xFF),
+            (buffer.get(super.getChannelIndex(posIndex, 3)) & 0xFF)
+        );
+        return this;
+    }
+
+    public int getPixelRGBA(int x, int y) {
+        final int posIndex = super.getPositionIndex(x, y);
+        final int r = buffer.get(super.getChannelIndex(posIndex, 0)) & 0xFF;
+        final int g = buffer.get(super.getChannelIndex(posIndex, 1)) & 0xFF;
+        final int b = buffer.get(super.getChannelIndex(posIndex, 2)) & 0xFF;
+        final int a = buffer.get(super.getChannelIndex(posIndex, 3)) & 0xFF;
+        return (r << 24 | g << 16 | b << 8 | a);
+    }
+
+    public int getPixelARGB(int x, int y) {
+        final int posIndex = super.getPositionIndex(x, y);
+        final int r = buffer.get(super.getChannelIndex(posIndex, 0)) & 0xFF;
+        final int g = buffer.get(super.getChannelIndex(posIndex, 1)) & 0xFF;
+        final int b = buffer.get(super.getChannelIndex(posIndex, 2)) & 0xFF;
+        final int a = buffer.get(super.getChannelIndex(posIndex, 3)) & 0xFF;
+        return (a << 24 | r << 16 | g << 8 | b);
+    }
+
+    public int getPixelABGR(int x, int y) {
+        final int posIndex = super.getPositionIndex(x, y);
+        final int r = buffer.get(super.getChannelIndex(posIndex, 0)) & 0xFF;
+        final int g = buffer.get(super.getChannelIndex(posIndex, 1)) & 0xFF;
+        final int b = buffer.get(super.getChannelIndex(posIndex, 2)) & 0xFF;
+        final int a = buffer.get(super.getChannelIndex(posIndex, 3)) & 0xFF;
+        return (a << 24 | b << 16 | g << 8 | r);
+    }
+
+
     public PixmapRGBA setPixel(int x, int y, AbstractColor color) {
         if(super.isOutOfBounds(x, y))
             return this;
 
-        final int posIndex = this.getPositionIndex(x, y);
-        final AbstractColor blendedColor = this.tryBlend(color, x, y);
+        final int posIndex = super.getPositionIndex(x, y);
+        final AbstractColor blendedColor = this.tryToBlend(color, x, y);
 
-        buffer.put(this.getChannelIndex(posIndex, 0), (byte) ((int) (blendedColor.getRed()   * 255) & 0xFF));
-        buffer.put(this.getChannelIndex(posIndex, 1), (byte) ((int) (blendedColor.getGreen() * 255) & 0xFF));
-        buffer.put(this.getChannelIndex(posIndex, 2), (byte) ((int) (blendedColor.getBlue()  * 255) & 0xFF));
-        buffer.put(this.getChannelIndex(posIndex, 3), (byte) ((int) (blendedColor.getAlpha() * 255) & 0xFF));
+        buffer.put(super.getChannelIndex(posIndex, 0), (byte) (Maths.round(blendedColor.getRed()   * 255) & 0xFF));
+        buffer.put(super.getChannelIndex(posIndex, 1), (byte) (Maths.round(blendedColor.getGreen() * 255) & 0xFF));
+        buffer.put(super.getChannelIndex(posIndex, 2), (byte) (Maths.round(blendedColor.getBlue()  * 255) & 0xFF));
+        buffer.put(super.getChannelIndex(posIndex, 3), (byte) (Maths.round(blendedColor.getAlpha() * 255) & 0xFF));
         return this;
     }
 
@@ -126,51 +165,53 @@ public class PixmapRGBA extends Pixmap {
     }
 
 
-    public PixmapRGBA getPixel(Color dst, int x, int y) {
-        final int posIndex = this.getPositionIndex(x, y);
-        dst.seti(
-            (buffer.get(this.getChannelIndex(posIndex, 0)) & 0xFF),
-            (buffer.get(this.getChannelIndex(posIndex, 1)) & 0xFF),
-            (buffer.get(this.getChannelIndex(posIndex, 2)) & 0xFF),
-            (buffer.get(this.getChannelIndex(posIndex, 3)) & 0xFF)
-        );
+    public PixmapRGBA setPixelRed(int x, int y, int value) {
+        super.setPixelChannel(x, y, 0, value);
         return this;
     }
 
-    public int getPixelRGBA(int x, int y) {
-        final int posIndex = this.getPositionIndex(x, y);
-        final int r = buffer.get(this.getChannelIndex(posIndex, 0)) & 0xFF;
-        final int g = buffer.get(this.getChannelIndex(posIndex, 1)) & 0xFF;
-        final int b = buffer.get(this.getChannelIndex(posIndex, 2)) & 0xFF;
-        final int a = buffer.get(this.getChannelIndex(posIndex, 3)) & 0xFF;
-        return (r << 24 | g << 16 | b << 8 | a);
+    public PixmapRGBA setPixelRedValue(int x, int y, double value) {
+        this.setPixelChannelValue(x, y, 0, value);
+        return this;
     }
-    
-    public int getPixelARGB(int x, int y) {
-        final int posIndex = this.getPositionIndex(x, y);
-        final int r = buffer.get(this.getChannelIndex(posIndex, 0)) & 0xFF;
-        final int g = buffer.get(this.getChannelIndex(posIndex, 1)) & 0xFF;
-        final int b = buffer.get(this.getChannelIndex(posIndex, 2)) & 0xFF;
-        final int a = buffer.get(this.getChannelIndex(posIndex, 3)) & 0xFF;
-        return (a << 24 | r << 16 | g << 8 | b);
+
+    public PixmapRGBA setPixelGreen(int x, int y, int value) {
+        super.setPixelChannel(x, y, 1, value);
+        return this;
     }
-    
-    public int getPixelABGR(int x, int y) {
-        final int posIndex = this.getPositionIndex(x, y);
-        final int r = buffer.get(this.getChannelIndex(posIndex, 0)) & 0xFF;
-        final int g = buffer.get(this.getChannelIndex(posIndex, 1)) & 0xFF;
-        final int b = buffer.get(this.getChannelIndex(posIndex, 2)) & 0xFF;
-        final int a = buffer.get(this.getChannelIndex(posIndex, 3)) & 0xFF;
-        return (a << 24 | b << 16 | g << 8 | r);
+
+    public PixmapRGBA setPixelGreenValue(int x, int y, double value) {
+        this.setPixelChannelValue(x, y, 1, value);
+        return this;
+    }
+
+    public PixmapRGBA setPixelBlue(int x, int y, int value) {
+        super.setPixelChannel(x, y, 2, value);
+        return this;
+    }
+
+    public PixmapRGBA setPixelBlueValue(int x, int y, double value) {
+        this.setPixelChannelValue(x, y, 2, value);
+        return this;
+    }
+
+    public PixmapRGBA setPixelAlpha(int x, int y, int value) {
+        super.setPixelChannel(x, y, 3, value);
+        return this;
+    }
+
+    public PixmapRGBA setPixelAlphaValue(int x, int y, double value) {
+        this.setPixelChannelValue(x, y, 3, value);
+        return this;
     }
 
 
     public PixmapRGBA clear(AbstractColor color) {
         for(int i = 0; i < buffer.capacity(); i += 4){
-            buffer.put(i,     (byte) (color.getRed()   * 255));
-            buffer.put(i + 1, (byte) (color.getGreen() * 255));
-            buffer.put(i + 2, (byte) (color.getBlue()  * 255));
-            buffer.put(i + 3, (byte) (color.getAlpha() * 255));
+            buffer.put(i,     (byte) Maths.round(color.getRed()   * 255));
+            buffer.put(i + 1, (byte) Maths.round(color.getGreen() * 255));
+            buffer.put(i + 2, (byte) Maths.round(color.getBlue()  * 255));
+            buffer.put(i + 3, (byte) Maths.round(color.getAlpha() * 255));
         }
         return this;
     }
@@ -719,6 +760,20 @@ public class PixmapRGBA extends Pixmap {
     public PixmapRGBA colorizeARGB(int color) {
         tmp_colorArg.setARGB(color);
         return this.colorize(tmp_colorArg);
+    }
+
+
+    public PixmapRGBA setAlphaChannel(PixmapAlpha alphaPixmap) {
+        final int minWidth = Math.min(alphaPixmap.getWidth(), width);
+        final int minHeight = Math.min(alphaPixmap.getHeight(), height);
+
+        for(int x = 0; x < minWidth; x++) {
+            for(int y = 0; y < minHeight; y++) {
+                final int alpha = alphaPixmap.getPixel(x, y);
+                this.setPixelAlpha(x, y, alpha);
+            }
+        }
+        return this;
     }
 
 
