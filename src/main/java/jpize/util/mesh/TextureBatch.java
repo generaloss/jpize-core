@@ -22,27 +22,26 @@ import jpize.gl.shader.Shader;
 public class TextureBatch implements Disposable {
 
     private final Mesh mesh;
-    private final Shader shader;
+    private final Shader defaultShader;
+    private Shader currentShader;
+    private Matrix4f combinedMat;
     private final Color color;
     private Texture2D lastTexture;
-    private Matrix4f combinedMat;
-    private Shader customShader;
     // data
     private int size;
     private final FloatList vertexList;
     // transform
-    private final Vec2f transformOrigin;
     private final Matrix3f transformMat, rotationMat, shearMat, scaleMat;
+    private final Vec2f transformOrigin;
     private final Vec2f position;
     private boolean flipX, flipY;
-    private final Vec2f tmpOrigin, tmpVertex1, tmpVertex2, tmpVertex3, tmpVertex4;
+    private boolean roundVertices;
+    // tmp
+    private final Vec2f tmp_origin, tmp_vertex1, tmp_vertex2, tmp_vertex3, tmp_vertex4;
+    private Matrix4f tmp_projectionMat;
+
 
     public TextureBatch() {
-        // shader
-        this.shader = new Shader(
-            Resource.internal("/shader/texture_batch/vert.glsl"),
-            Resource.internal("/shader/texture_batch/frag.glsl")
-        );
         // mesh
         this.mesh = new Mesh(
             new GlVertAttr(2, GlType.FLOAT), // position
@@ -51,43 +50,34 @@ public class TextureBatch implements Disposable {
         );
         this.mesh.setMode(GlPrimitive.QUADS);
         this.vertexList = new FloatList();
-        // matrices
+        // shader
+        this.defaultShader = new Shader(
+            Resource.internal("/shader/texture_batch/vert.glsl"),
+            Resource.internal("/shader/texture_batch/frag.glsl")
+        );
+        this.setShader(defaultShader);
+        // transform
         this.transformMat = new Matrix3f();
         this.rotationMat = new Matrix3f();
         this.shearMat = new Matrix3f();
         this.scaleMat = new Matrix3f();
-        // state
         this.color = new Color();
         this.position = new Vec2f();
         this.transformOrigin = new Vec2f(0.5F);
+        this.setRoundVertices(true);
         // tmp
-        this.tmpOrigin = new Vec2f();
-        this.tmpVertex1 = new Vec2f();
-        this.tmpVertex2 = new Vec2f();
-        this.tmpVertex3 = new Vec2f();
-        this.tmpVertex4 = new Vec2f();
-    }
-
-
-    private void addTexturedQuad(float x, float y, float width, float height, float u1, float v1, float u2, float v2, float r, float g, float b, float a) {
-        tmpOrigin.set(width * transformOrigin.x, height * transformOrigin.y);
-
-        transformMat.set(rotationMat.getMul(scaleMat.getMul(shearMat)));
-
-        tmpVertex1.set(0F,    height).sub(tmpOrigin).mulMat3(transformMat).add(tmpOrigin).add(x, y).add(position);
-        tmpVertex2.set(0F,    0F    ).sub(tmpOrigin).mulMat3(transformMat).add(tmpOrigin).add(x, y).add(position);
-        tmpVertex3.set(width, 0F    ).sub(tmpOrigin).mulMat3(transformMat).add(tmpOrigin).add(x, y).add(position);
-        tmpVertex4.set(width, height).sub(tmpOrigin).mulMat3(transformMat).add(tmpOrigin).add(x, y).add(position);
-
-        vertexList.add(tmpVertex1.x, tmpVertex1.y, (flipX ? u2 : u1), (flipY ? v2 : v1), r, g, b, a);
-        vertexList.add(tmpVertex2.x, tmpVertex2.y, (flipX ? u2 : u1), (flipY ? v1 : v2), r, g, b, a);
-        vertexList.add(tmpVertex3.x, tmpVertex3.y, (flipX ? u1 : u2), (flipY ? v1 : v2), r, g, b, a);
-        vertexList.add(tmpVertex4.x, tmpVertex4.y, (flipX ? u1 : u2), (flipY ? v2 : v1), r, g, b, a);
+        this.tmp_origin = new Vec2f();
+        this.tmp_vertex1 = new Vec2f();
+        this.tmp_vertex2 = new Vec2f();
+        this.tmp_vertex3 = new Vec2f();
+        this.tmp_vertex4 = new Vec2f();
     }
 
 
     public void setup(Matrix4f combined) {
-        this.combinedMat = combined;
+        currentShader.bind();
+        currentShader.uniform("u_combined", combined);
+        combinedMat = combined;
     }
 
     public void setup(Camera camera) {
@@ -95,27 +85,31 @@ public class TextureBatch implements Disposable {
     }
 
     public void setup() {
-        if(combinedMat == null)
-            combinedMat = new Matrix4f();
-        combinedMat.setOrthographic(0F, 0F, Jpize.getWidth(), Jpize.getHeight());
-        this.setup(combinedMat);
+        if(tmp_projectionMat == null)
+            tmp_projectionMat = new Matrix4f();
+        tmp_projectionMat.setOrthographic(0F, 0F, Jpize.getWidth(), Jpize.getHeight());
+        this.setup(tmp_projectionMat);
     }
+
 
     public void setShader(Shader shader) {
-        customShader = shader;
+        if(shader == null){
+            currentShader = defaultShader;
+        }else{
+            currentShader = shader;
+        }
     }
 
-    public void render(boolean clearCache) {
-        if(size == 0 || lastTexture == null || combinedMat == null)
-            return;
 
-        // shader
-        final Shader currentShader = ((customShader != null) ? customShader : shader);
-        currentShader.bind();
-        currentShader.uniform("u_combined", combinedMat);
-        currentShader.uniform("u_texture", lastTexture);
+    public void render(boolean clearCache) {
+        if(size == 0 || lastTexture == null)
+            return;
+        if(combinedMat == null)
+            throw new IllegalStateException("No matrix found. Call TextureBatch.setup() first");
 
         // render
+        currentShader.bind();
+        currentShader.uniform("u_texture", lastTexture);
         mesh.vertices().setData(vertexList.arrayTrimmed());
         mesh.render();
 
@@ -128,6 +122,30 @@ public class TextureBatch implements Disposable {
 
     public void render() {
         this.render(false);
+    }
+
+
+    private void addTexturedQuad(float x, float y, float width, float height, float u1, float v1, float u2, float v2, float r, float g, float b, float a) {
+        tmp_origin.set(width * transformOrigin.x, height * transformOrigin.y);
+
+        transformMat.set(rotationMat.getMul(scaleMat.getMul(shearMat)));
+
+        tmp_vertex1.set(0F,    height).sub(tmp_origin).mulMat3(transformMat).add(tmp_origin).add(x, y).add(position);
+        tmp_vertex2.set(0F,    0F    ).sub(tmp_origin).mulMat3(transformMat).add(tmp_origin).add(x, y).add(position);
+        tmp_vertex3.set(width, 0F    ).sub(tmp_origin).mulMat3(transformMat).add(tmp_origin).add(x, y).add(position);
+        tmp_vertex4.set(width, height).sub(tmp_origin).mulMat3(transformMat).add(tmp_origin).add(x, y).add(position);
+
+        if(roundVertices) {
+            tmp_vertex1.round();
+            tmp_vertex2.round();
+            tmp_vertex3.round();
+            tmp_vertex4.round();
+        }
+
+        vertexList.add(tmp_vertex1.x, tmp_vertex1.y, (flipX ? u2 : u1), (flipY ? v2 : v1), r, g, b, a);
+        vertexList.add(tmp_vertex2.x, tmp_vertex2.y, (flipX ? u2 : u1), (flipY ? v1 : v2), r, g, b, a);
+        vertexList.add(tmp_vertex3.x, tmp_vertex3.y, (flipX ? u1 : u2), (flipY ? v1 : v2), r, g, b, a);
+        vertexList.add(tmp_vertex4.x, tmp_vertex4.y, (flipX ? u1 : u2), (flipY ? v2 : v1), r, g, b, a);
     }
 
 
@@ -277,6 +295,14 @@ public class TextureBatch implements Disposable {
         this.color.set(color);
     }
 
+    public void setColorRGB(int color) {
+        this.color.setRGB(color);
+    }
+
+    public void setColorRGBA(int color) {
+        this.color.setRGBA(color);
+    }
+
     public void setAlpha(double alpha) {
         color.setAlpha(alpha);
     }
@@ -332,9 +358,18 @@ public class TextureBatch implements Disposable {
     }
 
 
+    public boolean isRoundVertices() {
+        return roundVertices;
+    }
+
+    public void setRoundVertices(boolean roundVertices) {
+        this.roundVertices = roundVertices;
+    }
+
+
     @Override
     public void dispose() {
-        shader.dispose();
+        defaultShader.dispose();
         mesh.dispose();
     }
 

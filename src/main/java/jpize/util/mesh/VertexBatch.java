@@ -10,6 +10,7 @@ import jpize.util.array.FloatList;
 import jpize.util.camera.Camera;
 import jpize.util.color.Color;
 import jpize.util.color.AbstractColor;
+import jpize.util.math.Maths;
 import jpize.util.math.matrix.Matrix4f;
 import jpize.util.math.vector.Vec2f;
 import jpize.util.res.Resource;
@@ -17,22 +18,20 @@ import jpize.util.res.Resource;
 public class VertexBatch implements Disposable {
 
     private final Mesh mesh;
-    private final Shader shader;
+    private final Shader defaultShader;
+    private Shader currentShader;
     private final Color color;
     private Matrix4f combinedMat;
-    private Shader customShader;
     // data
     private int size;
     private final FloatList vertexList;
     // transform
     private final Vec2f position;
+    private boolean roundVertices;
+    // tmp
+    private Matrix4f tmp_combinedMat;
 
     public VertexBatch(GlPrimitive mode) {
-        // shader
-        this.shader = new Shader(
-            Resource.internal("/shader/vertex_batch/vert.glsl"),
-            Resource.internal("/shader/vertex_batch/frag.glsl")
-        );
         // mesh
         this.mesh = new Mesh(
             new GlVertAttr(2, GlType.FLOAT), // position
@@ -40,14 +39,22 @@ public class VertexBatch implements Disposable {
         );
         this.mesh.setMode(mode);
         this.vertexList = new FloatList();
-        // state
+        // shader
+        this.defaultShader = new Shader(
+            Resource.internal("/shader/vertex_batch/vert.glsl"),
+            Resource.internal("/shader/vertex_batch/frag.glsl")
+        );
+        this.setShader(defaultShader);
+        // transform
         this.color = new Color();
         this.position = new Vec2f();
     }
 
 
     public void setup(Matrix4f combined) {
-        this.combinedMat = combined;
+        currentShader.bind();
+        currentShader.uniform("u_combined", combined);
+        combinedMat = combined;
     }
 
     public void setup(Camera camera) {
@@ -55,26 +62,30 @@ public class VertexBatch implements Disposable {
     }
 
     public void setup() {
-        if(combinedMat == null)
-            combinedMat = new Matrix4f();
-        combinedMat.setOrthographic(0F, 0F, Jpize.getWidth(), Jpize.getHeight());
-        this.setup(combinedMat);
+        if(tmp_combinedMat == null)
+            tmp_combinedMat = new Matrix4f();
+        tmp_combinedMat.setOrthographic(0F, 0F, Jpize.getWidth(), Jpize.getHeight());
+        this.setup(tmp_combinedMat);
     }
+
 
     public void setShader(Shader shader) {
-        customShader = shader;
+        if(shader == null){
+            currentShader = defaultShader;
+        }else{
+            currentShader = shader;
+        }
     }
 
-    public void render(boolean clearCache) {
-        if(size == 0 || combinedMat == null)
-            return;
 
-        // shader
-        final Shader currentShader = (customShader != null) ? customShader : shader;
-        currentShader.bind();
-        currentShader.uniform("u_combined", combinedMat);
+    public void render(boolean clearCache) {
+        if(size == 0)
+            return;
+        if(combinedMat == null)
+            throw new IllegalStateException("No matrix found. Call TextureBatch.setup() first");
 
         // render
+        currentShader.bind();
         mesh.vertices().setData(vertexList.arrayTrimmed());
         mesh.render(size);
 
@@ -91,7 +102,13 @@ public class VertexBatch implements Disposable {
 
 
     public void addVertex(float x, float y, float r, float g, float b, float a) {
-        vertexList.add(x + position.x, y + position.y,  r, g, b, a);
+        float positionX = (x + position.x);
+        float positionY = (y + position.y);
+        if(roundVertices){
+            positionX = Maths.round(positionX);
+            positionY = Maths.round(positionY);
+        }
+        vertexList.add(positionX, positionY,  r, g, b, a);
         size++;
     }
 
@@ -149,6 +166,14 @@ public class VertexBatch implements Disposable {
         this.color.set(color);
     }
 
+    public void setColorRGB(int color) {
+        this.color.setRGB(color);
+    }
+
+    public void setColorRGBA(int color) {
+        this.color.setRGBA(color);
+    }
+
     public void setAlpha(double alpha) {
         color.setAlpha(alpha);
     }
@@ -159,9 +184,18 @@ public class VertexBatch implements Disposable {
     }
 
 
+    public boolean isRoundVertices() {
+        return roundVertices;
+    }
+
+    public void setRoundVertices(boolean roundVertices) {
+        this.roundVertices = roundVertices;
+    }
+
+
     @Override
     public void dispose() {
-        shader.dispose();
+        defaultShader.dispose();
         mesh.dispose();
     }
 

@@ -17,10 +17,12 @@ public class NinePatchTest extends JpizeApplication {
     public void init() {
         Gl.clearColor(0.3, 0.6, 0.9);
         this.batch = new TextureBatch();
+        this.batch.position().add(50);
         this.ninePatch = new NinePatch()
-            .load("/button_ll.9.png")
-            .setStretchMode(StretchMode.STRETCH)
-            .setScale(20.5);
+            .load("/button_l.9.png")
+            .setStretchMode(StretchMode.TILE_FIT)
+            .setScale(20)
+            .setDrawCenter(true);
     }
 
     @Override
@@ -28,16 +30,16 @@ public class NinePatchTest extends JpizeApplication {
         Gl.clearColorBuffer();
         batch.setup();
 
-        float width  = (Jpize.getX() - 50);
-        float height = (Jpize.getY() - 50);
+        final float width  = (Jpize.getX() - batch.position().x);
+        final float height = (Jpize.getY() - batch.position().y);
 
-        batch.drawRect(49, 49, width + 2, height + 2, 1.0F, 0.3F, 0.3F);
-        ninePatch.draw(batch, 50, 50, width, height);
+        batch.drawRect(-1, -1, width + 2, height + 2, 1.0F, 0.3F, 0.3F);
+        ninePatch.draw(batch, 0, 0, width, height);
 
-        float contentX = 50 + ninePatch.getContentX(width);
-        float contentY = 50 + ninePatch.getContentY(height);
-        float contentWidth = ninePatch.getContentWidth(width);
-        float contentHeight = ninePatch.getContentHeight(height);
+        final float contentX = ninePatch.getContentX(width);
+        final float contentY = ninePatch.getContentY(height);
+        final float contentWidth = ninePatch.getContentWidth(width);
+        final float contentHeight = ninePatch.getContentHeight(height);
         batch.drawRect(contentX, contentY, contentWidth, contentHeight, 0.3F, 1.0F, 0.3F, 0.25F);
 
         batch.render();
