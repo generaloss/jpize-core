@@ -74,7 +74,7 @@ public abstract class Pixmap implements Disposable {
 
 
     public void resize(int width, int height) {
-        if(!Vec2i.equals(width, height, this.width, this.height)){
+        if(Vec2i.notEquals(width, height, this.width, this.height)){
             this.width = width;
             this.height = height;
             MemoryUtil.memFree(buffer);

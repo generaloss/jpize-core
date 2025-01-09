@@ -19,9 +19,9 @@ public class NinePatchTest extends JpizeApplication {
         this.batch = new TextureBatch();
         this.batch.position().add(50);
         this.ninePatch = new NinePatch()
-            .load("/button_l.9.png")
-            .setStretchMode(StretchMode.TILE_FIT)
-            .setScale(20)
+            .load("/dialog.9.png")
+            .setStretchMode(StretchMode.STRETCH)
+            .setScale(1)
             .setDrawCenter(true);
     }
 
@@ -33,7 +33,7 @@ public class NinePatchTest extends JpizeApplication {
         final float width  = (Jpize.getX() - batch.position().x);
         final float height = (Jpize.getY() - batch.position().y);
 
-        batch.drawRect(-1, -1, width + 2, height + 2, 1.0F, 0.3F, 0.3F);
+        // batch.drawRect(-1, -1, width + 2, height + 2, 1.0F, 0.3F, 0.3F);
         ninePatch.draw(batch, 0, 0, width, height);
 
         final float contentX = ninePatch.getContentX(width);
