@@ -403,6 +403,66 @@ public class PixmapRGBA extends Pixmap {
     }
 
 
+    public PixmapRGBA drawLinePath(AbstractColor color, int... pointsXY) {
+        for(int i = 0; i < pointsXY.length; i += 2){
+            final int x1 = pointsXY[i];
+            final int y1 = pointsXY[i + 1];
+
+            final int j = (i + 2) % pointsXY.length;
+            final int x2 = pointsXY[j];
+            final int y2 = pointsXY[j + 1];
+
+            this.drawLine(x1, y1, x2, y2, color);
+        }
+        return this;
+    }
+
+    public PixmapRGBA drawLinePath(float red, float green, float blue, float alpha, int... pointsXY) {
+        tmp_colorArg.set(red, green, blue, alpha);
+        return this.drawLinePath(tmp_colorArg, pointsXY);
+    }
+
+    public PixmapRGBA drawLinePath(double red, double green, double blue, double alpha, int... pointsXY) {
+        tmp_colorArg.set(red, green, blue, alpha);
+        return this.drawLinePath(tmp_colorArg, pointsXY);
+    }
+
+    public PixmapRGBA drawLinePathi(int red, int green, int blue, int alpha, int... pointsXY) {
+        tmp_colorArg.seti(red, green, blue, alpha);
+        return this.drawLinePath(tmp_colorArg, pointsXY);
+    }
+
+    public PixmapRGBA drawLinePath(float red, float green, float blue, int... pointsXY) {
+        tmp_colorArg.set(red, green, blue);
+        return this.drawLinePath(tmp_colorArg, pointsXY);
+    }
+
+    public PixmapRGBA drawLinePath(double red, double green, double blue, int... pointsXY) {
+        tmp_colorArg.set(red, green, blue);
+        return this.drawLinePath(tmp_colorArg, pointsXY);
+    }
+
+    public PixmapRGBA drawLinePathi(int red, int green, int blue, int... pointsXY) {
+        tmp_colorArg.seti(red, green, blue);
+        return this.drawLinePath(tmp_colorArg, pointsXY);
+    }
+
+    public PixmapRGBA drawLinePathRGB(int color, int... pointsXY) {
+        tmp_colorArg.setRGB(color);
+        return this.drawLinePath(tmp_colorArg, pointsXY);
+    }
+
+    public PixmapRGBA drawLinePathRGBA(int color, int... pointsXY) {
+        tmp_colorArg.setRGBA(color);
+        return this.drawLinePath(tmp_colorArg, pointsXY);
+    }
+
+    public PixmapRGBA drawLinePathARGB(int color, int... pointsXY) {
+        tmp_colorArg.setARGB(color);
+        return this.drawLinePath(tmp_colorArg, pointsXY);
+    }
+
+
     public PixmapRGBA drawDottedLine(int beginX, int beginY, int endX, int endY, double lineLength, AbstractColor color) {
         final int dx = (endX - beginX);
         final int dy = (endY - beginY);
@@ -470,6 +530,66 @@ public class PixmapRGBA extends Pixmap {
     public PixmapRGBA drawDottedLineARGB(int beginX, int beginY, int endX, int endY, double lineLength, int color) {
         tmp_colorArg.setARGB(color);
         return this.drawDottedLine(beginX, beginY, endX, endY, lineLength, tmp_colorArg);
+    }
+
+
+    public PixmapRGBA drawDottedLinePath(AbstractColor color, double lineLength, int... pointsXY) {
+        for(int i = 0; i < pointsXY.length; i += 2){
+            final int x1 = pointsXY[i];
+            final int y1 = pointsXY[i + 1];
+
+            final int j = (i + 2) % pointsXY.length;
+            final int x2 = pointsXY[j];
+            final int y2 = pointsXY[j + 1];
+
+            this.drawDottedLine(x1, y1, x2, y2, lineLength, color);
+        }
+        return this;
+    }
+
+    public PixmapRGBA drawDottedLinePath(float red, float green, float blue, float alpha, double lineLength, int... pointsXY) {
+        tmp_colorArg.set(red, green, blue, alpha);
+        return this.drawDottedLinePath(tmp_colorArg, lineLength, pointsXY);
+    }
+
+    public PixmapRGBA drawDottedLinePath(double red, double green, double blue, double alpha, double lineLength, int... pointsXY) {
+        tmp_colorArg.set(red, green, blue, alpha);
+        return this.drawDottedLinePath(tmp_colorArg, lineLength, pointsXY);
+    }
+
+    public PixmapRGBA drawDottedLinePathi(int red, int green, int blue, int alpha, double lineLength, int... pointsXY) {
+        tmp_colorArg.seti(red, green, blue, alpha);
+        return this.drawDottedLinePath(tmp_colorArg, lineLength, pointsXY);
+    }
+
+    public PixmapRGBA drawDottedLinePath(float red, float green, float blue, double lineLength, int... pointsXY) {
+        tmp_colorArg.set(red, green, blue);
+        return this.drawDottedLinePath(tmp_colorArg, lineLength, pointsXY);
+    }
+
+    public PixmapRGBA drawDottedLinePath(double red, double green, double blue, double lineLength, int... pointsXY) {
+        tmp_colorArg.set(red, green, blue);
+        return this.drawDottedLinePath(tmp_colorArg, lineLength, pointsXY);
+    }
+
+    public PixmapRGBA drawDottedLinePathi(int red, int green, int blue, double lineLength, int... pointsXY) {
+        tmp_colorArg.seti(red, green, blue);
+        return this.drawDottedLinePath(tmp_colorArg, lineLength, pointsXY);
+    }
+
+    public PixmapRGBA drawDottedLinePathRGB(int color, double lineLength, int... pointsXY) {
+        tmp_colorArg.setRGB(color);
+        return this.drawDottedLinePath(tmp_colorArg, lineLength, pointsXY);
+    }
+
+    public PixmapRGBA drawDottedLinePathRGBA(int color, double lineLength, int... pointsXY) {
+        tmp_colorArg.setRGBA(color);
+        return this.drawDottedLinePath(tmp_colorArg, lineLength, pointsXY);
+    }
+
+    public PixmapRGBA drawDottedLinePathARGB(int color, double lineLength, int... pointsXY) {
+        tmp_colorArg.setARGB(color);
+        return this.drawDottedLinePath(tmp_colorArg, lineLength, pointsXY);
     }
 
 
