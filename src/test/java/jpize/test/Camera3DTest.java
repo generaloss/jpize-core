@@ -9,8 +9,6 @@ import jpize.gl.texture.Skybox;
 import jpize.gl.texture.Texture2D;
 import jpize.gl.type.GlType;
 import jpize.gl.vertex.GlVertAttr;
-import jpize.glfw.Glfw;
-import jpize.glfw.init.GlfwPlatform;
 import jpize.glfw.input.Key;
 import jpize.util.camera.PerspectiveCamera;
 import jpize.util.font.Font;
@@ -18,6 +16,7 @@ import jpize.util.font.FontRenderOptions;
 import jpize.util.input.MotionInput;
 import jpize.util.input.RotationInput;
 import jpize.util.math.EulerAngles;
+import jpize.util.math.vector.Vec2f;
 import jpize.util.mesh.Mesh;
 import jpize.util.res.Resource;
 
@@ -99,8 +98,8 @@ public class Camera3DTest extends JpizeApplication {
         final FontRenderOptions options = font.getRenderOptions();
         options.scale().set(0.2);
 
-        float angleY = 0;//Vec2f.angle(camera.getX(), camera.getZ()) + 90;
-        float angleX = 0;//Vec2f.angleBetween(Vec2f.len(camera.getX(), camera.getZ()), camera.getY(), 0, 1) - 90;
+        float angleY = Vec2f.angle(camera.getX(), camera.getZ()) + 90;
+        float angleX = Vec2f.angleBetween(Vec2f.len(camera.getX(), camera.getZ()), camera.getY(), 0, 1) - 90;
         float angleZ = camera.rotation().getYaw();
 
         options.matrix().setRotationXYZ(angleX, angleY, 0);
@@ -128,8 +127,8 @@ public class Camera3DTest extends JpizeApplication {
 
 
     public static void main(String[] args) {
-        if(System.getProperty("os.name").equals("Linux"))
-            Glfw.glfwInitHintPlatform(GlfwPlatform.X11);
+        // if(System.getProperty("os.name").equals("Linux"))
+        //     Glfw.glfwInitHintPlatform(GlfwPlatform.X11);
 
         Jpize.create(1280, 720, "Quaternion Camera")
             .build().setApp(new Camera3DTest());

@@ -3,6 +3,7 @@ package jpize.glfw.input;
 import jpize.glfw.Glfw;
 import jpize.glfw.cursor.GlfwCursor;
 import jpize.glfw.window.GlfwWindow;
+import jpize.util.math.geometry.Intersector;
 import jpize.util.math.vector.Vec2f;
 import org.lwjgl.system.MemoryUtil;
 
@@ -174,6 +175,15 @@ public class GlfwInput {
 
     public void setCursorPos(double x, double y) {
         glfwSetCursorPos(windowID, x, y);
+    }
+
+
+    public boolean isCursorInRect(double x, double y, double width, double height) {
+        return Intersector.isPointInRect(this.getCursorX(), this.getCursorY(), x, y, width, height);
+    }
+
+    public boolean isCursorNativeInRect(double x, double y, double width, double height) {
+        return Intersector.isPointInRect(this.getCursorX(), this.getCursorNativeY(), x, y, width, height);
     }
 
 

@@ -4,7 +4,7 @@
 
     <groupId>io.github.generaloss</groupId>
     <artifactId>jpize-core</artifactId>
-    <version>SNAPSHOT-25.1.3.01</version>
+    <version>SNAPSHOT-25.1.5-1</version>
     <name>jpize-core</name>
 
     <description>opengl graphics library</description>
@@ -100,7 +100,7 @@
         <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-        <lwjgl.version>3.3.5</lwjgl.version>
+        <lwjgl.version>3.3.6</lwjgl.version>
     </properties>
 
     <dependencyManagement>
@@ -120,7 +120,7 @@
         <dependency>
             <groupId>io.github.generaloss</groupId>
             <artifactId>jpize-utils</artifactId>
-            <version>24.12.8</version>
+            <version>25.1.5-SNAPSHOT-7</version>
             <scope>provided</scope>
         </dependency>
         <!-- lwjgl -->

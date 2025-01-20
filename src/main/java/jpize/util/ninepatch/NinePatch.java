@@ -346,7 +346,7 @@ public class NinePatch implements Disposable {
 
         // remove corners
         partsList.elementSub(0, 1);
-        partsList.elementSub(partsList.lastIdx(), 1);
+        partsList.elementSub(partsList.lastIndex(), 1);
 
         return partsList.arrayTrimmed();
     }

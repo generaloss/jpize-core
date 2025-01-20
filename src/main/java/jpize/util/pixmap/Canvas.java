@@ -2,8 +2,7 @@ package jpize.util.pixmap;
 
 import jpize.app.Jpize;
 import jpize.gl.texture.Texture2D;
-import jpize.util.postprocess.ScreenQuadMesh;
-import jpize.util.postprocess.ScreenQuadShader;
+import jpize.util.postprocess.RenderQuad;
 
 public class Canvas extends PixmapRGBA {
 
@@ -17,8 +16,7 @@ public class Canvas extends PixmapRGBA {
 
     public void render() {
         frame.setImage(this);
-        ScreenQuadShader.bind(frame);
-        ScreenQuadMesh.render();
+        RenderQuad.instance().render(frame);
     }
 
     @Override

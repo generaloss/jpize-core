@@ -87,7 +87,7 @@ public class Bloom implements PostProcessEffect {
             brightShader.bind();
             brightShader.uniform("u_frame", colorBuffer.getTexture());
             brightShader.uniform("u_brightness", brightness);
-            ScreenQuadMesh.render();
+            RenderQuad.instance().render();
         }
         fbo2.unbind();
 
@@ -97,7 +97,7 @@ public class Bloom implements PostProcessEffect {
             blurShader.bind();
             blurShader.uniform("u_frame", fbo2.getTexture());
             blurShader.uniform("u_radius", radius);
-            ScreenQuadMesh.render();
+            RenderQuad.instance().render();
         }
         blurBuffer.unbind();
 
@@ -107,7 +107,7 @@ public class Bloom implements PostProcessEffect {
         combineShader.uniform("u_bloom", bloom);
         combineShader.uniform("u_exposure", exposure);
         combineShader.uniform("u_gamma", gamma);
-        ScreenQuadMesh.render();
+        RenderQuad.instance().render();
     }
 
     @Override

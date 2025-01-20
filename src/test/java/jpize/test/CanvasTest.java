@@ -29,12 +29,13 @@ public class CanvasTest extends JpizeApplication {
                 (double) canvas.getWidth() / texture.getWidth(),
                 (double) canvas.getHeight() / texture.getHeight());
         final int x = (int) Jpize.getX();
-        final int y = (int) Jpize.input().getCursorNativeY();
+        final int y = (int) Jpize.input().getCursorY();
         canvas.colorize(0.9F, 0.6F, 0.0F);
         canvas.enableBlending();
         canvas.drawCircle(Jpize.getWidth() / 2, Jpize.getHeight() / 2, (int) Vec2i.dst(Jpize.getWidth() / 2, Jpize.getHeight() / 2, x, y), new Color(1, 0, 0));
         canvas.fillRGBA(Jpize.getWidth() / 2, Jpize.getHeight() / 2, x, y, 0xFFFFFF99);
         canvas.disableBlending();
+        canvas.drawCircleRGB(x, y, 6, 0xFFFFFF);
 
         canvas.render();
     }

@@ -10,7 +10,7 @@ import jpize.glfw.init.GlfwPlatform;
 import jpize.glfw.input.MouseBtn;
 import jpize.util.camera.OrthographicCameraCentered;
 import jpize.util.color.Color;
-import jpize.util.math.Intersector;
+import jpize.util.math.geometry.Intersector;
 import jpize.util.math.Mathc;
 import jpize.util.math.vector.Vec2f;
 import jpize.util.mesh.VertexBatch;

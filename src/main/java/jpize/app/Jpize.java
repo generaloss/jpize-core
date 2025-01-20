@@ -59,6 +59,16 @@ public class Jpize {
         return window.getHeight();
     }
 
+
+    public static float getHalfWidth() {
+        return getWidth() * 0.5F;
+    }
+
+    public static float getHalfHeight() {
+        return getHeight() * 0.5F;
+    }
+
+
     public static float getX() {
         final GlfwInput input = input();
         if(input == null)
@@ -71,6 +81,13 @@ public class Jpize {
         if(input == null)
             return 0;
         return input.getCursorY();
+    }
+
+    public static float getNativeY() {
+        final GlfwInput input = input();
+        if(input == null)
+            return 0;
+        return input.getCursorNativeY();
     }
 
     public static float getScroll() {
