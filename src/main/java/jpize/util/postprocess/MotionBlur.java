@@ -64,7 +64,7 @@ public class MotionBlur implements PostProcessEffect {
             shader.bind();
             shader.uniform("u_frame", fbo1.getTexture());
             shader.uniform("u_backFrame", backframe);
-            ScreenQuadMesh.render();
+            RenderQuad.instance().render();
         }
         fbo2.unbind();
         rbo2.unbind();
@@ -76,7 +76,7 @@ public class MotionBlur implements PostProcessEffect {
         shader.bind();
         shader.uniform("u_frame", fbo1.getTexture());
         shader.uniform("u_backFrame", backframe);
-        ScreenQuadMesh.render();
+        RenderQuad.instance().render();
     }
 
     @Override
@@ -92,7 +92,7 @@ public class MotionBlur implements PostProcessEffect {
             shader.bind();
             shader.uniform("u_frame", fbo1.getTexture());
             shader.uniform("u_backFrame", backframe);
-            ScreenQuadMesh.render();
+            RenderQuad.instance().render();
         }
         fbo2.unbind();
         rbo2.unbind();
@@ -106,7 +106,7 @@ public class MotionBlur implements PostProcessEffect {
         shader.bind();
         shader.uniform("u_frame", fbo1.getTexture());
         shader.uniform("u_backFrame", backframe);
-        ScreenQuadMesh.render();
+        RenderQuad.instance().render();
     }
 
     public void resize(int width, int height) {

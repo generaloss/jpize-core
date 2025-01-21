@@ -182,10 +182,6 @@ public class GlfwInput {
         return Intersector.isPointInRect(this.getCursorX(), this.getCursorY(), x, y, width, height);
     }
 
-    public boolean isCursorNativeInRect(double x, double y, double width, double height) {
-        return Intersector.isPointInRect(this.getCursorX(), this.getCursorNativeY(), x, y, width, height);
-    }
-
 
     public Rectangle getPreeditCursorRectangle() {
         final IntBuffer xBuf = MemoryUtil.memAllocInt(1);

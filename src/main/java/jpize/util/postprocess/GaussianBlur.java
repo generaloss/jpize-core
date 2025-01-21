@@ -62,7 +62,7 @@ public class GaussianBlur implements PostProcessEffect {
             shader.uniform("u_frame", fbo1.getTexture());
             shader.uniform("u_axis", 0);
             shader.uniform("u_radius", radius);
-            ScreenQuadMesh.render();
+            RenderQuad.instance().render();
         }
         fbo2.unbind();
 
@@ -71,7 +71,7 @@ public class GaussianBlur implements PostProcessEffect {
         shader.uniform("u_frame", fbo2.getTexture());
         shader.uniform("u_axis", 1);
         shader.uniform("u_radius", radius);
-        ScreenQuadMesh.render();
+        RenderQuad.instance().render();
     }
 
     @Override
@@ -87,7 +87,7 @@ public class GaussianBlur implements PostProcessEffect {
             shader.uniform("u_frame", fbo1.getTexture());
             shader.uniform("u_axis", 0);
             shader.uniform("u_radius", radius);
-            ScreenQuadMesh.render();
+            RenderQuad.instance().render();
         }
         fbo2.unbind();
 
@@ -98,7 +98,7 @@ public class GaussianBlur implements PostProcessEffect {
         shader.uniform("u_frame", fbo2.getTexture());
         shader.uniform("u_axis", 1);
         shader.uniform("u_radius", radius);
-        ScreenQuadMesh.render();
+        RenderQuad.instance().render();
     }
 
     public void resize(int width, int height) {
