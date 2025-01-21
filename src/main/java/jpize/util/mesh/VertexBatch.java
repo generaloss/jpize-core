@@ -10,7 +10,6 @@ import jpize.util.array.FloatList;
 import jpize.util.camera.Camera;
 import jpize.util.color.Color;
 import jpize.util.color.AbstractColor;
-import jpize.util.math.Maths;
 import jpize.util.math.matrix.Matrix4f;
 import jpize.util.math.vector.Vec2f;
 import jpize.util.res.Resource;
@@ -22,6 +21,8 @@ public class VertexBatch implements Disposable {
     private Shader currentShader;
     private final Color color;
     private Matrix4f combinedMat;
+    // vertex
+    private final Color vertexColor;
     // data
     private int size;
     private final FloatList vertexList;
@@ -30,6 +31,7 @@ public class VertexBatch implements Disposable {
     private boolean roundVertices;
     // tmp
     private Matrix4f tmp_combinedMat;
+    private final Vec2f tmp_vertex;
 
     public VertexBatch(GlPrimitive mode) {
         // mesh
@@ -45,9 +47,13 @@ public class VertexBatch implements Disposable {
             Resource.internal("/shader/vertex_batch/frag.glsl")
         );
         this.setShader(defaultShader);
+        // vertex
+        this.vertexColor = new Color();
         // transform
         this.color = new Color();
         this.position = new Vec2f();
+        // tmp
+        this.tmp_vertex = new Vec2f();
     }
 
 
@@ -101,28 +107,66 @@ public class VertexBatch implements Disposable {
     }
 
 
-    public void addVertex(float x, float y, float r, float g, float b, float a) {
-        float positionX = (x + position.x);
-        float positionY = (y + position.y);
-        if(roundVertices){
-            positionX = Maths.round(positionX);
-            positionY = Maths.round(positionY);
-        }
-        vertexList.add(positionX, positionY,  r, g, b, a);
+    private void drawVertexColorless(float x, float y) {
+        tmp_vertex.set(x, y).add(position);
+        if(roundVertices)
+            tmp_vertex.round();
+
+        vertexList.add(
+            tmp_vertex.x, tmp_vertex.y,
+            vertexColor.red, vertexColor.green, vertexColor.blue, vertexColor.alpha
+        );
         size++;
     }
 
-    public void addVertex(float x, float y, AbstractColor color) {
-        this.addVertex(x, y, color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha());
+    public void drawVertex(float x, float y, AbstractColor color) {
+        vertexColor.set(color);
+        this.drawVertexColorless(x, y);
     }
 
-    public void addVertex(Vec2f position, float r, float g, float b, float a) {
-        this.addVertex(position.x, position.y, r, g, b, a);
+    public void drawVertex(float x, float y, double r, double g, double b, double a) {
+        vertexColor.set(r, g, b, a);
+        this.drawVertexColorless(x, y);
     }
 
-    public void addVertex(Vec2f position, AbstractColor color) {
-        this.addVertex(position.x, position.y,
-                color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha());
+    public void drawVertex(float x, float y, double r, double g, double b) {
+        vertexColor.set(r, g, b);
+        this.drawVertexColorless(x, y);
+    }
+
+    public void drawVertexRGBA(float x, float y, int color) {
+        vertexColor.setRGBA(color);
+        this.drawVertexColorless(x, y);
+    }
+
+    public void drawVertexRGB(float x, float y, int color) {
+        vertexColor.setRGB(color);
+        this.drawVertexColorless(x, y);
+    }
+
+    public void drawVertex(Vec2f position, AbstractColor color) {
+        vertexColor.set(color);
+        this.drawVertexColorless(position.x, position.y);
+    }
+
+    public void drawVertex(Vec2f position, double r, double g, double b, double a) {
+        vertexColor.set(r, g, b, a);
+        this.drawVertexColorless(position.x, position.y);
+    }
+
+    public void drawVertex(Vec2f position, double r, double g, double b) {
+        vertexColor.set(r, g, b);
+        this.drawVertexColorless(position.x, position.y);
+    }
+
+    public void drawVertexRGBA(Vec2f position, int color) {
+        vertexColor.setRGBA(color);
+        this.drawVertexColorless(position.x, position.y);
+    }
+
+    public void drawVertexRGB(Vec2f position, int color) {
+        vertexColor.setRGB(color);
+        this.drawVertexColorless(position.x, position.y);
     }
 
 

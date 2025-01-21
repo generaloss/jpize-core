@@ -5,8 +5,6 @@ import jpize.app.JpizeApplication;
 import jpize.gl.Gl;
 import jpize.gl.glenum.GlTarget;
 import jpize.gl.tesselation.GlPrimitive;
-import jpize.glfw.Glfw;
-import jpize.glfw.init.GlfwPlatform;
 import jpize.glfw.input.MouseBtn;
 import jpize.util.camera.OrthographicCameraCentered;
 import jpize.util.color.Color;
@@ -157,8 +155,8 @@ public class ClothSimulation extends JpizeApplication {
             if(!constraint.active)
                 continue;
 
-            line_batch.addVertex(constraint.p1.position, 1F, 1F, 1F, 1F);
-            line_batch.addVertex(constraint.p2.position, 1F, 1F, 1F, 1F);
+            line_batch.drawVertex(constraint.p1.position, 1F, 1F, 1F, 1F);
+            line_batch.drawVertex(constraint.p2.position, 1F, 1F, 1F, 1F);
         }
         line_batch.render();
 
@@ -172,14 +170,14 @@ public class ClothSimulation extends JpizeApplication {
         final Color bounds_color = new Color(0.5F, 0.5F, 0.5F, 1F);
 
         line_batch.setup(camera);
-        line_batch.addVertex(0, 0, bounds_color);
-        line_batch.addVertex(Jpize.getWidth(), 0, bounds_color);
-        line_batch.addVertex(0, 0, bounds_color);
-        line_batch.addVertex(0, Jpize.getHeight(), bounds_color);
-        line_batch.addVertex(Jpize.getWidth(), 0, bounds_color);
-        line_batch.addVertex(Jpize.getWidth(), Jpize.getHeight(), bounds_color);
-        line_batch.addVertex(0, Jpize.getHeight(), bounds_color);
-        line_batch.addVertex(Jpize.getWidth(), Jpize.getHeight(), bounds_color);
+        line_batch.drawVertex(0, 0, bounds_color);
+        line_batch.drawVertex(Jpize.getWidth(), 0, bounds_color);
+        line_batch.drawVertex(0, 0, bounds_color);
+        line_batch.drawVertex(0, Jpize.getHeight(), bounds_color);
+        line_batch.drawVertex(Jpize.getWidth(), 0, bounds_color);
+        line_batch.drawVertex(Jpize.getWidth(), Jpize.getHeight(), bounds_color);
+        line_batch.drawVertex(0, Jpize.getHeight(), bounds_color);
+        line_batch.drawVertex(Jpize.getWidth(), Jpize.getHeight(), bounds_color);
         line_batch.render();
     }
 
@@ -275,9 +273,6 @@ public class ClothSimulation extends JpizeApplication {
 
 
     public static void main(String[] args) {
-        if(System.getProperty("os.name").equals("Linux"))
-            Glfw.glfwInitHintPlatform(GlfwPlatform.X11); // waiting for fixes in lwjgl 3.3.6
-
         Jpize.create(1080, 720, "Cloth Simulation")
             .samples(8)
             .build().setApp(new ClothSimulation());

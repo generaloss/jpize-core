@@ -2,8 +2,6 @@ package jpize.test;
 
 import jpize.app.Jpize;
 import jpize.app.JpizeApplication;
-import jpize.glfw.Glfw;
-import jpize.glfw.init.GlfwPlatform;
 import jpize.util.font.Font;
 import jpize.gl.texture.Texture2D;
 import jpize.util.mesh.TextureBatch;
@@ -48,9 +46,6 @@ public class LoadingWindowTest {
     }
 
     public static void main(String[] args) {
-        if(System.getProperty("os.name").equals("Linux"))
-            Glfw.glfwInitHintPlatform(GlfwPlatform.X11); // waiting for fixes in lwjgl 3.3.6
-
         Jpize.create(720, 480, "Loading...")
             .decorated(false).resizable(false)
             .build().setApp(new LoadingWindow());

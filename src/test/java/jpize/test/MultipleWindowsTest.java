@@ -3,8 +3,6 @@ package jpize.test;
 import jpize.app.Jpize;
 import jpize.app.JpizeApplication;
 import jpize.gl.Gl;
-import jpize.glfw.Glfw;
-import jpize.glfw.init.GlfwPlatform;
 import jpize.glfw.input.Key;
 import jpize.util.input.TextInput;
 import jpize.util.font.Font;
@@ -60,9 +58,6 @@ public class MultipleWindowsTest {
     }
 
     public static void main(String[] args) {
-        if(System.getProperty("os.name").equals("Linux"))
-            Glfw.glfwInitHintPlatform(GlfwPlatform.X11); // waiting for fixes in lwjgl 3.3.6
-
         Jpize.create("Window 1", 800, 600)
             .icon("/icon.png")
             .build().setApp(new Window1());

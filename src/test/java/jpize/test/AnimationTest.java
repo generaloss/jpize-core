@@ -5,8 +5,6 @@ import jpize.app.JpizeApplication;
 import jpize.gl.Gl;
 import jpize.gl.texture.Texture2D;
 import jpize.util.mesh.TextureBatch;
-import jpize.glfw.Glfw;
-import jpize.glfw.init.GlfwPlatform;
 import jpize.util.Animation;
 import jpize.util.region.TextureRegion;
 
@@ -52,11 +50,7 @@ public class AnimationTest extends JpizeApplication {
 
 
     public static void main(String[] args) {
-        if(System.getProperty("os.name").equals("Linux"))
-            Glfw.glfwInitHintPlatform(GlfwPlatform.X11); // waiting for fixes in lwjgl 3.3.6
-
         Jpize.create(720, 480, "Window").build().setApp(new AnimationTest());
-
         Jpize.run();
     }
 

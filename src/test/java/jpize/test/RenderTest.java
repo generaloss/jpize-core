@@ -3,8 +3,6 @@ package jpize.test;
 import jpize.app.Jpize;
 import jpize.app.JpizeApplication;
 import jpize.gl.Gl;
-import jpize.glfw.Glfw;
-import jpize.glfw.init.GlfwPlatform;
 import jpize.util.camera.PerspectiveCamera;
 import jpize.util.shader.ShaderBuilder;
 import jpize.gl.tesselation.GlPrimitive;
@@ -70,9 +68,6 @@ public class RenderTest extends JpizeApplication {
 
 
     public static void main(String[] args) {
-        if(System.getProperty("os.name").equals("Linux"))
-            Glfw.glfwInitHintPlatform(GlfwPlatform.X11); // waiting for fixes in lwjgl 3.3.6
-
         Jpize.create(1280, 720, "Render Test").build().setApp(new RenderTest());
         Jpize.run();
     }

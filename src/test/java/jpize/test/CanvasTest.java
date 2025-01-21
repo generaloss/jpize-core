@@ -3,8 +3,6 @@ package jpize.test;
 import jpize.app.Jpize;
 import jpize.app.JpizeApplication;
 import jpize.gl.Gl;
-import jpize.glfw.Glfw;
-import jpize.glfw.init.GlfwPlatform;
 import jpize.util.color.Color;
 import jpize.util.math.vector.Vec2i;
 import jpize.util.pixmap.Canvas;
@@ -52,11 +50,7 @@ public class CanvasTest extends JpizeApplication {
     }
 
     public static void main(String[] args) {
-        if(System.getProperty("os.name").equals("Linux"))
-            Glfw.glfwInitHintPlatform(GlfwPlatform.X11); // waiting for fixes in lwjgl 3.3.6
-
         Jpize.create(1080, 1080, "Window").build().setApp(new CanvasTest());
-
         Jpize.run();
     }
 

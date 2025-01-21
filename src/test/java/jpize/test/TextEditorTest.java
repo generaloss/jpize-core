@@ -45,7 +45,7 @@ public class TextEditorTest extends JpizeApplication {
         this.cursorArrow = new GlfwCursor(GlfwCursorShape.ARROW);
         this.cursorIbeam = new GlfwCursor(GlfwCursorShape.IBEAM);
 
-        this.editorScale = new Vec2f(1F);
+        this.editorScale = new Vec2f(0.75F);
         this.selectionStart = new Vec2i();
         this.selectionEnd = new Vec2i();
         this.selection = new TextInput.Selection(input, 0, 0, 0, 0);
