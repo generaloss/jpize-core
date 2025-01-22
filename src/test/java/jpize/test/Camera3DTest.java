@@ -127,9 +127,6 @@ public class Camera3DTest extends JpizeApplication {
 
 
     public static void main(String[] args) {
-        // if(System.getProperty("os.name").equals("Linux"))
-        //     Glfw.glfwInitHintPlatform(GlfwPlatform.X11);
-
         Jpize.create(1280, 720, "Quaternion Camera")
             .build().setApp(new Camera3DTest());
 

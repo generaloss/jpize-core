@@ -3,8 +3,6 @@ package jpize.test;
 import jpize.app.Jpize;
 import jpize.app.JpizeApplication;
 import jpize.gl.Gl;
-import jpize.glfw.Glfw;
-import jpize.glfw.init.GlfwPlatform;
 import jpize.util.font.Font;
 import jpize.util.font.FontRenderOptions;
 import jpize.util.mesh.TextureBatch;
@@ -49,9 +47,6 @@ public class TextTest extends JpizeApplication {
 
 
     public static void main(String[] args) throws IOException {
-        if(System.getProperty("os.name").equals("Linux"))
-            Glfw.glfwInitHintPlatform(GlfwPlatform.X11);
-
         Jpize.create(1080, 720, "Cloth Simulation")
             .samples(8)
             .build().setApp(new TextTest());

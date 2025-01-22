@@ -4,7 +4,7 @@
 
     <groupId>io.github.generaloss</groupId>
     <artifactId>jpize-core</artifactId>
-    <version>SNAPSHOT-25.1.5-1</version>
+    <version>25.1.5-SNAPSHOT-2</version>
     <name>jpize-core</name>
 
     <description>opengl graphics library</description>
@@ -120,7 +120,7 @@
         <dependency>
             <groupId>io.github.generaloss</groupId>
             <artifactId>jpize-utils</artifactId>
-            <version>25.1.5-SNAPSHOT-7</version>
+            <version>25.1.5-SNAPSHOT-8</version>
             <scope>provided</scope>
         </dependency>
         <!-- lwjgl -->

@@ -7,8 +7,6 @@ import jpize.gl.tesselation.GlScissor;
 import jpize.gl.texture.Texture2D;
 import jpize.util.font.Font;
 import jpize.util.mesh.TextureBatch;
-import jpize.glfw.Glfw;
-import jpize.glfw.init.GlfwPlatform;
 import jpize.glfw.input.MouseBtn;
 import jpize.util.camera.OrthographicCameraCentered;
 import jpize.util.math.Mathc;
@@ -88,12 +86,8 @@ public class TileScissorTest extends JpizeApplication {
 
 
     public static void main(String[] args) {
-        if(System.getProperty("os.name").equals("Linux"))
-            Glfw.glfwInitHintPlatform(GlfwPlatform.X11);
-
         Jpize.create(1280, 720, "Tile Test")
             .build().setApp(new TileScissorTest());
-
         Jpize.run();
     }
 

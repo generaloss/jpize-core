@@ -3,10 +3,8 @@ package jpize.test;
 import jpize.app.Jpize;
 import jpize.app.JpizeApplication;
 import jpize.gl.Gl;
-import jpize.glfw.Glfw;
 import jpize.glfw.cursor.GlfwCursor;
 import jpize.glfw.cursor.GlfwCursorShape;
-import jpize.glfw.init.GlfwPlatform;
 import jpize.glfw.input.Key;
 import jpize.glfw.input.MouseBtn;
 import jpize.util.font.FontRenderOptions;
@@ -255,7 +253,6 @@ public class TextEditorTest extends JpizeApplication {
 
 
     public static void main(String[] args) {
-        if(System.getProperty("os.name").equals("Linux")) Glfw.glfwInitHintPlatform(GlfwPlatform.X11);
         Jpize.create(1280, 1280, "Editor").build().setApp(new TextEditorTest());
         Jpize.run();
     }
