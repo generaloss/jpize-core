@@ -11,6 +11,9 @@ import java.nio.ByteBuffer;
 public class PixmapIO {
 
     public static PixmapRGBA load(boolean invX, boolean invY, BufferedImage image) {
+        if(image == null)
+            throw new IllegalArgumentException("Unable to load null image");
+
         final int width = image.getWidth();
         final int height = image.getHeight();
         

@@ -1,8 +1,8 @@
 package jpize.util.camera;
 
 import jpize.app.Jpize;
+import jpize.util.math.Frustum;
 import jpize.util.math.Quaternion;
-import jpize.util.math.matrix.Frustum;
 import jpize.util.math.matrix.Matrix4f;
 import jpize.util.math.vector.Vec2i;
 import jpize.util.math.vector.Vec3f;
