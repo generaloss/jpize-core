@@ -4,7 +4,7 @@
 
     <groupId>io.github.generaloss</groupId>
     <artifactId>jpize-core</artifactId>
-    <version>25.1.5-SNAPSHOT-15</version>
+    <version>25.1.5</version>
     <name>jpize-core</name>
 
     <description>opengl graphics library</description>
