@@ -11,7 +11,7 @@ public class QuadIndexBuffer extends IndexBuffer {
 
     public QuadIndexBuffer(int maxQuads, GlBufUsage bufferUsage) {
         super.setDefaultUsage(bufferUsage);
-        setMaxQuads(maxQuads, bufferUsage);
+        this.setMaxQuads(maxQuads, bufferUsage);
     }
 
     public QuadIndexBuffer(int maxQuads) {
@@ -21,21 +21,21 @@ public class QuadIndexBuffer extends IndexBuffer {
     public void setMaxQuads(int maxQuads, GlBufUsage bufferUsage) {
         this.maxQuads = maxQuads;
 
-        // Allocate GL buffer
+        // allocate gl buffer
         final int typeSize = GlType.INT.size;
         super.allocateData(maxQuads * QUAD_INDICES * typeSize, bufferUsage);
         final int[] quadIndices = new int[QUAD_INDICES];
 
-        // Set data
+        // set data
         for(int i = 0; i < maxQuads; i++){
-            final int indexQuadOffset = QUAD_INDICES * i * typeSize;
+            final int indexQuadOffset = (QUAD_INDICES * i * typeSize);
             final int vertexQuadOffset = QUAD_VERTICES * i;
 
-            // Triangle 1
+            // triangle 1
             quadIndices[0] = vertexQuadOffset;
             quadIndices[1] = vertexQuadOffset + 1;
             quadIndices[2] = vertexQuadOffset + 2;
-            // Triangle 2
+            // triangle 2
             quadIndices[3] = vertexQuadOffset + 2;
             quadIndices[4] = vertexQuadOffset + 3;
             quadIndices[5] = vertexQuadOffset;

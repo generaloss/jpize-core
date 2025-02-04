@@ -1,6 +1,7 @@
 package jpize.gl.shader;
 
 import jpize.gl.GlObject;
+import org.lwjgl.PointerBuffer;
 
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
@@ -64,11 +65,12 @@ public class GlProgram extends GlObject {
     }
 
     private void logError(String error) {
-        final String log = glGetProgramInfoLog(ID);
-        if(!log.isEmpty())
+        final CharSequence log = glGetProgramInfoLog(ID);
+        if(!log.isEmpty()){
             throw new RuntimeException(error + ":\n" + log);
-        else
+        }else{
             throw new RuntimeException(error);
+        }
     }
 
 
@@ -161,7 +163,7 @@ public class GlProgram extends GlObject {
     }
 
 
-    public int getUniformLoc(CharSequence uniform) {
+    public int getUniformLocation(CharSequence uniform) {
         return glGetUniformLocation(ID, uniform);
     }
 
@@ -173,21 +175,38 @@ public class GlProgram extends GlObject {
         return glGetUniformi(ID, location);
     }
 
-    public void bindAttributeLocation(int index, String name) {
+    public void bindAttributeLocation(int index, CharSequence name) {
         glBindAttribLocation(ID, index, name);
     }
 
-    public void bindFragDataLocation(int index, String name) {
+    public void bindFragDataLocation(int index, CharSequence name) {
         glBindFragDataLocation(ID, index, name);
     }
 
 
-    public int getUniformBlockIndex(String uniformBlockName) {
+    public int getUniformIndices(CharSequence uniformName) {
+        return glGetUniformIndices(ID, uniformName);
+    }
+
+    public void getUniformIndices(CharSequence[] uniformNames, IntBuffer uniformIndices) {
+        glGetUniformIndices(ID, uniformNames, uniformIndices);
+    }
+
+    public void getUniformIndices(PointerBuffer uniformNames, IntBuffer uniformIndices) {
+        glGetUniformIndices(ID, uniformNames, uniformIndices);
+    }
+
+    public void getUniformIndices(PointerBuffer uniformNames, int[] uniformIndices) {
+        glGetUniformIndices(ID, uniformNames, uniformIndices);
+    }
+
+
+    public int getUniformBlockIndex(CharSequence uniformBlockName) {
         return glGetUniformBlockIndex(ID, uniformBlockName);
     }
 
-    public void uniformBlockBinding(int location, int bindingPoint) {
-        glUniformBlockBinding(ID, location, bindingPoint);
+    public void uniformBlockBinding(int blockIndex, int blockBindingPoint) {
+        glUniformBlockBinding(ID, blockIndex, blockBindingPoint);
     }
 
 

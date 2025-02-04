@@ -8,14 +8,14 @@ public class VertexBuffer extends GlVertexBuffer {
     private int vertexSize, vertexBytes;
 
     public VertexBuffer() {
-        bind();
+        super.bind();
     }
 
 
     public void enableAttributes(GlVertAttr... attributes) {
         for(GlVertAttr attribute: attributes){
             vertexSize += attribute.getCount();
-            vertexBytes += attribute.getCount() * attribute.getType().size;
+            vertexBytes += (attribute.getCount() * attribute.getType().size);
         }
 
         int pointer = 0;
@@ -28,7 +28,7 @@ public class VertexBuffer extends GlVertexBuffer {
             super.vertexAttribPointer(i, count, type, attribute.isNormalize(), vertexSize * type.size, pointer);
             super.enableVertexAttribArray(i);
 
-            pointer += count * type.size;
+            pointer += (count * type.size);
         }
     }
 
@@ -41,7 +41,7 @@ public class VertexBuffer extends GlVertexBuffer {
     }
 
     public int getVertexCount() {
-        return getSize() / vertexSize;
+        return (super.getSize() / vertexSize);
     }
 
 }

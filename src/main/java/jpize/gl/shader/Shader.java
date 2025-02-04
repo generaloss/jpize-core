@@ -1,5 +1,6 @@
 package jpize.gl.shader;
 
+import jpize.gl.buffer.GlUniformBuffer;
 import jpize.gl.texture.TextureCubemap;
 import jpize.gl.texture.Texture2D;
 import jpize.gl.texture.Texture2DArray;
@@ -14,8 +15,8 @@ import java.util.HashMap;
 
 public class Shader extends GlProgram {
 
-    private final HashMap<String, Integer> uniforms;
-    private int numSampler2D, numSamplerCube, numSampler2DArray;
+    private final HashMap<CharSequence, Integer> uniforms;
+    private int numSampler2D, numSamplerCube, numSampler2DArray, numUniformBuffer;
 
     public Shader() {
         this.uniforms = new HashMap<>();
@@ -96,110 +97,110 @@ public class Shader extends GlProgram {
             name = name.strip();                                 // 'type name'
             name = name.substring(name.lastIndexOf(" ") + 1);    // 'name'
 
-            uniforms.put(name, super.getUniformLoc(name));
+            uniforms.put(name, super.getUniformLocation(name));
         }
     }
 
-    protected int getUniformLocation(String uniformName) {
+    protected int getCachedUniformLocation(CharSequence uniformName) {
         if(!uniforms.containsKey(uniformName))
             throw new IllegalArgumentException("No such uniform: " + uniformName);
         return uniforms.get(uniformName);
     }
 
 
-    public Shader uniformMat4(String uniformName, float[] values) {
-        super.uniformMat4(this.getUniformLocation(uniformName), false, values);
+    public Shader uniformMat4(CharSequence uniformName, float[] values) {
+        super.uniformMat4(this.getCachedUniformLocation(uniformName), false, values);
         return this;
     }
 
-    public Shader uniform(String uniformName, Matrix4f matrix4f) {
+    public Shader uniform(CharSequence uniformName, Matrix4f matrix4f) {
         uniformMat4(uniformName, matrix4f.val);
         return this;
     }
 
-    public Shader uniformMat3(String uniformName, float[] values) {
-        super.uniformMat3(this.getUniformLocation(uniformName), false, values);
+    public Shader uniformMat3(CharSequence uniformName, float[] values) {
+        super.uniformMat3(this.getCachedUniformLocation(uniformName), false, values);
         return this;
     }
 
-    public Shader uniform(String uniformName, Matrix3f matrix3f) {
+    public Shader uniform(CharSequence uniformName, Matrix3f matrix3f) {
         this.uniformMat3(uniformName, matrix3f.val);
         return this;
     }
 
-    public Shader uniform(String uniformName, Vec2f v) {
-        super.uniform(this.getUniformLocation(uniformName), v.x, v.y);
+    public Shader uniform(CharSequence uniformName, Vec2f v) {
+        super.uniform(this.getCachedUniformLocation(uniformName), v.x, v.y);
         return this;
     }
 
-    public Shader uniform(String uniformName, Vec3f v) {
-        super.uniform(this.getUniformLocation(uniformName), v.x, v.y, v.z);
+    public Shader uniform(CharSequence uniformName, Vec3f v) {
+        super.uniform(this.getCachedUniformLocation(uniformName), v.x, v.y, v.z);
         return this;
     }
 
-    public Shader uniform(String uniformName, float x) {
-        super.uniform(this.getUniformLocation(uniformName), x);
+    public Shader uniform(CharSequence uniformName, float x) {
+        super.uniform(this.getCachedUniformLocation(uniformName), x);
         return this;
     }
 
-    public Shader uniform(String uniformName, float x, float y) {
-        super.uniform(this.getUniformLocation(uniformName), x, y);
+    public Shader uniform(CharSequence uniformName, float x, float y) {
+        super.uniform(this.getCachedUniformLocation(uniformName), x, y);
         return this;
     }
 
-    public Shader uniform(String uniformName, float x, float y, float z) {
-        super.uniform(this.getUniformLocation(uniformName), x, y, z);
+    public Shader uniform(CharSequence uniformName, float x, float y, float z) {
+        super.uniform(this.getCachedUniformLocation(uniformName), x, y, z);
         return this;
     }
 
-    public Shader uniform(String uniformName, float x, float y, float z, float w) {
-        super.uniform(this.getUniformLocation(uniformName), x, y, z, w);
+    public Shader uniform(CharSequence uniformName, float x, float y, float z, float w) {
+        super.uniform(this.getCachedUniformLocation(uniformName), x, y, z, w);
         return this;
     }
 
-    public Shader uniform(String uniformName, float[] array) {
-        super.uniform(this.getUniformLocation(uniformName), array);
+    public Shader uniform(CharSequence uniformName, float[] array) {
+        super.uniform(this.getCachedUniformLocation(uniformName), array);
         return this;
     }
 
-    public Shader uniform(String uniformName, int value) {
-        super.uniform(this.getUniformLocation(uniformName), value);
+    public Shader uniform(CharSequence uniformName, int value) {
+        super.uniform(this.getCachedUniformLocation(uniformName), value);
         return this;
     }
 
-    public Shader uniform(String uniformName, boolean value) {
+    public Shader uniform(CharSequence uniformName, boolean value) {
         this.uniform(uniformName, value ? 1 : 0);
         return this;
     }
 
-    public Shader uniform(String uniformName, int[] array) {
-        super.uniform(this.getUniformLocation(uniformName), array);
+    public Shader uniform(CharSequence uniformName, int[] array) {
+        super.uniform(this.getCachedUniformLocation(uniformName), array);
         return this;
     }
 
-    public Shader uniform(String uniformName, AbstractColor color) {
-        super.uniform(this.getUniformLocation(uniformName),
+    public Shader uniform(CharSequence uniformName, AbstractColor color) {
+        super.uniform(this.getCachedUniformLocation(uniformName),
                 color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha());
         return this;
     }
 
-    public Shader uniform(String uniformName, Texture2D texture) {
+    public Shader uniform(CharSequence uniformName, Texture2D texture) {
         texture.active(numSampler2D);
-        super.uniform(this.getUniformLocation(uniformName), numSampler2D);
+        super.uniform(this.getCachedUniformLocation(uniformName), numSampler2D);
         numSampler2D++;
         return this;
     }
 
-    public Shader uniform(String uniformName, Texture2DArray textureArray) {
+    public Shader uniform(CharSequence uniformName, Texture2DArray textureArray) {
         textureArray.active(numSampler2DArray);
-        super.uniform(this.getUniformLocation(uniformName), numSampler2DArray);
+        super.uniform(this.getCachedUniformLocation(uniformName), numSampler2DArray);
         numSampler2DArray++;
         return this;
     }
 
-    public Shader uniform(String uniformName, TextureCubemap cubeMap) {
+    public Shader uniform(CharSequence uniformName, TextureCubemap cubeMap) {
         cubeMap.active(numSamplerCube);
-        super.uniform(this.getUniformLocation(uniformName), numSamplerCube);
+        super.uniform(this.getCachedUniformLocation(uniformName), numSamplerCube);
         numSamplerCube++;
         return this;
     }
@@ -211,12 +212,17 @@ public class Shader extends GlProgram {
     }
 
 
-    public Shader uniformBlockBinding(String uniformName, int bindingPoint) {
-        final int index = super.getUniformBlockIndex(uniformName);
+    public Shader uniformBlockBinding(CharSequence uniformBlockName, int blockBindingPoint) {
+        final int index = super.getUniformBlockIndex(uniformBlockName);
         if(index < 0)
-            throw new RuntimeException("No uniform buffer called '" + uniformName + "'");
-        super.uniformBlockBinding(index, bindingPoint);
+            throw new RuntimeException("No uniform block called '" + uniformBlockName + "'");
+        super.uniformBlockBinding(index, blockBindingPoint);
         return this;
+    }
+
+    public Shader uniform(CharSequence uniformName, GlUniformBuffer uniformBuffer) {
+        uniformBuffer.bind(numUniformBuffer);
+        return this.uniformBlockBinding(uniformName, numUniformBuffer++);
     }
 
     
@@ -224,6 +230,7 @@ public class Shader extends GlProgram {
         numSampler2D = 0;
         numSamplerCube = 0;
         numSampler2DArray = 0;
+        numUniformBuffer = 0;
         super.bind();
     }
 

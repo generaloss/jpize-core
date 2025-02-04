@@ -182,6 +182,10 @@ public class GlfwInput {
         return Intersector.isPointInRect(this.getCursorX(), this.getCursorY(), x, y, width, height);
     }
 
+    public boolean isCursorOnRect(double x, double y, double width, double height) {
+        return Intersector.isPointOnRect(this.getCursorX(), this.getCursorY(), x, y, width, height);
+    }
+
 
     public Rectangle getPreeditCursorRectangle() {
         final IntBuffer xBuf = MemoryUtil.memAllocInt(1);

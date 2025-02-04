@@ -15,6 +15,7 @@ public class IndexBuffer extends GlIndexBuffer {
     }
 
 
+    @Override
     public void setDefaultUsage(GlBufUsage defaultUsage) {
         this.defaultUsage = defaultUsage;
     }
@@ -28,6 +29,7 @@ public class IndexBuffer extends GlIndexBuffer {
         super.allocateData(size, defaultUsage);
     }
 
+    @Override
     public void setData(int... data) {
         super.setData(data, defaultUsage);
         indexCount = data.length;
@@ -38,17 +40,20 @@ public class IndexBuffer extends GlIndexBuffer {
         indexCount = data.length;
     }
 
+    @Override
     public void setData(short... data) {
         super.setData(data, defaultUsage);
         indexCount = data.length;
     }
 
 
+    @Override
     public void setData(IntBuffer data) {
         super.setData(data, defaultUsage);
         indexCount = data.limit();
     }
 
+    @Override
     public void setData(ByteBuffer data) {
         super.setData(data, defaultUsage);
         indexCount = data.limit();
@@ -59,6 +64,7 @@ public class IndexBuffer extends GlIndexBuffer {
         indexCount = data.limit();
     }
 
+    @Override
     public void setData(ShortBuffer data) {
         super.setData(data, defaultUsage);
         indexCount = data.limit();
