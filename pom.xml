@@ -4,11 +4,19 @@
 
     <groupId>io.github.generaloss</groupId>
     <artifactId>jpize-core</artifactId>
-    <version>25.1.5</version>
+    <version>25.2.3</version>
     <name>jpize-core</name>
 
-    <description>opengl graphics library</description>
+    <description>OpenGL Graphics Library</description>
     <url>https://github.com/generaloss/jpize-core</url>
+
+    <properties>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+        <lwjgl.version>3.3.6</lwjgl.version>
+    </properties>
 
     <dependencyManagement>
         <dependencies>
@@ -27,7 +35,7 @@
         <dependency>
             <groupId>io.github.generaloss</groupId>
             <artifactId>jpize-utils</artifactId>
-            <version>25.1.5</version>
+            <version>25.2.3</version>
             <scope>provided</scope>
         </dependency>
         <!-- lwjgl -->
@@ -47,14 +55,6 @@
         <dependency><groupId>org.lwjgl</groupId><artifactId>lwjgl-stb</artifactId><classifier>natives-linux</classifier></dependency>
         <dependency><groupId>org.lwjgl</groupId><artifactId>lwjgl-stb</artifactId><classifier>natives-windows</classifier></dependency>
     </dependencies>
-
-    <properties>
-        <maven.compiler.source>17</maven.compiler.source>
-        <maven.compiler.target>17</maven.compiler.target>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-
-        <lwjgl.version>3.3.6</lwjgl.version>
-    </properties>
 
     <scm>
         <connection>scm:git:git://github.com/generaloss/jpize-core.git</connection>
@@ -137,7 +137,6 @@
                     <tokenAuth>true</tokenAuth>
                 </configuration>
             </plugin>
-
         </plugins>
     </build>
 

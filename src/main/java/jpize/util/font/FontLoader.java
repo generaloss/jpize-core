@@ -92,11 +92,12 @@ class FontLoader {
 
                     // page resource
                     final Resource pageResource;
-                    if(resource.isInternal()){
+                    if(resource.isInternalRes()){
                         pageResource = Resource.internal(pageRelativePath);
-                    }else if(resource.isExternal()){
-                        pageResource = Resource.external(pageRelativePath);
-                    }else if(resource instanceof ZipResource zipRes){
+                    }else if(resource.isFileRes()){
+                        pageResource = Resource.file(pageRelativePath);
+                    }else if(resource.isZipRes()){
+                        final ZipResource zipRes = resource.asZipRes();
                         pageResource = Resource.zip(zipRes.file(), zipRes.file().getEntry(pageRelativePath));
                     }else{
                         throw new IllegalArgumentException("Unable to load FNT font from UrlResource.");

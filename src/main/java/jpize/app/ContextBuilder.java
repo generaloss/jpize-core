@@ -6,7 +6,6 @@ import jpize.gl.glenum.GlTarget;
 import jpize.gl.texture.GlBlendFactor;
 import jpize.glfw.Glfw;
 import jpize.glfw.GlfwImage;
-import jpize.glfw.init.GlfwPlatform;
 import jpize.glfw.monitor.GlfwMonitor;
 import jpize.glfw.window.GlfwWindow;
 import jpize.glfw.window.GlfwWindowHint;
@@ -21,8 +20,8 @@ public class ContextBuilder {
 
     protected ContextBuilder(String title, int width, int height) {
         // waiting for wayland fix in lwjgl 3.4.0
-        if(System.getProperty("os.name").equals("Linux"))
-            Glfw.glfwInitHintPlatform(GlfwPlatform.X11);
+        // if(System.getProperty("os.name").equals("Linux"))
+        //     Glfw.glfwInitHintPlatform(GlfwPlatform.X11);
 
         ContextManager.instance(); // init
         this.title = title;

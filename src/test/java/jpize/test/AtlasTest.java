@@ -14,7 +14,7 @@ public class AtlasTest extends JpizeApplication {
     public void init() {
         Gl.clearColor(0.3, 0.4, 0.7);
         this.atlas = new TextureAtlas<>();
-        for(Resource s: Resource.external("src/test/resources/blocks").listResources())
+        for(Resource s: Resource.file("src/test/resources/blocks").listResources())
             atlas.put(s.simpleName(), "/blocks/" + s.name());
 
         atlas.setPadding(5, 3, 5, 3);

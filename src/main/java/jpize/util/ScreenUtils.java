@@ -1,6 +1,6 @@
 package jpize.util;
 
-import jpize.util.res.ExternalResource;
+import jpize.util.res.FileResource;
 import org.lwjgl.BufferUtils;
 import jpize.app.Jpize;
 import jpize.util.res.Resource;
@@ -40,12 +40,12 @@ public class ScreenUtils{
         }
     }
 
-    public static void saveScreenshot(ExternalResource resource){
+    public static void saveScreenshot(FileResource resource){
         saveScreenshot(resource.extension(), resource.outStream());
     }
 
     public static void saveScreenshot(String internalPath){
-        saveScreenshot(Resource.external(internalPath));
+        saveScreenshot(Resource.file(internalPath));
     }
 
 }

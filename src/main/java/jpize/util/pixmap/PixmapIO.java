@@ -1,7 +1,7 @@
 package jpize.util.pixmap;
 
 import jpize.util.res.Resource;
-import jpize.util.res.ExternalResource;
+import jpize.util.res.FileResource;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -132,7 +132,7 @@ public class PixmapIO {
     }
     
     public static void save(PixmapRGBA pixmap, String externalPath) {
-        final ExternalResource resource = Resource.external(externalPath);
+        final FileResource resource = Resource.file(externalPath);
         resource.mkAll();
         save(pixmap, resource.file());
     }
