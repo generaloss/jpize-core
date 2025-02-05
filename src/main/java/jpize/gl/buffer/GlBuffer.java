@@ -188,27 +188,27 @@ public class GlBuffer extends GlObject {
     }
 
 
-    public void setSubData(long offsetBytes, int[] data) {
+    public void setSubData(long offsetBytes, int... data) {
         this.bind();
         glBufferSubData(target.value, offsetBytes, data);
     }
 
-    public void setSubData(long offsetBytes, long[] data) {
+    public void setSubData(long offsetBytes, long... data) {
         this.bind();
         glBufferSubData(target.value, offsetBytes, data);
     }
 
-    public void setSubData(long offsetBytes, float[] data) {
+    public void setSubData(long offsetBytes, float... data) {
         this.bind();
         glBufferSubData(target.value, offsetBytes, data);
     }
 
-    public void setSubData(long offsetBytes, short[] data) {
+    public void setSubData(long offsetBytes, short... data) {
         this.bind();
         glBufferSubData(target.value, offsetBytes, data);
     }
 
-    public void setSubData(long offsetBytes, double[] data) {
+    public void setSubData(long offsetBytes, double... data) {
         this.bind();
         glBufferSubData(target.value, offsetBytes, data);
     }
@@ -244,27 +244,27 @@ public class GlBuffer extends GlObject {
     }
 
 
-    public void getSubData(long offsetBytes, int[] data) {
+    public void getSubData(long offsetBytes, int... data) {
         this.bind();
         glGetBufferSubData(target.value, offsetBytes, data);
     }
 
-    public void getSubData(long offsetBytes, long[] data) {
+    public void getSubData(long offsetBytes, long... data) {
         this.bind();
         glGetBufferSubData(target.value, offsetBytes, data);
     }
 
-    public void getSubData(long offsetBytes, float[] data) {
+    public void getSubData(long offsetBytes, float... data) {
         this.bind();
         glGetBufferSubData(target.value, offsetBytes, data);
     }
 
-    public void getSubData(long offsetBytes, short[] data) {
+    public void getSubData(long offsetBytes, short... data) {
         this.bind();
         glGetBufferSubData(target.value, offsetBytes, data);
     }
 
-    public void getSubData(long offsetBytes, double[] data) {
+    public void getSubData(long offsetBytes, double... data) {
         this.bind();
         glGetBufferSubData(target.value, offsetBytes, data);
     }
@@ -336,17 +336,17 @@ public class GlBuffer extends GlObject {
     }
 
 
-    public void clearSubData(GlInternalFormat format, GlType type, long offset, long size, int[] data) {
+    public void clearSubData(GlInternalFormat format, GlType type, long offset, long size, int... data) {
         this.bind();
         glClearBufferSubData(target.value, format.value, offset, size, format.base.value, type.value, data);
     }
 
-    public void clearSubData(GlInternalFormat format, GlType type, long offset, long size, float[] data) {
+    public void clearSubData(GlInternalFormat format, GlType type, long offset, long size, float... data) {
         this.bind();
         glClearBufferSubData(target.value, format.value, offset, size, format.base.value, type.value, data);
     }
 
-    public void clearSubData(GlInternalFormat format, GlType type, long offset, long size, short[] data) {
+    public void clearSubData(GlInternalFormat format, GlType type, long offset, long size, short... data) {
         this.bind();
         glClearBufferSubData(target.value, format.value, offset, size, format.base.value, type.value, data);
     }

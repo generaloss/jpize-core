@@ -15,10 +15,10 @@ public class GlBufferMapping {
     }
 
 
-    public void write(ByteBuffer data, int writeOffset) {
-        final long scrAddress = MemoryUtil.memAddress(data);
-        final long dstAddress = MemoryUtil.memAddress(mapBuffer, writeOffset);
-        MemoryUtil.memCopy(scrAddress, dstAddress, data.remaining());
+    public void write(int offset, ByteBuffer buffer) {
+        final long scrAddress = MemoryUtil.memAddress(buffer);
+        final long dstAddress = MemoryUtil.memAddress(mapBuffer, offset);
+        MemoryUtil.memCopy(scrAddress, dstAddress, buffer.remaining());
     }
 
     public void unmap() {
