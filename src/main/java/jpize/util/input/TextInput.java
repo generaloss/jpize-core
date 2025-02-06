@@ -12,7 +12,6 @@ import jpize.util.array.StringList;
 import jpize.util.font.Charset;
 import jpize.util.math.Maths;
 import jpize.util.math.vector.Vec2i;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 
@@ -424,7 +423,7 @@ public class TextInput implements Iterable<String> {
     }
 
     @Override
-    public @NotNull Iterator<String> iterator() {
+    public Iterator<String> iterator() {
         return this.lines.iterator();
     }
 
@@ -657,7 +656,7 @@ public class TextInput implements Iterable<String> {
         }
 
         @Override
-        public @NotNull Iterator<String> iterator() {
+        public Iterator<String> iterator() {
             return Arrays.stream(lines).iterator();
         }
 
