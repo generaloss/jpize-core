@@ -44,16 +44,23 @@ public class Shader extends GlProgram {
 
 
     public Shader load(String vertexCode, String fragmentCode) {
-        final GlShader vertexShader = new GlShader(vertexCode, GlShaderType.VERTEX);
-        final GlShader fragmentShader = new GlShader(fragmentCode, GlShaderType.FRAGMENT);
+        uniforms.clear();
         super.detachAll();
+
+        final GlShader vertexShader = new GlShader(GlShaderType.VERTEX);
+        vertexShader.setSource(vertexCode);
+        vertexShader.compileAndCheckError();
         super.attach(vertexShader);
+
+        final GlShader fragmentShader = new GlShader(GlShaderType.FRAGMENT);
+        fragmentShader.setSource(fragmentCode);
+        fragmentShader.compileAndCheckError();
         super.attach(fragmentShader);
+
         super.link();
         vertexShader.dispose();
         fragmentShader.dispose();
 
-        uniforms.clear();
         this.detectUniforms(vertexCode);
         this.detectUniforms(fragmentCode);
         return this;
@@ -64,19 +71,29 @@ public class Shader extends GlProgram {
     }
 
     public Shader load(String vertexCode, String fragmentCode, String geometryCode) {
-        final GlShader geometryShader = new GlShader(geometryCode, GlShaderType.GEOMETRY);
-        final GlShader vertexShader = new GlShader(vertexCode, GlShaderType.VERTEX);
-        final GlShader fragmentShader = new GlShader(fragmentCode, GlShaderType.FRAGMENT);
+        uniforms.clear();
         super.detachAll();
+
+        final GlShader geometryShader = new GlShader(GlShaderType.GEOMETRY);
+        geometryShader.setSource(geometryCode);
+        geometryShader.compileAndCheckError();
         super.attach(geometryShader);
+
+        final GlShader vertexShader = new GlShader(GlShaderType.VERTEX);
+        vertexShader.setSource(vertexCode);
+        vertexShader.compileAndCheckError();
         super.attach(vertexShader);
+
+        final GlShader fragmentShader = new GlShader(GlShaderType.FRAGMENT);
+        fragmentShader.setSource(fragmentCode);
+        fragmentShader.compileAndCheckError();
         super.attach(fragmentShader);
+
         super.link();
         geometryShader.dispose();
         vertexShader.dispose();
         fragmentShader.dispose();
 
-        uniforms.clear();
         this.detectUniforms(vertexCode);
         this.detectUniforms(fragmentCode);
         this.detectUniforms(geometryCode);

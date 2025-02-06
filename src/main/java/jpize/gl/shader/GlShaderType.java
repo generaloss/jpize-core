@@ -16,9 +16,12 @@ public enum GlShaderType {
     }
 
     public static GlShaderType byValue(int value) {
-        if(value == GEOMETRY.value)
-            return GEOMETRY;
-        return values()[value - FRAGMENT.value];
+        return switch(value) {
+            case GL_FRAGMENT_SHADER -> FRAGMENT;
+            case GL_VERTEX_SHADER -> VERTEX;
+            case GL_GEOMETRY_SHADER -> GEOMETRY;
+            default -> null;
+        };
     }
 
 }

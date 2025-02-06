@@ -3,10 +3,11 @@ package jpize.test;
 import jpize.app.Jpize;
 import jpize.app.JpizeApplication;
 import jpize.gl.Gl;
-import jpize.gl.buffer.GlUniformBuffer;
+import jpize.gl.buffer.UniformBufferStd140;
 import jpize.gl.shader.Shader;
 import jpize.gl.texture.Texture2D;
 import jpize.util.math.matrix.Matrix4f;
+import jpize.util.math.vector.Vec2f;
 import jpize.util.postprocess.RenderQuad;
 import jpize.util.res.Resource;
 
@@ -16,31 +17,37 @@ public class UBOTest extends JpizeApplication {
 
     private final Texture2D texture;
     private final Shader shader;
-    private final Matrix4f mat;
-    private final GlUniformBuffer statesBuf;
+    private final Matrix4f matrix;
+    private float brightness;
+    private final UniformBufferStd140 statesBuf;
 
     public UBOTest() {
         this.texture = new Texture2D("/bg.png");
-
         this.shader = new Shader(
             Resource.internal("/vert.glsl"),
             Resource.internal("/frag.glsl")
         );
+        this.matrix = new Matrix4f();
 
-        this.mat = new Matrix4f();
-
-        this.statesBuf = new GlUniformBuffer();
-        statesBuf.allocateData(16 * 4);
-        statesBuf.setSubData(0L, mat.val);
+        this.statesBuf = new UniformBufferStd140();
+        statesBuf.allocateData(64 + 16);
+        this.updateUBO();
 
         shader.bind();
         shader.uniform("State", statesBuf);
     }
 
+    private void updateUBO() {
+        statesBuf.reset();
+        statesBuf.put(matrix);
+        statesBuf.put(0.5F, brightness);
+    }
+
     @Override
     public void render() {
-        mat.identity().translate(Jpize.getX() / Jpize.getWidth(), Jpize.getY() / Jpize.getHeight());
-        statesBuf.setSubData(0L, mat.val);
+        matrix.identity().translate(Jpize.getX() / Jpize.getWidth() - 0.5F, Jpize.getY() / Jpize.getHeight() - 0.5F);
+        brightness = Vec2f.dst(Jpize.getHalfWidth(), Jpize.getHalfHeight(), Jpize.getX(), Jpize.getY()) / 500F;
+        this.updateUBO();
 
         Gl.clearColorBuffer();
         shader.bind();
