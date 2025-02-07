@@ -88,35 +88,35 @@ public class UniformBufferStd140 extends GlUniformBuffer {
 
 
     public void put(int... values) {
-        for(int value : values){
+        for(int value: values){
             super.setSubData(offset, value);
             this.offset(16);
         }
     }
 
     public void put(long... values) {
-        for(long value : values){
+        for(long value: values){
             super.setSubData(offset, value);
             this.offset(16);
         }
     }
 
     public void put(float... values) {
-        for(float value : values){
+        for(float value: values){
             super.setSubData(offset, value);
             this.offset(16);
         }
     }
 
     public void put(short... values) {
-        for(short value : values){
+        for(short value: values){
             super.setSubData(offset, value);
             this.offset(16);
         }
     }
 
     public void put(double... values) {
-        for(double value : values){
+        for(double value: values){
             super.setSubData(offset, value);
             this.offset(16);
         }

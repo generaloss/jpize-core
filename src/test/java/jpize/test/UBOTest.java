@@ -30,7 +30,7 @@ public class UBOTest extends JpizeApplication {
         this.matrix = new Matrix4f();
 
         this.statesBuf = new UniformBufferStd140();
-        statesBuf.allocateData(64 + 16);
+        statesBuf.allocateData(64 + 16 + 16);
         this.updateUBO();
 
         shader.bind();

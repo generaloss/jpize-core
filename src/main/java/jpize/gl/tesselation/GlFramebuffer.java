@@ -7,7 +7,6 @@ import jpize.util.postprocess.RenderQuad;
 import org.lwjgl.BufferUtils;
 import jpize.app.Jpize;
 import jpize.gl.GlObject;
-import jpize.gl.texture.Texture2D;
 
 import java.nio.ByteBuffer;
 

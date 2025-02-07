@@ -20,7 +20,7 @@ public class ContextBuilder {
     private final String title;
 
     protected ContextBuilder(String title, int width, int height) {
-        // waiting for wayland fix in lwjgl 3.4.0
+        // waiting for wayland fix in lwjgl
         if(System.getProperty("os.name").equals("Linux"))
             Glfw.glfwInitHintPlatform(GlfwPlatform.X11);
 
