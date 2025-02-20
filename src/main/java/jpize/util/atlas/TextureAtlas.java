@@ -132,7 +132,7 @@ public class TextureAtlas<T> implements Disposable {
     }
 
 
-    public TextureAtlas<T> setFillPaddings(boolean enable) {
+    public TextureAtlas<T> enablePaddingFilling(boolean enable) {
         fillPaddings = enable;
         return this;
     }

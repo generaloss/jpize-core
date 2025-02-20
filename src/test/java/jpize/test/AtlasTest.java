@@ -19,7 +19,7 @@ public class AtlasTest extends JpizeApplication {
 
         atlas.setPadding(5, 3, 5, 3);
 
-        atlas.setFillPaddings(true);
+        atlas.enablePaddingFilling(true);
 
         atlas.build(128, 128);
     }
