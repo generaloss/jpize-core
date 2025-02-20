@@ -69,7 +69,8 @@ public class Camera3DTest extends JpizeApplication {
 
     @Override
     public void update() {
-        camera.rotation().setRotation(rotInput.getTarget());
+        final EulerAngles angles = rotInput.getTarget();
+        camera.rotation().setRotation(-angles.yaw, -angles.pitch, -angles.roll);
         motionInput.update(camera.rotation().getYaw());
         camera.position().add(motionInput.getMotionDirected().mul(Jpize.getDeltaTime() * 10));
         camera.update();

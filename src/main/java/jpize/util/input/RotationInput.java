@@ -47,8 +47,8 @@ public class RotationInput {
 
     private void onCursorCallback(GlfwWindow window, float x, float y) {
         final GlfwInput input = window.getInput();
-        final float dx = (input.getCursorX() - prevX);
-        final float dy = (input.getCursorNativeY() - prevY);
+        final float dx = (prevX - input.getCursorX());
+        final float dy = (prevY - input.getCursorNativeY());
         this.centerCursor(window, input);
         prevX = input.getCursorX();
         prevY = input.getCursorNativeY();
