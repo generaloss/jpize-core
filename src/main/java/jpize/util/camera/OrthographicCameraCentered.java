@@ -83,12 +83,12 @@ public class OrthographicCameraCentered extends Camera2D {
         return rotation;
     }
 
-    public void setRotation(float deg) {
-        rotation = deg;
+    public void setRotation(float degrees) {
+        rotation = degrees;
     }
 
-    public void rotate(float deg) {
-        rotation += deg;
+    public void rotate(float degrees) {
+        rotation += degrees;
     }
 
     @Override

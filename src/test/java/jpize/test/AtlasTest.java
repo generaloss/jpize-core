@@ -37,8 +37,6 @@ public class AtlasTest extends JpizeApplication {
 
 
     public static void main(String[] args) {
-
-
         Jpize.create(720, 720, "Window").build().setApp(new AtlasTest());
 
         Jpize.run();

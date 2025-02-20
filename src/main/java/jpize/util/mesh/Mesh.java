@@ -33,7 +33,7 @@ public class Mesh implements IMesh {
 
     @Override
     public void render() {
-        render(vertexBuffer.getVertexCount());
+        this.render(vertexBuffer.getVertexCount());
     }
 
 

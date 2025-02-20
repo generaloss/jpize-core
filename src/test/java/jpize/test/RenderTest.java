@@ -53,15 +53,16 @@ public class RenderTest extends JpizeApplication {
         System.out.println(shader.getBinaryLength());
     }
 
+    @Override
     public void render() {
         Gl.clearColorBuffer();
-
         shader.bind();
         camera.update();
         shader.uniform("u_combined", camera.getCombined());
         mesh.render();
     }
 
+    @Override
     public void resize(int width, int height) {
         camera.resize(width, height);
     }
