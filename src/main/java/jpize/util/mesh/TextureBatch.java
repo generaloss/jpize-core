@@ -36,9 +36,10 @@ public class TextureBatch implements Disposable {
     private int size;
     private final FloatList vertexList;
     // transform
-    private final Matrix3f transformMat, rotationMat, shearMat, scaleMat;
+    private final Matrix3f transformMat, rotationMat, shearMat;
     private final Vec2f transformOrigin;
     private final Vec2f position;
+    private final Vec2f scale;
     private boolean flipX, flipY;
     private boolean roundVertices;
     // tmp
@@ -68,10 +69,10 @@ public class TextureBatch implements Disposable {
         this.transformMat = new Matrix3f();
         this.rotationMat = new Matrix3f();
         this.shearMat = new Matrix3f();
-        this.scaleMat = new Matrix3f();
         this.color = new Color();
         this.position = new Vec2f();
         this.transformOrigin = new Vec2f(0.5F);
+        this.scale = new Vec2f(1F);
         this.roundVertices = true;
         // tmp
         this.tmp_origin = new Vec2f();
@@ -141,12 +142,12 @@ public class TextureBatch implements Disposable {
 
         tmp_origin.set(width * transformOrigin.x, height * transformOrigin.y);
 
-        transformMat.set(rotationMat.getMul(scaleMat.getMul(shearMat)));
+        transformMat.set(rotationMat.getMul(shearMat));
 
-        tmp_vertex1.set(0F,    height).sub(tmp_origin).mulMat3(transformMat).add(tmp_origin).add(x, y).add(position);
-        tmp_vertex2.set(0F,    0F    ).sub(tmp_origin).mulMat3(transformMat).add(tmp_origin).add(x, y).add(position);
-        tmp_vertex3.set(width, 0F    ).sub(tmp_origin).mulMat3(transformMat).add(tmp_origin).add(x, y).add(position);
-        tmp_vertex4.set(width, height).sub(tmp_origin).mulMat3(transformMat).add(tmp_origin).add(x, y).add(position);
+        tmp_vertex1.set(0F,    height).sub(tmp_origin).mul(scale).mulMat3(transformMat).add(tmp_origin).add(x, y).add(position);
+        tmp_vertex2.set(0F,    0F    ).sub(tmp_origin).mul(scale).mulMat3(transformMat).add(tmp_origin).add(x, y).add(position);
+        tmp_vertex3.set(width, 0F    ).sub(tmp_origin).mul(scale).mulMat3(transformMat).add(tmp_origin).add(x, y).add(position);
+        tmp_vertex4.set(width, height).sub(tmp_origin).mul(scale).mulMat3(transformMat).add(tmp_origin).add(x, y).add(position);
 
         if(roundVertices) {
             tmp_vertex1.round();
@@ -436,20 +437,8 @@ public class TextureBatch implements Disposable {
         shearMat.setShear(angleX, angleY);
     }
 
-    public void setScale(double scale) {
-        scaleMat.setScale(scale);
-    }
-
-    public void setScale(double x, double y) {
-        scaleMat.setScale(x, y);
-    }
-
-    public void scale(double scale) {
-        scaleMat.scale(scale);
-    }
-
-    public void scale(double x, double y) {
-        scaleMat.scale(x, y);
+    public Vec2f scale() {
+        return scale;
     }
 
     public void flipX(boolean flip) {
