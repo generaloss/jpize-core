@@ -1,6 +1,7 @@
 package jpize.util.camera;
 
 import jpize.app.Jpize;
+import jpize.util.math.EulerAngles;
 import jpize.util.math.Frustum;
 import jpize.util.math.Quaternion;
 import jpize.util.math.matrix.Matrix4f;
@@ -11,6 +12,7 @@ public class PerspectiveCamera extends Camera3D {
 
     private float near, far, fovY;
     private final Quaternion quaternion;
+    private final EulerAngles rotation;
     private final Matrix4f projection, view, combined, imaginaryView;
     private final Vec3f direction;
     private final Frustum frustum;
@@ -23,6 +25,7 @@ public class PerspectiveCamera extends Camera3D {
         this.far = (float) far;
         this.fovY = (float) fovY;
         this.quaternion = new Quaternion();
+        this.rotation = new EulerAngles();
         this.imaginaryView = new Matrix4f();
         this.frustum = new Frustum();
         this.view = new Matrix4f();
@@ -41,6 +44,7 @@ public class PerspectiveCamera extends Camera3D {
     @Override
     public void update() {
         // update direction
+        quaternion.setRotation(-rotation.yaw + 90, -rotation.pitch, -rotation.roll);
         quaternion.getDirection(direction);
         // update view
         this.updateViewMatrix();
@@ -89,8 +93,8 @@ public class PerspectiveCamera extends Camera3D {
         return frustum;
     }
 
-    public Quaternion rotation() {
-        return quaternion;
+    public EulerAngles rotation() {
+        return rotation;
     }
 
     @Override

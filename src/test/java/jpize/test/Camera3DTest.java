@@ -5,6 +5,7 @@ import jpize.app.JpizeApplication;
 import jpize.gl.Gl;
 import jpize.gl.glenum.GlTarget;
 import jpize.gl.shader.Shader;
+import jpize.gl.tesselation.GlPrimitive;
 import jpize.gl.texture.Skybox;
 import jpize.gl.texture.Texture2D;
 import jpize.gl.type.GlType;
@@ -15,8 +16,8 @@ import jpize.util.font.Font;
 import jpize.util.font.FontRenderOptions;
 import jpize.util.input.MotionInput;
 import jpize.util.input.RotationInput;
-import jpize.util.math.EulerAngles;
 import jpize.util.math.vector.Vec2f;
+import jpize.util.math.vector.Vec3f;
 import jpize.util.mesh.Mesh;
 import jpize.util.res.Resource;
 
@@ -36,7 +37,7 @@ public class Camera3DTest extends JpizeApplication {
 
         this.camera = new PerspectiveCamera(0.1F, 100F, 90F);
 
-        this.rotInput = new RotationInput(new EulerAngles());
+        this.rotInput = new RotationInput(camera.rotation());
         this.rotInput.setClampPitch(false);
         this.rotInput.setSpeed(0.1F);
 
@@ -47,20 +48,18 @@ public class Camera3DTest extends JpizeApplication {
             new GlVertAttr(2, GlType.FLOAT)
         );
         mesh.vertices().setData(
-             20F, -10F,  20F,  1F, 1F,
-             20F, -10F, -20F,  0F, 1F,
-            -20F, -10F, -20F,  0F, 0F,
-            -20F, -10F, -20F,  0F, 0F,
-            -20F, -10F,  20F,  1F, 0F,
-             20F, -10F,  20F,  1F, 1F
+             0F, 0F, 0F,  1F, 1F,
+             0F, 0F, 0F,  0F, 1F
         );
+        mesh.setMode(GlPrimitive.LINES);
 
         this.shader = new Shader(Resource.internal("/shader.vert"), Resource.internal("/shader.frag"));
 
         this.skybox = new Skybox(
             "/skybox_positive_x.png", "/skybox_negative_x.png",
             "/skybox_positive_y.png", "/skybox_negative_y.png",
-            "/skybox_positive_z.png", "/skybox_negative_z.png");
+            "/skybox_positive_z.png", "/skybox_negative_z.png"
+        );
 
         this.font = new Font().loadFNT("/font.fnt", false);
     }
@@ -69,9 +68,8 @@ public class Camera3DTest extends JpizeApplication {
 
     @Override
     public void update() {
-        final EulerAngles angles = rotInput.getTarget();
-        camera.rotation().setRotation(-angles.yaw, -angles.pitch, -angles.roll);
-        motionInput.update(camera.rotation().getYaw());
+        motionInput.update(camera.rotation().yaw);
+        System.out.println("yaw: " + camera.rotation().yaw + ", dir: " + camera.rotation().getDirectionHorizontal(new Vec3f()) + ", pos: " + camera.position());
         camera.position().add(motionInput.getMotionDirected().mul(Jpize.getDeltaTime() * 10));
         camera.update();
 
@@ -94,7 +92,7 @@ public class Camera3DTest extends JpizeApplication {
         shader.bind();
         shader.uniform("u_combined", camera.getCombined());
         shader.uniform("u_texture", texture_floor);
-        //mesh.render();
+        mesh.render();
         // 3D text
         final FontRenderOptions options = font.getRenderOptions();
         options.scale().set(0.2);
