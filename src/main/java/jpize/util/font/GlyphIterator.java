@@ -31,7 +31,7 @@ public class GlyphIterator implements Iterator<GlyphSprite> {
 
     @Override
     public boolean hasNext() {
-        return position < text.length();
+        return (position < text.length());
     }
 
     @Override
@@ -40,16 +40,18 @@ public class GlyphIterator implements Iterator<GlyphSprite> {
         prevIncreaseY = 0F;
 
         final Glyph glyph = this.findNextGlyph();
-        if(glyph == null) // create last glyph '\n' to correct bounds
+        if(glyph == null) {
+            // create last glyph '\n' to correct bounds
             return new GlyphSprite(cursorY, font.getLineAdvance(), options.scale(), lineY);
+        }
 
-        prevIncreaseX = glyph.advanceX * options.advanceFactor().x;
+        prevIncreaseX = (glyph.advanceX * options.advanceFactor().x);
 
         // wrap line (max width)
-        final double maxWidth = options.getWrapWidth() / options.scale().x;
+        final double maxWidth = (options.getWrapWidth() / options.scale().x);
         if(maxWidth >= 0F && cursorX + prevIncreaseX > maxWidth){
             cursorX = 0F;
-            prevIncreaseY = options.getLineWrapSign() * font.getLineAdvance() * options.advanceFactor().y;
+            prevIncreaseY = (options.getLineWrapSign() * font.getLineAdvance() * options.advanceFactor().y);
             cursorY += prevIncreaseY;
             lineY++;
         }
@@ -74,7 +76,7 @@ public class GlyphIterator implements Iterator<GlyphSprite> {
 
             // Wrap line
             cursorX = 0F;
-            cursorY += options.getLineWrapSign() * font.getLineAdvance() * options.advanceFactor().y;
+            cursorY += (options.getLineWrapSign() * font.getNewLineAdvance() * options.advanceFactor().y);
             lineY++;
 
             position++;
@@ -102,15 +104,16 @@ public class GlyphIterator implements Iterator<GlyphSprite> {
         cursorX = 0F;
 
         // Skip characters
-        while(hasNext()){
+        while(this.hasNext()){
             if(text.charAt(position) == '\n')
                 break;
+
             position++;
         }
     }
 
 
-    public Font getFont() {
+    public Font font() {
         return font;
     }
 
@@ -128,6 +131,11 @@ public class GlyphIterator implements Iterator<GlyphSprite> {
 
     public float getCursorY() {
         return cursorY;
+    }
+
+    public void advance(float x, float y) {
+        cursorX += x;
+        cursorY += y;
     }
 
     public int getLineY() {

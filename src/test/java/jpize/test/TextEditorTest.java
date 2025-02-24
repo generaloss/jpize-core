@@ -38,6 +38,7 @@ public class TextEditorTest extends JpizeApplication {
         this.input = new TextInput().enable().insert(Jpize.input().getClipboardString());
         this.font = new Font().loadDefault();
         this.renderOptions = font.getRenderOptions().setInvLineWrap(true);
+        // renderOptions.setNewLineGap(40);
         this.batch = new TextureBatch();
 
         this.cursorArrow = new GlfwCursor(GlfwCursorShape.ARROW);

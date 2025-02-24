@@ -64,12 +64,28 @@ public class FontRenderOptions {
         return lineGap;
     }
 
-    public float getGapScaled() {
-        return lineGap * scale.y;
+    public float getLineGapScaled() {
+        return (lineGap * scale.y);
     }
 
     public FontRenderOptions setLineGap(float lineGap) {
         this.lineGap = lineGap;
+        return this;
+    }
+
+
+    public float newLineGap;
+
+    public float getNewLineGap() {
+        return newLineGap;
+    }
+
+    public float getNewLineGapScaled() {
+        return (newLineGap * scale.y);
+    }
+
+    public FontRenderOptions setNewLineGap(float newLineGap) {
+        this.newLineGap = newLineGap;
         return this;
     }
 

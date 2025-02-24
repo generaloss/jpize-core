@@ -38,8 +38,8 @@ public class TextRenderer {
         centerPos.y *= options.getLineWrapSign();
 
         // context-local instance
-        final Iterable<GlyphSprite> iterable = font.iterable(text);
-        final GlyphIterator iterator = (GlyphIterator) iterable.iterator();
+        final GlyphIterator iterator = font.iterator(text);
+        final Iterable<GlyphSprite> iterable = (() -> iterator);
 
         for(GlyphSprite sprite: iterable){
             // cull lines

@@ -95,8 +95,16 @@ public class Font implements Disposable {
         return (height + renderOptions.getLineGap());
     }
 
+    public float getNewLineAdvance() {
+        return (height + renderOptions.getNewLineGap());
+    }
+
     public float getLineAdvanceScaled() {
         return (this.getLineAdvance() * renderOptions.scale().y);
+    }
+
+    public float getNewLineAdvanceScaled() {
+        return (this.getNewLineAdvance() * renderOptions.scale().y);
     }
 
 
@@ -170,9 +178,13 @@ public class Font implements Disposable {
         TextRenderer.render(this, camera, text, x, y, z);
     }
 
+
+    public GlyphIterator iterator(String text) {
+        return new GlyphIterator(this, text);
+    }
+
     public Iterable<GlyphSprite> iterable(String text) {
-        final GlyphIterator iterator = new GlyphIterator(this, text);
-        return () -> iterator;
+        return () -> this.iterator(text);
     }
 
 
