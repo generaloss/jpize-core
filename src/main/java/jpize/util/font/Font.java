@@ -166,16 +166,16 @@ public class Font implements Disposable {
 
 
 
-    public void drawText(TextureBatch batch, String text, float x, float y) {
-        TextRenderer.render(this, batch, text, x, y);
+    public GlyphIterator drawText(TextureBatch batch, String text, float x, float y) {
+        return TextRenderer.render(this, batch, text, x, y);
     }
 
-    public void drawText(String text, float x, float y) {
-        TextRenderer.render(this, text, x, y);
+    public GlyphIterator drawText(String text, float x, float y) {
+        return TextRenderer.render(this, text, x, y);
     }
 
-    public void drawText(Camera3D camera, String text, float x, float y, float z) {
-        TextRenderer.render(this, camera, text, x, y, z);
+    public GlyphIterator drawText(Camera3D camera, String text, float x, float y, float z) {
+        return TextRenderer.render(this, camera, text, x, y, z);
     }
 
 

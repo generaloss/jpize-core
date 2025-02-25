@@ -24,10 +24,12 @@ import java.util.Map;
 
 public class TextRenderer {
 
-    public static void render(Font font, TextureBatch batch, String text, float x, float y) {
-        if(text == null || text.isBlank())
-            return;
-        
+    public static GlyphIterator render(Font font, TextureBatch batch, String text, float x, float y) {
+        if(text == null)
+            return null;
+        if(text.isBlank())
+            return new GlyphIterator(font, text);
+
         // init
         final FontRenderOptions options = font.getRenderOptions();
         batch.setTransformOrigin(0F, 0F);
@@ -65,6 +67,8 @@ public class TextRenderer {
             renderPos.y += font.getDescentScaled();
             batch.draw(sprite.getPage(), sprite.getRegion(), renderPos.x, renderPos.y, sprite.getWidth(), sprite.getHeight(), options.color());
         }
+
+        return iterator;
     }
 
 
@@ -72,9 +76,11 @@ public class TextRenderer {
 
     private static final Map<Long, Renderer> RENDERER_BY_CONTEXT = new HashMap<>();
 
-    public static void render(Font font, String text, float x, float y) {
-        if(text == null || text.isBlank())
-            return;
+    public static GlyphIterator render(Font font, String text, float x, float y) {
+        if(text == null)
+            return null;
+        if(text.isBlank())
+            return new GlyphIterator(font, text);
 
         // context-local instance
         if(!RENDERER_BY_CONTEXT.containsKey(GLFW.glfwGetCurrentContext())){
@@ -177,18 +183,22 @@ public class TextRenderer {
 
         // render mesh
         if(lastTexture == null || vertices.isEmpty())
-            return;
+            return iterator;
 
         renderer.mesh.vertices().setData(vertices.copyOf());
         renderer.shader.bind();
         renderer.shader.uniform("u_combined", renderer.matrixCombined);
         renderer.shader.uniform("u_texture", lastTexture);
         renderer.mesh.render();
+
+        return iterator;
     }
 
-    public static void render(Font font, Camera3D camera, String text, float x, float y, float z) {
-        if(text == null || text.isBlank())
-            return;
+    public static GlyphIterator render(Font font, Camera3D camera, String text, float x, float y, float z) {
+        if(text == null)
+            return null;
+        if(text.isBlank())
+            return new GlyphIterator(font, text);
 
         // context-local instance
         if(!RENDERER_BY_CONTEXT.containsKey(GLFW.glfwGetCurrentContext())){
@@ -290,13 +300,15 @@ public class TextRenderer {
 
         // render mesh
         if(lastTexture == null || vertices.isEmpty())
-            return;
+            return iterator;
 
         renderer.mesh.vertices().setData(vertices.copyOf());
         renderer.shader.bind();
         renderer.shader.uniform("u_combined", camera.getCombined());
         renderer.shader.uniform("u_texture", lastTexture);
         renderer.mesh.render();
+
+        return iterator;
     }
 
 }

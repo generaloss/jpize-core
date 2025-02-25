@@ -2,6 +2,8 @@ package jpize.util.font;
 
 import jpize.util.array.StringList;
 import jpize.util.math.vector.Vec2f;
+
+import java.util.BitSet;
 import java.util.Iterator;
 
 public class GlyphIterator implements Iterator<GlyphSprite> {
@@ -12,6 +14,7 @@ public class GlyphIterator implements Iterator<GlyphSprite> {
     // data
     private final StringList lines;
     private int size;
+    private final BitSet naturalBreakedLines;
     // iterator state
     private String currentLine;
     private final Vec2f cursor;
@@ -20,17 +23,16 @@ public class GlyphIterator implements Iterator<GlyphSprite> {
     private int lineCharIndex;
     private int lineIndex;
 
-    public GlyphIterator(Font font, StringList lines) {
+    public GlyphIterator(Font font, CharSequence text) {
         this.font = font;
         this.options = font.getRenderOptions();
-        this.lines = lines;
+        this.lines = new StringList();
+        this.lines.add(new StringList(""));
+        this.naturalBreakedLines = new BitSet();
+        this.naturalBreakedLines.set(0, true);
         this.cursor = new Vec2f();
         this.prevIncrease = new Vec2f();
         this.resetcursorY();
-    }
-
-    public GlyphIterator(Font font, CharSequence text) {
-        this(font, new StringList(""));
         this.extractLines(text);
     }
 
@@ -43,12 +45,12 @@ public class GlyphIterator implements Iterator<GlyphSprite> {
             final int code = text.charAt(charIndex++);
             if(code == '\n') {
                 // add line
-                lines.add("");
+                lines.add(new StringList(""));
                 lineIndex++;
+                cursor.x = 0;
+                naturalBreakedLines.set(lineIndex, true);
                 continue;
             }
-            lines.elementAdd(lineIndex, (char) code);
-            size++;
 
             // line breaking with textarea max width
             if(lineBreakingWidth >= 0F){
@@ -59,18 +61,21 @@ public class GlyphIterator implements Iterator<GlyphSprite> {
 
                 prevIncrease.x = (glyph.advanceX * options.advanceFactor().x);
 
-                if((cursor.x + prevIncrease.x) >= lineBreakingWidth) {
-                    lines.add("");
+                if(cursor.x != 0 && (cursor.x + prevIncrease.x) >= lineBreakingWidth) {
+                    lines.get(lineIndex);
                     lineIndex++;
                     cursor.x = 0;
+                    naturalBreakedLines.set(lineIndex, false);
 
-                    prevIncrease.y = (options.getLineWrapSign() * font.getLineAdvance() * options.advanceFactor().y);
+                    prevIncrease.y = (options.getLineWrapSign() * font.getNewLineAdvance() * options.advanceFactor().y);
                     cursor.y += prevIncrease.y;
-                    continue;
                 }
 
                 cursor.x += prevIncrease.x;
             }
+
+            lines.elementAdd(lineIndex, (char) code);
+            size++;
         }
 
         this.reset();
@@ -87,6 +92,10 @@ public class GlyphIterator implements Iterator<GlyphSprite> {
 
     public int size() {
         return size;
+    }
+
+    public BitSet naturalBreakedLines() {
+        return naturalBreakedLines;
     }
 
     public String getCurrentLine() {
@@ -184,7 +193,8 @@ public class GlyphIterator implements Iterator<GlyphSprite> {
         while(glyph == null && this.hasNext()){
             while(lineCharIndex >= currentLine.length()){
                 // next line
-                currentLine = lines.get(++lineIndex);
+                lineIndex++;
+                currentLine = lines.get(lineIndex);
                 lineCharIndex = 0;
                 cursor.x = 0F;
                 cursor.y += (options.getLineWrapSign() * font.getNewLineAdvance() * options.advanceFactor().y);

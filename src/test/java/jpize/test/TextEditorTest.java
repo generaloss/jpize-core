@@ -8,6 +8,7 @@ import jpize.glfw.cursor.GlfwCursorShape;
 import jpize.glfw.input.Key;
 import jpize.glfw.input.MouseBtn;
 import jpize.util.font.FontRenderOptions;
+import jpize.util.font.GlyphIterator;
 import jpize.util.math.vector.Vec2f;
 import jpize.util.mesh.TextureBatch;
 import jpize.util.input.TextInput;
@@ -16,6 +17,7 @@ import jpize.util.math.Mathc;
 import jpize.util.math.Maths;
 import jpize.util.math.vector.Vec2i;
 
+import java.util.BitSet;
 import java.util.StringJoiner;
 
 public class TextEditorTest extends JpizeApplication {
@@ -61,7 +63,6 @@ public class TextEditorTest extends JpizeApplication {
         });
 
         input.addCursorCallback((deltaX, deltaY) -> {
-            System.out.println(deltaX + " " + deltaY);
             if(Key.LCTRL.pressed() && Key.LSHIFT.pressed()){
                 if(Key.LEFT.pressed() || Key.RIGHT.pressed() || Key.UP.pressed() || Key.DOWN.pressed()){
                     if(selection.isEmpty())
@@ -192,8 +193,6 @@ public class TextEditorTest extends JpizeApplication {
 
     @Override
     public void render() {
-        renderOptions.setLineBreakingWidth(Jpize.getWidth() - numerationWidth);
-
         Gl.clearColorBuffer();
         batch.setup();
         {
@@ -201,17 +200,7 @@ public class TextEditorTest extends JpizeApplication {
             final String text = input.makeString();
             final float textY = (Jpize.getHeight() + scrollY);
 
-            // render line numeration
-            final float numerationHeight = input.lines() * lineHeight;
-            final float numerationY = (Jpize.getHeight() - numerationHeight + scrollY);
-
-            final StringJoiner numeration = new StringJoiner("\n");
-            for(int i = 0; i < input.lines(); i++)
-                numeration.add(String.valueOf(i + 1));
-
-            batch.drawRect(numerationWidth - 2F, numerationY, 2F, numerationHeight,  0.3F, 0.32F, 0.35F);
-            renderOptions.color().set(0.3, 0.32, 0.35);
-            font.drawText(batch, numeration.toString(), 0F, Jpize.getHeight() + scrollY);
+            renderOptions.setLineBreakingWidth(Jpize.getWidth() - numerationWidth);
 
             // render selection
             if(!selection.isEmpty()) {
@@ -236,12 +225,28 @@ public class TextEditorTest extends JpizeApplication {
             // render text
             renderOptions.color().set(0.95, 0.95, 0.93);
             renderOptions.enableCullLines(0F, Jpize.getHeight());
-            font.drawText(batch, text, numerationWidth, textY);
+            final GlyphIterator textDrawState = font.drawText(batch, text, numerationWidth, textY);
 
             // render cursor
             final float x = font.getTextWidth(input.getLine(input.getY()).substring(0, input.getX())) + numerationWidth;
             final float y = Jpize.getHeight() - (input.getY() + 1) * lineHeight + scrollY;
             batch.drawRect(x, y, 3F, lineHeight,  1F, 1F, 1F);
+
+            renderOptions.setLineBreakingWidth(-1F);
+
+            // render line numeration
+            final float numerationHeight = input.lines() * lineHeight;
+            final float numerationY = (Jpize.getHeight() - numerationHeight + scrollY);
+
+            final StringJoiner numeration = new StringJoiner("\n");
+            int lineNumber = 1;
+            final BitSet lineBreakings = textDrawState.naturalBreakedLines();
+            for(int i = 0; i < lineBreakings.size(); i++)
+                numeration.add(lineBreakings.get(i) ? String.valueOf(lineNumber++) : "");
+
+            batch.drawRect(numerationWidth - 2F, numerationY, 2F, numerationHeight, 0.3F, 0.32F, 0.35F);
+            renderOptions.color().set(0.3, 0.32, 0.35);
+            font.drawText(batch, numeration.toString(), 0F, Jpize.getHeight() + scrollY);
         }
         batch.render();
     }
