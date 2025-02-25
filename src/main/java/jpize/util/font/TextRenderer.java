@@ -44,7 +44,7 @@ public class TextRenderer {
         for(GlyphSprite sprite: iterable){
             // cull lines
             if(options.isCullLinesEnabled()) {
-                final float lineBottomY = (iterator.getCursorY() * options.scale().y + y);
+                final float lineBottomY = (iterator.cursor().y * options.scale().y + y);
                 final float lineTopY = (lineBottomY + font.getLineAdvanceScaled());
                 if(lineTopY < options.getCullLinesBottomY() || lineBottomY > options.getCullLinesTopY()){
                     iterator.skipLine();
@@ -110,7 +110,7 @@ public class TextRenderer {
         for(GlyphSprite sprite: iterable){
             // cull lines
             if(options.isCullLinesEnabled()) {
-                final float lineBottomY = (iterator.getCursorY() * options.scale().y + y);
+                final float lineBottomY = (iterator.cursor().y * options.scale().y + y);
                 final float lineTopY = (lineBottomY + font.getLineAdvanceScaled());
                 if(lineTopY < options.getCullLinesBottomY() || lineBottomY > options.getCullLinesTopY()){
                     iterator.skipLine();
@@ -222,7 +222,7 @@ public class TextRenderer {
         for(GlyphSprite sprite: iterable){
             // cull lines
             if(options.isCullLinesEnabled()) {
-                final float lineBottomY = (iterator.getCursorY() * options.scale().y + y);
+                final float lineBottomY = (iterator.cursor().y * options.scale().y + y);
                 final float lineTopY = (lineBottomY + font.getLineAdvanceScaled());
                 if(lineTopY < options.getCullLinesBottomY() || lineBottomY > options.getCullLinesTopY()){
                     iterator.skipLine();

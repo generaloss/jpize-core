@@ -216,7 +216,7 @@ public class Font implements Disposable {
             height = Math.max(height, glyphMaxY);
         }
 
-        final float cursorX = ((GlyphIterator) iterable.iterator()).getCursorX() * renderOptions.scale().x;
+        final float cursorX = ((GlyphIterator) iterable.iterator()).cursor().x * renderOptions.scale().x;
         return new Vec2f(Math.max(cursorX, width), height);
     }
 
@@ -238,7 +238,7 @@ public class Font implements Disposable {
             width = Math.max(width, glyphMaxX);
         }
 
-        final float cursorX = ((GlyphIterator) iterable.iterator()).getCursorX() * renderOptions.scale().x;
+        final float cursorX = ((GlyphIterator) iterable.iterator()).cursor().x * renderOptions.scale().x;
         return Math.max(cursorX, width);
     }
 

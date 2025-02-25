@@ -192,6 +192,8 @@ public class TextEditorTest extends JpizeApplication {
 
     @Override
     public void render() {
+        renderOptions.setLineBreakingWidth(Jpize.getWidth() - numerationWidth);
+
         Gl.clearColorBuffer();
         batch.setup();
         {

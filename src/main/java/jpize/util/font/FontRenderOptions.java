@@ -97,14 +97,14 @@ public class FontRenderOptions {
     }
 
 
-    private float wrapWidth = -1F;
+    private float lineBreakingWidth = -1F;
 
-    public float getWrapWidth() {
-        return wrapWidth;
+    public float getLineBreakingWidth() {
+        return lineBreakingWidth;
     }
 
-    public FontRenderOptions setWrapWidth(float wrapWidth) {
-        this.wrapWidth = wrapWidth;
+    public FontRenderOptions setLineBreakingWidth(float lineBreakingWidth) {
+        this.lineBreakingWidth = lineBreakingWidth;
         return this;
     }
 

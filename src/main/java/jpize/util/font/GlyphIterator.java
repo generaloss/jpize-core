@@ -1,145 +1,201 @@
 package jpize.util.font;
 
+import jpize.util.array.StringList;
+import jpize.util.math.vector.Vec2f;
 import java.util.Iterator;
 
 public class GlyphIterator implements Iterator<GlyphSprite> {
 
+    // font
     private final Font font;
     private final FontRenderOptions options;
-    private final CharSequence text;
+    // data
+    private final StringList lines;
+    private int size;
+    // iterator state
+    private String currentLine;
+    private final Vec2f cursor;
+    private final Vec2f prevIncrease;
+    private int charIndex;
+    private int lineCharIndex;
+    private int lineIndex;
 
-    private int position;
-    private int lineY;
-    private float cursorX;
-    private float cursorY;
-    private float prevIncreaseX;
-    private float prevIncreaseY;
-
-    public GlyphIterator(Font font, CharSequence text) {
+    public GlyphIterator(Font font, StringList lines) {
         this.font = font;
         this.options = font.getRenderOptions();
-        this.text = this.removeUnknownGlyphs(text);
-        this.cursorY = -(options.isInvLineWrap() ? font.getLineAdvance() : 0);
+        this.lines = lines;
+        this.cursor = new Vec2f();
+        this.prevIncrease = new Vec2f();
+        this.resetcursorY();
     }
 
-    @Override
-    public void remove() {
-        cursorX -= prevIncreaseX;
-        cursorY -= prevIncreaseY;
+    public GlyphIterator(Font font, CharSequence text) {
+        this(font, new StringList(""));
+        this.extractLines(text);
     }
 
+    private void extractLines(CharSequence text) {
+        final float lineBreakingWidth = (options.getLineBreakingWidth() / options.scale().x);
+        Glyph glyph;
 
-    @Override
-    public boolean hasNext() {
-        return (position < text.length());
-    }
+        while(charIndex < text.length()) {
+            // add char to line
+            final int code = text.charAt(charIndex++);
+            if(code == '\n') {
+                // add line
+                lines.add("");
+                lineIndex++;
+                continue;
+            }
+            lines.elementAdd(lineIndex, (char) code);
+            size++;
 
-    @Override
-    public GlyphSprite next() {
-        prevIncreaseX = 0F;
-        prevIncreaseY = 0F;
+            // line breaking with textarea max width
+            if(lineBreakingWidth >= 0F){
+                // glyph
+                glyph = font.glyphs().get(code);
+                if(glyph == null)
+                    continue;
 
-        final Glyph glyph = this.findNextGlyph();
-        if(glyph == null) {
-            // create last glyph '\n' to correct bounds
-            return new GlyphSprite(cursorY, font.getLineAdvance(), options.scale(), lineY);
+                prevIncrease.x = (glyph.advanceX * options.advanceFactor().x);
+
+                if((cursor.x + prevIncrease.x) >= lineBreakingWidth) {
+                    lines.add("");
+                    lineIndex++;
+                    cursor.x = 0;
+
+                    prevIncrease.y = (options.getLineWrapSign() * font.getLineAdvance() * options.advanceFactor().y);
+                    cursor.y += prevIncrease.y;
+                    continue;
+                }
+
+                cursor.x += prevIncrease.x;
+            }
         }
 
-        prevIncreaseX = (glyph.advanceX * options.advanceFactor().x);
-
-        // wrap line (max width)
-        final double maxWidth = (options.getWrapWidth() / options.scale().x);
-        if(maxWidth >= 0F && cursorX + prevIncreaseX > maxWidth){
-            cursorX = 0F;
-            prevIncreaseY = (options.getLineWrapSign() * font.getLineAdvance() * options.advanceFactor().y);
-            cursorY += prevIncreaseY;
-            lineY++;
-        }
-
-        // create sprite
-        final GlyphSprite sprite = new GlyphSprite(font, glyph, cursorX, cursorY, options.scale(), lineY);
-
-        // advance cursor
-        cursorX += prevIncreaseX;
-        position++;
-
-        return sprite;
+        this.reset();
     }
 
-    private Glyph findNextGlyph() {
-        int code = -1;
-
-        while(hasNext()){
-            code = text.charAt(position);
-            if(code != '\n')
-                break;
-
-            // Wrap line
-            cursorX = 0F;
-            cursorY += (options.getLineWrapSign() * font.getNewLineAdvance() * options.advanceFactor().y);
-            lineY++;
-
-            position++;
-        }
-
-        return font.glyphs().get(code);
-    }
-
-    private CharSequence removeUnknownGlyphs(CharSequence str) {
-        if(str == null || str.isEmpty())
-            return "";
-
-        final StringBuilder builder = new StringBuilder();
-        for(int i = 0; i < str.length(); i++){
-            final int code = Character.codePointAt(str, i);
-            if(code == '\n' || font.glyphs().containsKey(code))
-                builder.append((char) code);
-        }
-        return builder.toString();
-    }
-
-
-    public void skipLine() {
-        lineY++;
-        cursorX = 0F;
-
-        // Skip characters
-        while(this.hasNext()){
-            if(text.charAt(position) == '\n')
-                break;
-
-            position++;
-        }
-    }
-
-
+    
     public Font font() {
         return font;
     }
 
-    public CharSequence getText() {
-        return text;
+    public StringList lines() {
+        return lines;
     }
 
-    public int getPosition() {
-        return position;
+    public int size() {
+        return size;
     }
 
-    public float getCursorX() {
-        return cursorX;
+    public String getCurrentLine() {
+        return currentLine;
     }
 
-    public float getCursorY() {
-        return cursorY;
+    public Vec2f cursor() {
+        return cursor;
     }
 
-    public void advance(float x, float y) {
-        cursorX += x;
-        cursorY += y;
+    public Vec2f prevIncrease() {
+        return prevIncrease;
+    }
+    
+    public int getCharIndex() {
+        return charIndex;
     }
 
-    public int getLineY() {
-        return lineY;
+    public int getLineCharIndex() {
+        return charIndex;
+    }
+    
+    public int getLineIndex() {
+        return lineIndex;
+    }
+
+
+    public void reset() {
+        charIndex = 0;
+        lineCharIndex = 0;
+        lineIndex = 0;
+        prevIncrease.zero();
+        currentLine = lines.getFirst();
+        cursor.x = 0;
+        this.resetcursorY();
+    }
+
+    private void resetcursorY() {
+        cursor.y = -(options.isInvLineWrap() ? font.getLineAdvance() : 0);
+    }
+
+
+    @Override
+    public void remove() {
+        cursor.sub(prevIncrease);
+    }
+
+    public boolean hasNextLine() {
+        return (lineIndex < lines.size());
+    }
+
+    public void skipLine() {
+        cursor.x = 0F;
+        if(lineCharIndex != 0)
+            cursor.y += (options.getLineWrapSign() * font.getNewLineAdvance() * options.advanceFactor().y);
+
+        charIndex += (currentLine.length() - lineCharIndex);
+        lineCharIndex = 0;
+        lineIndex++;
+        if(this.hasNextLine()){
+            currentLine = lines.get(lineIndex);
+        }else{
+            currentLine = null;
+        }
+    }
+
+    @Override
+    public boolean hasNext() {
+        return (charIndex < size);
+    }
+
+    @Override
+    public GlyphSprite next() {
+        prevIncrease.zero();
+
+        final Glyph glyph = this.findNextGlyph();
+        if(glyph == null) {
+            // create last glyph '\n' to correct bounds
+            return new GlyphSprite(cursor.y, font.getLineAdvance(), options.scale(), lineIndex);
+        }
+
+        prevIncrease.x = (glyph.advanceX * options.advanceFactor().x);
+
+        // create sprite
+        final GlyphSprite sprite = new GlyphSprite(font, glyph, cursor.x, cursor.y, options.scale(), lineIndex);
+
+        // advance cursor
+        cursor.x += prevIncrease.x;
+        return sprite;
+    }
+    
+    private Glyph findNextGlyph() {
+        Glyph glyph = null;
+
+        while(glyph == null && this.hasNext()){
+            while(lineCharIndex >= currentLine.length()){
+                // next line
+                currentLine = lines.get(++lineIndex);
+                lineCharIndex = 0;
+                cursor.x = 0F;
+                cursor.y += (options.getLineWrapSign() * font.getNewLineAdvance() * options.advanceFactor().y);
+            }
+
+            final int code = currentLine.charAt(lineCharIndex++);
+            glyph = font.glyphs().get(code);
+            charIndex++;
+        }
+
+        return glyph;
     }
 
 }
