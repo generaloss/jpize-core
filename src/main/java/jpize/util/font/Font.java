@@ -12,8 +12,9 @@ import java.util.Map;
 
 public class Font implements Disposable {
 
-    private final Map<Integer, Texture2D> pages;
-    private final Map<Integer, Glyph> glyphs;
+    private final Map<Integer, Texture2D> pages; // pageID => texture
+    private final Map<Integer, Glyph> glyphs;    // code   => glyph
+    private final Map<Integer, Map<Integer, Float>> kernings; // (code_0, code_1) => kerning
     private FontRenderOptions renderOptions;
     private float height;
     private float ascent;
@@ -23,6 +24,7 @@ public class Font implements Disposable {
     public Font() {
         this.pages = new HashMap<>();
         this.glyphs = new HashMap<>();
+        this.kernings = new HashMap<>();
         this.renderOptions = new FontRenderOptions();
     }
 
@@ -32,6 +34,10 @@ public class Font implements Disposable {
 
     public Map<Integer, Glyph> glyphs() {
         return glyphs;
+    }
+
+    public Map<Integer, Map<Integer, Float>> kernings() {
+        return kernings;
     }
 
 

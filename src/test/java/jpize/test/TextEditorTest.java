@@ -38,7 +38,7 @@ public class TextEditorTest extends JpizeApplication {
 
     public TextEditorTest() {
         this.input = new TextInput().enable().insert(Jpize.input().getClipboardString());
-        this.font = new Font().loadDefault();
+        this.font = new Font().loadFNT("/kernfont/font.fnt", true);
         this.renderOptions = font.getRenderOptions().setInvLineWrap(true);
         // renderOptions.setNewLineGap(40);
         this.batch = new TextureBatch();

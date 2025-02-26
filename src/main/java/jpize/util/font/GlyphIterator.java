@@ -5,6 +5,7 @@ import jpize.util.math.vector.Vec2f;
 
 import java.util.BitSet;
 import java.util.Iterator;
+import java.util.Map;
 
 public class GlyphIterator implements Iterator<GlyphSprite> {
 
@@ -16,6 +17,7 @@ public class GlyphIterator implements Iterator<GlyphSprite> {
     private int size;
     private final BitSet naturalBreakedLines;
     // iterator state
+    private Map<Integer, Float> nextKernings;
     private String currentLine;
     private final Vec2f cursor;
     private final Vec2f prevIncrease;
@@ -59,13 +61,16 @@ public class GlyphIterator implements Iterator<GlyphSprite> {
                 if(glyph == null)
                     continue;
 
-                prevIncrease.x = (glyph.advanceX * options.advanceFactor().x);
+                final float kerning = (nextKernings == null ? 0F : nextKernings.getOrDefault(code, 0F));
+                prevIncrease.x = ((glyph.advanceX + kerning) * options.advanceFactor().x);
+                nextKernings = font.kernings().get(code);
 
                 if(cursor.x != 0 && (cursor.x + prevIncrease.x) >= lineBreakingWidth) {
                     lines.get(lineIndex);
                     lineIndex++;
                     cursor.x = 0;
                     naturalBreakedLines.set(lineIndex, false);
+                    nextKernings = null;
 
                     prevIncrease.y = (options.getLineWrapSign() * font.getNewLineAdvance() * options.advanceFactor().y);
                     cursor.y += prevIncrease.y;
@@ -177,7 +182,10 @@ public class GlyphIterator implements Iterator<GlyphSprite> {
             return new GlyphSprite(cursor.y, font.getLineAdvance(), options.scale(), lineIndex);
         }
 
-        prevIncrease.x = (glyph.advanceX * options.advanceFactor().x);
+        // advance x
+        final float kerning = (nextKernings == null ? 0F : nextKernings.getOrDefault(glyph.code, 0F));
+        prevIncrease.x = ((glyph.advanceX + kerning) * options.advanceFactor().x);
+        nextKernings = font.kernings().get(glyph.code);
 
         // create sprite
         final GlyphSprite sprite = new GlyphSprite(font, glyph, cursor.x, cursor.y, options.scale(), lineIndex);
@@ -198,6 +206,7 @@ public class GlyphIterator implements Iterator<GlyphSprite> {
                 lineCharIndex = 0;
                 cursor.x = 0F;
                 cursor.y += (options.getLineWrapSign() * font.getNewLineAdvance() * options.advanceFactor().y);
+                nextKernings = null;
             }
 
             final int code = currentLine.charAt(lineCharIndex++);

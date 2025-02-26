@@ -19,6 +19,8 @@ import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import java.nio.file.Path;
+import java.util.HashMap;
+import java.util.Map;
 
 class FontLoader {
 
@@ -141,6 +143,16 @@ class FontLoader {
                         advanceX,
                         page
                     ));
+                }
+                case "kerning" -> {
+                    final int code_0 = Integer.parseInt(getValue(tokens[1]));
+                    final int code_1 = Integer.parseInt(getValue(tokens[2]));
+                    final int amount = Integer.parseInt(getValue(tokens[3]));
+
+                    // add kerning entry
+                    final Map<Integer, Float> kerning = font.kernings().getOrDefault(code_0, new HashMap<>());
+                    kerning.put(code_1, (float) amount);
+                    font.kernings().put(code_0, kerning);
                 }
             }
         }
