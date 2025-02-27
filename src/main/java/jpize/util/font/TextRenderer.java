@@ -28,10 +28,10 @@ public class TextRenderer {
         if(text == null)
             return null;
         if(text.isBlank())
-            return new GlyphIterator(font, text);
+            return font.iterator(text);
 
         // init
-        final FontRenderOptions options = font.getRenderOptions();
+        final FontRenderOptions options = font.getOptions();
         batch.setTransformOrigin(0F, 0F);
         batch.rotate(options.getRotation());
         batch.shear(font.isItalic() ? options.getItalicAngle() : 0F, 0F);
@@ -80,7 +80,7 @@ public class TextRenderer {
         if(text == null)
             return null;
         if(text.isBlank())
-            return new GlyphIterator(font, text);
+            return font.iterator(text);
 
         // context-local instance
         if(!RENDERER_BY_CONTEXT.containsKey(GLFW.glfwGetCurrentContext())){
@@ -95,7 +95,7 @@ public class TextRenderer {
         final Renderer renderer = RENDERER_BY_CONTEXT.get(GLFW.glfwGetCurrentContext());
 
         // init
-        final FontRenderOptions options = font.getRenderOptions();
+        final FontRenderOptions options = font.getOptions();
         renderer.matrixCombined.setOrthographic(0F, 0F, Jpize.getWidth(), Jpize.getHeight());
         final Color color = options.color();
 
@@ -198,7 +198,7 @@ public class TextRenderer {
         if(text == null)
             return null;
         if(text.isBlank())
-            return new GlyphIterator(font, text);
+            return font.iterator(text);
 
         // context-local instance
         if(!RENDERER_BY_CONTEXT.containsKey(GLFW.glfwGetCurrentContext())){
@@ -213,7 +213,7 @@ public class TextRenderer {
         final Renderer renderer = RENDERER_BY_CONTEXT.get(GLFW.glfwGetCurrentContext());
 
         // init
-        final FontRenderOptions options = font.getRenderOptions();
+        final FontRenderOptions options = font.getOptions();
         final Color color = options.color();
 
         final Matrix3f shearMatrix = new Matrix3f()

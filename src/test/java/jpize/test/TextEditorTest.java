@@ -9,6 +9,7 @@ import jpize.glfw.input.Key;
 import jpize.glfw.input.MouseBtn;
 import jpize.util.font.FontRenderOptions;
 import jpize.util.font.GlyphIterator;
+import jpize.util.font.GlyphLine;
 import jpize.util.math.vector.Vec2f;
 import jpize.util.mesh.TextureBatch;
 import jpize.util.input.TextInput;
@@ -17,7 +18,7 @@ import jpize.util.math.Mathc;
 import jpize.util.math.Maths;
 import jpize.util.math.vector.Vec2i;
 
-import java.util.BitSet;
+import java.util.List;
 import java.util.StringJoiner;
 
 public class TextEditorTest extends JpizeApplication {
@@ -38,8 +39,8 @@ public class TextEditorTest extends JpizeApplication {
 
     public TextEditorTest() {
         this.input = new TextInput().enable().insert(Jpize.input().getClipboardString());
-        this.font = new Font().loadFNT("/kernfont/font.fnt", true);
-        this.renderOptions = font.getRenderOptions().setInvLineWrap(true);
+        this.font = new Font().loadDefault();//.loadFNT("/kernfont/font.fnt", true);
+        this.renderOptions = font.getOptions().setInvLineWrap(true);
         // renderOptions.setNewLineGap(40);
         this.batch = new TextureBatch();
 
@@ -136,7 +137,7 @@ public class TextEditorTest extends JpizeApplication {
         }
 
         // cinematic
-        renderOptions.scale().add(editorScale.copy().sub(font.getRenderOptions().scale()).div(10));
+        renderOptions.scale().add(editorScale.copy().sub(font.getOptions().scale()).div(10));
         lineHeight = font.getHeightScaled();
         numerationWidth = 200F * renderOptions.scale().x;
         animatedScroll += (scroll - animatedScroll) / 10F;
@@ -239,10 +240,10 @@ public class TextEditorTest extends JpizeApplication {
             final float numerationY = (Jpize.getHeight() - numerationHeight + scrollY);
 
             final StringJoiner numeration = new StringJoiner("\n");
+            final List<GlyphLine> lines = textDrawState.lines();
             int lineNumber = 1;
-            final BitSet lineBreakings = textDrawState.naturalBreakedLines();
-            for(int i = 0; i < lineBreakings.size(); i++)
-                numeration.add(lineBreakings.get(i) ? String.valueOf(lineNumber++) : "");
+            for(GlyphLine line: lines)
+                numeration.add(line.isBreaked() ? "" : String.valueOf(lineNumber++));
 
             batch.drawRect(numerationWidth - 2F, numerationY, 2F, numerationHeight, 0.3F, 0.32F, 0.35F);
             renderOptions.color().set(0.3, 0.32, 0.35);

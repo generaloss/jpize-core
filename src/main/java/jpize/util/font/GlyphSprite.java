@@ -13,34 +13,34 @@ public class GlyphSprite {
     private final Vec2f position;
     private final Vec2f size;
 
-    private final int lineY;
+    private final int lineIndex;
     private final boolean renderable;
     private final float advanceX;
     private final float offsetY;
 
-    public GlyphSprite(Font font, Glyph glyph, float cursorX, float cursorY, Vec2f scale, int lineY) {
-        this.code   = glyph.code;
-        this.region = glyph.region;
-        this.page   = font.pages().get(glyph.pageID);
+    public GlyphSprite(FontData fontData, GlyphInfo glyph, float cursorX, float cursorY, Vec2f scale, int lineIndex) {
+        this.code = glyph.getCode();
+        this.region = glyph.getRegion();
+        this.page = fontData.pages().get(glyph.getPageID());
 
-        this.position = new Vec2f(cursorX, cursorY).add(glyph.offset).mul(scale);
-        this.size = glyph.size.copy().mul(scale);
+        this.position = new Vec2f(cursorX, cursorY).add(glyph.getOffset()).mul(scale);
+        this.size = glyph.getSize().copy().mul(scale);
 
-        this.lineY = lineY;
+        this.lineIndex = lineIndex;
         this.renderable = true;
-        this.advanceX = glyph.advanceX * scale.x;
-        this.offsetY = glyph.offset.y * scale.y;
+        this.advanceX = (glyph.getAdvanceX() * scale.x);
+        this.offsetY  = (glyph.getOffset().y * scale.y);
     }
 
-    public GlyphSprite(float cursorY, float height, Vec2f scale, int lineY) {
-        this.code   = -1;
+    public GlyphSprite(float cursorY, float height, Vec2f scale, int lineIndex) {
+        this.code = -1;
         this.region = null;
-        this.page   = null;
+        this.page = null;
 
         this.position = new Vec2f(0, cursorY).mul(scale);
         this.size = new Vec2f(0, height).mul(scale);
 
-        this.lineY = lineY;
+        this.lineIndex = lineIndex;
         this.renderable = false;
         this.advanceX = 0;
         this.offsetY = 0;
@@ -77,8 +77,8 @@ public class GlyphSprite {
     }
 
 
-    public int getLineY() {
-        return lineY;
+    public int getLineIndex() {
+        return lineIndex;
     }
 
     public boolean isRenderable() {

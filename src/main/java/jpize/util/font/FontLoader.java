@@ -9,10 +9,7 @@ import jpize.util.region.Region;
 import jpize.gl.texture.Texture2D;
 import jpize.util.pixmap.PixmapAlpha;
 import jpize.util.io.FastReader;
-import org.lwjgl.stb.STBTTAlignedQuad;
-import org.lwjgl.stb.STBTTBakedChar;
-import org.lwjgl.stb.STBTTFontinfo;
-import org.lwjgl.stb.STBTruetype;
+import org.lwjgl.stb.*;
 import org.lwjgl.system.MemoryStack;
 
 import java.nio.ByteBuffer;
@@ -131,7 +128,7 @@ class FontLoader {
                     final float glyphHeight = regionOnTexture.getPixelHeight(font.pages().get(page));
                     final float glyphWidth = regionOnTexture.getPixelWidth(font.pages().get(page));
 
-                    font.glyphs().put(code, new Glyph(
+                    font.glyphs().put(code, new GlyphInfo(
                         code,
 
                         offsetX,
@@ -147,11 +144,11 @@ class FontLoader {
                 case "kerning" -> {
                     final int code_0 = Integer.parseInt(getValue(tokens[1]));
                     final int code_1 = Integer.parseInt(getValue(tokens[2]));
-                    final int amount = Integer.parseInt(getValue(tokens[3]));
+                    final int advance = Integer.parseInt(getValue(tokens[3]));
 
                     // add kerning entry
-                    final Map<Integer, Float> kerning = font.kernings().getOrDefault(code_0, new HashMap<>());
-                    kerning.put(code_1, (float) amount);
+                    final Map<Integer, Integer> kerning = font.kernings().getOrDefault(code_0, new HashMap<>());
+                    kerning.put(code_1, advance);
                     font.kernings().put(code_0, kerning);
                 }
             }
@@ -171,7 +168,7 @@ class FontLoader {
         font.setHeight(size);
 
         // pixmap
-        final int bitmapSize = size * Mathc.ceil(Math.sqrt(charset.size())) * 2;
+        final int bitmapSize = (size * Mathc.ceil(Math.sqrt(charset.size())) * 2);
 
         final PixmapAlpha pixmapAlpha = new PixmapAlpha(bitmapSize, bitmapSize);
         final ByteBuffer fontFileData = resource.readByteBuffer();
@@ -194,16 +191,16 @@ class FontLoader {
         // stb
         try(final MemoryStack stack = MemoryStack.stackPush()){
             // creating font
-            final STBTTFontinfo fontInfo = STBTTFontinfo.create();
-            STBTruetype.stbtt_InitFont(fontInfo, fontFileData);
+            final STBTTFontinfo info = STBTTFontinfo.create();
+            STBTruetype.stbtt_InitFont(info, fontFileData);
 
             // getting ascent & descent
             final IntBuffer ascentBuffer = stack.mallocInt(1);
             final IntBuffer descentBuffer = stack.mallocInt(1);
 
-            STBTruetype.stbtt_GetFontVMetrics(fontInfo, ascentBuffer, descentBuffer, null);
+            STBTruetype.stbtt_GetFontVMetrics(info, ascentBuffer, descentBuffer, null);
 
-            final float pixelScale = STBTruetype.stbtt_ScaleForPixelHeight(fontInfo, size);
+            final float pixelScale = STBTruetype.stbtt_ScaleForPixelHeight(info, size);
             font.setAscent(ascentBuffer.get() * pixelScale);
             font.setDescent(descentBuffer.get() * pixelScale);
 
@@ -225,7 +222,7 @@ class FontLoader {
                 float glyphWidth  = (quad.x1() - quad.x0());
 
                 // adding glyph to the font
-                font.glyphs().put(code, new Glyph(
+                font.glyphs().put(code, new GlyphInfo(
                     code,
 
                     quad.x0(),
@@ -237,6 +234,22 @@ class FontLoader {
                     advanceX,
                     0
                 ));
+            }
+
+            // kernings
+            final int kerningsLength = STBTruetype.stbtt_GetKerningTableLength(info);
+            final STBTTKerningentry.Buffer kerningsBuffer = STBTTKerningentry.malloc(kerningsLength, stack);
+            STBTruetype.stbtt_GetKerningTable(info, kerningsBuffer);
+
+            for(STBTTKerningentry kerningEntry: kerningsBuffer){
+                final int code_0 = kerningsBuffer.glyph1();
+                final int code_1 = kerningsBuffer.glyph2();
+                final int advance = kerningsBuffer.advance();
+
+                // add kerning entry
+                final Map<Integer, Integer> kerning = font.kernings().getOrDefault(code_0, new HashMap<>());
+                kerning.put(code_1, advance);
+                font.kernings().put(code_0, kerning);
             }
         }
         return font;

@@ -94,7 +94,7 @@ public class Camera3DTest extends JpizeApplication {
         shader.uniform("u_texture", texture_floor);
         mesh.render();
         // 3D text
-        final FontRenderOptions options = font.getRenderOptions();
+        final FontRenderOptions options = font.getOptions();
         options.scale().set(0.2);
 
         float angleY = Vec2f.angle(camera.getX(), camera.getZ()) + 90;

@@ -1,79 +1,29 @@
 package jpize.util.font;
 
-import jpize.gl.texture.Texture2D;
 import jpize.util.camera.Camera3D;
 import jpize.util.mesh.TextureBatch;
 import jpize.util.math.vector.Vec2f;
-import jpize.util.Disposable;
 import jpize.util.res.Resource;
 
-import java.util.HashMap;
-import java.util.Map;
+public class Font extends FontData {
 
-public class Font implements Disposable {
+    private FontRenderOptions options;
 
-    private final Map<Integer, Texture2D> pages; // pageID => texture
-    private final Map<Integer, Glyph> glyphs;    // code   => glyph
-    private final Map<Integer, Map<Integer, Float>> kernings; // (code_0, code_1) => kerning
-    private FontRenderOptions renderOptions;
-    private float height;
-    private float ascent;
-    private float descent;
     private boolean italic;
 
     public Font() {
-        this.pages = new HashMap<>();
-        this.glyphs = new HashMap<>();
-        this.kernings = new HashMap<>();
-        this.renderOptions = new FontRenderOptions();
+        this.options = new FontRenderOptions();
     }
 
-    public Map<Integer, Texture2D> pages() {
-        return pages;
+    public FontRenderOptions getOptions() {
+        return options;
     }
 
-    public Map<Integer, Glyph> glyphs() {
-        return glyphs;
-    }
-
-    public Map<Integer, Map<Integer, Float>> kernings() {
-        return kernings;
-    }
-
-
-    public FontRenderOptions getRenderOptions() {
-        return renderOptions;
-    }
-
-    public Font setRenderOptions(FontRenderOptions renderOptions) {
-        this.renderOptions = renderOptions;
+    public Font setOptions(FontRenderOptions options) {
+        this.options = options;
         return this;
     }
 
-
-    public float getHeight() {
-        return height;
-    }
-
-    public void setHeight(float height) {
-        this.height = height;
-    }
-
-    public float getAscent() {
-        return ascent;
-    }
-
-    public void setAscent(float ascent) {
-        this.ascent = ascent;
-    }
-
-    public float getDescent() {
-        return descent;
-    }
-
-    public void setDescent(float descent) {
-        this.descent = descent;
-    }
 
     public boolean isItalic() {
         return italic;
@@ -86,31 +36,31 @@ public class Font implements Disposable {
 
 
     public float getHeightScaled() {
-        return (height * renderOptions.scale().y);
+        return (super.getHeight() * options.scale().y);
     }
 
     public float getAscentScaled() {
-        return (ascent * renderOptions.scale().y);
+        return (super.getAscent() * options.scale().y);
     }
 
     public float getDescentScaled() {
-        return (descent * renderOptions.scale().y);
+        return (super.getDescent() * options.scale().y);
     }
 
     public float getLineAdvance() {
-        return (height + renderOptions.getLineGap());
+        return (super.getHeight() + options.getLineGap());
     }
 
     public float getNewLineAdvance() {
-        return (height + renderOptions.getNewLineGap());
+        return (super.getHeight() + options.getNewLineGap());
     }
 
     public float getLineAdvanceScaled() {
-        return (this.getLineAdvance() * renderOptions.scale().y);
+        return (this.getLineAdvance() * options.scale().y);
     }
 
     public float getNewLineAdvanceScaled() {
-        return (this.getNewLineAdvance() * renderOptions.scale().y);
+        return (this.getNewLineAdvance() * options.scale().y);
     }
 
 
@@ -185,12 +135,20 @@ public class Font implements Disposable {
     }
 
 
+    public GlyphIterator iterator(String text, FontRenderOptions options) {
+        return new GlyphIterator(this, options, text);
+    }
+
     public GlyphIterator iterator(String text) {
-        return new GlyphIterator(this, text);
+        return this.iterator(text, options);
+    }
+
+    public Iterable<GlyphSprite> iterable(String text, FontRenderOptions options) {
+        return () -> this.iterator(text, options);
     }
 
     public Iterable<GlyphSprite> iterable(String text) {
-        return () -> this.iterator(text);
+        return this.iterable(text, options);
     }
 
 
@@ -200,7 +158,7 @@ public class Font implements Disposable {
 
         for(GlyphSprite glyph: this.iterable(text)){
             final float glyphMaxX = glyph.getX() + ((char) glyph.getCode() == ' ' ? glyph.getAdvanceX() : glyph.getWidth());
-            final float glyphMaxY = glyph.getOffsetY() + glyph.getHeight() + glyph.getLineY() * this.getLineAdvanceScaled();
+            final float glyphMaxY = glyph.getOffsetY() + glyph.getHeight() + glyph.getLineIndex() * this.getLineAdvanceScaled();
 
             width = Math.max(width, glyphMaxX);
             height = Math.max(height, glyphMaxY);
@@ -216,13 +174,13 @@ public class Font implements Disposable {
         final Iterable<GlyphSprite> iterable = this.iterable(text);
         for(GlyphSprite glyph: iterable){
             final float glyphMaxX = glyph.getX() + ((char) glyph.getCode() == ' ' ? glyph.getAdvanceX() : glyph.getWidth());
-            final float glyphMaxY = (glyph.getLineY() + 1) * this.getLineAdvanceScaled();
+            final float glyphMaxY = (glyph.getLineIndex() + 1) * this.getLineAdvanceScaled();
 
             width = Math.max(width, glyphMaxX);
             height = Math.max(height, glyphMaxY);
         }
 
-        final float cursorX = ((GlyphIterator) iterable.iterator()).cursor().x * renderOptions.scale().x;
+        final float cursorX = ((GlyphIterator) iterable.iterator()).cursor().x * options.scale().x;
         return new Vec2f(Math.max(cursorX, width), height);
     }
 
@@ -244,14 +202,14 @@ public class Font implements Disposable {
             width = Math.max(width, glyphMaxX);
         }
 
-        final float cursorX = ((GlyphIterator) iterable.iterator()).cursor().x * renderOptions.scale().x;
+        final float cursorX = ((GlyphIterator) iterable.iterator()).cursor().x * options.scale().x;
         return Math.max(cursorX, width);
     }
 
     public float getTextHeight(String text) {
         float height = 0;
         for(GlyphSprite glyph: this.iterable(text)){
-            final float glyphMaxY = Math.abs(glyph.getY() + descent + glyph.getHeight()) - descent;
+            final float glyphMaxY = Math.abs(glyph.getY() + super.getDescent() + glyph.getHeight()) - super.getDescent();
             height = Math.max(height, glyphMaxY);
         }
         return height;
@@ -260,8 +218,7 @@ public class Font implements Disposable {
 
     @Override
     public void dispose() {
-        for(Texture2D page: pages.values())
-            page.dispose();
+        super.dispose();
     }
 
 }

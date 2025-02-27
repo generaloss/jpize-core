@@ -1,220 +1,233 @@
 package jpize.util.font;
 
-import jpize.util.array.StringList;
 import jpize.util.math.vector.Vec2f;
 
-import java.util.BitSet;
-import java.util.Iterator;
-import java.util.Map;
+import java.util.*;
 
 public class GlyphIterator implements Iterator<GlyphSprite> {
 
-    // font
-    private final Font font;
+    // links
+    private final FontData fontData;
     private final FontRenderOptions options;
-    // data
-    private final StringList lines;
+    // iteration data
     private int size;
-    private final BitSet naturalBreakedLines;
-    // iterator state
-    private Map<Integer, Float> nextKernings;
-    private String currentLine;
+    private final List<GlyphLine> lines;
+    // state
     private final Vec2f cursor;
-    private final Vec2f prevIncrease;
+    private final Vec2f advance;
+    private Map<Integer, Integer> kernelings;
     private int charIndex;
+    private GlyphInfo glyph;
     private int lineCharIndex;
     private int lineIndex;
+    private GlyphLine line;
 
-    public GlyphIterator(Font font, CharSequence text) {
-        this.font = font;
-        this.options = font.getRenderOptions();
-        this.lines = new StringList();
-        this.lines.add(new StringList(""));
-        this.naturalBreakedLines = new BitSet();
-        this.naturalBreakedLines.set(0, true);
+    public GlyphIterator(FontData fontData, FontRenderOptions options, CharSequence text) {
+        this.fontData = fontData;
+        this.options = options;
         this.cursor = new Vec2f();
-        this.prevIncrease = new Vec2f();
-        this.resetcursorY();
-        this.extractLines(text);
+        this.advance = new Vec2f();
+        // initialize lines
+        this.lines = new ArrayList<>();
+        this.makeLines(text);
+        this.line = lines.get(0);
+        if(!line.isEmpty())
+            this.glyph = fontData.glyphs().get((int) line.charAt(0));
     }
 
-    private void extractLines(CharSequence text) {
-        final float lineBreakingWidth = (options.getLineBreakingWidth() / options.scale().x);
-        Glyph glyph;
-
-        while(charIndex < text.length()) {
-            // add char to line
-            final int code = text.charAt(charIndex++);
-            if(code == '\n') {
-                // add line
-                lines.add(new StringList(""));
-                lineIndex++;
-                cursor.x = 0;
-                naturalBreakedLines.set(lineIndex, true);
-                continue;
-            }
-
-            // line breaking with textarea max width
-            if(lineBreakingWidth >= 0F){
-                // glyph
-                glyph = font.glyphs().get(code);
-                if(glyph == null)
-                    continue;
-
-                final float kerning = (nextKernings == null ? 0F : nextKernings.getOrDefault(code, 0F));
-                prevIncrease.x = ((glyph.advanceX + kerning) * options.advanceFactor().x);
-                nextKernings = font.kernings().get(code);
-
-                if(cursor.x != 0 && (cursor.x + prevIncrease.x) >= lineBreakingWidth) {
-                    lines.get(lineIndex);
-                    lineIndex++;
-                    cursor.x = 0;
-                    naturalBreakedLines.set(lineIndex, false);
-                    nextKernings = null;
-
-                    prevIncrease.y = (options.getLineWrapSign() * font.getNewLineAdvance() * options.advanceFactor().y);
-                    cursor.y += prevIncrease.y;
-                }
-
-                cursor.x += prevIncrease.x;
-            }
-
-            lines.elementAdd(lineIndex, (char) code);
-            size++;
-        }
-
-        this.reset();
+    public FontData fontData() {
+        return fontData;
     }
 
-    
-    public Font font() {
-        return font;
-    }
-
-    public StringList lines() {
-        return lines;
+    public FontRenderOptions options() {
+        return options;
     }
 
     public int size() {
         return size;
     }
 
-    public BitSet naturalBreakedLines() {
-        return naturalBreakedLines;
+    public List<GlyphLine> lines() {
+        return lines;
     }
 
-    public String getCurrentLine() {
-        return currentLine;
-    }
 
     public Vec2f cursor() {
         return cursor;
     }
 
-    public Vec2f prevIncrease() {
-        return prevIncrease;
+    public Vec2f advance() {
+        return advance;
     }
-    
-    public int getCharIndex() {
+
+
+    public int charIndex() {
         return charIndex;
     }
 
-    public int getLineCharIndex() {
-        return charIndex;
+    public GlyphInfo glyph() {
+        return glyph;
     }
-    
-    public int getLineIndex() {
+
+    public int lineCharIndex() {
+        return lineCharIndex;
+    }
+
+    public int lineIndex() {
         return lineIndex;
     }
 
+    public GlyphLine line() {
+        return line;
+    }
 
-    public void reset() {
-        charIndex = 0;
-        lineCharIndex = 0;
-        lineIndex = 0;
-        prevIncrease.zero();
-        currentLine = lines.getFirst();
+
+    private GlyphLine addLine(StringBuilder lineBuilder, boolean newLine) {
+        // calculate advance y
+        final float lineGap = (newLine ? options.getNewLineGapScaled() : options.getLineGapScaled());
+        final float lineHeight = (fontData.getHeight() * options.advanceFactor().y);
+        final float lineAdvance = (lineGap + lineHeight) * options.scale().y;
+
+        // add line
+        final GlyphLine line = new GlyphLine(lineBuilder.toString(), newLine, lineAdvance);
+        lines.add(line);
+
+        // reset 'line' state
+        lineBuilder.delete(0, lineBuilder.length());
+        kernelings = null;
         cursor.x = 0;
-        this.resetcursorY();
+
+        return line;
     }
 
-    private void resetcursorY() {
-        cursor.y = -(options.isInvLineWrap() ? font.getLineAdvance() : 0);
+    private void makeLines(CharSequence text) {
+        // setup
+        final StringBuilder lineBuilder = new StringBuilder();
+        final float breakLineMaxWidth = (options.getLineBreakingWidth() / options.scale().x);
+        boolean lastLineIsNew = true;
+
+        // iterate chars
+        for(int i = 0; i < text.length(); i++){
+            final int code = text.charAt(i);
+            // new line
+            if(code == '\n') {
+                this.addLine(lineBuilder, true);
+                continue;
+            }
+
+            // build line
+            lineBuilder.append((char) code);
+            size++;
+
+            // break line
+            if(breakLineMaxWidth >= 0F){
+                lastLineIsNew = false;
+
+                final GlyphInfo glyph = fontData.glyphs().get(code);
+                if(glyph == null)
+                    continue;
+
+                // kerning
+                final int kerning = (kernelings == null ? 0 : kernelings.getOrDefault(code, 0));
+                kernelings = fontData.kernings().get(code);
+
+                // calculate advance x
+                advance.x = ((glyph.getAdvanceX() + kerning) * options.advanceFactor().x);
+
+                // check current line width
+                if(cursor.x != 0 && (cursor.x + advance.x) >= breakLineMaxWidth) {
+                    final GlyphLine line = this.addLine(lineBuilder, false);
+                    cursor.y += line.getAdvanceY();
+                }
+            }
+        }
+        this.addLine(lineBuilder, lastLineIsNew);
+
+        // reset state
+        advance.x = 0;
+        cursor.y = 0;
     }
 
-
-    @Override
-    public void remove() {
-        cursor.sub(prevIncrease);
-    }
 
     public boolean hasNextLine() {
         return (lineIndex < lines.size());
     }
 
-    public void skipLine() {
-        cursor.x = 0F;
-        if(lineCharIndex != 0)
-            cursor.y += (options.getLineWrapSign() * font.getNewLineAdvance() * options.advanceFactor().y);
-
-        charIndex += (currentLine.length() - lineCharIndex);
-        lineCharIndex = 0;
-        lineIndex++;
-        if(this.hasNextLine()){
-            currentLine = lines.get(lineIndex);
-        }else{
-            currentLine = null;
-        }
-    }
-
     @Override
     public boolean hasNext() {
-        return (charIndex < size);
+        return (glyph != null);
     }
 
     @Override
     public GlyphSprite next() {
-        prevIncrease.zero();
+        float spriteY = cursor.y;
+        if(options.isInvLineWrap())
+            spriteY = -spriteY - (fontData.getHeight() + options.getNewLineGap()) * options.scale().y;
 
-        final Glyph glyph = this.findNextGlyph();
-        if(glyph == null) {
-            // create last glyph '\n' to correct bounds
-            return new GlyphSprite(cursor.y, font.getLineAdvance(), options.scale(), lineIndex);
-        }
-
+        final GlyphSprite sprite = new GlyphSprite(fontData, glyph, cursor.x, spriteY, options.scale(), lineIndex);
+        // kerning
+        final int code = glyph.getCode();
+        final int kerning = (kernelings == null ? 0 : kernelings.getOrDefault(code, 0));
+        kernelings = fontData.kernings().get(code);
         // advance x
-        final float kerning = (nextKernings == null ? 0F : nextKernings.getOrDefault(glyph.code, 0F));
-        prevIncrease.x = ((glyph.advanceX + kerning) * options.advanceFactor().x);
-        nextKernings = font.kernings().get(glyph.code);
-
-        // create sprite
-        final GlyphSprite sprite = new GlyphSprite(font, glyph, cursor.x, cursor.y, options.scale(), lineIndex);
-
-        // advance cursor
-        cursor.x += prevIncrease.x;
+        advance.x = (glyph.getAdvanceX() + kerning) * options.advanceFactor().x;
+        cursor.x += advance.x;
+        advance.y = 0;
+        // next glyph
+        this.nextGlyph();
         return sprite;
     }
-    
-    private Glyph findNextGlyph() {
-        Glyph glyph = null;
 
-        while(glyph == null && this.hasNext()){
-            while(lineCharIndex >= currentLine.length()){
-                // next line
-                lineIndex++;
-                currentLine = lines.get(lineIndex);
-                lineCharIndex = 0;
-                cursor.x = 0F;
-                cursor.y += (options.getLineWrapSign() * font.getNewLineAdvance() * options.advanceFactor().y);
-                nextKernings = null;
+    private void nextGlyph() {
+        if(line == null)
+            return;
+
+        do{
+            // increase next char index
+            charIndex++;
+            lineCharIndex++;
+            // next line
+            if(lineCharIndex == line.size()) {
+                this.nextLine();
+
+                if(line == null) {
+                    glyph = null;
+                    return;
+                }
             }
 
-            final int code = currentLine.charAt(lineCharIndex++);
-            glyph = font.glyphs().get(code);
-            charIndex++;
-        }
+            // next glyph
+            final int code = line.charAt(lineCharIndex);
+            glyph = fontData.glyphs().get(code);
+        }while(glyph == null);
+    }
 
-        return glyph;
+    private void nextLine() {
+        do{
+            // next line index
+            lineIndex++;
+            if(lineIndex == lines.size()){
+                line = null;
+                return;
+            }
+            // next line
+            line = lines.get(lineIndex);
+            lineCharIndex = 0;
+            // advance
+            cursor.x = 0F;
+            advance.y = line.getAdvanceY();
+            cursor.y += advance.y;
+        }while(line.isEmpty());
+    }
+
+    public void skipLine() {
+        charIndex += (line.size() - lineCharIndex);
+        this.nextLine();
+    }
+
+    @Override
+    public void remove() {
+        cursor.sub(advance);
     }
 
 }
