@@ -39,7 +39,7 @@ public class TextEditorTest extends JpizeApplication {
 
     public TextEditorTest() {
         this.input = new TextInput().enable().insert(Jpize.input().getClipboardString());
-        this.font = new Font().loadDefault();//.loadFNT("/kernfont/font.fnt", true);
+        this.font = new Font().loadFNT("/kernfont/font.fnt", true);
         this.renderOptions = font.getOptions().setInvLineWrap(true);
         // renderOptions.setNewLineGap(40);
         this.batch = new TextureBatch();
@@ -201,13 +201,13 @@ public class TextEditorTest extends JpizeApplication {
             final String text = input.makeString();
             final float textY = (Jpize.getHeight() + scrollY);
 
-            renderOptions.setLineBreakingWidth(Jpize.getWidth() - numerationWidth);
+            // renderOptions.setLineBreakingWidth(Jpize.getWidth() - numerationWidth);
 
             // render selection
             if(!selection.isEmpty()) {
-                final float firstLineOffsetX = font.getTextWidthWithAdvance(
-                    input.getLine(selection.start.y)
-                        .substring(0, selection.start.x)
+                final String inputLine = input.getLine(selection.start.y);
+                final float firstLineOffsetX = font.getTextWidthCursor(
+                    inputLine.substring(0, Math.min(inputLine.length(), selection.start.x + 1))
                 );
 
                 float lineX = numerationWidth + firstLineOffsetX;
@@ -233,7 +233,7 @@ public class TextEditorTest extends JpizeApplication {
             final float y = Jpize.getHeight() - (input.getY() + 1) * lineHeight + scrollY;
             batch.drawRect(x, y, 3F, lineHeight,  1F, 1F, 1F);
 
-            renderOptions.setLineBreakingWidth(-1F);
+            // renderOptions.setLineBreakingWidth(-1F);
 
             // render line numeration
             final float numerationHeight = input.lines() * lineHeight;
@@ -243,7 +243,7 @@ public class TextEditorTest extends JpizeApplication {
             final List<GlyphLine> lines = textDrawState.lines();
             int lineNumber = 1;
             for(GlyphLine line: lines)
-                numeration.add(line.isBreaked() ? "" : String.valueOf(lineNumber++));
+                numeration.add(line.isNewLine() ? String.valueOf(lineNumber++) : "");
 
             batch.drawRect(numerationWidth - 2F, numerationY, 2F, numerationHeight, 0.3F, 0.32F, 0.35F);
             renderOptions.color().set(0.3, 0.32, 0.35);

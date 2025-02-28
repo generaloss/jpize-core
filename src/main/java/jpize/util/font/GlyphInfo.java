@@ -45,4 +45,10 @@ public class GlyphInfo {
         return pageID;
     }
 
+
+    @Override
+    public String toString() {
+        return String.valueOf((char) code);
+    }
+
 }

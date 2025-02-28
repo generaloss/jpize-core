@@ -143,11 +143,11 @@ public class Font extends FontData {
         return this.iterator(text, options);
     }
 
-    public Iterable<GlyphSprite> iterable(String text, FontRenderOptions options) {
-        return () -> this.iterator(text, options);
+    public GlyphIterable iterable(String text, FontRenderOptions options) {
+        return new GlyphIterable(this.iterator(text, options));
     }
 
-    public Iterable<GlyphSprite> iterable(String text) {
+    public GlyphIterable iterable(String text) {
         return this.iterable(text, options);
     }
 
@@ -167,11 +167,11 @@ public class Font extends FontData {
         return new Vec2f(width, height);
     }
 
-    public Vec2f getTextBoundsWithAdvance(String text) {
+    public Vec2f getTextBoundsWithKerning(String text) {
         float width = 0;
         float height = 0;
 
-        final Iterable<GlyphSprite> iterable = this.iterable(text);
+        final GlyphIterable iterable = this.iterable(text);
         for(GlyphSprite glyph: iterable){
             final float glyphMaxX = glyph.getX() + ((char) glyph.getCode() == ' ' ? glyph.getAdvanceX() : glyph.getWidth());
             final float glyphMaxY = (glyph.getLineIndex() + 1) * this.getLineAdvanceScaled();
@@ -180,39 +180,51 @@ public class Font extends FontData {
             height = Math.max(height, glyphMaxY);
         }
 
-        final float cursorX = ((GlyphIterator) iterable.iterator()).cursor().x * options.scale().x;
+        final float cursorX = iterable.iterator().cursor().x * options.scale().x;
         return new Vec2f(Math.max(cursorX, width), height);
     }
 
     public float getTextWidth(String text) {
+        final GlyphIterable iterable = this.iterable(text);
+        final GlyphIterator iterator = iterable.iterator();
+
         float width = 0;
-        for(GlyphSprite glyph: this.iterable(text)){
-            final float glyphMaxX = glyph.getX() + ((char) glyph.getCode() == ' ' ? glyph.getAdvanceX() : glyph.getWidth());
-            width = Math.max(width, glyphMaxX);
-        }
-        return width;
+        for(GlyphSprite glyph: iterable)
+            width = Math.max(width, iterator.cursor().x + iterator.nextAdvanceX());
+
+        return (width * options.scale().x);
     }
 
-    public float getTextWidthWithAdvance(String text) {
+    public float getTextWidthCursor(String text) {
+        final GlyphIterable iterable = this.iterable(text);
+        final GlyphIterator iterator = iterable.iterator();
+
         float width = 0;
-        final Iterable<GlyphSprite> iterable = this.iterable(text);
+        for(GlyphSprite glyph: iterable)
+            width = Math.max(width, iterator.cursor().x);
 
-        for(GlyphSprite glyph: iterable){
-            final float glyphMaxX = glyph.getX() + ((char) glyph.getCode() == ' ' ? glyph.getAdvanceX() : glyph.getWidth());
-            width = Math.max(width, glyphMaxX);
-        }
+        return (width * options.scale().x);
+    }
 
-        final float cursorX = ((GlyphIterator) iterable.iterator()).cursor().x * options.scale().x;
-        return Math.max(cursorX, width);
+    public float getTextWidthWithKerning(String text) {
+        final GlyphIterable iterable = this.iterable(text);
+        final GlyphIterator iterator = iterable.iterator();
+
+        float width = 0;
+        for(GlyphSprite glyph: iterable)
+            width = Math.max(width, iterator.cursor().x + iterator.advanced().x);
+
+        return (width * options.scale().x);
     }
 
     public float getTextHeight(String text) {
-        float height = 0;
-        for(GlyphSprite glyph: this.iterable(text)){
-            final float glyphMaxY = Math.abs(glyph.getY() + super.getDescent() + glyph.getHeight()) - super.getDescent();
-            height = Math.max(height, glyphMaxY);
-        }
-        return height;
+        final GlyphIterable iterable = this.iterable(text);
+        final GlyphIterator iterator = iterable.iterator();
+
+        for(GlyphSprite glyph: iterable)
+            iterator.nextLine();
+
+        return ((iterator.cursor().y + this.getHeightScaled()) * options.scale().x);
     }
 
 

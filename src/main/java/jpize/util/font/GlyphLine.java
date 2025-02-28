@@ -1,19 +1,15 @@
 package jpize.util.font;
 
-import jpize.util.math.vector.Vec2f;
-
 public class GlyphLine {
 
     private final String text;
-    private final boolean breaked;
+    private final boolean newLine;
     private final float advanceY;
-    private final Vec2f bounds;
 
-    public GlyphLine(String text, boolean breaked, float advanceY) {
+    public GlyphLine(String text, boolean newLine, float advanceY) {
         this.text = text;
-        this.breaked = breaked;
+        this.newLine = newLine;
         this.advanceY = advanceY;
-        this.bounds = new Vec2f();
     }
 
     public String getText() {
@@ -28,20 +24,21 @@ public class GlyphLine {
         return text.isEmpty();
     }
 
-    public boolean isBreaked() {
-        return breaked;
+    public boolean isNewLine() {
+        return newLine;
     }
 
     public float getAdvanceY() {
         return advanceY;
     }
 
-    public Vec2f bounds() {
-        return bounds;
-    }
-
     public int size() {
         return text.length();
+    }
+
+    @Override
+    public String toString() {
+        return text;
     }
 
 }
