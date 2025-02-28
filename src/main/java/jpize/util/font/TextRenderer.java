@@ -5,7 +5,6 @@ import jpize.gl.shader.Shader;
 import jpize.gl.tesselation.GlPrimitive;
 import jpize.gl.type.GlType;
 import jpize.gl.vertex.GlVertAttr;
-import jpize.glfw.input.Key;
 import jpize.util.camera.Camera3D;
 import jpize.util.math.vector.Vec3f;
 import jpize.util.mesh.Mesh;
@@ -45,23 +44,17 @@ public class TextRenderer {
         final Iterable<GlyphSprite> iterable = (() -> iterator);
 
         for(GlyphSprite sprite: iterable){
-
-            if(iterator.lineIndex() == 2 && Key.F7.pressed()){
-                iterator.skipLine();
-                continue;
+            // cull lines
+            if(options.isCullLinesEnabled()) {
+                final float lineBottomY = (iterator.cursor().y * options.scale().y + y);
+                final float lineTopY = (lineBottomY + font.getLineAdvanceScaled());
+                if(lineTopY < options.getCullLinesBottomY() || lineBottomY > options.getCullLinesTopY()){
+                    iterator.skipLine();
+                    continue;
+                }
             }
 
-            // cull lines
-            // if(options.isCullLinesEnabled()) {
-            //     final float lineBottomY = (iterator.cursor().y * options.scale().y + y);
-            //     final float lineTopY = (lineBottomY + font.getLineAdvanceScaled());
-            //     if(lineTopY < options.getCullLinesBottomY() || lineBottomY > options.getCullLinesTopY()){
-            //         iterator.skipLine();
-            //         continue;
-            //     }
-            // }
-
-            if((char) sprite.getCode() == ' ' || !sprite.isRenderable())
+            if(iterator.character() == ' ')
                 continue;
 
             final Vec2f renderPos = new Vec2f(sprite.getX(), sprite.getY());
@@ -131,7 +124,7 @@ public class TextRenderer {
                 }
             }
 
-            if((char) sprite.getCode() == ' ' || !sprite.isRenderable())
+            if(iterator.character() == ' ')
                 continue;
 
             // add textured quad
@@ -247,7 +240,7 @@ public class TextRenderer {
                 }
             }
 
-            if((char) sprite.getCode() == ' ' || !sprite.isRenderable())
+            if(iterator.character() == ' ')
                 continue;
 
             // add textured quad

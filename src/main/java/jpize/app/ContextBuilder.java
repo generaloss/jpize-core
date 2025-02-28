@@ -39,6 +39,7 @@ public class ContextBuilder {
         Glfw.windowHint(GlfwWindowHint.RESIZABLE, resizable);
         Glfw.windowHint(GlfwWindowHint.SAMPLES, samples);
         Glfw.windowHint(GlfwWindowHint.FOCUS_ON_SHOW, focusOnShow);
+        Glfw.windowHint(GlfwWindowHint.TRANSPARENT_FRAMEBUFFER, transparentFramebuffer);
         // window
         final GlfwWindow window = new GlfwWindow(width, height, title, monitor, shared);
         // icon
@@ -128,8 +129,15 @@ public class ContextBuilder {
 
     private boolean focusOnShow = false;
 
-    public ContextBuilder focusOnShow(boolean focusOnShow) {
-        this.focusOnShow = focusOnShow;
+    public ContextBuilder focusOnShow() {
+        this.focusOnShow = true;
+        return this;
+    }
+
+    private boolean transparentFramebuffer = false;
+
+    public ContextBuilder transparentFramebuffer() {
+        this.transparentFramebuffer = true;
         return this;
     }
 

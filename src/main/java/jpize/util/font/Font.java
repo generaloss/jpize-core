@@ -156,9 +156,12 @@ public class Font extends FontData {
         float width = 0;
         float height = 0;
 
-        for(GlyphSprite glyph: this.iterable(text)){
-            final float glyphMaxX = glyph.getX() + ((char) glyph.getCode() == ' ' ? glyph.getAdvanceX() : glyph.getWidth());
-            final float glyphMaxY = glyph.getOffsetY() + glyph.getHeight() + glyph.getLineIndex() * this.getLineAdvanceScaled();
+        final GlyphIterable iterable = this.iterable(text);
+        final GlyphIterator iterator = iterable.iterator();
+
+        for(GlyphSprite glyph: iterable){
+            final float glyphMaxX = glyph.getX() + (iterator.character() == ' ' ? iterator.nextAdvanceX() : glyph.getWidth());
+            final float glyphMaxY = glyph.getOffsetY() + glyph.getHeight() + iterator.lineIndex() * this.getLineAdvanceScaled();
 
             width = Math.max(width, glyphMaxX);
             height = Math.max(height, glyphMaxY);
@@ -172,9 +175,11 @@ public class Font extends FontData {
         float height = 0;
 
         final GlyphIterable iterable = this.iterable(text);
+        final GlyphIterator iterator = iterable.iterator();
+
         for(GlyphSprite glyph: iterable){
-            final float glyphMaxX = glyph.getX() + ((char) glyph.getCode() == ' ' ? glyph.getAdvanceX() : glyph.getWidth());
-            final float glyphMaxY = (glyph.getLineIndex() + 1) * this.getLineAdvanceScaled();
+            final float glyphMaxX = glyph.getX() + (iterator.character() == ' ' ? iterator.nextAdvanceX() : glyph.getWidth());
+            final float glyphMaxY = (iterator.lineIndex() + 1) * this.getLineAdvanceScaled();
 
             width = Math.max(width, glyphMaxX);
             height = Math.max(height, glyphMaxY);

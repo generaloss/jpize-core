@@ -60,6 +60,7 @@ public class FontData implements Disposable {
     }
 
 
+    @Override
     public void dispose() {
         for(Texture2D page: pages.values())
             page.dispose();
