@@ -153,83 +153,32 @@ public class Font extends FontData {
 
 
     public Vec2f getTextBounds(String text) {
-        float width = 0;
-        float height = 0;
-
         final GlyphIterable iterable = this.iterable(text);
-        final GlyphIterator iterator = iterable.iterator();
-
-        for(GlyphSprite glyph: iterable){
-            final float glyphMaxX = glyph.getX() + (iterator.character() == ' ' ? iterator.nextAdvanceX() : glyph.getWidth());
-            final float glyphMaxY = glyph.getOffsetY() + glyph.getHeight() + iterator.lineIndex() * this.getLineAdvanceScaled();
-
-            width = Math.max(width, glyphMaxX);
-            height = Math.max(height, glyphMaxY);
-        }
-
-        return new Vec2f(width, height);
-    }
-
-    public Vec2f getTextBoundsWithKerning(String text) {
-        float width = 0;
-        float height = 0;
-
-        final GlyphIterable iterable = this.iterable(text);
-        final GlyphIterator iterator = iterable.iterator();
-
-        for(GlyphSprite glyph: iterable){
-            final float glyphMaxX = glyph.getX() + (iterator.character() == ' ' ? iterator.nextAdvanceX() : glyph.getWidth());
-            final float glyphMaxY = (iterator.lineIndex() + 1) * this.getLineAdvanceScaled();
-
-            width = Math.max(width, glyphMaxX);
-            height = Math.max(height, glyphMaxY);
-        }
-
-        final float cursorX = iterable.iterator().cursor().x * options.scale().x;
-        return new Vec2f(Math.max(cursorX, width), height);
+        for(GlyphSprite glyph: iterable);
+        return iterable.iterator().bounds().mul(options.scale());
     }
 
     public float getTextWidth(String text) {
         final GlyphIterable iterable = this.iterable(text);
-        final GlyphIterator iterator = iterable.iterator();
-
-        float width = 0;
-        for(GlyphSprite glyph: iterable)
-            width = Math.max(width, iterator.cursor().x + iterator.nextAdvanceX());
-
-        return (width * options.scale().x);
-    }
-
-    public float getTextWidthCursor(String text) {
-        final GlyphIterable iterable = this.iterable(text);
-        final GlyphIterator iterator = iterable.iterator();
-
-        float width = 0;
-        for(GlyphSprite glyph: iterable)
-            width = Math.max(width, iterator.cursor().x);
-
-        return (width * options.scale().x);
-    }
-
-    public float getTextWidthWithKerning(String text) {
-        final GlyphIterable iterable = this.iterable(text);
-        final GlyphIterator iterator = iterable.iterator();
-
-        float width = 0;
-        for(GlyphSprite glyph: iterable)
-            width = Math.max(width, iterator.cursor().x + iterator.advanced().x);
-
-        return (width * options.scale().x);
+        for(GlyphSprite glyph: iterable);
+        return iterable.iterator().bounds().x * options.scale().x;
     }
 
     public float getTextHeight(String text) {
         final GlyphIterable iterable = this.iterable(text);
         final GlyphIterator iterator = iterable.iterator();
-
         for(GlyphSprite glyph: iterable)
-            iterator.nextLine();
+            iterator.nextNotEmptyLine();
+        return (iterator.bounds().y * options.scale().y);
+    }
 
-        return ((iterator.cursor().y + this.getHeightScaled()) * options.scale().x);
+    public float getTextMaxCursorX(String text) {
+        final GlyphIterable iterable = this.iterable(text);
+        final GlyphIterator iterator = iterable.iterator();
+        float x = 0;
+        for(GlyphSprite glyph: iterable)
+            x = Math.max(x, iterator.cursor().x);
+        return (x * options.scale().x);
     }
 
 

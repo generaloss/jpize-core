@@ -4,6 +4,7 @@ import jpize.glfw.Glfw;
 import jpize.glfw.window.GlfwWindow;
 import jpize.gl.texture.TextureUtils;
 import jpize.util.ReflectUtils;
+import jpize.util.font.TextRenderer;
 import jpize.util.postprocess.RenderQuad;
 
 import java.util.Map;
@@ -108,9 +109,10 @@ public class ContextManager {
     }
 
     private void terminate() {
+        ReflectUtils.invokeStaticMethod(TextureUtils.class, "_dispose");
+        ReflectUtils.invokeStaticMethod(RenderQuad.class, "_dispose");
+        ReflectUtils.invokeStaticMethod(TextRenderer.class, "_dispose");
         Glfw.terminate();
-        ReflectUtils.invokeStaticMethod(TextureUtils.class, "dispose");
-        ReflectUtils.invokeStaticMethod(RenderQuad.class, "disposeInstances");
     }
 
 }

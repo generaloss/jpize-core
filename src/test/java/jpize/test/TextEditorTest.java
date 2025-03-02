@@ -39,9 +39,9 @@ public class TextEditorTest extends JpizeApplication {
 
     public TextEditorTest() {
         this.input = new TextInput().enable().insert(Jpize.input().getClipboardString());
-        this.font = new Font().loadTTF("/GlasstownNbpRegular-RyMM.ttf", 64, true);//.loadDefault();
+        this.font = new Font().loadDefault();
         this.renderOptions = font.getOptions().setInvLineWrap(true);
-        // renderOptions.setNewLineGap(40);
+        // this.renderOptions.setNewLineGap(40);
         this.batch = new TextureBatch();
 
         this.cursorArrow = new GlfwCursor(GlfwCursorShape.ARROW);
@@ -206,7 +206,7 @@ public class TextEditorTest extends JpizeApplication {
             // render selection
             if(!selection.isEmpty()) {
                 final String inputLine = input.getLine(selection.start.y);
-                final float firstLineOffsetX = font.getTextWidthCursor(
+                final float firstLineOffsetX = font.getTextMaxCursorX(
                     inputLine.substring(0, Math.min(inputLine.length(), selection.start.x + 1))
                 );
 

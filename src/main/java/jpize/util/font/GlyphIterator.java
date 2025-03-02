@@ -15,7 +15,10 @@ public class GlyphIterator implements Iterator<GlyphSprite> {
     private final List<GlyphLine> lines;
     private final IntList kernings;
     // state
+    private final Vec2f offset;
     private final Vec2f cursor;
+    private final Vec2f position;
+    private final Vec2f bounds;
     private float nextAdvanceX;
     private final Vec2f advanced;
     private int charIndex;
@@ -27,7 +30,10 @@ public class GlyphIterator implements Iterator<GlyphSprite> {
     public GlyphIterator(FontData fontData, FontRenderOptions options, CharSequence text) {
         this.fontData = fontData;
         this.options = options;
+        this.offset = new Vec2f();
         this.cursor = new Vec2f();
+        this.position = new Vec2f();
+        this.bounds = new Vec2f();
         this.advanced = new Vec2f();
         // init
         this.lines = new ArrayList<>();
@@ -36,10 +42,8 @@ public class GlyphIterator implements Iterator<GlyphSprite> {
         this.line = lines.get(0);
         this.charIndex = -1;
         this.lineCharIndex = -1;
-
-        float spriteY = cursor.y;
         if(options.isInvLineWrap())
-            cursor.y -= fontData.getHeight();
+            offset.y = -fontData.getHeight();
     }
 
     public FontData fontData() {
@@ -74,8 +78,20 @@ public class GlyphIterator implements Iterator<GlyphSprite> {
     }
 
 
+    public Vec2f offset() {
+        return offset;
+    }
+
     public Vec2f cursor() {
         return cursor;
+    }
+
+    public Vec2f position() {
+        return position;
+    }
+
+    public Vec2f bounds() {
+        return bounds;
     }
 
     public float nextAdvanceX() {
@@ -83,7 +99,10 @@ public class GlyphIterator implements Iterator<GlyphSprite> {
     }
 
     public float nextAdvanceY() {
-        return (line == null ? 0F : line.getAdvanceY());
+        if(line == null) return 0F;
+        if(lineCharIndex + 1 < line.size()) return 0F;
+        if(lineIndex + 1 >= lines.size()) return 0F;
+        return line.getAdvanceY();
     }
 
     public Vec2f advanced() {
@@ -102,7 +121,8 @@ public class GlyphIterator implements Iterator<GlyphSprite> {
     public int code() {
         if(glyph == null)
             return -1;
-        return glyph.getCode();    }
+        return glyph.getCode();
+    }
 
     public char character() {
         return (char) this.code();
@@ -121,21 +141,18 @@ public class GlyphIterator implements Iterator<GlyphSprite> {
     }
 
 
-    private GlyphLine addLine(StringBuilder lineBuilder, boolean newLine) {
+    private void addLine(StringBuilder lineBuilder, boolean newLine) {
         // calculate advance y
         final float lineGap = (newLine ? options.getNewLineGap() : options.getLineGap());
         final float lineHeight = (fontData.getHeight() * options.advanceFactor().y);
-        final float lineAdvance = (lineGap + lineHeight) * options.getLineWrapSign();
+        final float lineAdvance = (lineGap + lineHeight);
 
         // add line
-        final GlyphLine line = new GlyphLine(lineBuilder.toString(), newLine, lineAdvance);
-        lines.add(line);
+        lines.add(new GlyphLine(lineBuilder.toString(), newLine, lineAdvance));
 
         // reset 'line' state
         lineBuilder.delete(0, lineBuilder.length());
         cursor.x = 0;
-
-        return line;
     }
 
     private void makeLines(CharSequence text) {
@@ -175,8 +192,7 @@ public class GlyphIterator implements Iterator<GlyphSprite> {
                 // check current line width
                 if(cursor.x != 0 && (cursor.x + advanced.x) >= breakLineMaxWidth) {
                     kerningEntry = null;
-                    final GlyphLine line = this.addLine(lineBuilder, false);
-                    cursor.y += line.getAdvanceY();
+                    this.addLine(lineBuilder, false);
                 }
 
                 cursor.x += advanced.x;
@@ -190,7 +206,6 @@ public class GlyphIterator implements Iterator<GlyphSprite> {
 
         // reset state
         advanced.x = 0;
-        cursor.y = 0;
     }
 
 
@@ -200,27 +215,39 @@ public class GlyphIterator implements Iterator<GlyphSprite> {
 
     @Override
     public boolean hasNext() {
+        if(!(charIndex + 1 < size))
+            System.out.println(nextAdvanceY());
         return (charIndex + 1 < size);
     }
 
     @Override
     public GlyphSprite next() {
+        // advance cursor
+        advanced.zero();
         this.nextGlyph();
         cursor.add(advanced);
+        // position
+        position.set(cursor);
+        position.y *= options.getLineWrapSign();
+        position.add(offset);
+        // bounds
+        bounds.setMaxComps(
+            cursor.x + nextAdvanceX,
+            cursor.y + line.getAdvanceY()
+        );
+        // sprite
         if(glyph == null)
-            return new GlyphSprite(fontData, cursor, options.scale());
-        return new GlyphSprite(fontData, glyph, cursor, options.scale());
+            return new GlyphSprite(fontData, position, options.scale());
+        return new GlyphSprite(fontData, glyph, position, options.scale());
     }
 
     private void nextGlyph() {
-        // reset advance
-        advanced.zero();
         // increase next char index
         charIndex++;
         lineCharIndex++;
         // next line
         if(lineCharIndex >= line.size()) {
-            this.nextLine();
+            this.nextNotEmptyLine();
             if(line == null)
                 return;
         }
@@ -235,45 +262,39 @@ public class GlyphIterator implements Iterator<GlyphSprite> {
         ) * options.advanceFactor().x;
     }
 
-    public void nextLine() {
+    public void nextNotEmptyLine() {
         do{
-            // next line index
-            lineIndex++;
-            // next char indices
-            charIndex += (line.size() - lineCharIndex);
-            lineCharIndex = 0;
-            // advance
-            nextAdvanceX = 0F;
-            cursor.x = 0F;
-            advanced.y += line.getAdvanceY();
-            // check bounds
-            if(lineIndex >= lines.size()){
-                line = null;
-                return;
-            }
-            // next line
-            line = lines.get(lineIndex);
+            this.nextLine();
         }while(line.isEmpty());
     }
 
-    public void skipLine() {
-        // next line index
+    private void nextLine() {
         lineIndex++;
         // next char indices
-        charIndex += (line.size() - lineCharIndex - 1);
-        lineCharIndex = -1;
+        charIndex += (line.size() - lineCharIndex);
+        lineCharIndex = 0;
         // advance
         nextAdvanceX = 0F;
         cursor.x = 0F;
-        cursor.y += line.getAdvanceY();
-        // check bounds
-        if(lineIndex >= lines.size()){
-            line = null;
-            return;
-        }
+        advanced.y += line.getAdvanceY();
         // next line
-        line = lines.get(lineIndex);
+        line = null;
+        if(lineIndex < lines.size())
+            line = lines.get(lineIndex);
     }
+
+    public void skipLine() { // skips only non-empty lines
+        this.nextLine();
+        charIndex -= 1;
+        lineCharIndex -= 1;
+    }
+
+    public void hideLine() {
+        this.skipLine();
+        if(line != null)
+            cursor.y += line.getAdvanceY();
+    }
+
 
     @Override
     public void remove() {

@@ -5,6 +5,7 @@ import jpize.app.JpizeApplication;
 import jpize.gl.Gl;
 import jpize.util.font.Font;
 import jpize.util.font.FontRenderOptions;
+import jpize.util.font.GlyphIterator;
 import jpize.util.mesh.TextureBatch;
 import jpize.util.res.Resource;
 
@@ -23,7 +24,7 @@ public class TextTest extends JpizeApplication {
         this.font = new Font().loadFNT(Resource.zip(zip, zip.getEntry("font.fnt")), false);
         this.options = font.getOptions();
 
-        options.setInvLineWrap(true);
+        options.setInvLineWrap(false);
         options.scale().set(4F);
         options.advanceFactor().set(1F, 1F);
         options.color().set(1F, 0.8F, 1F);
@@ -35,7 +36,8 @@ public class TextTest extends JpizeApplication {
     public void render() {
         Gl.clearColorBuffer();
         batch.setup();
-        font.drawText(batch, "public static void main(String[] args) {\n    System.out.println(\"pizza\");\n}", 100, 400);
+        final GlyphIterator state = font.drawText(batch, "public static void main(String[] args) {\n    System.out.println(\"pizza\");\n}", 100, 400);
+        batch.drawRect(100, 400, state.bounds().x * state.options().scale().x, state.bounds().y * state.options().scale().y, 1F, 0.8F, 1F, 0.25F);
         batch.render();
     }
 

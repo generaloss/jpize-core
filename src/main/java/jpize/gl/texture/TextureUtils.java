@@ -14,13 +14,15 @@ public class TextureUtils {
         final long context = GLFW.glfwGetCurrentContext();
         if(!WHITE_TEXTURE_BY_CONTEXT.containsKey(context)) {
             final PixmapRGBA pixmap = new PixmapRGBA(1, 1);
-            pixmap.setPixelRGB(0, 0, 0xFFFFFF);
-            WHITE_TEXTURE_BY_CONTEXT.put(context, new Texture2D(pixmap));
+            pixmap.clearRGB(0xFFFFFF);
+            final Texture2D texture = new Texture2D(pixmap);
+            pixmap.dispose();
+            WHITE_TEXTURE_BY_CONTEXT.put(context, texture);
         }
         return WHITE_TEXTURE_BY_CONTEXT.get(context);
     }
 
-    private static void dispose() { // calls from ContextManager
+    private static void _dispose() { // calls from ContextManager (112)
         for(Texture2D texture: WHITE_TEXTURE_BY_CONTEXT.values())
             texture.dispose();
     }

@@ -15,24 +15,20 @@ public class GlyphSprite {
 
     private final float offsetY;
 
-    public GlyphSprite(FontData fontData, GlyphInfo glyph, Vec2f cursor, Vec2f scale) {
+    public GlyphSprite(FontData fontData, GlyphInfo glyph, Vec2f position, Vec2f scale) {
         this.region = glyph.getRegion();
         this.page = fontData.pages().get(glyph.getPageID());
-
-        this.position = cursor.copy().add(glyph.getOffset()).mul(scale);
+        this.position = position.copy().add(glyph.getOffset()).mul(scale);
         this.size = glyph.getSize().copy().mul(scale);
-
-        this.offsetY  = (glyph.getOffset().y * scale.y);
+        this.offsetY = (glyph.getOffset().y * scale.y);
     }
 
-    public GlyphSprite(FontData fontData, Vec2f cursor, Vec2f scale) {
+    public GlyphSprite(FontData fontData, Vec2f position, Vec2f scale) {
         this.region = new Region();
         this.page = TextureUtils.whiteTexture();
-
-        this.position = cursor.copy().add(0F).mul(scale);
+        this.position = position.copy().mul(scale);
         this.size = new Vec2f(fontData.getHeight() * 0.5F, fontData.getHeight()).mul(0.9F).mul(scale);
-
-        this.offsetY  = 0F;
+        this.offsetY = 0F;
     }
 
 

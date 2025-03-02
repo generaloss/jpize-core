@@ -75,7 +75,7 @@ public class RenderQuad implements Disposable {
         return BY_CONTEXT.get(context);
     }
 
-    private static void disposeInstances() {
+    private static void _dispose() { // calls from ContextManager (113)
         for(RenderQuad quad: BY_CONTEXT.values())
             quad.dispose();
     }

@@ -5,6 +5,7 @@ import jpize.gl.shader.Shader;
 import jpize.gl.tesselation.GlPrimitive;
 import jpize.gl.type.GlType;
 import jpize.gl.vertex.GlVertAttr;
+import jpize.glfw.input.Key;
 import jpize.util.camera.Camera3D;
 import jpize.util.math.vector.Vec3f;
 import jpize.util.mesh.Mesh;
@@ -23,6 +24,18 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class TextRenderer {
+
+    private record Renderer(Mesh mesh, Shader shader, Matrix4f matrixCombined) { }
+
+    private static final Map<Long, Renderer> RENDERER_BY_CONTEXT = new HashMap<>();
+
+    private static void _dispose() { // calls from ContextManager (114)
+        for(Renderer renderer: RENDERER_BY_CONTEXT.values()){
+            renderer.mesh.dispose();
+            renderer.shader.dispose();
+        }
+    }
+
 
     public static GlyphIterator render(Font font, TextureBatch batch, String text, float x, float y) {
         if(text == null)
@@ -44,12 +57,21 @@ public class TextRenderer {
         final Iterable<GlyphSprite> iterable = (() -> iterator);
 
         for(GlyphSprite sprite: iterable){
+            if(Key.F2.pressed() && iterator.lineIndex() == 2){
+                iterator.skipLine();
+                continue;
+            }
+            if(Key.F3.pressed() && iterator.lineIndex() == 2){
+                iterator.hideLine();
+                continue;
+            }
+
             // cull lines
             if(options.isCullLinesEnabled()) {
-                final float lineBottomY = (iterator.cursor().y * options.scale().y + y);
+                final float lineBottomY = (iterator.position().y * options.scale().y + y);
                 final float lineTopY = (lineBottomY + font.getLineAdvanceScaled());
                 if(lineTopY < options.getCullLinesBottomY() || lineBottomY > options.getCullLinesTopY()){
-                    iterator.skipLine();
+                    iterator.hideLine();
                     continue;
                 }
             }
@@ -71,10 +93,6 @@ public class TextRenderer {
         return iterator;
     }
 
-
-    private record Renderer(Mesh mesh, Shader shader, Matrix4f matrixCombined) { }
-
-    private static final Map<Long, Renderer> RENDERER_BY_CONTEXT = new HashMap<>();
 
     public static GlyphIterator render(Font font, String text, float x, float y) {
         if(text == null)
@@ -116,10 +134,10 @@ public class TextRenderer {
         for(GlyphSprite sprite: iterable){
             // cull lines
             if(options.isCullLinesEnabled()) {
-                final float lineBottomY = (iterator.cursor().y * options.scale().y + y);
+                final float lineBottomY = (iterator.position().y * options.scale().y + y);
                 final float lineTopY = (lineBottomY + font.getLineAdvanceScaled());
                 if(lineTopY < options.getCullLinesBottomY() || lineBottomY > options.getCullLinesTopY()){
-                    iterator.nextLine();
+                    iterator.nextNotEmptyLine();
                     continue;
                 }
             }
@@ -232,10 +250,10 @@ public class TextRenderer {
         for(GlyphSprite sprite: iterable){
             // cull lines
             if(options.isCullLinesEnabled()) {
-                final float lineBottomY = (iterator.cursor().y * options.scale().y + y);
+                final float lineBottomY = (iterator.position().y * options.scale().y + y);
                 final float lineTopY = (lineBottomY + font.getLineAdvanceScaled());
                 if(lineTopY < options.getCullLinesBottomY() || lineBottomY > options.getCullLinesTopY()){
-                    iterator.nextLine();
+                    iterator.nextNotEmptyLine();
                     continue;
                 }
             }
