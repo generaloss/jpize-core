@@ -5,6 +5,7 @@ import jpize.app.JpizeApplication;
 import jpize.gl.Gl;
 import jpize.util.font.Font;
 import jpize.util.font.FontRenderOptions;
+import jpize.util.font.GlyphIterable;
 import jpize.util.font.GlyphIterator;
 import jpize.util.mesh.TextureBatch;
 import jpize.util.res.Resource;
@@ -30,6 +31,17 @@ public class TextTest extends JpizeApplication {
         options.color().set(1F, 0.8F, 1F);
         options.setRotation(0F);
         options.rotationOrigin().set(0.5F, 0.5F);
+
+        GlyphIterator a = font.drawText("I ", 0, 0);
+        System.out.println(a.nextAdvanceX() + ", " + a.nextAdvanceY());
+        GlyphIterator b = font.drawText("Want ", 0, 0);
+        System.out.println(b.nextAdvanceX() + ", " + b.nextAdvanceY());
+        GlyphIterator c = font.drawText("Pizza", 0, 0);
+        System.out.println(c.nextAdvanceX() + ", " + c.nextAdvanceY());
+        GlyphIterator d = font.drawText("\n", 0, 0);
+        System.out.println(d.nextAdvanceX() + ", " + d.nextAdvanceY());
+        GlyphIterator e = font.drawText("Bold text", 0, 0);
+        System.out.println(e.nextAdvanceX() + ", " + e.nextAdvanceY());
     }
 
     @Override

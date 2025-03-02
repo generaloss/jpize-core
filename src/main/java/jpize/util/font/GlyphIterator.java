@@ -86,6 +86,17 @@ public class GlyphIterator implements Iterator<GlyphSprite> {
         return cursor;
     }
 
+    public float nextCursorX() {
+        if(this.hasNextLine() && lineCharIndex + 1 >= line.size())
+            return 0F;
+        return (cursor.x + nextAdvanceX);
+    }
+
+    public float nextCursorY() {
+        return (cursor.y + this.nextAdvanceY());
+    }
+
+
     public Vec2f position() {
         return position;
     }
@@ -94,14 +105,14 @@ public class GlyphIterator implements Iterator<GlyphSprite> {
         return bounds;
     }
 
+
     public float nextAdvanceX() {
         return nextAdvanceX;
     }
 
     public float nextAdvanceY() {
-        if(line == null) return 0F;
-        if(lineCharIndex + 1 < line.size()) return 0F;
-        if(lineIndex + 1 >= lines.size()) return 0F;
+        if(this.hasNextInLine() || !this.hasNextLine())
+            return 0F;
         return line.getAdvanceY();
     }
 
@@ -213,10 +224,14 @@ public class GlyphIterator implements Iterator<GlyphSprite> {
         return (lineIndex + 1 < lines.size());
     }
 
+    public boolean hasNextInLine() {
+        if(line == null)
+            return false;
+        return (lineCharIndex + 1 < line.size());
+    }
+
     @Override
     public boolean hasNext() {
-        if(!(charIndex + 1 < size))
-            System.out.println(nextAdvanceY());
         return (charIndex + 1 < size);
     }
 
