@@ -1,5 +1,9 @@
 package jpize.app;
 
+import jpize.gl.GL20;
+import jpize.gl.GL30;
+import jpize.gl.GL31;
+import jpize.gl.GL32;
 import jpize.glfw.callback.GlfwCallbacks;
 import jpize.glfw.input.GlfwInput;
 import jpize.glfw.window.GlfwWindow;
@@ -16,6 +20,23 @@ public class Jpize {
 
     public static void run() {
         ContextManager.instance().run();
+    }
+    
+    
+    public static GL20 gl20() {
+        return null;
+    }
+
+    public static GL30 gl30() {
+        return null;
+    }
+
+    public static GL31 gl31() {
+        return null;
+    }
+
+    public static GL32 gl() {
+        return null;
     }
 
 

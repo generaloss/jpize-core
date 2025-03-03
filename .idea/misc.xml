@@ -4,7 +4,6 @@
   <component name="MavenProjectsManager">
     <option name="originalFiles">
       <list>
-        <option value="$PROJECT_DIR$/pom.xml" />
         <option value="$PROJECT_DIR$/core/pom.xml" />
         <option value="$PROJECT_DIR$/net/pom.xml" />
         <option value="$PROJECT_DIR$/physic/pom.xml" />
@@ -12,6 +11,8 @@
         <option value="$PROJECT_DIR$/tilemap/pom.xml" />
         <option value="$PROJECT_DIR$/tests/pom.xml" />
         <option value="$PROJECT_DIR$/utils/pom.xml" />
+        <option value="$PROJECT_DIR$/jpize-core-lwjgl/pom.xml" />
+        <option value="$PROJECT_DIR$/pom.xml" />
       </list>
     </option>
     <option name="ignoredFiles">

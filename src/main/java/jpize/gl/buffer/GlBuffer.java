@@ -1,12 +1,11 @@
 package jpize.gl.buffer;
 
+import jpize.app.Jpize;
 import jpize.gl.GlObject;
 import jpize.gl.texture.GlInternalFormat;
 import jpize.gl.type.GlType;
 
 import java.nio.*;
-
-import static org.lwjgl.opengl.GL43.*;
 
 public class GlBuffer extends GlObject {
 
@@ -14,7 +13,7 @@ public class GlBuffer extends GlObject {
     private GlBufUsage defaultUsage;
 
     public GlBuffer(GlBufTarget target) {
-        super(glGenBuffers());
+        super(Jpize.gl().glGenBuffer());
         this.target = target;
         this.defaultUsage = GlBufUsage.STATIC_DRAW;
     }
@@ -79,7 +78,7 @@ public class GlBuffer extends GlObject {
 
     public GlBufferMapping mapRange(long offset, long length, GlBufAccess access) {
         this.bind();
-        final ByteBuffer mapBuffer = glMapBufferRange(target.value, offset, length, access.value);
+        final ByteBuffer mapBuffer = Jpize.gl().glMapBufferRange(target.value, offset, length, access.value);
         return createMapping(mapBuffer);
     }
 
