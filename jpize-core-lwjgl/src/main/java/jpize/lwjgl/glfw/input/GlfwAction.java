@@ -1,37 +1,18 @@
 package jpize.lwjgl.glfw.input;
 
-import static org.lwjgl.glfw.GLFW.GLFW_PRESS;
-import static org.lwjgl.glfw.GLFW.GLFW_RELEASE;
-import static org.lwjgl.glfw.GLFW.GLFW_REPEAT;
+import jpize.io.input.Action;
 
-public enum GlfwAction {
+import static org.lwjgl.glfw.GLFW.*;
 
-    RELEASE (GLFW_RELEASE), // 0
-    PRESS   (GLFW_PRESS  ), // 1
-    REPEAT  (GLFW_REPEAT ); // 2
+public class GlfwAction {
 
-    public final int value;
-
-    GlfwAction(int value) {
-        this.value = value;
-    }
-
-
-    public boolean isDown() {
-        return (this == PRESS);
-    }
-
-    public boolean isPressed() {
-        return (this != RELEASE);
-    }
-
-    public boolean isRelease() {
-        return (this == RELEASE);
-    }
-
-
-    public static GlfwAction byValue(int value) {
-        return values()[value];
+    public static Action byValue(int value) {
+        return switch(value) {
+            case GLFW_RELEASE -> Action.RELEASE;
+            case GLFW_PRESS   -> Action.PRESS;
+            case GLFW_REPEAT  -> Action.REPEAT;
+            default -> null;
+        };
     }
 
 }

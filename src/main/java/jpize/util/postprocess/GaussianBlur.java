@@ -1,7 +1,7 @@
 package jpize.util.postprocess;
 
 import jpize.app.Jpize;
-import jpize.opengl.Gl;
+import jpize.opengl.gl.Gl;
 import jpize.opengl.tesselation.GlFramebuffer;
 import jpize.opengl.tesselation.GlRenderbuffer;
 import jpize.opengl.shader.Shader;

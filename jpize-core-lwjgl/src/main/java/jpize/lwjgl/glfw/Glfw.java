@@ -5,7 +5,7 @@ import jpize.lwjgl.glfw.init.GlfwAnglePlatformType;
 import jpize.lwjgl.glfw.init.GlfwInitHint;
 import jpize.lwjgl.glfw.init.GlfwPlatform;
 import jpize.lwjgl.glfw.init.GlfwWaylandLibdecor;
-import jpize.lwjgl.glfw.input.Key;
+import jpize.lwjgl.glfw.input.GlfwKey;
 import jpize.glfw.window.*;
 import jpize.lwjgl.glfw.window.*;
 import jpize.util.math.vector.Vec3i;
@@ -205,11 +205,11 @@ public class Glfw {
         return GLFW.glfwRawMouseMotionSupported();
     }
 
-    public static String getKeyName(Key key) {
+    public static String getKeyName(GlfwKey key) {
         return GLFW.glfwGetKeyName(key.value, key.scancode);
     }
 
-    public static int getKeyScancode(Key key) {
+    public static int getKeyScancode(GlfwKey key) {
         return GLFW.glfwGetKeyScancode(key.value);
     }
 

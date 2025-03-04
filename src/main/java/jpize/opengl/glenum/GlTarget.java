@@ -1,7 +1,7 @@
 package jpize.opengl.glenum;
 
-import static org.lwjgl.opengl.ARBImaging.*;
-import static org.lwjgl.opengl.GL20.*;
+// import static org.lwjgl.opengl.ARBImaging.*;
+import static jpize.opengl.gl.IGL20.*;
 
 public enum GlTarget {
 
@@ -80,17 +80,17 @@ public enum GlTarget {
     LIGHT4                        (GL_LIGHT4                       ),
     LIGHT5                        (GL_LIGHT5                       ),
     LIGHT6                        (GL_LIGHT6                       ),
-    LIGHT7                        (GL_LIGHT7                       ),
+    LIGHT7                        (GL_LIGHT7                       );
 
     // ARB
-    COLOR_TABLE                   (GL_COLOR_TABLE                  ),
-    CONVOLUTION_1D                (GL_CONVOLUTION_1D               ),
-    CONVOLUTION_2D                (GL_CONVOLUTION_2D               ),
-    HISTOGRAM                     (GL_HISTOGRAM                    ),
-    MINMAX                        (GL_MINMAX                       ),
-    POST_COLOR_MATRIX_COLOR_TABLE (GL_POST_COLOR_MATRIX_COLOR_TABLE),
-    POST_CONVOLUTION_COLOR_TABLE  (GL_POST_CONVOLUTION_COLOR_TABLE ),
-    SEPARABLE_2D                  (GL_SEPARABLE_2D                 );
+    // COLOR_TABLE                   (GL_COLOR_TABLE                  ),
+    // CONVOLUTION_1D                (GL_CONVOLUTION_1D               ),
+    // CONVOLUTION_2D                (GL_CONVOLUTION_2D               ),
+    // HISTOGRAM                     (GL_HISTOGRAM                    ),
+    // MINMAX                        (GL_MINMAX                       ),
+    // POST_COLOR_MATRIX_COLOR_TABLE (GL_POST_COLOR_MATRIX_COLOR_TABLE),
+    // POST_CONVOLUTION_COLOR_TABLE  (GL_POST_CONVOLUTION_COLOR_TABLE ),
+    // SEPARABLE_2D                  (GL_SEPARABLE_2D                 );
 
 
     public final int value;

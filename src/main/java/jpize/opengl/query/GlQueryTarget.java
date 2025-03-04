@@ -1,6 +1,6 @@
 package jpize.opengl.query;
 
-import static org.lwjgl.opengl.GL46.*;
+import static jpize.opengl.gl.IGL43.*;
 
 public enum GlQueryTarget {
 

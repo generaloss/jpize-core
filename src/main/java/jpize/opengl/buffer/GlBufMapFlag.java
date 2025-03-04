@@ -1,6 +1,6 @@
 package jpize.opengl.buffer;
 
-import static jpize.opengl.IGL44.*;
+import static jpize.opengl.gl.IGL44.*;
 
 public enum GlBufMapFlag {
 

@@ -1,7 +1,6 @@
 package jpize.app;
 
-import jpize.glfw.Glfw;
-import jpize.glfw.window.GlfwWindow;
+import jpize.io.IWindow;
 import jpize.opengl.texture.TextureUtils;
 import jpize.util.ReflectUtils;
 import jpize.util.font.TextRenderer;
@@ -27,10 +26,7 @@ public class ContextManager {
     private final Map<Long, Context> contexts = new ConcurrentHashMap<>();
     private long currentContextID;
 
-    private ContextManager() {
-        Glfw.init();
-        Glfw.swapInterval(1);
-    }
+    private ContextManager() { }
 
 
     public Context getContext(long windowID) {
@@ -42,7 +38,7 @@ public class ContextManager {
         );
     }
 
-    public Context getContext(GlfwWindow window) {
+    public Context getContext(IWindow window) {
         if(window == null)
             return null;
         return this.getContext(window.getID());
@@ -52,7 +48,7 @@ public class ContextManager {
         return this.getContext(currentContextID);
     }
 
-    public void makeContextCurrent(GlfwWindow window) {
+    public void makeContextCurrent(IWindow window) {
         if(window == null){
             currentContextID = 0L;
             return;
@@ -92,6 +88,10 @@ public class ContextManager {
         while(!contextsToInit.isEmpty()){
             final Context context = contextsToInit.poll();
             contexts.put(context.getWindow().getID(), context);
+
+            final Jpize jpize = new Jpize();
+            ReflectUtils.invokeStaticMethod(Jpize.class, "_add", jpize);
+
             context.init();
         }
     }

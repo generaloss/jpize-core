@@ -1,6 +1,7 @@
 package jpize.app;
 
-import jpize.opengl.Gl;
+import jpize.io.IWindow;
+import jpize.opengl.gl.Gl;
 import jpize.glfw.window.GlfwWindow;
 import jpize.util.time.DeltaTimeCounter;
 import jpize.util.time.PerSecondCounter;
@@ -9,8 +10,7 @@ import org.lwjgl.opengl.GLCapabilities;
 
 public class Context {
 
-    private final GlfwWindow window;
-    private final GLCapabilities capabilities;
+    private final IWindow window;
     private final SyncExecutor syncExecutor;
     private final PerSecondCounter fpsCounter;
     private final DeltaTimeCounter deltaTimeCounter;
@@ -18,22 +18,17 @@ public class Context {
     private JpizeApplication app;
     private boolean disableRender;
 
-    protected Context(GlfwWindow window) {
+    public Context(IWindow window) {
         this.window = window;
         this.makeCurrent();
-        this.capabilities = GL.createCapabilities();
         this.syncExecutor = new SyncExecutor();
         this.fpsCounter = new PerSecondCounter();
         this.deltaTimeCounter = new DeltaTimeCounter();
         ContextManager.instance().contextToInit(this);
     }
 
-    public GlfwWindow getWindow() {
+    public IWindow getWindow() {
         return window;
-    }
-
-    public GLCapabilities getGLCapabilities() {
-        return capabilities;
     }
 
     public SyncExecutor getSyncExecutor() {

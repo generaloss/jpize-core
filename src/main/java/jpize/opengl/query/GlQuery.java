@@ -1,24 +1,24 @@
 package jpize.opengl.query;
 
+import jpize.app.Jpize;
 import jpize.opengl.GlObject;
-
-import static org.lwjgl.opengl.GL46.*;
+import jpize.opengl.gl.IGL15;
 
 public class GlQuery extends GlObject {
     
     private GlQueryTarget type;
     
     public GlQuery(GlQueryTarget type) {
-        super(glGenQueries());
+        super(Jpize.GL15.glGenQueries());
         this.type = type;
     }
     
     public void begin() {
-        glBeginQuery(type.value, ID);
+        Jpize.GL15.glBeginQuery(type.value, ID);
     }
     
     public void end() {
-        glEndQuery(type.value);
+        Jpize.GL15.glEndQuery(type.value);
     }
 
 
@@ -32,11 +32,11 @@ public class GlQuery extends GlObject {
 
 
     public int getResult() {
-        return glGetQueryObjecti(ID, GL_QUERY_RESULT);
+        return Jpize.GL15.glGetQueryObjecti(ID, IGL15.GL_QUERY_RESULT);
     }
 
     public boolean isResultAvailable() {
-        return glGetQueryObjecti(ID, GL_QUERY_RESULT_AVAILABLE) == GL_TRUE;
+        return (Jpize.GL15.glGetQueryObjecti(ID, IGL15.GL_QUERY_RESULT_AVAILABLE) == IGL15.GL_TRUE);
     }
 
     public int waitForResult() {
@@ -47,7 +47,7 @@ public class GlQuery extends GlObject {
 
     @Override
     public void dispose() {
-        glDeleteQueries(ID);
+        Jpize.GL15.glDeleteQueries(ID);
     }
     
 }

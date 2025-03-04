@@ -1,6 +1,6 @@
 package jpize.opengl.texture;
 
-import jpize.opengl.Gl;
+import jpize.opengl.gl.Gl;
 import jpize.opengl.GlObject;
 import jpize.opengl.glenum.GlCompareFunc;
 import jpize.opengl.type.GlType;

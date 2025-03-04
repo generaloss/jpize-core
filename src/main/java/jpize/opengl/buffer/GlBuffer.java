@@ -2,7 +2,7 @@ package jpize.opengl.buffer;
 
 import jpize.app.Jpize;
 import jpize.opengl.GlObject;
-import jpize.opengl.IGL32;
+import jpize.opengl.gl.IGL32;
 import jpize.opengl.texture.GlInternalFormat;
 import jpize.opengl.type.GlType;
 

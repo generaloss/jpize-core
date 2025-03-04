@@ -2,10 +2,12 @@ package jpize.lwjgl.glfw.callback;
 
 import jpize.app.Context;
 import jpize.app.ContextManager;
+import jpize.io.input.ICallbacks;
+import jpize.io.input.Action;
 import jpize.lwjgl.glfw.input.GlfwAction;
 import jpize.lwjgl.glfw.input.GlfwMods;
-import jpize.lwjgl.glfw.input.Key;
-import jpize.lwjgl.glfw.input.MouseBtn;
+import jpize.lwjgl.glfw.input.GlfwKey;
+import jpize.lwjgl.glfw.input.GlfwMouseBtn;
 import jpize.lwjgl.glfw.window.GlfwWindow;
 import org.lwjgl.PointerBuffer;
 import org.lwjgl.system.Callback;
@@ -16,7 +18,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 import static org.lwjgl.glfw.GLFW.*;
 
-public class GlfwCallbacks {
+public class GlfwCallbacks implements ICallbacks {
 
     private final GlfwWindow window;
     private final long windowID;
@@ -229,8 +231,8 @@ public class GlfwCallbacks {
         if(callbackMouseButton == null){
             callbackMouseButton = glfwSetMouseButtonCallback(windowID, (windowID, rawButton, rawAction, rawMods) -> {
                 this.makeContextCurrent();
-                final MouseBtn button = MouseBtn.byValue(rawButton);
-                final GlfwAction action = GlfwAction.byValue(rawAction);
+                final GlfwMouseBtn button = GlfwMouseBtn.byValue(rawButton);
+                final Action action = GlfwAction.byValue(rawAction);
                 final GlfwMods mods = new GlfwMods(rawMods);
                 callbacksMouseButton.forEach(c -> c.invoke(window, button, action, mods));
             });
@@ -293,10 +295,10 @@ public class GlfwCallbacks {
         if(callbackKey == null){
             callbackKey = glfwSetKeyCallback(windowID, (windowID, rawKey, scancode, rawAction, rawMods) -> {
                 this.makeContextCurrent();
-                final Key key = Key.byValue(rawKey);
+                final GlfwKey key = GlfwKey.byValue(rawKey);
                 if(key == null) // theoretically impossible, but once it happened
                     return;
-                final GlfwAction action = GlfwAction.byValue(rawAction);
+                final Action action = GlfwAction.byValue(rawAction);
                 final GlfwMods mods = new GlfwMods(rawMods);
                 callbacksKey.forEach(c -> c.invoke(window, key, scancode, action, mods));
             });

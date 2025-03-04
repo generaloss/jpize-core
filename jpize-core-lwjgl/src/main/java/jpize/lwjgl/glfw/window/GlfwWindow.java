@@ -1,12 +1,12 @@
 package jpize.lwjgl.glfw.window;
 
+import jpize.io.IWindow;
 import jpize.lwjgl.glfw.Glfw;
 import jpize.lwjgl.glfw.GlfwImage;
 import jpize.lwjgl.glfw.GlfwObjectLong;
 import jpize.lwjgl.glfw.callback.GlfwCallbacks;
 import jpize.lwjgl.glfw.input.GlfwInput;
 import jpize.lwjgl.glfw.monitor.GlfwMonitor;
-import jpize.util.Disposable;
 import jpize.util.pixmap.PixmapRGBA;
 import jpize.util.math.vector.Vec2f;
 import jpize.util.math.vector.Vec2i;
@@ -23,7 +23,7 @@ import java.util.Map;
 
 import static org.lwjgl.glfw.GLFW.*;
 
-public class GlfwWindow extends GlfwObjectLong implements Disposable {
+public class GlfwWindow extends GlfwObjectLong implements IWindow {
 
     private final GlfwInput input;
     private final GlfwCallbacks callbacks;
@@ -57,13 +57,6 @@ public class GlfwWindow extends GlfwObjectLong implements Disposable {
 
     public GlfwWindow(String title, int width, int height) {
         this(title, width, height, null);
-    }
-
-
-    @Override
-    public void dispose() {
-        unregisterContext(this);
-        glfwDestroyWindow(ID);
     }
 
 
@@ -351,6 +344,13 @@ public class GlfwWindow extends GlfwObjectLong implements Disposable {
 
     public void toggleFullscreen() {
         this.setFullscreen(!this.isFullscreen());
+    }
+
+
+    @Override
+    public void dispose() {
+        unregisterContext(this);
+        glfwDestroyWindow(ID);
     }
 
 

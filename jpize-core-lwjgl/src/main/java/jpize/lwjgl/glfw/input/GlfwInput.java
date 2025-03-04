@@ -1,5 +1,8 @@
 package jpize.lwjgl.glfw.input;
 
+import jpize.io.input.AbstractInput;
+import jpize.io.input.Action;
+import jpize.io.input.InputMonitor;
 import jpize.lwjgl.glfw.Glfw;
 import jpize.lwjgl.glfw.cursor.GlfwCursor;
 import jpize.lwjgl.glfw.window.GlfwWindow;
@@ -13,16 +16,14 @@ import java.nio.IntBuffer;
 
 import static org.lwjgl.glfw.GLFW.*;
 
-public class GlfwInput {
+public class GlfwInput extends AbstractInput {
 
-    private final GlfwWindow window;
     private final long windowID;
-    private final InputMonitor inputMonitor;
+
 
     public GlfwInput(GlfwWindow window) {
-        this.window = window;
+        super(window);
         this.windowID = window.getID();
-        this.inputMonitor = new InputMonitor(window);
     }
 
     public InputMonitor getInputMonitor() {
@@ -30,19 +31,19 @@ public class GlfwInput {
     }
     
     
-    public GlfwAction getKey(Key key) {
+    public Action getKey(GlfwKey key) {
         return GlfwAction.byValue(glfwGetKey(windowID, key.value));
     }
     
-    public boolean isKeyDown(Key key) {
+    public boolean isKeyDown(GlfwKey key) {
         return inputMonitor.isKeyDown(key);
     }
     
-    public boolean isKeyPressed(Key key) {
+    public boolean isKeyPressed(GlfwKey key) {
         return this.getKey(key).isPressed();
     }
 
-    public boolean isKeyUp(Key key) {
+    public boolean isKeyUp(GlfwKey key) {
         return inputMonitor.isKeyUp(key);
     }
 
@@ -55,19 +56,19 @@ public class GlfwInput {
     }
     
 
-    public GlfwAction getMouseButton(MouseBtn button) {
+    public Action getMouseButton(GlfwMouseBtn button) {
         return GlfwAction.byValue(glfwGetMouseButton(windowID, button.value));
     }
 
-    public boolean isButtonDown(MouseBtn button) {
+    public boolean isButtonDown(GlfwMouseBtn button) {
         return inputMonitor.isMouseButtonDown(button);
     }
 
-    public boolean isButtonPressed(MouseBtn button) {
+    public boolean isButtonPressed(GlfwMouseBtn button) {
         return this.getMouseButton(button).isPressed();
     }
 
-    public boolean isButtonUp(MouseBtn button) {
+    public boolean isButtonUp(GlfwMouseBtn button) {
         return inputMonitor.isMouseButtonUp(button);
     }
 

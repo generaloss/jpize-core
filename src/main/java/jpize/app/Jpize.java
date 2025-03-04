@@ -1,139 +1,87 @@
 package jpize.app;
 
-import jpize.opengl.*;
-import jpize.glfw.callback.GlfwCallbacks;
-import jpize.glfw.input.GlfwInput;
-import jpize.glfw.window.GlfwWindow;
+import jpize.io.input.ICallbacks;
+import jpize.io.input.AbstractInput;
+import jpize.io.IWindow;
+import jpize.opengl.gl.*;
 
 public class Jpize {
 
-    public static ContextBuilder create(String title, int width, int height) {
-        return new ContextBuilder(title, width, height);
-    }
-
-    public static ContextBuilder create(int width, int height, String title) {
-        return create(title, width, height);
-    }
-
-    public static void run() {
-        ContextManager.instance().run();
-    }
-    
-    
-    public static IGL11 GL11 = null;
-    public static IGL12 GL12 = null;
-    public static IGL13 GL13 = null;
-    public static IGL14 GL14 = null;
-    public static IGL15 GL15 = null;
-    public static IGL20 GL20 = null;
-    public static IGL21 GL21 = null;
-    public static IGL30 GL30 = null;
-    public static IGL31 GL31 = null;
-    public static IGL32 GL32 = null;
-    public static IGL33 GL33 = null;
-    public static IGL40 GL40 = null;
-    public static IGL41 GL41 = null;
-    public static IGL42 GL42 = null;
-    public static IGL43 GL43 = null;
-    public static IGL44 GL44 = null;
-    public static IGL45 GL45 = null;
-    public static IGL46 GL46 = null;
+    public static Context context;
+    public static IWindow window;
+    public static AbstractInput input;
+    public static ICallbacks callbacks;
+    public static IGL11 GL11;
+    public static IGL12 GL12;
+    public static IGL13 GL13;
+    public static IGL14 GL14;
+    public static IGL15 GL15;
+    public static IGL20 GL20;
+    public static IGL21 GL21;
+    public static IGL30 GL30;
+    public static IGL31 GL31;
+    public static IGL32 GL32;
+    public static IGL33 GL33;
+    public static IGL40 GL40;
+    public static IGL41 GL41;
+    public static IGL42 GL42;
+    public static IGL43 GL43;
+    public static IGL44 GL44;
+    public static IGL45 GL45;
+    public static IGL46 GL46;
 
 
-    public static GlfwWindow window() {
-        final Context context = context();
-        if(context == null)
-            return null;
-        return context.getWindow();
-    }
-
-    public static GlfwInput input() {
-        final GlfwWindow window = window();
-        if(window == null)
-            return null;
-        return window.getInput();
-    }
-
-    public static GlfwCallbacks callbacks() {
-        final GlfwWindow window = window();
-        if(window == null)
-            return null;
-        return window.getCallbacks();
-    }
-
-    public static Context context() {
-        return ContextManager.instance().getCurrentContext();
-    }
-
-
-    public static int getWidth() {
-        final GlfwWindow window = window();
-        if(window == null)
-            return 0;
+    public int getWidth() {
         return window.getWidth();
     }
 
-    public static int getHeight() {
-        final GlfwWindow window = window();
-        if(window == null)
-            return 0;
+    public int getHeight() {
         return window.getHeight();
     }
 
-    public static float getHalfWidth() {
-        return getWidth() * 0.5F;
+    public float getHalfWidth() {
+        return (getWidth() * 0.5F);
     }
 
-    public static float getHalfHeight() {
-        return getHeight() * 0.5F;
+    public float getHalfHeight() {
+        return (getHeight() * 0.5F);
     }
 
-    public static float getAspectRatio() {
-        final GlfwWindow window = window();
-        if(window == null)
-            return 1F;
+    public float getAspectRatio() {
         return window.getAspectRatio();
     }
 
 
-    public static float getX() {
-        final GlfwInput input = input();
-        if(input == null)
-            return 0;
+    public float getX() {
         return input.getCursorX();
     }
 
-    public static float getY() {
-        final GlfwInput input = input();
-        if(input == null)
-            return 0;
+    public float getY() {
         return input.getCursorY();
     }
 
-    public static float getScroll() {
-        final GlfwInput input = input();
-        if(input == null)
-            return 0;
+    public float getScroll() {
         return input.getScrollY();
     }
 
 
-    public static int getFPS() {
-        return context().getFPS();
+    public int getFPS() {
+        return context.getFPS();
     }
 
-    public static float getDeltaTime() {
-        return context().getDeltaTime();
+    public float getDeltaTime() {
+        return context.getDeltaTime();
     }
 
 
-    public static SyncExecutor syncExecutor() {
-        final Context context = context();
-        if(context == null)
-            return null;
+    public SyncExecutor syncExecutor() {
         return context.getSyncExecutor();
     }
 
+
+    public static void run() {
+        ContextManager.instance().run();
+    }
 
     public static void exit() {
         ContextManager.instance().closeAll();

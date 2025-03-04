@@ -1,6 +1,6 @@
 package jpize.opengl.buffer;
 
-import static jpize.opengl.IGL33.*;
+import static jpize.opengl.gl.IGL33.*;
 
 public enum GlBufUsage {
 

@@ -1,6 +1,6 @@
 package jpize.opengl.texture;
 
-import jpize.opengl.Gl;
+import jpize.opengl.gl.Gl;
 import jpize.opengl.type.GlType;
 import jpize.opengl.vertex.GlVertAttr;
 import jpize.util.camera.Camera;

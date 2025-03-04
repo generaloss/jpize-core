@@ -29,7 +29,13 @@
     </dependencyManagement>
 
     <dependencies>
-        <!-- jpize-core -->
+        <!-- jpize -->
+        <dependency>
+            <groupId>io.github.generaloss</groupId>
+            <artifactId>jpize-utils</artifactId>
+            <version>25.3.1</version>
+            <scope>provided</scope>
+        </dependency>
         <dependency>
             <groupId>io.github.generaloss</groupId>
             <artifactId>jpize-core</artifactId>

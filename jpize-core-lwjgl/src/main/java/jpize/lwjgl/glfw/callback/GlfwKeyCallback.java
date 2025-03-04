@@ -1,12 +1,12 @@
 package jpize.lwjgl.glfw.callback;
 
-import jpize.lwjgl.glfw.input.GlfwAction;
+import jpize.io.input.Action;
 import jpize.lwjgl.glfw.input.GlfwMods;
-import jpize.lwjgl.glfw.input.Key;
+import jpize.lwjgl.glfw.input.GlfwKey;
 import jpize.lwjgl.glfw.window.GlfwWindow;
 
 public interface GlfwKeyCallback {
 
-    void invoke(GlfwWindow window, Key key, int scancode, GlfwAction action, GlfwMods mods);
+    void invoke(GlfwWindow window, GlfwKey key, int scancode, Action action, GlfwMods mods);
 
 }

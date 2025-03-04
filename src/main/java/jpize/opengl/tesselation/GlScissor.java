@@ -1,6 +1,6 @@
 package jpize.opengl.tesselation;
 
-import jpize.opengl.Gl;
+import jpize.opengl.gl.Gl;
 import jpize.opengl.glenum.GlTarget;
 import jpize.util.math.Maths;
 

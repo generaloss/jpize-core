@@ -1,6 +1,6 @@
 package jpize.opengl.buffer;
 
-import static jpize.opengl.IGL46.*;
+import static jpize.opengl.gl.IGL46.*;
 
 public enum GlBufTarget {
 

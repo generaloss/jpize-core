@@ -1,6 +1,6 @@
 package jpize.opengl.tesselation;
 
-import jpize.opengl.Gl;
+import jpize.opengl.gl.Gl;
 import jpize.util.Disposable;
 import jpize.opengl.texture.Texture2D;
 
