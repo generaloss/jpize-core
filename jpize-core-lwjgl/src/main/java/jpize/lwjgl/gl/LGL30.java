@@ -8,6 +8,7 @@ import java.nio.IntBuffer;
 import java.nio.LongBuffer;
 import java.nio.ShortBuffer;
 
+import jpize.gl.IGL30;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 import org.lwjgl.opengl.GL15;
@@ -21,7 +22,7 @@ import org.lwjgl.opengl.GL40;
 import org.lwjgl.opengl.GL41;
 import org.lwjgl.opengl.GL43;
 
-class LGL30 extends LGL20 implements GL30 {
+public class LGL30 extends LGL20 implements IGL30 {
 
 	@Override
 	public void glReadBuffer (int mode) {
@@ -37,7 +38,7 @@ class LGL30 extends LGL20 implements GL30 {
 		else if (indices instanceof IntBuffer)
 			GL12.glDrawRangeElements(mode, start, end, (IntBuffer)indices);
 		else
-			throw new GdxRuntimeException("indices must be byte, short or int buffer");
+			throw new RuntimeException("indices must be byte, short or int buffer");
 	}
 
 	@Override
@@ -67,7 +68,7 @@ class LGL30 extends LGL20 implements GL30 {
 		else if (pixels instanceof DoubleBuffer)
 			GL12.glTexImage3D(target, level, internalformat, width, height, depth, border, format, type, (DoubleBuffer)pixels);
 		else
-			throw new GdxRuntimeException("Can't use " + pixels.getClass().getName()
+			throw new RuntimeException("Can't use " + pixels.getClass().getName()
 				+ " with this method. Use ByteBuffer, ShortBuffer, IntBuffer, FloatBuffer or DoubleBuffer instead. Blame LWJGL");
 	}
 
@@ -97,7 +98,7 @@ class LGL30 extends LGL20 implements GL30 {
 		else if (pixels instanceof DoubleBuffer)
 			GL12.glTexSubImage3D(target, level, xoffset, yoffset, zoffset, width, height, depth, format, type, (DoubleBuffer)pixels);
 		else
-			throw new GdxRuntimeException("Can't use " + pixels.getClass().getName()
+			throw new RuntimeException("Can't use " + pixels.getClass().getName()
 				+ " with this method. Use ByteBuffer, ShortBuffer, IntBuffer, FloatBuffer or DoubleBuffer instead. Blame LWJGL");
 	}
 

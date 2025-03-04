@@ -4,6 +4,8 @@ import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 
+import jpize.gl.IGL31;
+import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL32;
 import org.lwjgl.opengl.GL40;
@@ -12,9 +14,9 @@ import org.lwjgl.opengl.GL42;
 import org.lwjgl.opengl.GL43;
 import org.lwjgl.opengl.GL46;
 
-public class LGL31 extends LGL30 implements GL31 {
+public class LGL31 extends LGL30 implements IGL31 {
 
-	private final static ByteBuffer tmpByteBuffer = BufferUtils.newByteBuffer(16);
+	private final static ByteBuffer tmpByteBuffer = BufferUtils.createByteBuffer(16);
 
 	@Override
 	public void glDispatchCompute (int num_groups_x, int num_groups_y, int num_groups_z) {

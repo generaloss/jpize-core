@@ -10,9 +10,6 @@
 
     <description>OpenGL Graphics Library</description>
     <url>https://github.com/generaloss/jpize-core</url>
-    <modules>
-        <module>jpize-core-android</module>
-    </modules>
 
     <properties>
         <maven.compiler.source>17</maven.compiler.source>

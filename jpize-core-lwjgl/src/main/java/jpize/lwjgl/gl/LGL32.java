@@ -6,18 +6,12 @@ import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import java.nio.ShortBuffer;
 
+import jpize.gl.IGL32;
 import org.lwjgl.PointerBuffer;
-import org.lwjgl.opengl.GL30;
-import org.lwjgl.opengl.GL31;
-import org.lwjgl.opengl.GL33;
-import org.lwjgl.opengl.GL40;
-import org.lwjgl.opengl.GL43;
-import org.lwjgl.opengl.GL45;
-import org.lwjgl.opengl.GLDebugMessageCallbackI;
-import org.lwjgl.opengl.KHRBlendEquationAdvanced;
+import org.lwjgl.opengl.*;
 import org.lwjgl.system.MemoryUtil;
 
-public class LGL32 extends LGL31 implements GL32 {
+public class LGL32 extends LGL31 implements IGL32 {
 
 	private static final PointerBuffer pb = PointerBuffer.allocateDirect(16);
 
@@ -156,7 +150,7 @@ public class LGL32 extends LGL31 implements GL32 {
 			org.lwjgl.opengl.GL32.glDrawElementsBaseVertex(mode, bb, basevertex);
 			bb.limit(oldLimit);
 		} else
-			throw new GdxRuntimeException(
+			throw new RuntimeException(
 				"Can't use " + indices.getClass().getName() + " with this method. Use ShortBuffer or ByteBuffer instead.");
 	}
 
@@ -184,7 +178,7 @@ public class LGL32 extends LGL31 implements GL32 {
 			org.lwjgl.opengl.GL32.glDrawRangeElementsBaseVertex(mode, start, end, bb, basevertex);
 			bb.limit(oldLimit);
 		} else
-			throw new GdxRuntimeException(
+			throw new RuntimeException(
 				"Can't use " + indices.getClass().getName() + " with this method. Use ShortBuffer or ByteBuffer instead.");
 	}
 
@@ -213,7 +207,7 @@ public class LGL32 extends LGL31 implements GL32 {
 			org.lwjgl.opengl.GL32.glDrawElementsInstancedBaseVertex(mode, bb, instanceCount, basevertex);
 			bb.limit(oldLimit);
 		} else
-			throw new GdxRuntimeException(
+			throw new RuntimeException(
 				"Can't use " + indices.getClass().getName() + " with this method. Use ShortBuffer or ByteBuffer instead.");
 	}
 
@@ -249,7 +243,7 @@ public class LGL32 extends LGL31 implements GL32 {
 			} else if (data instanceof FloatBuffer) {
 				GL45.glReadnPixels(x, y, width, height, format, type, (FloatBuffer)data);
 			} else {
-				throw new GdxRuntimeException("buffer type not supported");
+				throw new RuntimeException("buffer type not supported");
 			}
 			data.limit(oldLimit);
 		}

@@ -3,6 +3,7 @@
   <component name="Encoding">
     <file url="file://$PROJECT_DIR$/core/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/core/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/jpize-core-android/src" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/jpize-core-android/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/jpize-core-android/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/jpize-core-lwjgl/src/main/java" charset="UTF-8" />

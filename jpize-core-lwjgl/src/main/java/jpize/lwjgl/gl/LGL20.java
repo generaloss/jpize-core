@@ -8,10 +8,11 @@ import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import java.nio.ShortBuffer;
 
-import org.lwjgl.opengl.EXTFramebufferObject;
-import static org.lwjgl.opengl.GL20.*;
+import jpize.gl.IGL20;
+import org.lwjgl.BufferUtils;
+import org.lwjgl.opengl.*;
 
-class LGL20 implements jpize.gl.GL20 {
+public class LGL20 implements IGL20 {
 
     private ByteBuffer buffer = null;
     private FloatBuffer floatBuffer = null;
@@ -19,27 +20,27 @@ class LGL20 implements jpize.gl.GL20 {
 
     private void ensureBufferCapacity(int numBytes) {
         if(buffer == null || buffer.capacity() < numBytes){
-            buffer = BufferUtils.newByteBuffer(numBytes);
+            buffer = BufferUtils.createByteBuffer(numBytes);
             floatBuffer = buffer.asFloatBuffer();
             intBuffer = buffer.asIntBuffer();
         }
     }
 
     private FloatBuffer toFloatBuffer(float[] v, int offset, int count) {
-        ensureBufferCapacity(count << 2);
-        ((Buffer) floatBuffer).clear();
-        ((Buffer) floatBuffer).limit(count);
+        this.ensureBufferCapacity(count << 2);
+        floatBuffer.clear();
+        floatBuffer.limit(count);
         floatBuffer.put(v, offset, count);
-        ((Buffer) floatBuffer).position(0);
+        floatBuffer.position(0);
         return floatBuffer;
     }
 
     private IntBuffer toIntBuffer(int[] v, int offset, int count) {
-        ensureBufferCapacity(count << 2);
-        ((Buffer) intBuffer).clear();
-        ((Buffer) intBuffer).limit(count);
+        this.ensureBufferCapacity(count << 2);
+        intBuffer.clear();
+        intBuffer.limit(count);
         intBuffer.put(v, offset, count);
-        ((Buffer) intBuffer).position(0);
+        intBuffer.position(0);
         return intBuffer;
     }
 
@@ -186,7 +187,6 @@ class LGL20 implements jpize.gl.GL20 {
         GL15.glDeleteBuffers(buffers);
     }
 
-    @Override
     public void glDeleteBuffer(int buffer) {
         GL15.glDeleteBuffers(buffer);
     }
@@ -195,7 +195,6 @@ class LGL20 implements jpize.gl.GL20 {
         EXTFramebufferObject.glDeleteFramebuffersEXT(framebuffers);
     }
 
-    @Override
     public void glDeleteFramebuffer(int framebuffer) {
         EXTFramebufferObject.glDeleteFramebuffersEXT(framebuffer);
     }
@@ -219,8 +218,7 @@ class LGL20 implements jpize.gl.GL20 {
     public void glDeleteTextures(int n, IntBuffer textures) {
         GL11.glDeleteTextures(textures);
     }
-
-    @Override
+    
     public void glDeleteTexture(int texture) {
         GL11.glDeleteTextures(texture);
     }
@@ -275,9 +273,9 @@ class LGL20 implements jpize.gl.GL20 {
             bb.limit(position + count);
             GL11.glDrawElements(mode, bb);
             bb.limit(oldLimit);
-        }else
-            throw new RuntimeException("Can't use " + indices.getClass()
-                .getName() + " with this method. Use ShortBuffer or ByteBuffer instead. Blame LWJGL");
+        }else{
+            throw new RuntimeException("Can't use " + indices.getClass().getName() + " with this method. Use ShortBuffer or ByteBuffer instead. Blame LWJGL");
+        }
     }
 
     public void glEnable(int cap) {
@@ -543,7 +541,7 @@ class LGL20 implements jpize.gl.GL20 {
     }
 
     public void glShaderBinary(int n, IntBuffer shaders, int binaryformat, Buffer binary, int length) {
-        throw new UnsupportedOperationException("unsupported, won't implement");
+        throw new UnsupportedOperationException();
     }
 
     public void glShaderSource(int shader, String string) {
@@ -575,21 +573,21 @@ class LGL20 implements jpize.gl.GL20 {
     }
 
     public void glTexImage2D(int target, int level, int internalformat, int width, int height, int border, int format, int type, Buffer pixels) {
-        if(pixels == null)
+        if(pixels == null){
             GL11.glTexImage2D(target, level, internalformat, width, height, border, format, type, (ByteBuffer) null);
-        else if(pixels instanceof ByteBuffer)
+        }else if(pixels instanceof ByteBuffer){
             GL11.glTexImage2D(target, level, internalformat, width, height, border, format, type, (ByteBuffer) pixels);
-        else if(pixels instanceof ShortBuffer)
+        }else if(pixels instanceof ShortBuffer){
             GL11.glTexImage2D(target, level, internalformat, width, height, border, format, type, (ShortBuffer) pixels);
-        else if(pixels instanceof IntBuffer)
+        }else if(pixels instanceof IntBuffer){
             GL11.glTexImage2D(target, level, internalformat, width, height, border, format, type, (IntBuffer) pixels);
-        else if(pixels instanceof FloatBuffer)
+        }else if(pixels instanceof FloatBuffer){
             GL11.glTexImage2D(target, level, internalformat, width, height, border, format, type, (FloatBuffer) pixels);
-        else if(pixels instanceof DoubleBuffer)
+        }else if(pixels instanceof DoubleBuffer){
             GL11.glTexImage2D(target, level, internalformat, width, height, border, format, type, (DoubleBuffer) pixels);
-        else
-            throw new RuntimeException("Can't use " + pixels.getClass()
-                .getName() + " with this method. Use ByteBuffer, ShortBuffer, IntBuffer, FloatBuffer or DoubleBuffer instead. Blame LWJGL");
+        }else{
+            throw new RuntimeException("Can't use " + pixels.getClass().getName() + " with this method. Use ByteBuffer, ShortBuffer, IntBuffer, FloatBuffer or DoubleBuffer instead. Blame LWJGL");
+        }
     }
 
     public void glTexParameterf(int target, int pname, float param) {
@@ -644,7 +642,7 @@ class LGL20 implements jpize.gl.GL20 {
         GL20.glUniform1iv(location, v);
     }
 
-    @Override
+    
     public void glUniform1iv(int location, int count, int[] v, int offset) {
         GL20.glUniform1iv(location, toIntBuffer(v, offset, count));
     }

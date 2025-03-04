@@ -1,9 +1,9 @@
 package jpize.app;
 
-import jpize.gl.GL20;
-import jpize.gl.GL30;
-import jpize.gl.GL31;
-import jpize.gl.GL32;
+import jpize.gl.IGL20;
+import jpize.gl.IGL30;
+import jpize.gl.IGL31;
+import jpize.gl.IGL32;
 import jpize.glfw.callback.GlfwCallbacks;
 import jpize.glfw.input.GlfwInput;
 import jpize.glfw.window.GlfwWindow;
@@ -23,19 +23,19 @@ public class Jpize {
     }
     
     
-    public static GL20 gl20() {
+    public static IGL20 gl20() {
         return null;
     }
 
-    public static GL30 gl30() {
+    public static IGL30 gl30() {
         return null;
     }
 
-    public static GL31 gl31() {
+    public static IGL31 gl31() {
         return null;
     }
 
-    public static GL32 gl() {
+    public static IGL32 gl() {
         return null;
     }
 
