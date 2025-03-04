@@ -1,7 +1,7 @@
 package jpize.util.pixmap;
 
 import jpize.util.Disposable;
-import jpize.gl.texture.GlInternalFormat;
+import jpize.opengl.texture.GlInternalFormat;
 import jpize.util.math.Maths;
 import jpize.util.math.vector.Vec2i;
 import org.lwjgl.system.MemoryUtil;

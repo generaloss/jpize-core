@@ -4,7 +4,7 @@ import java.nio.Buffer;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 
-import jpize.gl.IGL20;
+import jpize.opengl.IGL20;
 import android.opengl.GLES20;
 
 public class AGL20 implements IGL20 {

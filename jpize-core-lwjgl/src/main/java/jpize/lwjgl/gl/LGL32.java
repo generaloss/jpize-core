@@ -6,7 +6,7 @@ import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import java.nio.ShortBuffer;
 
-import jpize.gl.IGL32;
+import jpize.opengl.IGL32;
 import org.lwjgl.PointerBuffer;
 import org.lwjgl.opengl.*;
 import org.lwjgl.system.MemoryUtil;

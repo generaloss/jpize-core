@@ -2,7 +2,7 @@ package jpize.test;
 
 import jpize.app.Jpize;
 import jpize.app.JpizeApplication;
-import jpize.gl.Gl;
+import jpize.opengl.Gl;
 import jpize.util.ninepatch.NinePatch;
 import jpize.util.mesh.TextureBatch;
 import jpize.util.ninepatch.StretchMode;

@@ -2,12 +2,12 @@ package jpize.test;
 
 import jpize.app.Jpize;
 import jpize.app.JpizeApplication;
-import jpize.gl.Gl;
-import jpize.gl.shader.Shader;
-import jpize.gl.tesselation.GlPrimitive;
-import jpize.gl.texture.Texture2D;
-import jpize.gl.type.GlType;
-import jpize.gl.vertex.GlVertAttr;
+import jpize.opengl.Gl;
+import jpize.opengl.shader.Shader;
+import jpize.opengl.tesselation.GlPrimitive;
+import jpize.opengl.texture.Texture2D;
+import jpize.opengl.type.GlType;
+import jpize.opengl.vertex.GlVertAttr;
 import jpize.util.camera.OrthographicCamera;
 import jpize.util.mesh.Mesh;
 import jpize.util.res.Resource;

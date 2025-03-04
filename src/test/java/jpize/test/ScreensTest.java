@@ -2,8 +2,8 @@ package jpize.test;
 
 import jpize.app.Jpize;
 import jpize.app.JpizeApplication;
-import jpize.gl.Gl;
-import jpize.gl.texture.Texture2D;
+import jpize.opengl.Gl;
+import jpize.opengl.texture.Texture2D;
 import jpize.glfw.input.Key;
 import jpize.util.font.Font;
 import jpize.util.mesh.TextureBatch;

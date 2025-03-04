@@ -2,7 +2,7 @@ package jpize.test;
 
 import jpize.app.Jpize;
 import jpize.app.JpizeApplication;
-import jpize.gl.Gl;
+import jpize.opengl.Gl;
 import jpize.glfw.cursor.GlfwCursor;
 import jpize.glfw.cursor.GlfwCursorShape;
 import jpize.glfw.input.Key;

@@ -2,7 +2,7 @@ package jpize.app;
 
 import jpize.glfw.Glfw;
 import jpize.glfw.window.GlfwWindow;
-import jpize.gl.texture.TextureUtils;
+import jpize.opengl.texture.TextureUtils;
 import jpize.util.ReflectUtils;
 import jpize.util.font.TextRenderer;
 import jpize.util.postprocess.RenderQuad;

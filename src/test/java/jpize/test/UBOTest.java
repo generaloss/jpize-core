@@ -2,10 +2,10 @@ package jpize.test;
 
 import jpize.app.Jpize;
 import jpize.app.JpizeApplication;
-import jpize.gl.Gl;
-import jpize.gl.buffer.UniformBufferStd140;
-import jpize.gl.shader.Shader;
-import jpize.gl.texture.Texture2D;
+import jpize.opengl.Gl;
+import jpize.opengl.buffer.UniformBufferStd140;
+import jpize.opengl.shader.Shader;
+import jpize.opengl.texture.Texture2D;
 import jpize.util.math.matrix.Matrix4f;
 import jpize.util.math.vector.Vec2f;
 import jpize.util.postprocess.RenderQuad;

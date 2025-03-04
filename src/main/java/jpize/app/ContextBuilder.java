@@ -1,9 +1,9 @@
 package jpize.app;
 
-import jpize.gl.Gl;
-import jpize.gl.glenum.GlCompareFunc;
-import jpize.gl.glenum.GlTarget;
-import jpize.gl.texture.GlBlendFactor;
+import jpize.opengl.Gl;
+import jpize.opengl.glenum.GlCompareFunc;
+import jpize.opengl.glenum.GlTarget;
+import jpize.opengl.texture.GlBlendFactor;
 import jpize.glfw.Glfw;
 import jpize.glfw.GlfwImage;
 import jpize.glfw.init.GlfwPlatform;

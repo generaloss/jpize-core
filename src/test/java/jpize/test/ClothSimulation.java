@@ -2,9 +2,9 @@ package jpize.test;
 
 import jpize.app.Jpize;
 import jpize.app.JpizeApplication;
-import jpize.gl.Gl;
-import jpize.gl.glenum.GlTarget;
-import jpize.gl.tesselation.GlPrimitive;
+import jpize.opengl.Gl;
+import jpize.opengl.glenum.GlTarget;
+import jpize.opengl.tesselation.GlPrimitive;
 import jpize.glfw.input.MouseBtn;
 import jpize.util.camera.OrthographicCameraCentered;
 import jpize.util.color.Color;

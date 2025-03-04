@@ -1,6 +1,6 @@
 package jpize.android.gl;
 
-import jpize.gl.IGL30;
+import jpize.opengl.IGL30;
 
 import java.nio.Buffer;
 import java.nio.FloatBuffer;

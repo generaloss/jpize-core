@@ -2,7 +2,7 @@ package jpize.test;
 
 import jpize.app.Jpize;
 import jpize.app.JpizeApplication;
-import jpize.gl.Gl;
+import jpize.opengl.Gl;
 import jpize.util.atlas.TextureAtlas;
 import jpize.util.postprocess.RenderQuad;
 import jpize.util.res.Resource;

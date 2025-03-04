@@ -1,7 +1,7 @@
 package jpize.util.pixmap;
 
-import jpize.gl.texture.GlInternalFormat;
-import jpize.gl.texture.Texture2D;
+import jpize.opengl.texture.GlInternalFormat;
+import jpize.opengl.texture.Texture2D;
 import jpize.util.color.Color;
 import jpize.util.color.AbstractColor;
 import jpize.util.math.Maths;

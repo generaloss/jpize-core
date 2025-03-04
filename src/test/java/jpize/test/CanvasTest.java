@@ -2,7 +2,7 @@ package jpize.test;
 
 import jpize.app.Jpize;
 import jpize.app.JpizeApplication;
-import jpize.gl.Gl;
+import jpize.opengl.Gl;
 import jpize.util.color.Color;
 import jpize.util.math.vector.Vec2i;
 import jpize.util.pixmap.Canvas;

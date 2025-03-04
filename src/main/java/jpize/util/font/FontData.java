@@ -1,6 +1,6 @@
 package jpize.util.font;
 
-import jpize.gl.texture.Texture2D;
+import jpize.opengl.texture.Texture2D;
 import jpize.util.Disposable;
 
 import java.util.HashMap;

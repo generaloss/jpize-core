@@ -1,10 +1,10 @@
 package jpize.util.mesh;
 
 import jpize.app.Jpize;
-import jpize.gl.shader.Shader;
-import jpize.gl.tesselation.GlPrimitive;
-import jpize.gl.type.GlType;
-import jpize.gl.vertex.GlVertAttr;
+import jpize.opengl.shader.Shader;
+import jpize.opengl.tesselation.GlPrimitive;
+import jpize.opengl.type.GlType;
+import jpize.opengl.vertex.GlVertAttr;
 import jpize.util.Disposable;
 import jpize.util.array.FloatList;
 import jpize.util.camera.Camera;

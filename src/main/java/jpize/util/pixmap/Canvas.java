@@ -1,7 +1,7 @@
 package jpize.util.pixmap;
 
 import jpize.app.Jpize;
-import jpize.gl.texture.Texture2D;
+import jpize.opengl.texture.Texture2D;
 import jpize.util.postprocess.RenderQuad;
 
 public class Canvas extends PixmapRGBA {

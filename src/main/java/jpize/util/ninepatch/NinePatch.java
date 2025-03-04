@@ -1,7 +1,7 @@
 package jpize.util.ninepatch;
 
-import jpize.gl.texture.GlWrap;
-import jpize.gl.texture.Texture2D;
+import jpize.opengl.texture.GlWrap;
+import jpize.opengl.texture.Texture2D;
 import jpize.util.Disposable;
 import jpize.util.array.IntList;
 import jpize.util.math.Maths;

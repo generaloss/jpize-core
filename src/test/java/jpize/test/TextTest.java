@@ -2,10 +2,9 @@ package jpize.test;
 
 import jpize.app.Jpize;
 import jpize.app.JpizeApplication;
-import jpize.gl.Gl;
+import jpize.opengl.Gl;
 import jpize.util.font.Font;
 import jpize.util.font.FontRenderOptions;
-import jpize.util.font.GlyphIterable;
 import jpize.util.font.GlyphIterator;
 import jpize.util.mesh.TextureBatch;
 import jpize.util.res.Resource;

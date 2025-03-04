@@ -2,14 +2,14 @@ package jpize.test;
 
 import jpize.app.Jpize;
 import jpize.app.JpizeApplication;
-import jpize.gl.Gl;
+import jpize.opengl.Gl;
 import jpize.util.camera.PerspectiveCamera;
 import jpize.util.shader.ShaderBuilder;
-import jpize.gl.tesselation.GlPrimitive;
-import jpize.gl.type.GlType;
-import jpize.gl.vertex.GlVertAttr;
+import jpize.opengl.tesselation.GlPrimitive;
+import jpize.opengl.type.GlType;
+import jpize.opengl.vertex.GlVertAttr;
 import jpize.util.mesh.Mesh;
-import jpize.gl.shader.Shader;
+import jpize.opengl.shader.Shader;
 import jpize.util.math.axisaligned.AABox;
 import jpize.util.math.axisaligned.AABoxBody;
 

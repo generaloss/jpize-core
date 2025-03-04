@@ -1,9 +1,9 @@
 package jpize.util.mesh;
 
 import jpize.app.Jpize;
-import jpize.gl.tesselation.GlPrimitive;
-import jpize.gl.texture.Texture2D;
-import jpize.gl.texture.TextureUtils;
+import jpize.opengl.tesselation.GlPrimitive;
+import jpize.opengl.texture.Texture2D;
+import jpize.opengl.texture.TextureUtils;
 import jpize.util.Disposable;
 import jpize.util.array.FloatList;
 import jpize.util.color.Color;
@@ -12,13 +12,13 @@ import jpize.util.math.geometry.Rect;
 import jpize.util.region.Region;
 import jpize.util.region.TextureRegion;
 import jpize.util.res.Resource;
-import jpize.gl.type.GlType;
-import jpize.gl.vertex.GlVertAttr;
+import jpize.opengl.type.GlType;
+import jpize.opengl.vertex.GlVertAttr;
 import jpize.util.camera.Camera;
 import jpize.util.math.matrix.Matrix3f;
 import jpize.util.math.matrix.Matrix4f;
 import jpize.util.math.vector.Vec2f;
-import jpize.gl.shader.Shader;
+import jpize.opengl.shader.Shader;
 
 public class TextureBatch implements Disposable {
 

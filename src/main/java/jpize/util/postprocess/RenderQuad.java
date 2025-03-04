@@ -2,10 +2,10 @@ package jpize.util.postprocess;
 
 import jpize.app.Context;
 import jpize.app.Jpize;
-import jpize.gl.shader.Shader;
-import jpize.gl.texture.Texture2D;
-import jpize.gl.type.GlType;
-import jpize.gl.vertex.GlVertAttr;
+import jpize.opengl.shader.Shader;
+import jpize.opengl.texture.Texture2D;
+import jpize.opengl.type.GlType;
+import jpize.opengl.vertex.GlVertAttr;
 import jpize.util.Disposable;
 import jpize.util.mesh.IndexedMesh;
 import jpize.util.res.Resource;

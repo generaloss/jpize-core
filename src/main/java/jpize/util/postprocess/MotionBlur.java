@@ -2,11 +2,11 @@ package jpize.util.postprocess;
 
 import jpize.app.Jpize;
 import jpize.util.res.Resource;
-import jpize.gl.Gl;
-import jpize.gl.tesselation.GlFramebuffer;
-import jpize.gl.tesselation.GlRenderbuffer;
-import jpize.gl.texture.Texture2D;
-import jpize.gl.shader.Shader;
+import jpize.opengl.Gl;
+import jpize.opengl.tesselation.GlFramebuffer;
+import jpize.opengl.tesselation.GlRenderbuffer;
+import jpize.opengl.texture.Texture2D;
+import jpize.opengl.shader.Shader;
 
 public class MotionBlur implements PostProcessEffect {
 

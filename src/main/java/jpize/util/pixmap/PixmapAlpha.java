@@ -1,6 +1,6 @@
 package jpize.util.pixmap;
 
-import jpize.gl.texture.GlInternalFormat;
+import jpize.opengl.texture.GlInternalFormat;
 
 import java.nio.ByteBuffer;
 

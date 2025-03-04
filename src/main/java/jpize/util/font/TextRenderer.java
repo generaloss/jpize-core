@@ -1,16 +1,16 @@
 package jpize.util.font;
 
 import jpize.app.Jpize;
-import jpize.gl.shader.Shader;
-import jpize.gl.tesselation.GlPrimitive;
-import jpize.gl.type.GlType;
-import jpize.gl.vertex.GlVertAttr;
+import jpize.opengl.shader.Shader;
+import jpize.opengl.tesselation.GlPrimitive;
+import jpize.opengl.type.GlType;
+import jpize.opengl.vertex.GlVertAttr;
 import jpize.glfw.input.Key;
 import jpize.util.camera.Camera3D;
 import jpize.util.math.vector.Vec3f;
 import jpize.util.mesh.Mesh;
 import jpize.util.region.Region;
-import jpize.gl.texture.Texture2D;
+import jpize.opengl.texture.Texture2D;
 import jpize.util.mesh.TextureBatch;
 import jpize.util.array.FloatList;
 import jpize.util.color.Color;

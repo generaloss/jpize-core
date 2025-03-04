@@ -1,9 +1,9 @@
 package jpize.util.font;
 
-import jpize.gl.texture.TextureUtils;
+import jpize.opengl.texture.TextureUtils;
 import jpize.util.math.vector.Vec2f;
 import jpize.util.region.Region;
-import jpize.gl.texture.Texture2D;
+import jpize.opengl.texture.Texture2D;
 
 public class GlyphSprite {
 

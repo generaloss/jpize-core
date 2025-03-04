@@ -2,11 +2,11 @@ package jpize.test;
 
 import jpize.app.Jpize;
 import jpize.app.JpizeApplication;
-import jpize.gl.Gl;
+import jpize.opengl.Gl;
 import jpize.glfw.input.Key;
 import jpize.util.input.TextInput;
 import jpize.util.font.Font;
-import jpize.gl.texture.Texture2D;
+import jpize.opengl.texture.Texture2D;
 import jpize.util.pixmap.PixmapRGBA;
 import jpize.util.mesh.TextureBatch;
 

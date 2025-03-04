@@ -3,7 +3,7 @@ package jpize.test;
 import jpize.app.Jpize;
 import jpize.app.JpizeApplication;
 import jpize.util.font.Font;
-import jpize.gl.texture.Texture2D;
+import jpize.opengl.texture.Texture2D;
 import jpize.util.mesh.TextureBatch;
 
 public class LoadingWindowTest {

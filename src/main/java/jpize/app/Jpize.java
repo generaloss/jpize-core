@@ -1,9 +1,6 @@
 package jpize.app;
 
-import jpize.gl.IGL20;
-import jpize.gl.IGL30;
-import jpize.gl.IGL31;
-import jpize.gl.IGL32;
+import jpize.opengl.*;
 import jpize.glfw.callback.GlfwCallbacks;
 import jpize.glfw.input.GlfwInput;
 import jpize.glfw.window.GlfwWindow;
@@ -23,21 +20,24 @@ public class Jpize {
     }
     
     
-    public static IGL20 gl20() {
-        return null;
-    }
-
-    public static IGL30 gl30() {
-        return null;
-    }
-
-    public static IGL31 gl31() {
-        return null;
-    }
-
-    public static IGL32 gl() {
-        return null;
-    }
+    public static IGL11 GL11 = null;
+    public static IGL12 GL12 = null;
+    public static IGL13 GL13 = null;
+    public static IGL14 GL14 = null;
+    public static IGL15 GL15 = null;
+    public static IGL20 GL20 = null;
+    public static IGL21 GL21 = null;
+    public static IGL30 GL30 = null;
+    public static IGL31 GL31 = null;
+    public static IGL32 GL32 = null;
+    public static IGL33 GL33 = null;
+    public static IGL40 GL40 = null;
+    public static IGL41 GL41 = null;
+    public static IGL42 GL42 = null;
+    public static IGL43 GL43 = null;
+    public static IGL44 GL44 = null;
+    public static IGL45 GL45 = null;
+    public static IGL46 GL46 = null;
 
 
     public static GlfwWindow window() {

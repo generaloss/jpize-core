@@ -1,6 +1,6 @@
 package jpize.app;
 
-import jpize.gl.Gl;
+import jpize.opengl.Gl;
 import jpize.glfw.window.GlfwWindow;
 import jpize.util.time.DeltaTimeCounter;
 import jpize.util.time.PerSecondCounter;

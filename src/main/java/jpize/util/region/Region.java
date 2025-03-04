@@ -1,6 +1,6 @@
 package jpize.util.region;
 
-import jpize.gl.texture.Texture2D;
+import jpize.opengl.texture.Texture2D;
 import jpize.util.math.vector.Vec2d;
 import jpize.util.math.vector.Vec2f;
 import jpize.util.math.vector.Vec2i;

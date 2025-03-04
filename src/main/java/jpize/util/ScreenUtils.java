@@ -4,8 +4,8 @@ import jpize.util.res.FileResource;
 import org.lwjgl.BufferUtils;
 import jpize.app.Jpize;
 import jpize.util.res.Resource;
-import jpize.gl.texture.GlBaseFormat;
-import jpize.gl.type.GlType;
+import jpize.opengl.texture.GlBaseFormat;
+import jpize.opengl.type.GlType;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;

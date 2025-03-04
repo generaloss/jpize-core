@@ -1,7 +1,7 @@
 package jpize.util.atlas;
 
-import jpize.gl.texture.GlWrap;
-import jpize.gl.texture.Texture2D;
+import jpize.opengl.texture.GlWrap;
+import jpize.opengl.texture.Texture2D;
 import jpize.util.Disposable;
 import jpize.util.math.Maths;
 import jpize.util.math.vector.Vec2i;
