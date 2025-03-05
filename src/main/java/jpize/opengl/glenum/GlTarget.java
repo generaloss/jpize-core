@@ -1,7 +1,7 @@
 package jpize.opengl.glenum;
 
 // import static org.lwjgl.opengl.ARBImaging.*;
-import static jpize.opengl.gl.IGL20.*;
+import static jpize.opengl.gl.GLI20.*;
 
 public enum GlTarget {
 

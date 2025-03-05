@@ -1,16 +1,15 @@
 package jpize.opengl.tesselation;
 
 import jpize.opengl.buffer.GlAttachment;
+import jpize.opengl.gl.GLI11;
+import jpize.opengl.gl.GLI30;
 import jpize.opengl.texture.*;
 import jpize.opengl.type.GlType;
 import jpize.util.postprocess.RenderQuad;
-import org.lwjgl.BufferUtils;
 import jpize.app.Jpize;
 import jpize.opengl.GlObject;
 
 import java.nio.ByteBuffer;
-
-import static org.lwjgl.opengl.GL33.*;
 
 public class GlFramebuffer extends GlObject {
 
@@ -22,7 +21,7 @@ public class GlFramebuffer extends GlObject {
     private final Texture2D texture;
 
     public GlFramebuffer(int width, int height) {
-        super(glGenFramebuffers());
+        super(Jpize.GL30.glGenFramebuffers());
         
         this.width = width;
         this.height = height;
@@ -40,7 +39,7 @@ public class GlFramebuffer extends GlObject {
 
 
     public GlFramebufferStatus checkStatus() {
-        return GlFramebufferStatus.byValue(glCheckFramebufferStatus(GL_FRAMEBUFFER));
+        return GlFramebufferStatus.byValue(Jpize.GL30.glCheckFramebufferStatus(GLI30.GL_FRAMEBUFFER));
     }
 
 
@@ -77,9 +76,9 @@ public class GlFramebuffer extends GlObject {
     public GlFramebuffer create() {
         this.updateTexture();
         this.bind();
-        glFramebufferTexture2D(GL_FRAMEBUFFER, attachment.value, GL_TEXTURE_2D, texture.getID(), 0);
-        glDrawBuffer(draw ? attachment.value : GL_NONE);
-        glReadBuffer(read ? attachment.value : GL_NONE);
+        Jpize.GL30.glFramebufferTexture2D(GLI30.GL_FRAMEBUFFER, attachment.value, GLI11.GL_TEXTURE_2D, texture.getID(), 0);
+        Jpize.GL30.glDrawBuffer(draw ? attachment.value : GLI11.GL_NONE);
+        Jpize.GL30.glReadBuffer(read ? attachment.value : GLI11.GL_NONE);
         this.unbind();
         return this;
     }
@@ -94,7 +93,7 @@ public class GlFramebuffer extends GlObject {
     public void copyTo(Texture2D texture) {
         this.bind();
         texture.bind();
-        glCopyTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 0, 0, width, height);
+        Jpize.GL30.glCopyTexSubImage2D(GLI11.GL_TEXTURE_2D, 0, 0, 0, 0, 0, width, height);
         this.unbind();
     }
 
@@ -104,8 +103,8 @@ public class GlFramebuffer extends GlObject {
         final int height = texture.getHeight();
 
         final GlBaseFormat format = texture.getInternalFormat().base;
-        final ByteBuffer buffer = BufferUtils.createByteBuffer(width * height * format.channels);
-        glReadPixels(0, 0, width, height, format.value, type.value, buffer);
+        final ByteBuffer buffer = ByteBuffer.allocateDirect(width * height * format.channels);
+        Jpize.GL30.glReadPixels(0, 0, width, height, format.value, type.value, buffer);
 
         this.unbind();
         return buffer;
@@ -131,20 +130,20 @@ public class GlFramebuffer extends GlObject {
     }
     
     public GlFramebuffer bind() {
-        glBindFramebuffer(GL_FRAMEBUFFER, ID);
+        Jpize.GL30.glBindFramebuffer(GLI30.GL_FRAMEBUFFER, ID);
         return this;
     }
     
     
     @Override
     public void dispose() {
-        glDeleteFramebuffers(ID);
+        Jpize.GL30.glDeleteFramebuffers(ID);
         texture.dispose();
     }
     
     
     public GlFramebuffer unbind() {
-        glBindFramebuffer(GL_FRAMEBUFFER, 0);
+        Jpize.GL30.glBindFramebuffer(GLI30.GL_FRAMEBUFFER, 0);
         return this;
     }
 

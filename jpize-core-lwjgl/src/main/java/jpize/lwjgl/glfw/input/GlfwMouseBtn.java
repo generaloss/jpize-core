@@ -1,86 +1,29 @@
 package jpize.lwjgl.glfw.input;
 
-import jpize.app.Jpize;
+import jpize.io.input.MouseBtn;
 
-import static org.lwjgl.glfw.GLFW.*;
+public class GlfwMouseBtn {
 
-public enum GlfwMouseBtn {
+    private static final MouseBtn[] BY_GLFW_VALUE = {
+        MouseBtn.LEFT,   // GLFW_MOUSE_BUTTON_1 = 0
+        MouseBtn.RIGHT,  // GLFW_MOUSE_BUTTON_2 = 1
+        MouseBtn.MIDDLE, // GLFW_MOUSE_BUTTON_3 = 2
+        MouseBtn.B4,     // GLFW_MOUSE_BUTTON_4 = 3
+        MouseBtn.B5,     // GLFW_MOUSE_BUTTON_5 = 4
+        MouseBtn.B6,     // GLFW_MOUSE_BUTTON_6 = 5
+        MouseBtn.B7,     // GLFW_MOUSE_BUTTON_7 = 6
+        MouseBtn.B8,     // GLFW_MOUSE_BUTTON_8 = 7
+    };
 
-    LEFT   (GLFW_MOUSE_BUTTON_1),  // 0
-    RIGHT  (GLFW_MOUSE_BUTTON_2),  // 1
-    MIDDLE (GLFW_MOUSE_BUTTON_3),  // 2
-    B4     (GLFW_MOUSE_BUTTON_4),  // 3
-    B5     (GLFW_MOUSE_BUTTON_5),  // 4
-    B6     (GLFW_MOUSE_BUTTON_6),  // 5
-    B7     (GLFW_MOUSE_BUTTON_7),  // 6
-    B8     (GLFW_MOUSE_BUTTON_8);  // 7
-
-    public final int value;
-
-    GlfwMouseBtn(int value) {
-        this.value = value;
+    public static MouseBtn byGlfwValue(int value) {
+        return BY_GLFW_VALUE[value];
     }
 
-
-    public boolean pressed() {
-        return Jpize.input.isButtonPressed(this);
-    }
-
-    public boolean down() {
-        return Jpize.input.isButtonDown(this);
-    }
-
-    public boolean up() {
-        return Jpize.input.isButtonUp(this);
-    }
-
-
-    public static GlfwMouseBtn byValue(int value) {
-        return values()[value];
-    }
-
-
-    public static boolean downAny(GlfwMouseBtn... buttons) {
-        for(GlfwMouseBtn button: buttons)
-            if(button.down())
-                return true;
-        return false;
-    }
-
-    public static boolean pressedAny(GlfwMouseBtn... buttons) {
-        for(GlfwMouseBtn button: buttons)
-            if(button.pressed())
-                return true;
-        return false;
-    }
-
-    public static boolean upAny(GlfwMouseBtn... buttons) {
-        for(GlfwMouseBtn button: buttons)
-            if(button.up())
-                return true;
-        return false;
-    }
-
-
-    public static boolean downAll(GlfwMouseBtn... buttons) {
-        for(GlfwMouseBtn button: buttons)
-            if(!button.down())
-                return false;
-        return true;
-    }
-
-    public static boolean pressedAll(GlfwMouseBtn... buttons) {
-        for(GlfwMouseBtn button: buttons)
-            if(!button.pressed())
-                return false;
-        return true;
-    }
-
-    public static boolean upAll(GlfwMouseBtn... buttons) {
-        for(GlfwMouseBtn button: buttons)
-            if(!button.up())
-                return false;
-        return true;
+    public static int getGlfwValue(MouseBtn button) {
+        for(int i = 0; i < BY_GLFW_VALUE.length; i++)
+            if(BY_GLFW_VALUE[i] == button)
+                return i;
+        return -1;
     }
 
 }

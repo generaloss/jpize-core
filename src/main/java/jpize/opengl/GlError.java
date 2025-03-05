@@ -1,6 +1,6 @@
 package jpize.opengl;
 
-import static jpize.opengl.gl.IGL32.*;
+import static jpize.opengl.gl.GLI32.*;
 
 public enum GlError {
 

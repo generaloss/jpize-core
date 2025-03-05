@@ -1,6 +1,6 @@
 package jpize.opengl.tesselation;
 
-import static org.lwjgl.opengl.GL33.*;
+import static jpize.opengl.gl.GLI33.*;
 
 public enum GlPrimitive {
 

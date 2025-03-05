@@ -22,17 +22,17 @@ public class InputMonitor {
         window.getCallbacks().addScrollCallback(this::onScroll);
     }
     
-    private void onKey(IWindow window, Key key, int scancode, GlfwAction action, GlfwMods mods) {
+    private void onKey(Key key, int scancode, Action action, Mods mods) {
         if(action.isDown()) keysDown.set(key.ordinal());
         else if(action.isRelease()) keysRelease.set(key.ordinal());
     }
 
-    private void onButton(GlfwWindow window, MouseBtn button, GlfwAction action, GlfwMods mods) {
+    private void onButton(MouseBtn button, Action action, Mods mods) {
         if(action.isDown()) btnsDown.set(button.ordinal());
         else if(action.isRelease()) btnsRelease.set(button.ordinal());
     }
 
-    private void onScroll(GlfwWindow window, float scrollX, float scrollY) {
+    private void onScroll(float scrollX, float scrollY) {
         this.scrollX += scrollX;
         this.scrollY += scrollY;
     }

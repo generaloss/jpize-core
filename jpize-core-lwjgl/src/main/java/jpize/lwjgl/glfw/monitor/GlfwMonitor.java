@@ -1,8 +1,8 @@
 package jpize.lwjgl.glfw.monitor;
 
-import jpize.lwjgl.glfw.GlfwEvent;
+import jpize.io.input.ConnectEvent;
+import jpize.lwjgl.glfw.GlfwConnectEvent;
 import jpize.lwjgl.glfw.GlfwObjectLong;
-import jpize.lwjgl.glfw.callback.GlfwMonitorCallback;
 import jpize.util.math.vector.Vec2f;
 import jpize.util.math.vector.Vec2i;
 import org.lwjgl.PointerBuffer;
@@ -221,7 +221,7 @@ public class GlfwMonitor extends GlfwObjectLong {
             return;
 
         MONITOR_CALLBACK = glfwSetMonitorCallback((ID, eventCode) -> {
-            final GlfwEvent event = GlfwEvent.byValue(eventCode);
+            final ConnectEvent event = GlfwConnectEvent.byGlfwValue(eventCode);
             final GlfwMonitor monitor;
 
             if(event.isConnected()){

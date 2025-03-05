@@ -1,6 +1,5 @@
 package jpize.lwjgl.glfw;
 
-import jpize.lwjgl.glfw.callback.GlfwErrorCallback;
 import jpize.lwjgl.glfw.init.GlfwAnglePlatformType;
 import jpize.lwjgl.glfw.init.GlfwInitHint;
 import jpize.lwjgl.glfw.init.GlfwPlatform;
@@ -15,6 +14,7 @@ import org.lwjgl.glfw.GLFWAllocator;
 import org.lwjgl.system.MemoryUtil;
 
 import java.nio.IntBuffer;
+import java.security.Key;
 
 public class Glfw {
 
@@ -209,8 +209,8 @@ public class Glfw {
         return GLFW.glfwGetKeyName(key.value, key.scancode);
     }
 
-    public static int getKeyScancode(GlfwKey key) {
-        return GLFW.glfwGetKeyScancode(key.value);
+    public static int getKeyScancode(Key key) {
+        return GLFW.glfwGetKeyScancode(GlfwKey.getScancode(key));
     }
 
 

@@ -5,7 +5,7 @@ import jpize.util.Utils;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.lwjgl.opengl.GL32.*;
+import static jpize.opengl.gl.GLI32.*;
 
 public enum GlFramebufferStatus {
 

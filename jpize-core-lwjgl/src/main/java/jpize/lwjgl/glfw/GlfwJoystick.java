@@ -1,6 +1,6 @@
 package jpize.lwjgl.glfw;
 
-import jpize.lwjgl.glfw.callback.GlfwJoystickCallback;
+import jpize.io.input.ConnectEvent;
 import org.lwjgl.glfw.GLFWGamepadState;
 import org.lwjgl.system.Callback;
 
@@ -87,7 +87,7 @@ public class GlfwJoystick {
             return;
 
         callbackJoystick = glfwSetJoystickCallback((ID, eventCode) -> {
-            final GlfwEvent event = GlfwEvent.byValue(eventCode);
+            final ConnectEvent event = GlfwConnectEvent.byGlfwValue(eventCode);
             final GlfwJoystick joystick;
 
             if(event.isConnected()){

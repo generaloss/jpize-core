@@ -2,6 +2,7 @@ package jpize.test;
 
 import jpize.app.Jpize;
 import jpize.app.JpizeApplication;
+import jpize.lwjgl.app.GlfwContextBuilder;
 import jpize.opengl.gl.Gl;
 import jpize.opengl.texture.Texture2D;
 import jpize.util.mesh.TextureBatch;
@@ -50,7 +51,8 @@ public class AnimationTest extends JpizeApplication {
 
 
     public static void main(String[] args) {
-        Jpize.create(720, 480, "Window").build().setApp(new AnimationTest());
+        GlfwContextBuilder.create(720, 480, "Window")
+            .build().setApp(new AnimationTest());
         Jpize.run();
     }
 

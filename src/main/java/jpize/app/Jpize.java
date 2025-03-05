@@ -1,6 +1,6 @@
 package jpize.app;
 
-import jpize.io.input.ICallbacks;
+import jpize.io.callback.AnstractCallbacks;
 import jpize.io.input.AbstractInput;
 import jpize.io.IWindow;
 import jpize.opengl.gl.*;
@@ -10,72 +10,81 @@ public class Jpize {
     public static Context context;
     public static IWindow window;
     public static AbstractInput input;
-    public static ICallbacks callbacks;
-    public static IGL11 GL11;
-    public static IGL12 GL12;
-    public static IGL13 GL13;
-    public static IGL14 GL14;
-    public static IGL15 GL15;
-    public static IGL20 GL20;
-    public static IGL21 GL21;
-    public static IGL30 GL30;
-    public static IGL31 GL31;
-    public static IGL32 GL32;
-    public static IGL33 GL33;
-    public static IGL40 GL40;
-    public static IGL41 GL41;
-    public static IGL42 GL42;
-    public static IGL43 GL43;
-    public static IGL44 GL44;
-    public static IGL45 GL45;
-    public static IGL46 GL46;
+    public static AnstractCallbacks callbacks;
+    public static GLI11 GL11;
+    public static GLI12 GL12;
+    public static GLI13 GL13;
+    public static GLI14 GL14;
+    public static GLI15 GL15;
+    public static GLI20 GL20;
+    public static GLI21 GL21;
+    public static GLI30 GL30;
+    public static GLI31 GL31;
+    public static GLI32 GL32;
+    public static GLI33 GL33;
+    public static GLI40 GL40;
+    public static GLI41 GL41;
+    public static GLI42 GL42;
+    public static GLI43 GL43;
+    public static GLI44 GL44;
+    public static GLI45 GL45;
+    public static GLI46 GL46;
 
 
-    public int getWidth() {
+    public static int getWidth() {
         return window.getWidth();
     }
 
-    public int getHeight() {
+    public static int getHeight() {
         return window.getHeight();
     }
 
-    public float getHalfWidth() {
+    public static float getHalfWidth() {
         return (getWidth() * 0.5F);
     }
 
-    public float getHalfHeight() {
+    public static float getHalfHeight() {
         return (getHeight() * 0.5F);
     }
 
-    public float getAspectRatio() {
+    public static float getAspectRatio() {
         return window.getAspectRatio();
     }
 
 
-    public float getX() {
+    public static float getX() {
         return input.getCursorX();
     }
 
-    public float getY() {
+    public static float getY() {
         return input.getCursorY();
     }
 
-    public float getScroll() {
+    public static float getScroll() {
         return input.getScrollY();
     }
 
 
-    public int getFPS() {
+    public static int getFPS() {
         return context.getFPS();
     }
 
-    public float getDeltaTime() {
+    public static float getDeltaTime() {
         return context.getDeltaTime();
     }
 
 
     public SyncExecutor syncExecutor() {
         return context.getSyncExecutor();
+    }
+
+
+    public static <T extends IContextBuilder> T create(T builder, int width, int height, String title) {
+        return builder;
+    }
+
+    public static <T extends IContextBuilder> T create(T builder) {
+        return builder;
     }
 
 

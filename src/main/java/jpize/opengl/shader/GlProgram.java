@@ -2,9 +2,9 @@ package jpize.opengl.shader;
 
 import jpize.app.Jpize;
 import jpize.opengl.*;
-import jpize.opengl.gl.IGL11;
-import jpize.opengl.gl.IGL20;
-import jpize.opengl.gl.IGL41;
+import jpize.opengl.gl.GLI11;
+import jpize.opengl.gl.GLI20;
+import jpize.opengl.gl.GLI41;
 
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
@@ -57,11 +57,11 @@ public class GlProgram extends GlObject {
 
     public void link() {
         Jpize.GL20.glLinkProgram(ID);
-        if(Jpize.GL20.glGetProgrami(ID, IGL20.GL_LINK_STATUS) == IGL11.GL_FALSE)
+        if(Jpize.GL20.glGetProgrami(ID, GLI20.GL_LINK_STATUS) == GLI11.GL_FALSE)
             this.logError("Linking shader error");
 
         Jpize.GL20.glValidateProgram(ID);
-        if(Jpize.GL20.glGetProgrami(ID, IGL20.GL_VALIDATE_STATUS) == IGL11.GL_FALSE)
+        if(Jpize.GL20.glGetProgrami(ID, GLI20.GL_VALIDATE_STATUS) == GLI11.GL_FALSE)
             this.logError("Validating shader error");
     }
 
@@ -212,11 +212,11 @@ public class GlProgram extends GlObject {
 
 
     public void setBinaryRetrievable(boolean value) {
-        Jpize.GL41.glProgramParameteri(ID, IGL41.GL_PROGRAM_BINARY_RETRIEVABLE_HINT, value ? 1 : 0);
+        Jpize.GL41.glProgramParameteri(ID, GLI41.GL_PROGRAM_BINARY_RETRIEVABLE_HINT, value ? 1 : 0);
     }
 
     public int getBinaryLength() {
-        return Jpize.GL20.glGetProgrami(ID, IGL41.GL_PROGRAM_BINARY_LENGTH);
+        return Jpize.GL20.glGetProgrami(ID, GLI41.GL_PROGRAM_BINARY_LENGTH);
     }
 
 

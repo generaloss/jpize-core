@@ -6,7 +6,7 @@ import static org.lwjgl.glfw.GLFW.*;
 
 public class GlfwAction {
 
-    public static Action byValue(int value) {
+    public static Action byGlfwValue(int value) {
         return switch(value) {
             case GLFW_RELEASE -> Action.RELEASE;
             case GLFW_PRESS   -> Action.PRESS;

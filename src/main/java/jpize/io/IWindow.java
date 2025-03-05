@@ -1,7 +1,7 @@
 package jpize.io;
 
 import jpize.io.input.AbstractInput;
-import jpize.io.input.ICallbacks;
+import jpize.io.callback.AnstractCallbacks;
 import jpize.io.input.IMonitor;
 import jpize.util.Disposable;
 import jpize.util.math.vector.Vec2f;
@@ -17,7 +17,7 @@ public interface IWindow extends Disposable {
 
     AbstractInput getInput();
 
-    ICallbacks getCallbacks();
+    AnstractCallbacks getCallbacks();
 
 
     void makeContextCurrent();

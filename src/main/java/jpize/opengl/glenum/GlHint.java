@@ -1,6 +1,6 @@
 package jpize.opengl.glenum;
 
-import static jpize.opengl.gl.IGL14.*;
+import static jpize.opengl.gl.GLI14.*;
 
 public enum GlHint {
 

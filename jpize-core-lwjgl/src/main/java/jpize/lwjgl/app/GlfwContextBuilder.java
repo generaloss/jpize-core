@@ -17,6 +17,14 @@ import jpize.util.res.Resource;
 
 public class GlfwContextBuilder {
 
+    public static GlfwContextBuilder create(int width, int height, String title) {
+        return new GlfwContextBuilder(title, width, height);
+    }
+
+    public static GlfwContextBuilder create(String title, int width, int height) {
+        return new GlfwContextBuilder(title, width, height);
+    }
+
     static {
         // init glfw
         Glfw.init();
@@ -27,7 +35,7 @@ public class GlfwContextBuilder {
     private final int height;
     private final String title;
 
-    protected GlfwContextBuilder(String title, int width, int height) {
+    private GlfwContextBuilder(String title, int width, int height) {
         // waiting for wayland fix in lwjgl
         if(System.getProperty("os.name").equals("Linux"))
             Glfw.glfwInitHintPlatform(GlfwPlatform.X11);

@@ -1,7 +1,6 @@
 package jpize.opengl.shader;
 
-
-import static org.lwjgl.opengl.GL32.*;
+import static jpize.opengl.gl.GLI32.*;
 
 public enum GlShaderType {
 

@@ -10,11 +10,9 @@ import java.nio.IntBuffer;
 
 public abstract class AbstractInput {
 
-    private final IWindow window;
     private final InputMonitor inputMonitor;
 
     public AbstractInput(IWindow window) {
-        this.window = window;
         this.inputMonitor = new InputMonitor(window);
     }
 
@@ -23,21 +21,36 @@ public abstract class AbstractInput {
     }
 
 
-    public GlfwAction getKey(GlfwKey key) {
-        return GlfwAction.byValue(glfwGetKey(windowID, key.value));
-    }
+    public abstract Action getKey(Key key);
 
-    public boolean isKeyDown(GlfwKey key) {
+
+    public boolean isKeyDown(Key key) {
         return inputMonitor.isKeyDown(key);
     }
 
-    public boolean isKeyPressed(GlfwKey key) {
+    public boolean isKeyPressed(Key key) {
         return this.getKey(key).isPressed();
     }
 
-    public boolean isKeyUp(GlfwKey key) {
+    public boolean isKeyUp(Key key) {
         return inputMonitor.isKeyUp(key);
     }
+
+
+    public abstract Action getMouseButton(MouseBtn button);
+
+    public boolean isButtonDown(MouseBtn button) {
+        return inputMonitor.isMouseButtonDown(button);
+    }
+
+    public boolean isButtonPressed(MouseBtn button) {
+        return this.getMouseButton(button).isPressed();
+    }
+
+    public boolean isButtonUp(MouseBtn button) {
+        return inputMonitor.isMouseButtonUp(button);
+    }
+
 
     public float getScrollX() {
         return inputMonitor.getScrollX();
@@ -48,30 +61,9 @@ public abstract class AbstractInput {
     }
 
 
-    public GlfwAction getMouseButton(GlfwMouseBtn button) {
-        return GlfwAction.byValue(glfwGetMouseButton(windowID, button.value));
-    }
+    public abstract String getClipboardString();
 
-    public boolean isButtonDown(GlfwMouseBtn button) {
-        return inputMonitor.isMouseButtonDown(button);
-    }
-
-    public boolean isButtonPressed(GlfwMouseBtn button) {
-        return this.getMouseButton(button).isPressed();
-    }
-
-    public boolean isButtonUp(GlfwMouseBtn button) {
-        return inputMonitor.isMouseButtonUp(button);
-    }
-
-
-    public String getClipboardString() {
-        return glfwGetClipboardString(windowID);
-    }
-
-    public void setClipboardString(CharSequence string) {
-        glfwSetClipboardString(windowID, string);
-    }
+    public abstract void setClipboardString(CharSequence string);
 
 
     public void setCursor(GlfwCursor cursor) {

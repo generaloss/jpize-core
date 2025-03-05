@@ -2,7 +2,7 @@ package jpize.opengl.query;
 
 import jpize.app.Jpize;
 import jpize.opengl.GlObject;
-import jpize.opengl.gl.IGL15;
+import jpize.opengl.gl.GLI15;
 
 public class GlQuery extends GlObject {
     
@@ -32,11 +32,11 @@ public class GlQuery extends GlObject {
 
 
     public int getResult() {
-        return Jpize.GL15.glGetQueryObjecti(ID, IGL15.GL_QUERY_RESULT);
+        return Jpize.GL15.glGetQueryObjecti(ID, GLI15.GL_QUERY_RESULT);
     }
 
     public boolean isResultAvailable() {
-        return (Jpize.GL15.glGetQueryObjecti(ID, IGL15.GL_QUERY_RESULT_AVAILABLE) == IGL15.GL_TRUE);
+        return (Jpize.GL15.glGetQueryObjecti(ID, GLI15.GL_QUERY_RESULT_AVAILABLE) == GLI15.GL_TRUE);
     }
 
     public int waitForResult() {

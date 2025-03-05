@@ -1,6 +1,6 @@
 package jpize.opengl.glenum;
 
-import static jpize.opengl.gl.IGL11.*;
+import static jpize.opengl.gl.GLI11.*;
 
 public enum GlMode {
 

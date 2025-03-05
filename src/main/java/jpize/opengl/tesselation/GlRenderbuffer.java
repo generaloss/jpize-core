@@ -3,11 +3,11 @@ package jpize.opengl.tesselation;
 import jpize.app.Jpize;
 import jpize.opengl.GlObject;
 import jpize.opengl.buffer.GlAttachment;
+import jpize.opengl.gl.GLI11;
+import jpize.opengl.gl.GLI30;
 import jpize.opengl.texture.*;
 import jpize.opengl.type.GlType;
 import jpize.opengl.texture.Texture2D;
-
-import static org.lwjgl.opengl.GL33.*;
 
 public class GlRenderbuffer extends GlObject {
 
@@ -18,7 +18,7 @@ public class GlRenderbuffer extends GlObject {
     private final Texture2D texture;
 
     public GlRenderbuffer(int width, int height) {
-        super(glGenRenderbuffers());
+        super(Jpize.GL30.glGenRenderbuffers());
         
         this.width = width;
         this.height = height;
@@ -56,9 +56,9 @@ public class GlRenderbuffer extends GlObject {
     public GlRenderbuffer create() {
         this.updateTexture();
         this.bind();
-        glFramebufferTexture2D(GL_FRAMEBUFFER, attachment.value, GL_TEXTURE_2D, texture.getID(), 0);
-        glRenderbufferStorage(GL_RENDERBUFFER, format.value, width, height);
-        glFramebufferRenderbuffer(GL_FRAMEBUFFER, attachment.value, GL_RENDERBUFFER, ID);
+        Jpize.GL30.glFramebufferTexture2D(GLI30.GL_FRAMEBUFFER, attachment.value, GLI11.GL_TEXTURE_2D, texture.getID(), 0);
+        Jpize.GL30.glRenderbufferStorage(GLI30.GL_RENDERBUFFER, format.value, width, height);
+        Jpize.GL30.glFramebufferRenderbuffer(GLI30.GL_FRAMEBUFFER, attachment.value, GLI30.GL_RENDERBUFFER, ID);
         this.unbind();
         return this;
     }
@@ -69,7 +69,7 @@ public class GlRenderbuffer extends GlObject {
         this.updateTexture();
 
         this.bind();
-        glRenderbufferStorage(GL_RENDERBUFFER, format.value, width, height);
+        Jpize.GL30.glRenderbufferStorage(GLI30.GL_RENDERBUFFER, format.value, width, height);
         this.unbind();
     }
 
@@ -87,18 +87,18 @@ public class GlRenderbuffer extends GlObject {
     }
     
     public GlRenderbuffer bind() {
-        glBindRenderbuffer(GL_RENDERBUFFER, ID);
+        Jpize.GL30.glBindRenderbuffer(GLI30.GL_RENDERBUFFER, ID);
         return this;
     }
 
     @Override
     public void dispose() {
-        glDeleteRenderbuffers(ID);
+        Jpize.GL30.glDeleteRenderbuffers(ID);
         texture.dispose();
     }
 
     public GlRenderbuffer unbind() {
-        glBindRenderbuffer(GL_RENDERBUFFER, 0);
+        Jpize.GL30.glBindRenderbuffer(GLI30.GL_RENDERBUFFER, 0);
         return this;
     }
 

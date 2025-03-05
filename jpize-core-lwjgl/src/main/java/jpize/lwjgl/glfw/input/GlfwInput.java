@@ -2,7 +2,6 @@ package jpize.lwjgl.glfw.input;
 
 import jpize.io.input.AbstractInput;
 import jpize.io.input.Action;
-import jpize.io.input.InputMonitor;
 import jpize.lwjgl.glfw.Glfw;
 import jpize.lwjgl.glfw.cursor.GlfwCursor;
 import jpize.lwjgl.glfw.window.GlfwWindow;
@@ -18,65 +17,33 @@ import static org.lwjgl.glfw.GLFW.*;
 
 public class GlfwInput extends AbstractInput {
 
+    private final GlfwWindow window;
     private final long windowID;
-
 
     public GlfwInput(GlfwWindow window) {
         super(window);
+        this.window = window;
         this.windowID = window.getID();
     }
 
-    public InputMonitor getInputMonitor() {
-        return inputMonitor;
-    }
-    
-    
+
+    @Override
     public Action getKey(GlfwKey key) {
-        return GlfwAction.byValue(glfwGetKey(windowID, key.value));
-    }
-    
-    public boolean isKeyDown(GlfwKey key) {
-        return inputMonitor.isKeyDown(key);
-    }
-    
-    public boolean isKeyPressed(GlfwKey key) {
-        return this.getKey(key).isPressed();
+        return GlfwAction.byGlfwValue(glfwGetKey(windowID, key.value));
     }
 
-    public boolean isKeyUp(GlfwKey key) {
-        return inputMonitor.isKeyUp(key);
-    }
-
-    public float getScrollX() {
-        return inputMonitor.getScrollX();
-    }
-
-    public float getScrollY() {
-        return inputMonitor.getScrollY();
-    }
-    
-
+    @Override
     public Action getMouseButton(GlfwMouseBtn button) {
-        return GlfwAction.byValue(glfwGetMouseButton(windowID, button.value));
-    }
-
-    public boolean isButtonDown(GlfwMouseBtn button) {
-        return inputMonitor.isMouseButtonDown(button);
-    }
-
-    public boolean isButtonPressed(GlfwMouseBtn button) {
-        return this.getMouseButton(button).isPressed();
-    }
-
-    public boolean isButtonUp(GlfwMouseBtn button) {
-        return inputMonitor.isMouseButtonUp(button);
+        return GlfwAction.byGlfwValue(glfwGetMouseButton(windowID, button.value));
     }
 
 
+    @Override
     public String getClipboardString() {
         return glfwGetClipboardString(windowID);
     }
 
+    @Override
     public void setClipboardString(CharSequence string) {
         glfwSetClipboardString(windowID, string);
     }

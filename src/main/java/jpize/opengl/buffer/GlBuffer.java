@@ -2,7 +2,7 @@ package jpize.opengl.buffer;
 
 import jpize.app.Jpize;
 import jpize.opengl.GlObject;
-import jpize.opengl.gl.IGL32;
+import jpize.opengl.gl.GLI32;
 import jpize.opengl.texture.GlInternalFormat;
 import jpize.opengl.type.GlType;
 
@@ -116,9 +116,9 @@ public class GlBuffer extends GlObject {
     }
 
     public void copySubData(GlBuffer buffer, long readOffset, long writeOffset, long size) {
-        Jpize.GL15.glBindBuffer(IGL32.GL_COPY_READ_BUFFER, ID);
-        Jpize.GL15.glBindBuffer(IGL32.GL_COPY_WRITE_BUFFER, buffer.ID);
-        Jpize.GL31.glCopyBufferSubData(IGL32.GL_COPY_READ_BUFFER, IGL32.GL_COPY_WRITE_BUFFER, readOffset, writeOffset, size);
+        Jpize.GL15.glBindBuffer(GLI32.GL_COPY_READ_BUFFER, ID);
+        Jpize.GL15.glBindBuffer(GLI32.GL_COPY_WRITE_BUFFER, buffer.ID);
+        Jpize.GL31.glCopyBufferSubData(GLI32.GL_COPY_READ_BUFFER, GLI32.GL_COPY_WRITE_BUFFER, readOffset, writeOffset, size);
     }
 
 

@@ -1,6 +1,6 @@
 package jpize.opengl.buffer;
 
-import static jpize.opengl.gl.IGL30.*;
+import static jpize.opengl.gl.GLI30.*;
 
 public enum GlAttachment {
 

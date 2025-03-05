@@ -2,8 +2,9 @@ package jpize.lwjgl.glfw.callback;
 
 import jpize.app.Context;
 import jpize.app.ContextManager;
-import jpize.io.input.ICallbacks;
+import jpize.io.callback.*;
 import jpize.io.input.Action;
+import jpize.io.input.MouseBtn;
 import jpize.lwjgl.glfw.input.GlfwAction;
 import jpize.lwjgl.glfw.input.GlfwMods;
 import jpize.lwjgl.glfw.input.GlfwKey;
@@ -13,14 +14,10 @@ import org.lwjgl.PointerBuffer;
 import org.lwjgl.system.Callback;
 import org.lwjgl.system.MemoryUtil;
 
-import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
-
 import static org.lwjgl.glfw.GLFW.*;
 
-public class GlfwCallbacks implements ICallbacks {
+public class GlfwCallbacks extends AnstractCallbacks {
 
-    private final GlfwWindow window;
     private final long windowID;
 
     private Callback callbackCursorPos, callbackCursorEnter, callbackMouseButton;
@@ -29,350 +26,250 @@ public class GlfwCallbacks implements ICallbacks {
     private Callback callbackClose, callbackContentScale, callbackFocus, callbackIconify;
     private Callback callbackMaximize, callbackPos, callbackRefresh, callbackSize, callbackFramebufferSize;
 
-    private final List<GlfwCursorPosCallback> callbacksCursorPos = new CopyOnWriteArrayList<>();
-    private final List<GlfwCursorEnterCallback> callbacksCursorEnter = new CopyOnWriteArrayList<>();
-    private final List<GlfwMouseButtonCallback> callbacksMouseButton = new CopyOnWriteArrayList<>();
-    private final List<GlfwScrollCallback> callbacksScroll = new CopyOnWriteArrayList<>();
-    private final List<GlfwIMEStatusCallback> callbacksIMEStatus = new CopyOnWriteArrayList<>();
-    private final List<GlfwCharModsCallback> callbacksCharMods = new CopyOnWriteArrayList<>();
-    private final List<GlfwKeyCallback> callbacksKey = new CopyOnWriteArrayList<>();
-    private final List<GlfwCharCallback> callbacksChar = new CopyOnWriteArrayList<>();
-    private final List<GlfwPreeditCallback> callbacksPreedit = new CopyOnWriteArrayList<>();
-    private final List<GlfwPreeditCandidateCallback> callbacksPreeditCandidate = new CopyOnWriteArrayList<>();
-    private final List<GlfwDropCallback> callbacksDrop = new CopyOnWriteArrayList<>();
-    private final List<GlfwWindowCloseCallback> callbacksClose = new CopyOnWriteArrayList<>();
-    private final List<GlfwWindowContentScaleCallback> callbacksContentScale = new CopyOnWriteArrayList<>();
-    private final List<GlfwWindowFocusCallback> callbacksFocus = new CopyOnWriteArrayList<>();
-    private final List<GlfwWindowIconifyCallback> callbacksIconify = new CopyOnWriteArrayList<>();
-    private final List<GlfwWindowMaximizeCallback> callbacksMaximize = new CopyOnWriteArrayList<>();
-    private final List<GlfwWindowPosCallback> callbacksPos = new CopyOnWriteArrayList<>();
-    private final List<GlfwWindowRefreshCallback> callbacksRefresh = new CopyOnWriteArrayList<>();
-    private final List<GlfwWindowSizeCallback> callbacksSize = new CopyOnWriteArrayList<>();
-    private final List<GlfwFramebufferSizeCallback> callbacksFramebufferSize = new CopyOnWriteArrayList<>();
-
     public GlfwCallbacks(GlfwWindow window) {
-        this.window = window;
         this.windowID = window.getID();
     }
-    
+
     private void makeContextCurrent() {
         final Context context = ContextManager.instance().getContext(windowID);
         context.makeCurrent();
     }
 
+    @Override
+    public void addWindowCloseCallback(ExitCallback callback) {
+        super.addWindowCloseCallback(callback);
 
-    public void addWindowCloseCallback(GlfwWindowCloseCallback callback) {
-        callbacksClose.add(callback);
-        if(callbackClose == null){
-            callbackClose = glfwSetWindowCloseCallback(windowID, (ID) -> {
-                this.makeContextCurrent();
-                callbacksClose.forEach(c -> c.invoke(window));
-            });
-        }
+        if(callbackClose != null) return;
+        callbackClose = glfwSetWindowCloseCallback(windowID, (ID) -> {
+            this.makeContextCurrent();
+            exit.forEach(ExitCallback::invoke);
+        });
     }
 
-    public void removeWindowCloseCallback(GlfwWindowCloseCallback callback) {
-        callbacksClose.remove(callback);
+    @Override
+    public void addWindowContentScaleCallback(ContentScaleCallback callback) {
+        super.addWindowContentScaleCallback(callback);
+
+        if(callbackContentScale == null) return;
+        callbackContentScale = glfwSetWindowContentScaleCallback(windowID, (ID, scaleX, scaleY) -> {
+            this.makeContextCurrent();
+            contentScale.forEach(c -> c.invoke(scaleX, scaleY));
+        });
     }
 
+    @Override
+    public void addWindowFocusCallback(WindowFocusCallback callback) {
+        super.addWindowFocusCallback(callback);
 
-    public void addWindowContentScaleCallback(GlfwWindowContentScaleCallback callback) {
-        callbacksContentScale.add(callback);
-        if(callbackContentScale == null){
-            callbackContentScale = glfwSetWindowContentScaleCallback(windowID, (ID, scaleX, scaleY) -> {
-                this.makeContextCurrent();
-                callbacksContentScale.forEach(c -> c.invoke(window, scaleX, scaleY));
-            });
-        }
+        if(callbackFocus == null) return;
+        callbackFocus = glfwSetWindowFocusCallback(windowID, (ID, focused) -> {
+            this.makeContextCurrent();
+            windowFocus.forEach(c -> c.invoke(focused));
+        });
     }
 
-    public void removeWindowContentScaleCallback(GlfwWindowContentScaleCallback callback) {
-        callbacksContentScale.remove(callback);
+    @Override
+    public void addWindowIconifyCallback(WindowIconifyCallback callback) {
+        super.addWindowIconifyCallback(callback);
+
+        if(callbackIconify == null) return;
+        callbackIconify = glfwSetWindowIconifyCallback(windowID, (ID, iconified) -> {
+            this.makeContextCurrent();
+            windowIconify.forEach(c -> c.invoke(iconified));
+        });
     }
 
+    @Override
+    public void addWindowMaximizeCallback(WindowMaximizeCallback callback) {
+        super.addWindowMaximizeCallback(callback);
 
-    public void addWindowFocusCallback(GlfwWindowFocusCallback callback) {
-        callbacksFocus.add(callback);
-        if(callbackFocus == null){
-            callbackFocus = glfwSetWindowFocusCallback(windowID, (ID, focused) -> {
-                this.makeContextCurrent();
-                callbacksFocus.forEach(c -> c.invoke(window, focused));
-            });
-        }
+        if(callbackMaximize == null) return;
+        callbackMaximize = glfwSetWindowMaximizeCallback(windowID, (ID, maximized) -> {
+            this.makeContextCurrent();
+            windowMaximize.forEach(c -> c.invoke(maximized));
+        });
     }
 
-    public void removeWindowFocusCallback(GlfwWindowFocusCallback callback) {
-        callbacksFocus.remove(callback);
+    @Override
+    public void addWindowPosCallback(WindowPosCallback callback) {
+        super.addWindowPosCallback(callback);
+
+        if(callbackPos == null) return;
+        callbackPos = glfwSetWindowPosCallback(windowID, (ID, x, y) -> {
+            this.makeContextCurrent();
+            windowPosition.forEach(c -> c.invoke(x, y));
+        });
     }
 
+    @Override
+    public void addWindowRefreshCallback(WindowRefreshCallback callback) {
+        super.addWindowRefreshCallback(callback);
 
-    public void addWindowIconifyCallback(GlfwWindowIconifyCallback callback) {
-        callbacksIconify.add(callback);
-        if(callbackIconify == null){
-            callbackIconify = glfwSetWindowIconifyCallback(windowID, (ID, iconified) -> {
-                this.makeContextCurrent();
-                callbacksIconify.forEach(c -> c.invoke(window, iconified));
-            });
-        }
+        if(callbackRefresh == null) return;
+        callbackRefresh = glfwSetWindowRefreshCallback(windowID, (ID) -> {
+            this.makeContextCurrent();
+            windowRefresh.forEach(WindowRefreshCallback::invoke);
+        });
     }
 
-    public void removeWindowIconifyCallback(GlfwWindowIconifyCallback callback) {
-        callbacksIconify.remove(callback);
+    @Override
+    public void addWindowSizeCallback(WindowSizeCallback callback) {
+        super.addWindowSizeCallback(callback);
+
+        if(callbackSize == null) return;
+        callbackSize = glfwSetWindowSizeCallback(windowID, (ID, width, height) -> {
+            this.makeContextCurrent();
+            windowSize.forEach(c -> c.invoke(width, height));
+        });
     }
 
+    @Override
+    public void addFramebufferSizeCallback(FramebufferSizeCallback callback) {
+        super.addFramebufferSizeCallback(callback);
 
-    public void addWindowMaximizeCallback(GlfwWindowMaximizeCallback callback) {
-        callbacksMaximize.add(callback);
-        if(callbackMaximize == null){
-            callbackMaximize = glfwSetWindowMaximizeCallback(windowID, (ID, maximized) -> {
-                this.makeContextCurrent();
-                callbacksMaximize.forEach(c -> c.invoke(window, maximized));
-            });
-        }
+        if(callbackFramebufferSize == null) return;
+        callbackFramebufferSize = glfwSetFramebufferSizeCallback(windowID, (ID, width, height) -> {
+            this.makeContextCurrent();
+            framebufferSize.forEach(c -> c.invoke(width, height));
+        });
     }
 
-    public void removeWindowMaximizeCallback(GlfwWindowMaximizeCallback callback) {
-        callbacksMaximize.remove(callback);
+    @Override
+    public void addCursorPosCallback(CursorPosCallback callback) {
+        super.addCursorPosCallback(callback);
+
+        if(callbackCursorPos == null) return;
+        callbackCursorPos = glfwSetCursorPosCallback(windowID, (windowID, x, y) -> {
+            this.makeContextCurrent();
+            cursorPosition.forEach(c -> c.invoke((float) x, (float) y));
+        });
     }
 
+    @Override
+    public void addCursorEnterCallback(CursorEnterCallback callback) {
+        super.addCursorEnterCallback(callback);
 
-    public void addWindowPosCallback(GlfwWindowPosCallback callback) {
-        callbacksPos.add(callback);
-        if(callbackPos == null){
-            callbackPos = glfwSetWindowPosCallback(windowID, (ID, x, y) -> {
-                this.makeContextCurrent();
-                callbacksPos.forEach(c -> c.invoke(window, x, y));
-            });
-        }
+        if(callbackCursorEnter == null) return;
+        callbackCursorEnter = glfwSetCursorEnterCallback(windowID, (windowID, entered) -> {
+            this.makeContextCurrent();
+            cursorEnter.forEach(c -> c.invoke(entered));
+        });
     }
 
-    public void removeWindowPosCallback(GlfwWindowPosCallback callback) {
-        callbacksPos.remove(callback);
+    @Override
+    public void addMouseButtonCallback(MouseButtonCallback callback) {
+        super.addMouseButtonCallback(callback);
+
+        if(callbackMouseButton == null) return;
+        callbackMouseButton = glfwSetMouseButtonCallback(windowID, (windowID, rawButton, rawAction, rawMods) -> {
+            this.makeContextCurrent();
+            final MouseBtn button = GlfwMouseBtn.byGlfwValue(rawButton);
+            final Action action = GlfwAction.byGlfwValue(rawAction);
+            final GlfwMods mods = new GlfwMods(rawMods);
+            mouseButton.forEach(c -> c.invoke(button, action, mods));
+        });
     }
 
+    @Override
+    public void addScrollCallback(ScrollCallback callback) {
+        super.addScrollCallback(callback);
 
-    public void addWindowRefreshCallback(GlfwWindowRefreshCallback callback) {
-        callbacksRefresh.add(callback);
-        if(callbackRefresh == null){
-            callbackRefresh = glfwSetWindowRefreshCallback(windowID, (ID) -> {
-                this.makeContextCurrent();
-                callbacksRefresh.forEach(c -> c.invoke(window));
-            });
-        }
+        if(callbackScroll == null) return;
+        callbackScroll = glfwSetScrollCallback(windowID, (windowID, offsetX, offsetY) -> {
+            this.makeContextCurrent();
+            scroll.forEach(c -> c.invoke((float) offsetX, (float) offsetY));
+        });
     }
 
-    public void removeWindowRefreshCallback(GlfwWindowRefreshCallback callback) {
-        callbacksRefresh.remove(callback);
+    @Override
+    public void addIMEStatusCallback(IMEStatusCallback callback) {
+        super.addIMEStatusCallback(callback);
+
+        if(callbackIMEStatus == null) return;
+        callbackIMEStatus = glfwSetIMEStatusCallback(windowID, (windowID) -> {
+            this.makeContextCurrent();
+            imeStatus.forEach(IMEStatusCallback::invoke);
+        });
     }
 
+    @Override
+    public void addCharModsCallback(CharModsCallback callback) {
+        super.addCharModsCallback(callback);
 
-    public void addWindowSizeCallback(GlfwWindowSizeCallback callback) {
-        callbacksSize.add(callback);
-        if(callbackSize == null){
-            callbackSize = glfwSetWindowSizeCallback(windowID, (ID, width, height) -> {
-                this.makeContextCurrent();
-                callbacksSize.forEach(c -> c.invoke(window, width, height));
-            });
-        }
+        if(callbackCharMods == null) return;
+        callbackCharMods = glfwSetCharModsCallback(windowID, (windowID, codepoint, rawMods) -> {
+            this.makeContextCurrent();
+            final GlfwMods mods = new GlfwMods(rawMods);
+            charMods.forEach(c -> c.invoke((char) codepoint, mods));
+        });
     }
 
-    public void removeWindowSizeCallback(GlfwWindowSizeCallback callback) {
-        callbacksSize.remove(callback);
+    @Override
+    public void addKeyCallback(KeyCallback callback) {
+        super.addKeyCallback(callback);
+
+        if(callbackKey == null) return;
+        callbackKey = glfwSetKeyCallback(windowID, (windowID, rawKey, scancode, rawAction, rawMods) -> {
+            this.makeContextCurrent();
+            final GlfwKey key = GlfwKey.byValue(rawKey);
+            if(key == null) // theoretically impossible, but once it happened
+                return;
+            final Action action = GlfwAction.byGlfwValue(rawAction);
+            final GlfwMods mods = new GlfwMods(rawMods);
+            this.key.forEach(c -> c.invoke(key, scancode, action, mods));
+        });
     }
 
+    @Override
+    public void addCharCallback(CharCallback callback) {
+        super.addCharCallback(callback);
 
-    public void addFramebufferSizeCallback(GlfwFramebufferSizeCallback callback) {
-        callbacksFramebufferSize.add(callback);
-        if(callbackFramebufferSize == null){
-            callbackFramebufferSize = glfwSetFramebufferSizeCallback(windowID, (ID, width, height) -> {
-                this.makeContextCurrent();
-                callbacksFramebufferSize.forEach(c -> c.invoke(window, width, height));
-            });
-        }
+        if(callbackChar == null) return;
+        callbackChar = glfwSetCharCallback(windowID, (windowID, codepoint) -> {
+            this.makeContextCurrent();
+            character.forEach(c -> c.invoke((char) codepoint));
+        });
     }
 
-    public void removeFramebufferSizeCallback(GlfwFramebufferSizeCallback callback) {
-        callbacksFramebufferSize.remove(callback);
+    @Override
+    public void addPreeditCallback(PreeditCallback callback) { //! ???
+        super.addPreeditCallback(callback);
+
+        if(callbackPreedit == null) return;
+        callbackPreedit = glfwSetPreeditCallback(windowID, (windowID, preeditCount, preeditStringPointer, blockCount, blockSizesPointer, focusedBlock, caret) -> {
+            this.makeContextCurrent();
+            preedit.forEach(c -> c.invoke(
+                preeditCount, preeditStringPointer, blockCount, blockSizesPointer, focusedBlock, caret
+            ));
+        });
     }
 
+    @Override
+    public void addPreeditCandidateCallback(PreeditCandidateCallback callback) { //! ???
+        super.addPreeditCandidateCallback(callback);
 
-    public void addCursorPosCallback(GlfwCursorPosCallback callback) {
-        callbacksCursorPos.add(callback);
-        if(callbackCursorPos == null){
-            callbackCursorPos = glfwSetCursorPosCallback(windowID, (windowID, x, y) -> {
-                this.makeContextCurrent();
-                callbacksCursorPos.forEach(c -> c.invoke(window, (float) x, (float) y));
-            });
-        }
+        if(callbackPreeditCandidate == null) return;
+        callbackPreeditCandidate = glfwSetPreeditCandidateCallback(windowID, (windowID, candidatesCount, selectedIndex, pageStart, pageSize) -> {
+            this.makeContextCurrent();
+            preeditCandidate.forEach(c -> c.invoke(candidatesCount, selectedIndex, pageStart, pageSize));
+        });
     }
 
-    public void removeCursorPosCallback(GlfwCursorPosCallback callback) {
-        callbacksCursorPos.remove(callback);
-    }
+    @Override
+    public void addDropCallback(DropCallback callback) {
+        super.addDropCallback(callback);
 
+        if(callbackDrop == null) return;
+        callbackDrop = glfwSetDropCallback(windowID, (windowID, capacity, address) -> {
+            this.makeContextCurrent();
+            final PointerBuffer pointerBuf = MemoryUtil.memPointerBuffer(address, capacity);
 
-    public void addCursorEnterCallback(GlfwCursorEnterCallback callback) {
-        callbacksCursorEnter.add(callback);
-        if(callbackCursorEnter == null){
-            callbackCursorEnter = glfwSetCursorEnterCallback(windowID, (windowID, entered) -> {
-                this.makeContextCurrent();
-                callbacksCursorEnter.forEach(c -> c.invoke(window, entered));
-            });
-        }
-    }
+            final String[] files = new String[capacity];
+            for(int i = 0; i < capacity; i++)
+                files[i] = MemoryUtil.memUTF8(pointerBuf.get(i));
 
-    public void removeCursorEnterCallback(GlfwCursorEnterCallback callback) {
-        callbacksCursorEnter.remove(callback);
-    }
-
-
-    public void addMouseButtonCallback(GlfwMouseButtonCallback callback) {
-        callbacksMouseButton.add(callback);
-        if(callbackMouseButton == null){
-            callbackMouseButton = glfwSetMouseButtonCallback(windowID, (windowID, rawButton, rawAction, rawMods) -> {
-                this.makeContextCurrent();
-                final GlfwMouseBtn button = GlfwMouseBtn.byValue(rawButton);
-                final Action action = GlfwAction.byValue(rawAction);
-                final GlfwMods mods = new GlfwMods(rawMods);
-                callbacksMouseButton.forEach(c -> c.invoke(window, button, action, mods));
-            });
-        }
-    }
-
-    public void removeMouseButtonCallback(GlfwMouseButtonCallback callback) {
-        callbacksMouseButton.remove(callback);
-    }
-
-
-    public void addScrollCallback(GlfwScrollCallback callback) {
-        callbacksScroll.add(callback);
-        if(callbackScroll == null){
-            callbackScroll = glfwSetScrollCallback(windowID, (windowID, offsetX, offsetY) -> {
-                this.makeContextCurrent();
-                callbacksScroll.forEach(c -> c.invoke(window, (float) offsetX, (float) offsetY));
-            });
-        }
-    }
-
-    public void removeScrollCallback(GlfwScrollCallback callback) {
-        callbacksScroll.remove(callback);
-    }
-
-
-    public void addIMEStatusCallback(GlfwIMEStatusCallback callback) {
-        callbacksIMEStatus.add(callback);
-        if(callbackIMEStatus == null){
-            callbackIMEStatus = glfwSetIMEStatusCallback(windowID, (windowID) -> {
-                this.makeContextCurrent();
-                callbacksIMEStatus.forEach(c -> c.invoke(window));
-            });
-        }
-    }
-
-    public void removeIMEStatusCallback(GlfwIMEStatusCallback callback) {
-        callbacksIMEStatus.remove(callback);
-    }
-
-
-    public void addCharModsCallback(GlfwCharModsCallback callback) {
-        callbacksCharMods.add(callback);
-        if(callbackCharMods == null){
-            callbackCharMods = glfwSetCharModsCallback(windowID, (windowID, codepoint, rawMods) -> {
-                this.makeContextCurrent();
-                final GlfwMods mods = new GlfwMods(rawMods);
-                callbacksCharMods.forEach(c -> c.invoke(window, (char) codepoint, mods));
-            });
-        }
-    }
-
-    public void removeCharModsCallback(GlfwCharModsCallback callback) {
-        callbacksCharMods.remove(callback);
-    }
-
-
-    public void addKeyCallback(GlfwKeyCallback callback) {
-        callbacksKey.add(callback);
-        if(callbackKey == null){
-            callbackKey = glfwSetKeyCallback(windowID, (windowID, rawKey, scancode, rawAction, rawMods) -> {
-                this.makeContextCurrent();
-                final GlfwKey key = GlfwKey.byValue(rawKey);
-                if(key == null) // theoretically impossible, but once it happened
-                    return;
-                final Action action = GlfwAction.byValue(rawAction);
-                final GlfwMods mods = new GlfwMods(rawMods);
-                callbacksKey.forEach(c -> c.invoke(window, key, scancode, action, mods));
-            });
-        }
-    }
-
-    public void removeKeyCallback(GlfwKeyCallback callback) {
-        callbacksKey.remove(callback);
-    }
-
-
-    public void addCharCallback(GlfwCharCallback callback) {
-        callbacksChar.add(callback);
-        if(callbackChar == null){
-            callbackChar = glfwSetCharCallback(windowID, (windowID, codepoint) -> {
-                this.makeContextCurrent();
-                callbacksChar.forEach(c -> c.invoke(window, (char) codepoint));
-            });
-        }
-    }
-
-    public void removeCharCallback(GlfwCharCallback callback) {
-        callbacksChar.remove(callback);
-    }
-
-
-    public void addPreeditCallback(GlfwPreeditCallback callback) { //! ???
-        callbacksPreedit.add(callback);
-        if(callbackPreedit == null){
-            callbackPreedit = glfwSetPreeditCallback(windowID, (windowID, preeditCount, preeditStringPointer, blockCount, blockSizesPointer, focusedBlock, caret) -> {
-                this.makeContextCurrent();
-                callbacksPreedit.forEach(c -> c.invoke(window, preeditCount, preeditStringPointer, blockCount, blockSizesPointer, focusedBlock, caret));
-            });
-        }
-    }
-
-    public void removePreeditCallback(GlfwPreeditCallback callback) { //! ???
-        callbacksPreedit.remove(callback);
-    }
-
-
-    public void addPreeditCandidateCallback(GlfwPreeditCandidateCallback callback) { //! ???
-        callbacksPreeditCandidate.add(callback);
-        if(callbackPreeditCandidate == null){
-            callbackPreeditCandidate = glfwSetPreeditCandidateCallback(windowID, (windowID, candidatesCount, selectedIndex, pageStart, pageSize) -> {
-                this.makeContextCurrent();
-                callbacksPreeditCandidate.forEach(c -> c.invoke(window, candidatesCount, selectedIndex, pageStart, pageSize));
-            });
-        }
-    }
-
-    public void removePreeditCandidateCallback(GlfwPreeditCandidateCallback callback) { //! ???
-        callbacksPreeditCandidate.remove(callback);
-    }
-
-
-    public void addDropCallback(GlfwDropCallback callback) {
-        callbacksDrop.add(callback);
-        if(callbackDrop == null){
-            callbackDrop = glfwSetDropCallback(windowID, (windowID, capacity, address) -> {
-                this.makeContextCurrent();
-                final PointerBuffer pointerBuf = MemoryUtil.memPointerBuffer(address, capacity);
-
-                final String[] files = new String[capacity];
-                for(int i = 0; i < capacity; i++)
-                    files[i] = MemoryUtil.memUTF8(pointerBuf.get(i));
-
-                callbacksDrop.forEach(c -> c.invoke(window, files));
-            });
-        }
-    }
-
-    public void removeDropCallback(GlfwDropCallback callback) {
-        callbacksDrop.remove(callback);
+            drop.forEach(c -> c.invoke(files));
+        });
     }
 
 }
