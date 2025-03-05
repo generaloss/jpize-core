@@ -1,8 +1,8 @@
-package jpize.io.callback;
+package jpize.lwjgl.glfw.callback;
 
 import jpize.io.input.ConnectEvent;
 
-public interface IJoystickCallback {
+public interface GlfwJoystickCallback {
 
     void invoke(ConnectEvent event);
 

@@ -1,11 +1,10 @@
 package jpize.lwjgl.glfw;
 
+import jpize.lwjgl.glfw.callback.GlfwErrorCallback;
 import jpize.lwjgl.glfw.init.GlfwAnglePlatformType;
 import jpize.lwjgl.glfw.init.GlfwInitHint;
 import jpize.lwjgl.glfw.init.GlfwPlatform;
 import jpize.lwjgl.glfw.init.GlfwWaylandLibdecor;
-import jpize.lwjgl.glfw.input.GlfwKey;
-import jpize.glfw.window.*;
 import jpize.lwjgl.glfw.window.*;
 import jpize.util.math.vector.Vec3i;
 import org.lwjgl.PointerBuffer;
@@ -14,7 +13,6 @@ import org.lwjgl.glfw.GLFWAllocator;
 import org.lwjgl.system.MemoryUtil;
 
 import java.nio.IntBuffer;
-import java.security.Key;
 
 public class Glfw {
 
@@ -203,14 +201,6 @@ public class Glfw {
 
     public static boolean rawMouseMotionSupported() {
         return GLFW.glfwRawMouseMotionSupported();
-    }
-
-    public static String getKeyName(GlfwKey key) {
-        return GLFW.glfwGetKeyName(key.value, key.scancode);
-    }
-
-    public static int getKeyScancode(Key key) {
-        return GLFW.glfwGetKeyScancode(GlfwKey.getScancode(key));
     }
 
 

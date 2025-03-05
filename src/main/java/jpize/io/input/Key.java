@@ -128,88 +128,59 @@ public enum Key {
     RALT,          //
     RSUPER,        //
     MENU;          //
+    
 
-    GlfwKey(int value) {
-        this.value = value;
-        this.scancode =
-    }
-
-
-    @Override
-    public int getScancode() {
-        return scancode;
-    }
-
-    @Override
-    public String getName() {
-        return Glfw.getKeyName(this);
-    }
-
-
-    @Override
     public boolean pressed() {
         return Jpize.input.isKeyPressed(this);
     }
 
-    @Override
     public boolean down() {
         return Jpize.input.isKeyDown(this);
     }
 
-    @Override
     public boolean up() {
         return Jpize.input.isKeyUp(this);
     }
+    
 
-
-    public static GlfwKey byValue(int value) {
-        return BY_VALUE.get(value);
-    }
-
-    private static final Map<Integer, GlfwKey> BY_VALUE = Utils.make(new HashMap<>(), (map) -> {
-        for(GlfwKey key: values())
-            map.put(key.value, key);
-    });
-
-
-    public static boolean downAny(GlfwKey... buttons) {
-        for(GlfwKey key: buttons)
+    public static boolean downAny(Key... buttons) {
+        for(Key key: buttons)
             if(key.down())
                 return true;
         return false;
     }
 
-    public static boolean pressedAny(GlfwKey... buttons) {
-        for(GlfwKey key: buttons)
+    public static boolean pressedAny(Key... buttons) {
+        for(Key key: buttons)
             if(key.pressed())
                 return true;
         return false;
     }
 
-    public static boolean upAny(GlfwKey... buttons) {
-        for(GlfwKey key: buttons)
+    public static boolean upAny(Key... buttons) {
+        for(Key key: buttons)
             if(key.up())
                 return true;
         return false;
     }
 
 
-    public static boolean downAll(GlfwKey... buttons) {
-        for(GlfwKey key: buttons)
+    public static boolean downAll(Key... buttons) {
+        for(Key key: buttons)
             if(!key.down())
                 return false;
         return true;
     }
 
-    public static boolean pressedAll(GlfwKey... buttons) {
-        for(GlfwKey key: buttons)
+    public static boolean pressedAll(Key... buttons) {
+        for(Key key: buttons)
             if(!key.pressed())
                 return false;
         return true;
     }
 
-    public static boolean upAll(GlfwKey... buttons) {
-        for(GlfwKey key: buttons)
+    public static boolean upAll(Key... buttons) {
+        for(Key key: buttons)
             if(!key.up())
                 return false;
         return true;

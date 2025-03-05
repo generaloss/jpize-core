@@ -182,13 +182,13 @@ public class GlfwCallbacks extends AnstractCallbacks {
     }
 
     @Override
-    public void addIMEStatusCallback(IMEStatusCallback callback) {
+    public void addIMEStatusCallback(GlfwIMEStatusCallback callback) {
         super.addIMEStatusCallback(callback);
 
         if(callbackIMEStatus == null) return;
         callbackIMEStatus = glfwSetIMEStatusCallback(windowID, (windowID) -> {
             this.makeContextCurrent();
-            imeStatus.forEach(IMEStatusCallback::invoke);
+            imeStatus.forEach(GlfwIMEStatusCallback::invoke);
         });
     }
 
