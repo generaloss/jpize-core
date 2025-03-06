@@ -5,6 +5,7 @@ import jpize.app.Jpize;
 import jpize.io.IAllocator;
 import jpize.lwjgl.glfw.window.GlfwWindow;
 import jpize.lwjgl.opengl.*;
+import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL;
 import org.lwjgl.opengl.GLCapabilities;
 
@@ -72,6 +73,12 @@ public class GlfwContext extends Context {
         Jpize.GL45 = GL45;
         Jpize.GL46 = GL46;
         Jpize.allocator = ALLOCATOR;
+    }
+
+    @Override
+    protected void loop() {
+        GLFW.glfwPollEvents();
+        super.loop();
     }
 
 }

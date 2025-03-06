@@ -98,7 +98,7 @@ public class ContextManager {
             if(contexts.isEmpty())
                 return;
 
-            // Glfw.pollEvents();
+            // ;
             for(Context context: contexts.values())
                 context.loop();
         }

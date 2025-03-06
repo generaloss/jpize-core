@@ -26,6 +26,9 @@ public class GlfwContextBuilder {
     }
 
     static {
+        // waiting for wayland fix in lwjgl
+        if(System.getProperty("os.name").equals("Linux"))
+            Glfw.glfwInitHintPlatform(GlfwPlatform.X11);
         // init glfw
         Glfw.init();
         Glfw.swapInterval(1);
@@ -36,10 +39,6 @@ public class GlfwContextBuilder {
     private final String title;
 
     private GlfwContextBuilder(String title, int width, int height) {
-        // waiting for wayland fix in lwjgl
-        if(System.getProperty("os.name").equals("Linux"))
-            Glfw.glfwInitHintPlatform(GlfwPlatform.X11);
-
         ContextManager.instance(); // init
         this.title = title;
         this.width = width;
