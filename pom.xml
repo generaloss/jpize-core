@@ -11,6 +11,12 @@
     <description>OpenGL Graphics Library</description>
     <url>https://github.com/generaloss/jpize-core</url>
 
+    <modules>
+        <module>core</module>
+        <module>lwjgl</module>
+        <module>android</module>
+    </modules>
+
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
