@@ -1,6 +1,6 @@
 package jpize.util.camera;
 
-import jpize.app.Jpize;
+import jpize.context.Jpize;
 import jpize.util.math.EulerAngles;
 import jpize.util.math.Frustum;
 import jpize.util.math.Quaternion;

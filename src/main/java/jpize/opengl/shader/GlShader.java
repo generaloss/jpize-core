@@ -1,6 +1,6 @@
 package jpize.opengl.shader;
 
-import jpize.app.Jpize;
+import jpize.context.Jpize;
 import jpize.opengl.GlObject;
 import jpize.opengl.gl.GLI20;
 

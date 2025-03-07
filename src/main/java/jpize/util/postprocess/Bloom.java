@@ -1,6 +1,6 @@
 package jpize.util.postprocess;
 
-import jpize.app.Jpize;
+import jpize.context.Jpize;
 import jpize.util.res.Resource;
 import jpize.opengl.gl.Gl;
 import jpize.opengl.tesselation.GlFramebuffer;

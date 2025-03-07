@@ -1,6 +1,6 @@
 package jpize.opengl.buffer;
 
-import jpize.app.Jpize;
+import jpize.context.Jpize;
 import jpize.opengl.GlObject;
 import jpize.opengl.gl.GLI32;
 import jpize.opengl.texture.GlInternalFormat;

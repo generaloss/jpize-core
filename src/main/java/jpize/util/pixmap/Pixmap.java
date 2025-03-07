@@ -1,6 +1,6 @@
 package jpize.util.pixmap;
 
-import jpize.app.Jpize;
+import jpize.context.Jpize;
 import jpize.util.Disposable;
 import jpize.opengl.texture.GlInternalFormat;
 import jpize.util.math.Maths;

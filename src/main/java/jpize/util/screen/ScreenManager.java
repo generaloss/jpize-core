@@ -1,6 +1,6 @@
 package jpize.util.screen;
 
-import jpize.app.Jpize;
+import jpize.context.Jpize;
 import jpize.util.Disposable;
 
 import java.util.Collection;

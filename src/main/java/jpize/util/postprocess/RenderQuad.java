@@ -1,6 +1,6 @@
 package jpize.util.postprocess;
 
-import jpize.app.Jpize;
+import jpize.context.Jpize;
 import jpize.opengl.shader.Shader;
 import jpize.opengl.texture.Texture2D;
 import jpize.opengl.type.GlType;

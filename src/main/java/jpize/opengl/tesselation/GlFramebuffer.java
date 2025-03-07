@@ -6,7 +6,7 @@ import jpize.opengl.gl.GLI30;
 import jpize.opengl.texture.*;
 import jpize.opengl.type.GlType;
 import jpize.util.postprocess.RenderQuad;
-import jpize.app.Jpize;
+import jpize.context.Jpize;
 import jpize.opengl.GlObject;
 
 import java.nio.ByteBuffer;

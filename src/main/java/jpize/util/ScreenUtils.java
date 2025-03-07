@@ -1,7 +1,7 @@
 package jpize.util;
 
 import jpize.util.res.FileResource;
-import jpize.app.Jpize;
+import jpize.context.Jpize;
 import jpize.util.res.Resource;
 import jpize.opengl.texture.GlBaseFormat;
 import jpize.opengl.type.GlType;

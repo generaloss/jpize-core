@@ -2,5 +2,6 @@
 <project version="4">
   <component name="VcsDirectoryMappings">
     <mapping directory="" vcs="Git" />
+    <mapping directory="/data/files/workspace/coding/java/projects/engine/module/jpize-core" vcs="Git" />
   </component>
 </project>

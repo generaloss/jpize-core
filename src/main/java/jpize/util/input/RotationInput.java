@@ -1,8 +1,8 @@
 package jpize.util.input;
 
-import jpize.app.Jpize;
-import jpize.io.callback.CursorPosCallback;
-import jpize.io.input.CursorMode;
+import jpize.context.Jpize;
+import jpize.context.callback.CursorPosCallback;
+import jpize.context.input.CursorMode;
 import jpize.util.math.EulerAngles;
 import jpize.util.math.Maths;
 

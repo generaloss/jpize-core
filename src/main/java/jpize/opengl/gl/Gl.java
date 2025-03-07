@@ -1,6 +1,6 @@
 package jpize.opengl.gl;
 
-import jpize.app.Jpize;
+import jpize.context.Jpize;
 import jpize.opengl.GlError;
 import jpize.opengl.glenum.*;
 import jpize.opengl.tesselation.GlFace;

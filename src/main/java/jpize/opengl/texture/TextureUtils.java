@@ -1,6 +1,6 @@
 package jpize.opengl.texture;
 
-import jpize.app.Jpize;
+import jpize.context.Jpize;
 import jpize.util.pixmap.PixmapRGBA;
 import java.util.HashMap;
 import java.util.Map;

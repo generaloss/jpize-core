@@ -1,6 +1,6 @@
 package jpize.opengl.vertex;
 
-import jpize.app.Jpize;
+import jpize.context.Jpize;
 import jpize.opengl.GlObject;
 import jpize.opengl.tesselation.GlPrimitive;
 import jpize.opengl.type.GlIndexType;

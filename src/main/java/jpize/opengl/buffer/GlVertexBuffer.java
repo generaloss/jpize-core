@@ -1,6 +1,6 @@
 package jpize.opengl.buffer;
 
-import jpize.app.Jpize;
+import jpize.context.Jpize;
 import jpize.opengl.type.GlType;
 
 import java.nio.ByteBuffer;

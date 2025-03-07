@@ -1,6 +1,6 @@
 package jpize.util.font;
 
-import jpize.app.Jpize;
+import jpize.context.Jpize;
 import jpize.opengl.shader.Shader;
 import jpize.opengl.tesselation.GlPrimitive;
 import jpize.opengl.type.GlType;

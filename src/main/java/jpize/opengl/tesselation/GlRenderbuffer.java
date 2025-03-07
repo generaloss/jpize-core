@@ -1,6 +1,6 @@
 package jpize.opengl.tesselation;
 
-import jpize.app.Jpize;
+import jpize.context.Jpize;
 import jpize.opengl.GlObject;
 import jpize.opengl.buffer.GlAttachment;
 import jpize.opengl.gl.GLI11;

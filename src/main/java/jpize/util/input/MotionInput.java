@@ -1,6 +1,6 @@
 package jpize.util.input;
 
-import jpize.io.input.Key;
+import jpize.context.input.Key;
 import jpize.util.math.vector.Vec3f;
 import jpize.util.math.vector.Vec3i;
 public class MotionInput {

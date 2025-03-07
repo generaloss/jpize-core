@@ -1,6 +1,6 @@
 package jpize.util.postprocess;
 
-import jpize.app.Jpize;
+import jpize.context.Jpize;
 import jpize.opengl.gl.GLI11;
 import jpize.util.Disposable;
 import jpize.util.res.Resource;

@@ -1,6 +1,6 @@
 package jpize.util.camera;
 
-import jpize.app.Jpize;
+import jpize.context.Jpize;
 import jpize.util.math.Maths;
 import jpize.util.math.matrix.Matrix4f;
 import jpize.util.math.vector.Vec2i;

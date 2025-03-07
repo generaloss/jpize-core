@@ -1,11 +1,11 @@
 package jpize.util.input;
 
-import jpize.app.Jpize;
-import jpize.io.callback.CharCallback;
-import jpize.io.callback.KeyCallback;
-import jpize.io.input.Action;
-import jpize.io.input.Key;
-import jpize.io.input.Mods;
+import jpize.context.Jpize;
+import jpize.context.callback.CharCallback;
+import jpize.context.callback.KeyCallback;
+import jpize.context.input.Action;
+import jpize.context.input.Key;
+import jpize.context.input.Mods;
 import jpize.util.array.StringList;
 import jpize.util.font.Charset;
 import jpize.util.math.Maths;
