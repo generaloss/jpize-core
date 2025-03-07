@@ -5,6 +5,7 @@ import jpize.opengl.shader.Shader;
 import jpize.opengl.tesselation.GlPrimitive;
 import jpize.opengl.type.GlType;
 import jpize.opengl.vertex.GlVertAttr;
+import jpize.util.Disposable;
 import jpize.util.camera.Camera3D;
 import jpize.util.math.vector.Vec3f;
 import jpize.util.mesh.Mesh;
@@ -23,16 +24,15 @@ import java.util.Map;
 
 public class TextRenderer {
 
-    private record Renderer(Mesh mesh, Shader shader, Matrix4f matrixCombined) { }
-
-    private static final Map<Long, Renderer> RENDERER_BY_THREAD = new HashMap<>();
-
-    private static void _dispose() { // calls from ContextManager (114)
-        for(Renderer renderer: RENDERER_BY_THREAD.values()){
-            renderer.mesh.dispose();
-            renderer.shader.dispose();
+    private record Renderer(Mesh mesh, Shader shader, Matrix4f matrixCombined) implements Disposable {
+        @Override
+        public void dispose() {
+            mesh.dispose();
+            shader.dispose();
         }
     }
+
+    private static final Map<Long, Renderer> RENDERER_BY_THREAD = new HashMap<>();
 
 
     public static GlyphIterator render(Font font, TextureBatch batch, String text, float x, float y) {
@@ -98,6 +98,7 @@ public class TextRenderer {
                 new Matrix4f()
             );
             renderer.mesh.setMode(GlPrimitive.QUADS);
+            Jpize.callbacks.addExitCallback(renderer::dispose);
             RENDERER_BY_THREAD.put(threadID, renderer);
         }
         final Renderer renderer = RENDERER_BY_THREAD.get(threadID);
@@ -217,6 +218,7 @@ public class TextRenderer {
                 new Matrix4f()
             );
             renderer.mesh.setMode(GlPrimitive.QUADS);
+            Jpize.callbacks.addExitCallback(renderer::dispose);
             RENDERER_BY_THREAD.put(threadID, renderer);
         }
         final Renderer renderer = RENDERER_BY_THREAD.get(threadID);

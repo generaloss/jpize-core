@@ -33,7 +33,7 @@ public class TileScissorTest extends JpizeApplication {
         this.texture = new Texture2D(
             new PixmapRGBA(21, 21).fillRGB(0, 0, 20, 20, 0xFFFFFF).fillRGB(0, 0, 17, 17, 0x666666)
         );
-        this.font = new Font().loadDefault();
+        this.font = new Font().loadFNT("/font.fnt", false);//.loadDefault();
         this.scissor = new GlScissor<String>()
             .put("scissor_1",  100, 100, camera.getWidth() - 200, camera.getHeight() - 200);
     }

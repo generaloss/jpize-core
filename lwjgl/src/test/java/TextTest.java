@@ -19,7 +19,7 @@ public class TextTest extends JpizeApplication {
 
     public TextTest() throws IOException {
         this.batch = new TextureBatch();
-        final ZipFile zip = new ZipFile("src/test/resources/font.zip");
+        final ZipFile zip = new ZipFile("./lwjgl/src/test/resources/font.zip");
         this.font = new Font().loadFNT(Resource.zip(zip, zip.getEntry("font.fnt")), false);
         this.options = font.getOptions();
 

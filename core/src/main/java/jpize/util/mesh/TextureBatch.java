@@ -57,8 +57,8 @@ public class TextureBatch implements Disposable {
         this.vertexList = new FloatList();
         // shader
         this.defaultShader = new Shader(
-            Resource.internal(TextureBatch.class, "/shader/texture_batch/vert.glsl"),
-            Resource.internal(TextureBatch.class, "/shader/texture_batch/frag.glsl")
+            Resource.internal("/shader/texture_batch/vert.glsl"),
+            Resource.internal("/shader/texture_batch/frag.glsl")
         );
         this.setShader(defaultShader);
         // quad

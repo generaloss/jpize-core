@@ -1,5 +1,6 @@
 package jpize.util.postprocess;
 
+import jpize.app.Jpize;
 import jpize.opengl.shader.Shader;
 import jpize.opengl.texture.Texture2D;
 import jpize.opengl.type.GlType;
@@ -54,26 +55,20 @@ public class RenderQuad implements Disposable {
 
     public static RenderQuad instance() {
         final long threadID = Thread.currentThread().getId();
-        if(!BY_THREAD.containsKey(threadID))
-            BY_THREAD.put(threadID, new RenderQuad(
-                new float[] {
-                    -1F,  1F,  0F, 0F, // 0
-                    -1F, -1F,  0F, 1F, // 1
-                     1F, -1F,  1F, 1F, // 2
-                     1F,  1F,  1F, 0F, // 3
-                },
-                new int[] {
-                    0, 1, 2,
-                    2, 3, 0,
-                }
-            )
-        );
+        if(!BY_THREAD.containsKey(threadID)) {
+            final RenderQuad quad = new RenderQuad(new float[]{
+                -1F,  1F,  0F, 0F, // 0
+                -1F, -1F,  0F, 1F, // 1
+                 1F, -1F,  1F, 1F, // 2
+                 1F,  1F,  1F, 0F, // 3
+            }, new int[]{
+                0, 1, 2,
+                2, 3, 0,
+            });
+            Jpize.callbacks.addExitCallback(quad::dispose);
+            BY_THREAD.put(threadID, quad);
+        }
         return BY_THREAD.get(threadID);
-    }
-
-    private static void _dispose() { // calls from ContextManager (113)
-        for(RenderQuad quad: BY_THREAD.values())
-            quad.dispose();
     }
 
 }

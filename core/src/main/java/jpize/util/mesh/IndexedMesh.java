@@ -38,7 +38,7 @@ public class IndexedMesh implements IMesh {
 
     @Override
     public void render() {
-        render(indexBuffer.getIndexCount());
+        this.render(indexBuffer.getIndexCount());
     }
 
 

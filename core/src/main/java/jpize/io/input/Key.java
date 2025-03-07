@@ -129,6 +129,10 @@ public enum Key {
     public int getScancode() {
         return Jpize.input.getKeyScancode(this);
     }
+
+    public String getName() {
+        return Jpize.input.getKeyName(this);
+    }
     
 
     public boolean pressed() {

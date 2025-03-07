@@ -8,6 +8,8 @@ import jpize.opengl.gl.*;
 
 public class Jpize {
 
+    public static IContextManager contextManager;
+    public static IAllocator allocator;
     public static Context context;
     public static IWindow window;
     public static AbstractInput input;
@@ -30,7 +32,6 @@ public class Jpize {
     public static GLI44 GL44;
     public static GLI45 GL45;
     public static GLI46 GL46;
-    public static IAllocator allocator;
 
 
     public static int getWidth() {
@@ -62,6 +63,10 @@ public class Jpize {
         return input.getCursorY();
     }
 
+    public static float getNativeY() {
+        return input.getCursorNativeY();
+    }
+
     public static float getScroll() {
         return input.getScrollY();
     }
@@ -91,15 +96,15 @@ public class Jpize {
 
 
     public static void run() {
-        ContextManager.instance().run();
+        contextManager.run();
     }
 
     public static void exit() {
-        ContextManager.instance().closeAll();
+        contextManager.closeAll();
     }
 
     public static void exitOthers() {
-        ContextManager.instance().closeAllThatNotCurrent();
+        contextManager.closeAllThatNotCurrent();
     }
 
 }

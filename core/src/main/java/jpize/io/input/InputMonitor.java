@@ -15,9 +15,9 @@ public class InputMonitor {
         this.btnsDown = new BitSet(MouseBtn.values().length);
         this.btnsRelease = new BitSet(MouseBtn.values().length);
 
-        window.getCallbacks().addKeyCallback(this::onKey);
-        window.getCallbacks().addMouseButtonCallback(this::onButton);
-        window.getCallbacks().addScrollCallback(this::onScroll);
+        window.getCallbacks().addKey(this::onKey);
+        window.getCallbacks().addMouseButton(this::onButton);
+        window.getCallbacks().addScroll(this::onScroll);
     }
     
     private void onKey(Key key, int scancode, Action action, Mods mods) {

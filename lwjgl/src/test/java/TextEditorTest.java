@@ -39,7 +39,7 @@ public class TextEditorTest extends JpizeApplication {
 
     public TextEditorTest() {
         this.input = new TextInput().enable().insert(Jpize.input.getClipboardString());
-        this.font = new Font().loadDefault();
+        this.font = new Font().loadFNT("/font.fnt", false);//.loadDefault();
         this.renderOptions = font.getOptions().setInvLineWrap(true);
         // this.renderOptions.setNewLineGap(40);
         this.batch = new TextureBatch();
@@ -57,7 +57,7 @@ public class TextEditorTest extends JpizeApplication {
     public void init() {
         Gl.clearColor(0.1F, 0.11F, 0.12F);
 
-        Jpize.callbacks.addKeyCallback((key, scancode, action, mods) -> {
+        Jpize.callbacks.addKey((key, scancode, action, mods) -> {
             if(key == Key.Y && mods.hasCtrl() && action.isPressed())
                 input.removeLine(input.getY());
         });
@@ -130,7 +130,7 @@ public class TextEditorTest extends JpizeApplication {
                 final float scaleFactor = 1.2F;
                 editorScale.mul(Mathc.pow(Jpize.getScroll() > 0 ? scaleFactor : 1F / scaleFactor, Math.abs(Jpize.getScroll())));
             }else{
-                final float scrollFactor = 1.5F / editorScale.y;
+                final float scrollFactor = (100F / editorScale.y / font.getHeight());
                 scroll -= Jpize.getScroll() * scrollFactor;
             }
         }

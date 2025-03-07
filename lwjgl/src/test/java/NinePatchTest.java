@@ -19,7 +19,7 @@ public class NinePatchTest extends JpizeApplication {
         this.ninePatch = new NinePatch()
             .load("/dialog.9.png")
             .setStretchMode(StretchMode.STRETCH)
-            .setScale(1.5F)
+            .setScale(1F)
             .setDrawCenter(true);
     }
 

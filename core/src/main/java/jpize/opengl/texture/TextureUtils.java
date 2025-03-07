@@ -1,5 +1,6 @@
 package jpize.opengl.texture;
 
+import jpize.app.Jpize;
 import jpize.util.pixmap.PixmapRGBA;
 import java.util.HashMap;
 import java.util.Map;
@@ -15,14 +16,10 @@ public class TextureUtils {
             pixmap.clearRGB(0xFFFFFF);
             final Texture2D texture = new Texture2D(pixmap);
             pixmap.dispose();
+            Jpize.callbacks.addExitCallback(texture::dispose);
             WHITE_TEXTURE_BY_THREAD.put(threadID, texture);
         }
         return WHITE_TEXTURE_BY_THREAD.get(threadID);
-    }
-
-    private static void _dispose() { // calls from ContextManager (112)
-        for(Texture2D texture: WHITE_TEXTURE_BY_THREAD.values())
-            texture.dispose();
     }
 
 }

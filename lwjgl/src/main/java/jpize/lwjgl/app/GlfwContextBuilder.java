@@ -1,14 +1,13 @@
 package jpize.lwjgl.app;
 
 import jpize.app.Context;
-import jpize.app.ContextManager;
+import jpize.app.Jpize;
 import jpize.opengl.gl.Gl;
 import jpize.opengl.glenum.GlCompareFunc;
 import jpize.opengl.glenum.GlTarget;
 import jpize.opengl.texture.GlBlendFactor;
 import jpize.lwjgl.glfw.Glfw;
 import jpize.lwjgl.glfw.GlfwImage;
-import jpize.lwjgl.glfw.init.GlfwPlatform;
 import jpize.lwjgl.glfw.monitor.GlfwMonitor;
 import jpize.lwjgl.glfw.window.GlfwWindow;
 import jpize.lwjgl.glfw.window.GlfwWindowHint;
@@ -26,12 +25,8 @@ public class GlfwContextBuilder {
     }
 
     static {
-        // waiting for wayland fix in lwjgl
-        if(System.getProperty("os.name").equals("Linux"))
-            Glfw.glfwInitHintPlatform(GlfwPlatform.X11);
-        // init glfw
-        Glfw.init();
-        Glfw.swapInterval(1);
+        Jpize.contextManager = GlfwContextManager.instance();
+        Jpize.allocator = new LwjglAllocator();
     }
 
     private final int width;
@@ -39,7 +34,7 @@ public class GlfwContextBuilder {
     private final String title;
 
     private GlfwContextBuilder(String title, int width, int height) {
-        ContextManager.instance(); // init
+        GlfwContextManager.instance(); // init
         this.title = title;
         this.width = width;
         this.height = height;

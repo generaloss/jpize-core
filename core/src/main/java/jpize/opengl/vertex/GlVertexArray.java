@@ -25,7 +25,7 @@ public class GlVertexArray extends GlObject {
 
     public void drawElements(int indicesNum, GlPrimitive mode, GlIndexType indexType) {
         this.bind();
-        Jpize.GL11.glDrawElements(mode.value, indicesNum, indexType.value, 0);
+        Jpize.GL11.glDrawElements(mode.value, indicesNum, indexType.value, 0L);
     }
 
     public void drawElements(int indicesNum, GlPrimitive mode) {

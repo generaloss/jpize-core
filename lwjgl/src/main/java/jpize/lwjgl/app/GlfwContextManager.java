@@ -1,35 +1,43 @@
-package jpize.app;
+package jpize.lwjgl.app;
 
+import jpize.app.IContextManager;
 import jpize.io.IWindow;
-import jpize.opengl.texture.TextureUtils;
-import jpize.util.ReflectUtils;
-import jpize.util.font.TextRenderer;
-import jpize.util.postprocess.RenderQuad;
+import jpize.lwjgl.glfw.Glfw;
+import jpize.lwjgl.glfw.init.GlfwPlatform;
+import org.lwjgl.glfw.GLFW;
 
 import java.util.Map;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-public class ContextManager {
+public class GlfwContextManager implements IContextManager {
 
-    private static ContextManager INSTANCE;
+    private static GlfwContextManager INSTANCE;
 
-    public static ContextManager instance() {
+    public static GlfwContextManager instance() {
         if(INSTANCE == null)
-            INSTANCE = new ContextManager();
+            INSTANCE = new GlfwContextManager();
         return INSTANCE;
     }
 
 
-    private final Queue<Context> contextsToInit = new ConcurrentLinkedQueue<>();
-    private final Map<Long, Context> contexts = new ConcurrentHashMap<>();
+    private final Queue<GlfwContext> contextsToInit = new ConcurrentLinkedQueue<>();
+    private final Map<Long, GlfwContext> contexts = new ConcurrentHashMap<>();
     private long currentContextID;
 
-    private ContextManager() { }
+    private GlfwContextManager() {
+        // waiting for wayland fix in lwjgl
+        if(System.getProperty("os.name").equals("Linux"))
+            Glfw.glfwInitHintPlatform(GlfwPlatform.X11);
+        // init glfw
+        if(!GLFW.glfwInit())
+            throw new RuntimeException("GLFW init failed.");
+        Glfw.enableVSync(true);
+    }
 
 
-    public Context getContext(long windowID) {
+    public GlfwContext getContext(long windowID) {
         return contexts.getOrDefault(windowID,
             contextsToInit.stream()
                 .filter(context -> windowID == context.getWindow().getID())
@@ -38,13 +46,13 @@ public class ContextManager {
         );
     }
 
-    public Context getContext(IWindow window) {
+    public GlfwContext getContext(IWindow window) {
         if(window == null)
             return null;
         return this.getContext(window.getID());
     }
 
-    public Context getCurrentContext() {
+    public GlfwContext getCurrentContext() {
         return this.getContext(currentContextID);
     }
 
@@ -57,36 +65,38 @@ public class ContextManager {
         window.makeContextCurrent();
     }
 
-    protected void contextToInit(Context context) {
+    protected void contextToInit(GlfwContext context) {
         contextsToInit.add(context);
     }
 
-    protected void unregister(Context context) {
+    protected void unregister(GlfwContext context) {
         contexts.remove(context.getWindow().getID());
     }
 
-    protected void closeAll() {
-        for(Context context: contexts.values())
+    @Override
+    public void closeAll() {
+        for(GlfwContext context: contexts.values())
             context.close();
     }
 
-    protected void closeAllThatNotCurrent() {
-        final Context current = this.getCurrentContext();
-        for(Context context: contexts.values())
+    @Override
+    public void closeAllThatNotCurrent() {
+        final GlfwContext current = this.getCurrentContext();
+        for(GlfwContext context: contexts.values())
             if(context != current)
                 context.close();
     }
 
-
+    @Override
     public void run() {
         this.initContexts();
         this.startLoop();
-        this.terminate();
+        GLFW.glfwTerminate();
     }
 
     private void initContexts() {
         while(!contextsToInit.isEmpty()){
-            final Context context = contextsToInit.poll();
+            final GlfwContext context = contextsToInit.poll();
             contexts.put(context.getWindow().getID(), context);
             context.init();
         }
@@ -98,17 +108,10 @@ public class ContextManager {
             if(contexts.isEmpty())
                 return;
 
-            // ;
-            for(Context context: contexts.values())
+            GLFW.glfwPollEvents();
+            for(GlfwContext context: contexts.values())
                 context.loop();
         }
-    }
-
-    private void terminate() {
-        ReflectUtils.invokeStaticMethod(TextureUtils.class, "_dispose");
-        ReflectUtils.invokeStaticMethod(RenderQuad.class, "_dispose");
-        ReflectUtils.invokeStaticMethod(TextRenderer.class, "_dispose");
-        // Glfw.terminate();
     }
 
 }

@@ -232,7 +232,7 @@ public class GlyphIterator implements Iterator<GlyphSprite> {
 
     @Override
     public boolean hasNext() {
-        return (charIndex + 1 < size);
+        return (line != null && charIndex + 1 < size);
     }
 
     @Override
@@ -280,7 +280,7 @@ public class GlyphIterator implements Iterator<GlyphSprite> {
     public void nextNotEmptyLine() {
         do{
             this.nextLine();
-        }while(line.isEmpty());
+        }while(line != null && line.isEmpty());
     }
 
     private void nextLine() {

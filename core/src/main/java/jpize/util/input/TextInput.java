@@ -317,8 +317,8 @@ public class TextInput implements Iterable<String> {
         if(enabled)
             return this;
         enabled = true;
-        Jpize.callbacks.addCharCallback(charCallback);
-        Jpize.callbacks.addKeyCallback(keyCallback);
+        Jpize.callbacks.addChar(charCallback);
+        Jpize.callbacks.addKey(keyCallback);
         return this;
     }
 
@@ -326,8 +326,8 @@ public class TextInput implements Iterable<String> {
         if(!enabled)
             return this;
         enabled = false;
-        Jpize.callbacks.removeCharCallback(charCallback);
-        Jpize.callbacks.removeKeyCallback(keyCallback);
+        Jpize.callbacks.removeChar(charCallback);
+        Jpize.callbacks.removeKey(keyCallback);
         return this;
     }
 

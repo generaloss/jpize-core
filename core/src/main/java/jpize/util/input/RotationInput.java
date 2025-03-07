@@ -81,9 +81,9 @@ public class RotationInput {
 
         if(enabled){
             this.centerCursor();
-            Jpize.callbacks.addCursorPosCallback(cursorCallback);
+            Jpize.callbacks.addCursorPos(cursorCallback);
         }else{
-            Jpize.callbacks.removeCursorPosCallback(cursorCallback);
+            Jpize.callbacks.removeCursorPos(cursorCallback);
         }
     }
 

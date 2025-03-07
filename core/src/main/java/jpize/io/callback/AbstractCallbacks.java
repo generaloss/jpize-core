@@ -26,173 +26,173 @@ public abstract class AbstractCallbacks {
     protected final List<FramebufferSizeCallback> framebufferSize = new CopyOnWriteArrayList<>();
 
 
-    public void addWindowCloseCallback(ExitCallback callback) {
+    public void addExitCallback(ExitCallback callback) {
         exit.add(callback);
     }
 
-    public void removeWindowCloseCallback(ExitCallback callback) {
+    public void removeExitClose(ExitCallback callback) {
         exit.remove(callback);
     }
 
 
-    public void addWindowContentScaleCallback(ContentScaleCallback callback) {
+    public void addContentScale(ContentScaleCallback callback) {
         contentScale.add(callback);
     }
 
-    public void removeWindowContentScaleCallback(ContentScaleCallback callback) {
+    public void removeContentScale(ContentScaleCallback callback) {
         contentScale.remove(callback);
     }
 
 
-    public void addWindowFocusCallback(WindowFocusCallback callback) {
+    public void addWindowFocus(WindowFocusCallback callback) {
         windowFocus.add(callback);
     }
 
-    public void removeWindowFocusCallback(WindowFocusCallback callback) {
+    public void removeWindowFocus(WindowFocusCallback callback) {
         windowFocus.remove(callback);
     }
 
 
-    public void addWindowIconifyCallback(WindowIconifyCallback callback) {
+    public void addWindowIconify(WindowIconifyCallback callback) {
         windowIconify.add(callback);
     }
 
-    public void removeWindowIconifyCallback(WindowIconifyCallback callback) {
+    public void removeWindowIconify(WindowIconifyCallback callback) {
         windowIconify.remove(callback);
     }
 
 
-    public void addWindowMaximizeCallback(WindowMaximizeCallback callback) {
+    public void addWindowMaximize(WindowMaximizeCallback callback) {
         windowMaximize.add(callback);
     }
 
-    public void removeWindowMaximizeCallback(WindowMaximizeCallback callback) {
+    public void removeWindowMaximize(WindowMaximizeCallback callback) {
         windowMaximize.remove(callback);
     }
 
 
-    public void addWindowPosCallback(WindowPosCallback callback) {
+    public void addWindowPos(WindowPosCallback callback) {
         windowPosition.add(callback);
     }
 
-    public void removeWindowPosCallback(WindowPosCallback callback) {
+    public void removeWindowPos(WindowPosCallback callback) {
         windowPosition.remove(callback);
     }
 
 
-    public void addWindowRefreshCallback(WindowRefreshCallback callback) {
+    public void addWindowRefresh(WindowRefreshCallback callback) {
         windowRefresh.add(callback);
     }
 
-    public void removeWindowRefreshCallback(WindowRefreshCallback callback) {
+    public void removeWindowRefresh(WindowRefreshCallback callback) {
         windowRefresh.remove(callback);
     }
 
 
-    public void addWindowSizeCallback(WindowSizeCallback callback) {
+    public void addWindowSize(WindowSizeCallback callback) {
         windowSize.add(callback);
     }
 
-    public void removeWindowSizeCallback(WindowSizeCallback callback) {
+    public void removeWindowSize(WindowSizeCallback callback) {
         windowSize.remove(callback);
     }
 
 
-    public void addFramebufferSizeCallback(FramebufferSizeCallback callback) {
+    public void addFramebufferSize(FramebufferSizeCallback callback) {
         framebufferSize.add(callback);
     }
 
-    public void removeFramebufferSizeCallback(FramebufferSizeCallback callback) {
+    public void removeFramebufferSize(FramebufferSizeCallback callback) {
         framebufferSize.remove(callback);
     }
 
 
-    public void addCursorPosCallback(CursorPosCallback callback) {
+    public void addCursorPos(CursorPosCallback callback) {
         cursorPosition.add(callback);
     }
 
-    public void removeCursorPosCallback(CursorPosCallback callback) {
+    public void removeCursorPos(CursorPosCallback callback) {
         cursorPosition.remove(callback);
     }
 
 
-    public void addCursorEnterCallback(CursorEnterCallback callback) {
+    public void addCursorEnter(CursorEnterCallback callback) {
         cursorEnter.add(callback);
     }
 
-    public void removeCursorEnterCallback(CursorEnterCallback callback) {
+    public void removeCursorEnter(CursorEnterCallback callback) {
         cursorEnter.remove(callback);
     }
 
 
-    public void addMouseButtonCallback(MouseButtonCallback callback) {
+    public void addMouseButton(MouseButtonCallback callback) {
         mouseButton.add(callback);
     }
 
-    public void removeMouseButtonCallback(MouseButtonCallback callback) {
+    public void removeMouseButton(MouseButtonCallback callback) {
         mouseButton.remove(callback);
     }
 
 
-    public void addScrollCallback(ScrollCallback callback) {
+    public void addScroll(ScrollCallback callback) {
         scroll.add(callback);
     }
 
-    public void removeScrollCallback(ScrollCallback callback) {
+    public void removeScroll(ScrollCallback callback) {
         scroll.remove(callback);
     }
 
 
-    public void addCharModsCallback(CharModsCallback callback) {
+    public void addCharMods(CharModsCallback callback) {
         charMods.add(callback);
     }
 
-    public void removeCharModsCallback(CharModsCallback callback) {
+    public void removeCharMods(CharModsCallback callback) {
         charMods.remove(callback);
     }
 
 
-    public void addKeyCallback(KeyCallback callback) {
+    public void addKey(KeyCallback callback) {
         key.add(callback);
     }
 
-    public void removeKeyCallback(KeyCallback callback) {
+    public void removeKey(KeyCallback callback) {
         key.remove(callback);
     }
 
 
-    public void addCharCallback(CharCallback callback) {
+    public void addChar(CharCallback callback) {
         character.add(callback);
     }
 
-    public void removeCharCallback(CharCallback callback) {
+    public void removeChar(CharCallback callback) {
         character.remove(callback);
     }
 
 
-    public void addPreeditCallback(PreeditCallback callback) { //! ???
+    public void addPreedit(PreeditCallback callback) { //! ???
         preedit.add(callback);
     }
 
-    public void removePreeditCallback(PreeditCallback callback) { //! ???
+    public void removePreedit(PreeditCallback callback) { //! ???
         preedit.remove(callback);
     }
 
 
-    public void addPreeditCandidateCallback(PreeditCandidateCallback callback) { //! ???
+    public void addPreeditCandidate(PreeditCandidateCallback callback) { //! ???
         preeditCandidate.add(callback);
     }
 
-    public void removePreeditCandidateCallback(PreeditCandidateCallback callback) { //! ???
+    public void removePreeditCandidate(PreeditCandidateCallback callback) { //! ???
         preeditCandidate.remove(callback);
     }
 
 
-    public void addDropCallback(DropCallback callback) {
+    public void addDrop(DropCallback callback) {
         drop.add(callback);
     }
 
-    public void removeDropCallback(DropCallback callback) {
+    public void removeDrop(DropCallback callback) {
         drop.remove(callback);
     }
 

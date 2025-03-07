@@ -20,7 +20,8 @@ public class ScreensTest extends JpizeApplication {
         public TestScreen() {
             this.batch = new TextureBatch();
             this.texture = new Texture2D("/background.png");
-            this.font = new Font().loadDefault();
+            this.font = new Font().loadFNT("/font.fnt", false);//.loadDefault();
+            this.font.getOptions().scale().set(3F);
         }
 
         @Override
@@ -36,10 +37,6 @@ public class ScreensTest extends JpizeApplication {
         @Override
         public void hide() {
             System.out.println("hide " + super.getID());
-        }
-
-        @Override
-        public void update() {
         }
 
         private int width;
@@ -74,8 +71,8 @@ public class ScreensTest extends JpizeApplication {
 
     public ScreensTest() {
         this.screens = new ScreenManager<>();
-        screens.register("session", new TestScreen());
-        screens.register("title", new TestScreen()).setCurrent();
+        this.screens.register("session", new TestScreen());
+        this.screens.register("title", new TestScreen()).setCurrent();
     }
 
     @Override
@@ -83,10 +80,11 @@ public class ScreensTest extends JpizeApplication {
         screens.update();
 
         if(Key.T.down()){
-            if(screens.get("title").isCurrent())
+            if(screens.get("title").isCurrent()) {
                 screens.setCurrent("session");
-            else
+            }else{
                 screens.setCurrent("title");
+            }
         }
     }
 

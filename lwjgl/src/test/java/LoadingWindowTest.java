@@ -12,8 +12,9 @@ public class LoadingWindowTest {
     private static class LoadingWindow extends JpizeApplication {
         TextureBatch batch = new TextureBatch();
         Texture2D bg = new Texture2D("/bg.png");
-        Font font = new Font().loadDefault();
+        Font font = new Font().loadFNT("/font.fnt", false);//.loadDefault();
         public void init() {
+            font.getOptions().scale().set(3F);
             // show window because usually the window shows after init()
             Jpize.window.show();
 

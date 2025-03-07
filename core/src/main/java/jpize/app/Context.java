@@ -1,6 +1,5 @@
 package jpize.app;
 
-import jpize.io.IAllocator;
 import jpize.io.IWindow;
 import jpize.opengl.gl.Gl;
 import jpize.util.time.DeltaTimeCounter;
@@ -21,8 +20,6 @@ public abstract class Context {
         this.syncExecutor = new SyncExecutor();
         this.fpsCounter = new PerSecondCounter();
         this.deltaTimeCounter = new DeltaTimeCounter();
-        this.makeCurrent();
-        ContextManager.instance().contextToInit(this);
     }
 
     public IWindow getWindow() {
@@ -32,8 +29,6 @@ public abstract class Context {
     public SyncExecutor getSyncExecutor() {
         return syncExecutor;
     }
-
-    abstract public IAllocator getAllocator();
 
 
     public Context setApp(JpizeApplication app) {
@@ -56,14 +51,8 @@ public abstract class Context {
     }
 
 
-    public void makeCurrent() {
-        ContextManager.instance().makeContextCurrent(window);
-    }
-
-
     protected void init() {
-        this.makeCurrent();
-        window.getCallbacks().addWindowSizeCallback(this::resize);
+        window.getCallbacks().addWindowSize(this::resize);
         if(app != null)
             app.init();
         window.show();
@@ -72,15 +61,12 @@ public abstract class Context {
         deltaTimeCounter.reset();
     }
 
-    private void resize(int width, int height) {
-        this.makeCurrent();
+    protected void resize(int width, int height) {
         Gl.viewport(width, height);
         if(app != null) app.resize(width, height);
     }
 
     protected void loop() {
-        this.makeCurrent();
-
         // close window
         if(window.shouldClose()){
             exit();
@@ -105,14 +91,12 @@ public abstract class Context {
         deltaTimeCounter.update();
     }
 
-    private void exit() {
+    protected void exit() {
         // context is current (calls in loop)
         window.hide();
-
         // free resources
         if(app != null) app.dispose();
         window.dispose();
-        ContextManager.instance().unregister(this);
     }
 
     public void close() {

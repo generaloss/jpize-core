@@ -147,7 +147,7 @@ public class GlfwKey {
     }
 
     private static final Map<Key, Integer> SCANCODE_BY_KEY = Utils.make(new HashMap<>(), map -> {
-        for(Key key: map.keySet()) {
+        for(Key key: Key.values()) {
             final int glfwKeyValue = getGlfwValue(key);
             final int scancode = GLFW.glfwGetKeyScancode(glfwKeyValue);
             map.put(key, scancode);

@@ -26,6 +26,8 @@ public abstract class AbstractInput {
 
     public abstract int getKeyScancode(Key key);
 
+    public abstract String getKeyName(Key key);
+
 
     public boolean isKeyDown(Key key) {
         return inputMonitor.isKeyDown(key);

@@ -10,6 +10,7 @@ import jpize.util.math.vector.Vec3i;
 import org.lwjgl.PointerBuffer;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWAllocator;
+import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.system.MemoryUtil;
 
 import java.nio.IntBuffer;
@@ -20,15 +21,6 @@ public class Glfw {
     public static final int FALSE = GLFW.GLFW_FALSE;
     public static final int DONT_CARE = GLFW.GLFW_DONT_CARE;
     public static final int ANY_POSITION = GLFW.GLFW_ANY_POSITION;
-
-    public static void init() {
-        if(!GLFW.glfwInit())
-            throw new RuntimeException("GLFW init failed.");
-    }
-
-    public static void terminate() {
-        GLFW.glfwTerminate();
-    }
 
 
     public static void setTime(double time) {
@@ -68,8 +60,8 @@ public class Glfw {
         MemoryUtil.memFree(description);
     }
 
-    public static void setErrorCallback(GlfwErrorCallback callback) {
-        GLFW.glfwSetErrorCallback((int code, long description) -> {
+    public static GLFWErrorCallback setErrorCallback(GlfwErrorCallback callback) {
+        return GLFW.glfwSetErrorCallback((int code, long description) -> {
             final GlfwError error = GlfwError.byValue(code);
             final String message = MemoryUtil.memUTF8(description);
             callback.invoke(error, message);

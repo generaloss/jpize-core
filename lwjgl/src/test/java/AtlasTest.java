@@ -13,13 +13,11 @@ public class AtlasTest extends JpizeApplication {
     public void init() {
         Gl.clearColor(0.3, 0.4, 0.7);
         this.atlas = new TextureAtlas<>();
-        for(Resource s: Resource.file("src/test/resources/blocks").listResources())
+        for(Resource s: Resource.file("./lwjgl/src/test/resources/blocks/").listResources())
             atlas.put(s.simpleName(), "/blocks/" + s.name());
 
         atlas.setPadding(5, 3, 5, 3);
-
         atlas.enablePaddingFilling(true);
-
         atlas.build(128, 128);
     }
 
@@ -36,8 +34,8 @@ public class AtlasTest extends JpizeApplication {
 
 
     public static void main(String[] args) {
-        GlfwContextBuilder.create(720, 720, "Window").build().setApp(new AtlasTest());
-
+        GlfwContextBuilder.create(720, 720, "Atlas Test")
+            .build().setApp(new AtlasTest());
         Jpize.run();
     }
 

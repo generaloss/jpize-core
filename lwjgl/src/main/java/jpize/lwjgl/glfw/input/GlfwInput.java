@@ -29,9 +29,15 @@ public class GlfwInput extends AbstractInput {
         final int glfwAction = glfwGetKey(windowID, glfwKeyValue);
         return GlfwAction.byGlfwValue(glfwAction);
     }
+
     @Override
     public int getKeyScancode(Key key) {
         return GlfwKey.getScancode(key);
+    }
+
+    @Override
+    public String getKeyName(Key key) {
+        return GlfwKey.getKeyName(key);
     }
 
     @Override

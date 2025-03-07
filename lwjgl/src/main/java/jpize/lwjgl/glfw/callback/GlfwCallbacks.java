@@ -1,7 +1,7 @@
 package jpize.lwjgl.glfw.callback;
 
-import jpize.app.Context;
-import jpize.app.ContextManager;
+import jpize.lwjgl.app.GlfwContext;
+import jpize.lwjgl.app.GlfwContextManager;
 import jpize.io.callback.*;
 import jpize.io.input.Action;
 import jpize.io.input.Key;
@@ -38,7 +38,7 @@ public class GlfwCallbacks extends AbstractCallbacks {
 
 
     private void makeContextCurrent() {
-        final Context context = ContextManager.instance().getContext(windowID);
+        final GlfwContext context = GlfwContextManager.instance().getContext(windowID);
         context.makeCurrent();
     }
 
@@ -46,7 +46,7 @@ public class GlfwCallbacks extends AbstractCallbacks {
     public void addIMEStatusCallback(GlfwIMEStatusCallback callback) {
         imeStatus.add(callback);
 
-        if(callbackIMEStatus == null) return;
+        if(callbackIMEStatus != null) return;
         callbackIMEStatus = glfwSetIMEStatusCallback(windowID, (windowID) -> {
             this.makeContextCurrent();
             imeStatus.forEach(GlfwIMEStatusCallback::invoke);
@@ -58,8 +58,8 @@ public class GlfwCallbacks extends AbstractCallbacks {
     }
 
     @Override
-    public void addWindowCloseCallback(ExitCallback callback) {
-        super.addWindowCloseCallback(callback);
+    public void addExitCallback(ExitCallback callback) {
+        super.addExitCallback(callback);
 
         if(callbackClose != null) return;
         callbackClose = glfwSetWindowCloseCallback(windowID, (ID) -> {
@@ -69,10 +69,10 @@ public class GlfwCallbacks extends AbstractCallbacks {
     }
 
     @Override
-    public void addWindowContentScaleCallback(ContentScaleCallback callback) {
-        super.addWindowContentScaleCallback(callback);
+    public void addContentScale(ContentScaleCallback callback) {
+        super.addContentScale(callback);
 
-        if(callbackContentScale == null) return;
+        if(callbackContentScale != null) return;
         callbackContentScale = glfwSetWindowContentScaleCallback(windowID, (ID, scaleX, scaleY) -> {
             this.makeContextCurrent();
             contentScale.forEach(c -> c.invoke(scaleX, scaleY));
@@ -80,10 +80,10 @@ public class GlfwCallbacks extends AbstractCallbacks {
     }
 
     @Override
-    public void addWindowFocusCallback(WindowFocusCallback callback) {
-        super.addWindowFocusCallback(callback);
+    public void addWindowFocus(WindowFocusCallback callback) {
+        super.addWindowFocus(callback);
 
-        if(callbackFocus == null) return;
+        if(callbackFocus != null) return;
         callbackFocus = glfwSetWindowFocusCallback(windowID, (ID, focused) -> {
             this.makeContextCurrent();
             windowFocus.forEach(c -> c.invoke(focused));
@@ -91,10 +91,10 @@ public class GlfwCallbacks extends AbstractCallbacks {
     }
 
     @Override
-    public void addWindowIconifyCallback(WindowIconifyCallback callback) {
-        super.addWindowIconifyCallback(callback);
+    public void addWindowIconify(WindowIconifyCallback callback) {
+        super.addWindowIconify(callback);
 
-        if(callbackIconify == null) return;
+        if(callbackIconify != null) return;
         callbackIconify = glfwSetWindowIconifyCallback(windowID, (ID, iconified) -> {
             this.makeContextCurrent();
             windowIconify.forEach(c -> c.invoke(iconified));
@@ -102,10 +102,10 @@ public class GlfwCallbacks extends AbstractCallbacks {
     }
 
     @Override
-    public void addWindowMaximizeCallback(WindowMaximizeCallback callback) {
-        super.addWindowMaximizeCallback(callback);
+    public void addWindowMaximize(WindowMaximizeCallback callback) {
+        super.addWindowMaximize(callback);
 
-        if(callbackMaximize == null) return;
+        if(callbackMaximize != null) return;
         callbackMaximize = glfwSetWindowMaximizeCallback(windowID, (ID, maximized) -> {
             this.makeContextCurrent();
             windowMaximize.forEach(c -> c.invoke(maximized));
@@ -113,10 +113,10 @@ public class GlfwCallbacks extends AbstractCallbacks {
     }
 
     @Override
-    public void addWindowPosCallback(WindowPosCallback callback) {
-        super.addWindowPosCallback(callback);
+    public void addWindowPos(WindowPosCallback callback) {
+        super.addWindowPos(callback);
 
-        if(callbackPos == null) return;
+        if(callbackPos != null) return;
         callbackPos = glfwSetWindowPosCallback(windowID, (ID, x, y) -> {
             this.makeContextCurrent();
             windowPosition.forEach(c -> c.invoke(x, y));
@@ -124,10 +124,10 @@ public class GlfwCallbacks extends AbstractCallbacks {
     }
 
     @Override
-    public void addWindowRefreshCallback(WindowRefreshCallback callback) {
-        super.addWindowRefreshCallback(callback);
+    public void addWindowRefresh(WindowRefreshCallback callback) {
+        super.addWindowRefresh(callback);
 
-        if(callbackRefresh == null) return;
+        if(callbackRefresh != null) return;
         callbackRefresh = glfwSetWindowRefreshCallback(windowID, (ID) -> {
             this.makeContextCurrent();
             windowRefresh.forEach(WindowRefreshCallback::invoke);
@@ -135,10 +135,10 @@ public class GlfwCallbacks extends AbstractCallbacks {
     }
 
     @Override
-    public void addWindowSizeCallback(WindowSizeCallback callback) {
-        super.addWindowSizeCallback(callback);
+    public void addWindowSize(WindowSizeCallback callback) {
+        super.addWindowSize(callback);
 
-        if(callbackSize == null) return;
+        if(callbackSize != null) return;
         callbackSize = glfwSetWindowSizeCallback(windowID, (ID, width, height) -> {
             this.makeContextCurrent();
             windowSize.forEach(c -> c.invoke(width, height));
@@ -146,10 +146,10 @@ public class GlfwCallbacks extends AbstractCallbacks {
     }
 
     @Override
-    public void addFramebufferSizeCallback(FramebufferSizeCallback callback) {
-        super.addFramebufferSizeCallback(callback);
+    public void addFramebufferSize(FramebufferSizeCallback callback) {
+        super.addFramebufferSize(callback);
 
-        if(callbackFramebufferSize == null) return;
+        if(callbackFramebufferSize != null) return;
         callbackFramebufferSize = glfwSetFramebufferSizeCallback(windowID, (ID, width, height) -> {
             this.makeContextCurrent();
             framebufferSize.forEach(c -> c.invoke(width, height));
@@ -157,10 +157,10 @@ public class GlfwCallbacks extends AbstractCallbacks {
     }
 
     @Override
-    public void addCursorPosCallback(CursorPosCallback callback) {
-        super.addCursorPosCallback(callback);
+    public void addCursorPos(CursorPosCallback callback) {
+        super.addCursorPos(callback);
 
-        if(callbackCursorPos == null) return;
+        if(callbackCursorPos != null) return;
         callbackCursorPos = glfwSetCursorPosCallback(windowID, (windowID, x, y) -> {
             this.makeContextCurrent();
             cursorPosition.forEach(c -> c.invoke((float) x, (float) y));
@@ -168,10 +168,10 @@ public class GlfwCallbacks extends AbstractCallbacks {
     }
 
     @Override
-    public void addCursorEnterCallback(CursorEnterCallback callback) {
-        super.addCursorEnterCallback(callback);
+    public void addCursorEnter(CursorEnterCallback callback) {
+        super.addCursorEnter(callback);
 
-        if(callbackCursorEnter == null) return;
+        if(callbackCursorEnter != null) return;
         callbackCursorEnter = glfwSetCursorEnterCallback(windowID, (windowID, entered) -> {
             this.makeContextCurrent();
             cursorEnter.forEach(c -> c.invoke(entered));
@@ -179,10 +179,10 @@ public class GlfwCallbacks extends AbstractCallbacks {
     }
 
     @Override
-    public void addMouseButtonCallback(MouseButtonCallback callback) {
-        super.addMouseButtonCallback(callback);
+    public void addMouseButton(MouseButtonCallback callback) {
+        super.addMouseButton(callback);
 
-        if(callbackMouseButton == null) return;
+        if(callbackMouseButton != null) return;
         callbackMouseButton = glfwSetMouseButtonCallback(windowID, (windowID, rawButton, rawAction, rawMods) -> {
             this.makeContextCurrent();
             final MouseBtn button = GlfwMouseBtn.byGlfwValue(rawButton);
@@ -193,10 +193,10 @@ public class GlfwCallbacks extends AbstractCallbacks {
     }
 
     @Override
-    public void addScrollCallback(ScrollCallback callback) {
-        super.addScrollCallback(callback);
+    public void addScroll(ScrollCallback callback) {
+        super.addScroll(callback);
 
-        if(callbackScroll == null) return;
+        if(callbackScroll != null) return;
         callbackScroll = glfwSetScrollCallback(windowID, (windowID, offsetX, offsetY) -> {
             this.makeContextCurrent();
             scroll.forEach(c -> c.invoke((float) offsetX, (float) offsetY));
@@ -204,10 +204,10 @@ public class GlfwCallbacks extends AbstractCallbacks {
     }
 
     @Override
-    public void addCharModsCallback(CharModsCallback callback) {
-        super.addCharModsCallback(callback);
+    public void addCharMods(CharModsCallback callback) {
+        super.addCharMods(callback);
 
-        if(callbackCharMods == null) return;
+        if(callbackCharMods != null) return;
         callbackCharMods = glfwSetCharModsCallback(windowID, (windowID, codepoint, rawMods) -> {
             this.makeContextCurrent();
             final GlfwMods mods = new GlfwMods(rawMods);
@@ -216,10 +216,10 @@ public class GlfwCallbacks extends AbstractCallbacks {
     }
 
     @Override
-    public void addKeyCallback(KeyCallback callback) {
-        super.addKeyCallback(callback);
+    public void addKey(KeyCallback callback) {
+        super.addKey(callback);
 
-        if(callbackKey == null) return;
+        if(callbackKey != null) return;
         callbackKey = glfwSetKeyCallback(windowID, (windowID, rawKey, scancode, rawAction, rawMods) -> {
             this.makeContextCurrent();
             final Key key = GlfwKey.byGlfwValue(rawKey);
@@ -232,10 +232,10 @@ public class GlfwCallbacks extends AbstractCallbacks {
     }
 
     @Override
-    public void addCharCallback(CharCallback callback) {
-        super.addCharCallback(callback);
+    public void addChar(CharCallback callback) {
+        super.addChar(callback);
 
-        if(callbackChar == null) return;
+        if(callbackChar != null) return;
         callbackChar = glfwSetCharCallback(windowID, (windowID, codepoint) -> {
             this.makeContextCurrent();
             character.forEach(c -> c.invoke((char) codepoint));
@@ -243,10 +243,10 @@ public class GlfwCallbacks extends AbstractCallbacks {
     }
 
     @Override
-    public void addPreeditCallback(PreeditCallback callback) { //! ???
-        super.addPreeditCallback(callback);
+    public void addPreedit(PreeditCallback callback) { //! ???
+        super.addPreedit(callback);
 
-        if(callbackPreedit == null) return;
+        if(callbackPreedit != null) return;
         callbackPreedit = glfwSetPreeditCallback(windowID, (windowID, preeditCount, preeditStringPointer, blockCount, blockSizesPointer, focusedBlock, caret) -> {
             this.makeContextCurrent();
             preedit.forEach(c -> c.invoke(
@@ -256,10 +256,10 @@ public class GlfwCallbacks extends AbstractCallbacks {
     }
 
     @Override
-    public void addPreeditCandidateCallback(PreeditCandidateCallback callback) { //! ???
-        super.addPreeditCandidateCallback(callback);
+    public void addPreeditCandidate(PreeditCandidateCallback callback) { //! ???
+        super.addPreeditCandidate(callback);
 
-        if(callbackPreeditCandidate == null) return;
+        if(callbackPreeditCandidate != null) return;
         callbackPreeditCandidate = glfwSetPreeditCandidateCallback(windowID, (windowID, candidatesCount, selectedIndex, pageStart, pageSize) -> {
             this.makeContextCurrent();
             preeditCandidate.forEach(c -> c.invoke(candidatesCount, selectedIndex, pageStart, pageSize));
@@ -267,10 +267,10 @@ public class GlfwCallbacks extends AbstractCallbacks {
     }
 
     @Override
-    public void addDropCallback(DropCallback callback) {
-        super.addDropCallback(callback);
+    public void addDrop(DropCallback callback) {
+        super.addDrop(callback);
 
-        if(callbackDrop == null) return;
+        if(callbackDrop != null) return;
         callbackDrop = glfwSetDropCallback(windowID, (windowID, capacity, address) -> {
             this.makeContextCurrent();
             final PointerBuffer pointerBuf = MemoryUtil.memPointerBuffer(address, capacity);

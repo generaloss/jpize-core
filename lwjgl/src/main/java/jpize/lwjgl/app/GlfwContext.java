@@ -2,10 +2,8 @@ package jpize.lwjgl.app;
 
 import jpize.app.Context;
 import jpize.app.Jpize;
-import jpize.io.IAllocator;
 import jpize.lwjgl.glfw.window.GlfwWindow;
 import jpize.lwjgl.opengl.*;
-import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL;
 import org.lwjgl.opengl.GLCapabilities;
 
@@ -29,27 +27,22 @@ public class GlfwContext extends Context {
     private static final LwjglGL44 GL44 = new LwjglGL44();
     private static final LwjglGL45 GL45 = new LwjglGL45();
     private static final LwjglGL46 GL46 = new LwjglGL46();
-    private static final LwjglAllocator ALLOCATOR = new LwjglAllocator();
 
     private final GLCapabilities glCapabilities;
 
     public GlfwContext(GlfwWindow window) {
         super(window);
+        this.makeCurrent();
         this.glCapabilities = GL.createCapabilities();
+        GlfwContextManager.instance().contextToInit(this);
     }
 
     public GLCapabilities getGLCapabilities() {
         return glCapabilities;
     }
 
-    @Override
-    public IAllocator getAllocator() {
-        return ALLOCATOR;
-    }
-
-    @Override
     public void makeCurrent() {
-        super.makeCurrent();
+        GlfwContextManager.instance().makeContextCurrent(window);
         Jpize.context = this;
         Jpize.window = super.window;
         Jpize.input = super.window.getInput();
@@ -72,13 +65,30 @@ public class GlfwContext extends Context {
         Jpize.GL44 = GL44;
         Jpize.GL45 = GL45;
         Jpize.GL46 = GL46;
-        Jpize.allocator = ALLOCATOR;
+    }
+
+    @Override
+    protected void init() {
+        this.makeCurrent();
+        super.init();
+    }
+
+    @Override
+    protected void resize(int width, int height) {
+        this.makeCurrent();
+        super.resize(width, height);
     }
 
     @Override
     protected void loop() {
-        GLFW.glfwPollEvents();
+        this.makeCurrent();
         super.loop();
+    }
+
+    @Override
+    protected void exit() {
+        GlfwContextManager.instance().unregister(this);
+        super.exit();
     }
 
 }
