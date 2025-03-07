@@ -1,21 +1,16 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>io.github.generaloss</groupId>
     <artifactId>jpize-core</artifactId>
-    <version>25.3.1</version>
-    <packaging>pom</packaging>
+    <version>25.3.1-SNAPSHOT-3</version>
     <name>jpize-core</name>
 
-    <description>OpenGL Graphics Library</description>
+    <description>OpenGL Graphics Library Core</description>
     <url>https://github.com/generaloss/jpize-core</url>
-
-    <modules>
-        <module>core</module>
-        <module>lwjgl</module>
-        <module>android</module>
-    </modules>
 
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
