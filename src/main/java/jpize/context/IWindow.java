@@ -106,6 +106,8 @@ public interface IWindow extends Disposable {
 
     boolean isFullscreen();
 
-    void toggleFullscreen();
+    default void toggleFullscreen() {
+        this.setFullscreen(!this.isFullscreen());
+    }
 
 }
