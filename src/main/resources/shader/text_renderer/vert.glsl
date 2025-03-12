@@ -1,4 +1,4 @@
-#version 330
+#version 300
 
 in vec3 v_pos;
 in vec2 v_uv;
