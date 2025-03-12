@@ -101,6 +101,10 @@ public class TextureBatch implements Disposable {
     }
 
 
+    public Shader getCurrentShader() {
+        return currentShader;
+    }
+
     public void setShader(Shader shader) {
         if(shader == null){
             currentShader = defaultShader;

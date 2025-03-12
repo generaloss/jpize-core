@@ -1,6 +1,9 @@
-#version 300
+#version 300 es
+precision mediump float;
 
 in vec2 f_uv;
+
+out vec4 fragColor;
 
 uniform sampler2D u_frame1;
 uniform sampler2D u_frame2;
@@ -18,5 +21,5 @@ void main() {
     // gamma correction
     color.rgb = pow(color.rgb, vec3(1.0 / u_gamma));
 
-    gl_FragColor = color;
+    fragColor = color;
 }

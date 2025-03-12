@@ -75,6 +75,10 @@ public class VertexBatch implements Disposable {
     }
 
 
+    public Shader getCurrentShader() {
+        return currentShader;
+    }
+
     public void setShader(Shader shader) {
         if(shader == null){
             currentShader = defaultShader;

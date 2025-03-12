@@ -6,7 +6,7 @@
 
     <groupId>io.github.generaloss</groupId>
     <artifactId>jpize-core</artifactId>
-    <version>25.3.1-SNAPSHOT-9</version>
+    <version>25.3.1-SNAPSHOT-12</version>
     <name>jpize-core</name>
 
     <description>OpenGL Graphics Library Core</description>

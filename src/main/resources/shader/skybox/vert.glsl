@@ -1,7 +1,10 @@
-#version 300
+#version 300 es
+precision mediump float;
 
 in vec3 v_pos;
+
 out vec3 f_pos;
+
 uniform mat4 u_combined;
 
 void main() {

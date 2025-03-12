@@ -1,6 +1,9 @@
-#version 300
+#version 300 es
+precision mediump float;
 
 in vec2 f_uv;
+
+out vec4 fragColor;
 
 uniform sampler2D u_frame;
 uniform int u_axis;
@@ -25,5 +28,5 @@ void main() {
             col += texture2D(u_frame, p) * w;
         }
 
-    gl_FragColor=col;
+    fragColor=col;
 }

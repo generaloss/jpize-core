@@ -1,6 +1,10 @@
-#version 300
+#version 300 es
+precision mediump float;
 
 in vec2 f_uv;
+
+out vec4 fragColor;
+
 uniform sampler2D u_frame;
 uniform float u_brightness;
 
@@ -9,8 +13,8 @@ void main() {
     float brightness = dot(color.rgb, vec3(0.2126, 0.7152, 0.0722));
 
     if(brightness > u_brightness){
-        gl_FragColor = color;
+        fragColor = color;
     }else{
-        gl_FragColor = vec4(0.0, 0.0, 0.0, 1.0);
+        fragColor = vec4(0.0, 0.0, 0.0, 1.0);
     }
 }

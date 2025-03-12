@@ -1,9 +1,13 @@
-#version 300
+#version 300 es
+precision mediump float;
 
 in vec2 f_uv;
+
+out vec4 fragColor;
+
 uniform sampler2D u_frame;
 uniform sampler2D u_backFrame;
 
 void main() {
-    gl_FragColor = mix(texture2D(u_frame, f_uv), texture2D(u_backFrame, f_uv), 0.6);
+    fragColor = mix(texture2D(u_frame, f_uv), texture2D(u_backFrame, f_uv), 0.6);
 }
