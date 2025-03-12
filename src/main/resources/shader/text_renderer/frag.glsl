@@ -1,4 +1,4 @@
-#version 330
+#version 300
 
 in vec2 f_uv;
 in vec4 f_color;
