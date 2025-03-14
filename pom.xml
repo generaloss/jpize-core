@@ -26,6 +26,13 @@
             <version>25.3.1</version>
             <scope>provided</scope>
         </dependency>
+        <!-- ttf-parser -->
+        <dependency>
+            <groupId>io.github.generaloss</groupId>
+            <artifactId>stb-truetype-java</artifactId>
+            <version>25.3.1-SNAPSHOT-1</version>
+            <scope>provided</scope>
+        </dependency>
     </dependencies>
 
     <scm>
