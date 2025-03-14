@@ -20,12 +20,12 @@ void main() {
     if(u_axis == 0.0)
         for(d = 1.0 / res.x, x = -u_radius, p.x += x * d; x <= u_radius;  x++, p.x += d){
             w = w0 * exp((-x * x) / (2.0 * rr));
-            col += texture2D(u_frame, p) * w;
+            col += texture(u_frame, p) * w;
         }
     else
         for(d = 1.0 / res.y, y = -u_radius, p.y += y * d;  y <= u_radius;  y++, p.y += d){
             w = w0 * exp((-y * y) / (2.0 * rr));
-            col += texture2D(u_frame, p) * w;
+            col += texture(u_frame, p) * w;
         }
 
     fragColor=col;

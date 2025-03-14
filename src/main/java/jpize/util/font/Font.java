@@ -65,35 +65,35 @@ public class Font extends FontData {
 
 
     public Font loadDefault(int size, boolean linearFilter, Charset charset) {
-        return FNTFontLoader.loadDefault(this, size, linearFilter, charset);
+        return TTFFontLoader.loadDefault(this, size, linearFilter, charset);
     }
 
     public Font loadDefault(int size, boolean linearFilter) {
-        return FNTFontLoader.loadDefault(this, size, linearFilter);
+        return TTFFontLoader.loadDefault(this, size, linearFilter);
     }
 
     public Font loadDefault(int size) {
-        return FNTFontLoader.loadDefault(this, size);
+        return TTFFontLoader.loadDefault(this, size);
     }
 
     public Font loadDefault() {
-        return FNTFontLoader.loadDefault(this);
+        return TTFFontLoader.loadDefault(this);
     }
 
     public Font loadDefaultBold(int size, boolean linearFilter, Charset charset) {
-        return FNTFontLoader.loadDefaultBold(this, size, linearFilter, charset);
+        return TTFFontLoader.loadDefaultBold(this, size, linearFilter, charset);
     }
 
     public Font loadDefaultBold(int size, boolean linearFilter) {
-        return FNTFontLoader.loadDefaultBold(this, size, linearFilter);
+        return TTFFontLoader.loadDefaultBold(this, size, linearFilter);
     }
 
     public Font loadDefaultBold(int size) {
-        return FNTFontLoader.loadDefaultBold(this, size);
+        return TTFFontLoader.loadDefaultBold(this, size);
     }
 
     public Font loadDefaultBold() {
-        return FNTFontLoader.loadDefaultBold(this);
+        return TTFFontLoader.loadDefaultBold(this);
     }
 
     public Font loadFNT(Resource resource, boolean linearFilter) {
@@ -105,19 +105,19 @@ public class Font extends FontData {
     }
 
     public Font loadTTF(Resource resource, int size, boolean linearFilter, Charset charset) {
-        return FNTFontLoader.loadTTF(this, resource, size, linearFilter, charset);
+        return TTFFontLoader.load(this, resource, size, linearFilter, charset);
     }
 
     public Font loadTTF(String internalPath, int size, boolean linearFilter, Charset charset) {
-        return FNTFontLoader.loadTTF(this, internalPath, size, linearFilter, charset);
+        return TTFFontLoader.load(this, internalPath, size, linearFilter, charset);
     }
 
     public Font loadTTF(Resource resource, int size, boolean linearFilter) {
-        return FNTFontLoader.loadTTF(this, resource, size, linearFilter);
+        return TTFFontLoader.load(this, resource, size, linearFilter);
     }
 
     public Font loadTTF(String internalPath, int size, boolean linearFilter) {
-        return FNTFontLoader.loadTTF(this, internalPath, size, linearFilter);
+        return TTFFontLoader.load(this, internalPath, size, linearFilter);
     }
 
 
