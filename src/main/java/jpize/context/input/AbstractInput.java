@@ -2,23 +2,17 @@ package jpize.context.input;
 
 import jpize.context.IWindow;
 import jpize.util.math.geometry.Intersector;
+import jpize.util.math.geometry.Recti;
 import jpize.util.math.vector.Vec2f;
 
-import java.awt.*;
 import java.nio.IntBuffer;
 
 public abstract class AbstractInput {
 
     protected final IWindow window;
-    private final InputMonitor inputMonitor;
 
     public AbstractInput(IWindow window) {
         this.window = window;
-        this.inputMonitor = new InputMonitor(window);
-    }
-
-    public InputMonitor getInputMonitor() {
-        return inputMonitor;
     }
 
 
@@ -29,41 +23,42 @@ public abstract class AbstractInput {
     public abstract String getKeyName(Key key);
 
 
-    public boolean isKeyDown(Key key) {
-        return inputMonitor.isKeyDown(key);
+    public abstract boolean isKeyDown(Key key);
+
+    public abstract boolean isKeyPressed(Key key);
+
+    public abstract boolean isKeyUp(Key key);
+
+
+    public abstract Action getMouseButton(int index, MouseBtn button);
+
+    public Action getMouseButton(MouseBtn button) {
+        return this.getMouseButton(0, button);
     }
 
-    public boolean isKeyPressed(Key key) {
-        return this.getKey(key).isPressed();
-    }
 
-    public boolean isKeyUp(Key key) {
-        return inputMonitor.isKeyUp(key);
-    }
-
-
-    public abstract Action getMouseButton(MouseBtn button);
+    public abstract boolean isButtonDown(int index, MouseBtn button);
 
     public boolean isButtonDown(MouseBtn button) {
-        return inputMonitor.isMouseButtonDown(button);
+        return this.isButtonDown(0, button);
     }
+
+    public abstract boolean isButtonPressed(int index, MouseBtn button);
 
     public boolean isButtonPressed(MouseBtn button) {
-        return this.getMouseButton(button).isPressed();
+        return this.isButtonPressed(0, button);
     }
+
+    public abstract boolean isButtonUp(int index, MouseBtn button);
 
     public boolean isButtonUp(MouseBtn button) {
-        return inputMonitor.isMouseButtonUp(button);
+        return this.isButtonUp(0, button);
     }
 
 
-    public float getScrollX() {
-        return inputMonitor.getScrollX();
-    }
+    public abstract float getScrollX();
 
-    public float getScrollY() {
-        return inputMonitor.getScrollY();
-    }
+    public abstract float getScrollY();
 
 
     public abstract String getClipboardString();
@@ -120,7 +115,7 @@ public abstract class AbstractInput {
     }
 
 
-    public abstract Rectangle getPreeditCursorRectangle();
+    public abstract Recti getPreeditCursorRectangle();
 
     public abstract void setPreeditCursorRectangle(int x, int y, int width, int height);
 

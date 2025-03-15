@@ -2,20 +2,25 @@ package jpize.context.input;
 
 public enum Action {
 
-    RELEASE,
-    PRESS,
-    REPEAT;
+    DOWN,
+    PRESSED,
+    UP,
+    NONE;
 
     public boolean isDown() {
-        return (this == PRESS);
+        return (this == DOWN);
     }
 
     public boolean isPressed() {
-        return (this != RELEASE);
+        return (this == PRESSED || this.isDown());
     }
 
-    public boolean isRelease() {
-        return (this == RELEASE);
+    public boolean isUp() {
+        return (this == UP);
+    }
+
+    public boolean isNone() {
+        return (this == NONE || this.isUp());
     }
 
 }

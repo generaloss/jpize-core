@@ -98,7 +98,7 @@ public class TextRenderer {
                 new Matrix4f()
             );
             renderer.mesh.setMode(GlPrimitive.QUADS);
-            Jpize.callbacks.addExitCallback(renderer::dispose);
+            Jpize.callbacks.addExit(renderer::dispose);
             RENDERER_BY_THREAD.put(threadID, renderer);
         }
         final Renderer renderer = RENDERER_BY_THREAD.get(threadID);
@@ -218,7 +218,7 @@ public class TextRenderer {
                 new Matrix4f()
             );
             renderer.mesh.setMode(GlPrimitive.QUADS);
-            Jpize.callbacks.addExitCallback(renderer::dispose);
+            Jpize.callbacks.addExit(renderer::dispose);
             RENDERER_BY_THREAD.put(threadID, renderer);
         }
         final Renderer renderer = RENDERER_BY_THREAD.get(threadID);

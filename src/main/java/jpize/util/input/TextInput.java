@@ -251,7 +251,7 @@ public class TextInput implements Iterable<String> {
     }
 
     private void onKey(Key key, int scancode, Action action, Mods mods) {
-        if(!enabledKeyInput || action.isRelease())
+        if(!enabledKeyInput || action.isUp())
             return;
 
         final Vec2i prevPosition = position.copy();

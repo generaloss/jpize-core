@@ -65,7 +65,7 @@ public class RenderQuad implements Disposable {
                 0, 1, 2,
                 2, 3, 0,
             });
-            Jpize.callbacks.addExitCallback(quad::dispose);
+            Jpize.callbacks.addExit(quad::dispose);
             BY_THREAD.put(threadID, quad);
         }
         return BY_THREAD.get(threadID);

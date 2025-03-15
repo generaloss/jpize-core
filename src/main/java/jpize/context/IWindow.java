@@ -1,22 +1,15 @@
 package jpize.context;
 
-import jpize.context.callback.AbstractCallbacks;
-import jpize.context.input.AbstractInput;
 import jpize.util.Disposable;
+import jpize.util.Insetsi;
 import jpize.util.math.vector.Vec2f;
 import jpize.util.math.vector.Vec2i;
 import jpize.util.pixmap.PixmapRGBA;
 import jpize.util.res.Resource;
 
-import java.awt.*;
-
 public interface IWindow extends Disposable {
 
     long getID();
-
-    AbstractInput getInput();
-
-    AbstractCallbacks getCallbacks();
 
 
     void makeContextCurrent();
@@ -75,7 +68,7 @@ public interface IWindow extends Disposable {
     float getContentScaleY();
 
 
-    Insets getFrameSize();
+    Insetsi getFrameSize();
 
 
     void setPos(int x, int y);

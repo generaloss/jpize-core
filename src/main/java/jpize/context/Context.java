@@ -1,33 +1,35 @@
 package jpize.context;
 
-import jpize.opengl.gl.Gl;
+import jpize.context.callback.AbstractCallbacks;
+import jpize.context.input.AbstractInput;
 import jpize.util.time.DeltaTimeCounter;
 import jpize.util.time.PerSecondCounter;
 
 public abstract class Context {
 
-    protected final IWindow window;
     private final SyncExecutor syncExecutor;
     private final PerSecondCounter fpsCounter;
     private final DeltaTimeCounter deltaTimeCounter;
 
     private JpizeApplication app;
     private boolean disableRender;
+    private boolean exitRequest;
 
-    public Context(IWindow window) {
-        this.window = window;
+    public Context() {
         this.syncExecutor = new SyncExecutor();
         this.fpsCounter = new PerSecondCounter();
         this.deltaTimeCounter = new DeltaTimeCounter();
     }
 
-    public IWindow getWindow() {
-        return window;
-    }
-
     public SyncExecutor getSyncExecutor() {
         return syncExecutor;
     }
+
+    public abstract IWindow getWindow();
+
+    public abstract AbstractInput getInput();
+
+    public abstract AbstractCallbacks getCallbacks();
 
 
     public Context setApp(JpizeApplication app) {
@@ -51,55 +53,53 @@ public abstract class Context {
 
 
     protected void init() {
-        window.getCallbacks().addWindowSize(this::resize);
         if(app != null)
             app.init();
-        window.show();
+        this.getCallbacks().invokeInit();
         // reset delta time counter after init
         fpsCounter.reset();
         deltaTimeCounter.reset();
     }
 
     protected void resize(int width, int height) {
-        Gl.viewport(width, height);
-        if(app != null) app.resize(width, height);
+        Jpize.GL11.glViewport(0, 0, width, height);
+        if(app != null)
+            app.resize(width, height);
+        this.getCallbacks().invokeResize(width, height);
     }
 
     protected void loop() {
-        // close window
-        if(window.shouldClose()){
-            exit();
+        // close
+        if(exitRequest){
+            this.exit();
             return;
         }
-
         // update
-        if(app != null) app.update();
+        if(app != null)
+            app.update();
+        this.getCallbacks().invokeUpdate();
         // execute tasks in context thread
         syncExecutor.sync();
         // render
         if(app != null && !disableRender){
             app.render();
-            window.swapBuffers();
+            this.getCallbacks().invokeRender();
         }
-        // clear down/release keys
-        window.getInput()
-            .getInputMonitor().clear();
-
         // update fps & delta time counters
         fpsCounter.update();
         deltaTimeCounter.update();
     }
 
     protected void exit() {
-        // context is current (calls in loop)
-        window.hide();
+        // (context is current (calls in loop))
+        this.getCallbacks().invokeExit();
         // free resources
-        if(app != null) app.dispose();
-        window.dispose();
+        if(app != null)
+            app.dispose();
     }
 
     public void close() {
-        window.setShouldClose(true);
+        exitRequest = true;
     }
 
 }

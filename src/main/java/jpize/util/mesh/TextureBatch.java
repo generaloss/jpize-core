@@ -8,7 +8,7 @@ import jpize.util.Disposable;
 import jpize.util.array.FloatList;
 import jpize.util.color.Color;
 import jpize.util.color.AbstractColor;
-import jpize.util.math.geometry.Rect;
+import jpize.util.math.geometry.Rectf;
 import jpize.util.region.Region;
 import jpize.util.region.TextureRegion;
 import jpize.util.res.Resource;
@@ -30,7 +30,7 @@ public class TextureBatch implements Disposable {
     // quad
     private Texture2D quadTexture;
     private final Region quadRegion;
-    private final Rect quadRect;
+    private final Rectf quadRect;
     private final Color quadColor;
     // data
     private int size;
@@ -63,7 +63,7 @@ public class TextureBatch implements Disposable {
         this.setShader(defaultShader);
         // quad
         this.quadRegion = new TextureRegion();
-        this.quadRect = new Rect();
+        this.quadRect = new Rectf();
         this.quadColor = new Color();
         // transform
         this.transformMat = new Matrix3f();

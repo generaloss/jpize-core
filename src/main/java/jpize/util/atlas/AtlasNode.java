@@ -1,17 +1,16 @@
 package jpize.util.atlas;
 
+import jpize.util.math.geometry.Recti;
 import jpize.util.pixmap.PixmapRGBA;
-
-import java.awt.*;
 
 class AtlasNode {
     
     private PixmapRGBA imagePixmap;
-    private final Rectangle rectangle;
+    private final Recti rectangle;
     private AtlasNode child1, child2;
 
     public AtlasNode(int x, int y, int width, int height) {
-        this.rectangle = new Rectangle(x, y, width, height);
+        this.rectangle = new Recti(x, y, width, height);
     }
     
     
