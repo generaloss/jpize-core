@@ -1,6 +1,7 @@
 package jpize.context.input;
 
-import jpize.context.IWindow;
+import jpize.context.Context;
+import jpize.context.Jpize;
 import jpize.util.math.geometry.Intersector;
 import jpize.util.math.geometry.Recti;
 import jpize.util.math.vector.Vec2f;
@@ -9,56 +10,92 @@ import java.nio.IntBuffer;
 
 public abstract class AbstractInput {
 
-    protected final IWindow window;
+    private final InputMonitor inputMonitor;
 
-    public AbstractInput(IWindow window) {
-        this.window = window;
+    public AbstractInput(Context context) {
+        this.inputMonitor = new InputMonitor(context, this);
     }
 
+    public InputMonitor getInputMonitor() {
+        return inputMonitor;
+    }
 
-    public abstract Action getKey(Key key);
 
     public abstract int getKeyScancode(Key key);
 
     public abstract String getKeyName(Key key);
 
 
-    public abstract boolean isKeyDown(Key key);
+    public Action getKey(Key key) {
+        if(inputMonitor.isKeyDown(key)) return Action.DOWN;
+        if(inputMonitor.isKeyPressed(key)) return Action.PRESSED;
+        if(inputMonitor.isKeyUp(key)) return Action.UP;
+        return Action.NONE;
+    }
 
-    public abstract boolean isKeyPressed(Key key);
+    public boolean isKeyDown(Key key) {
+        return inputMonitor.isKeyDown(key);
+    }
 
-    public abstract boolean isKeyUp(Key key);
+    public boolean isKeyPressed(Key key) {
+        return inputMonitor.isKeyPressed(key);
+    }
+
+    public boolean isKeyUp(Key key) {
+        return inputMonitor.isKeyUp(key);
+    }
 
 
-    public abstract Action getMouseButton(int index, MouseBtn button);
+    public abstract int getMaxMousesCount();
+
+    public int getMouseButtonPressedCount(MouseBtn button) {
+        return inputMonitor.getMouseButtonPressedCount(button);
+    }
+
+    public Action getMouseButton(int index, MouseBtn button) {
+        if(inputMonitor.isMouseButtonDown(index, button)) return Action.DOWN;
+        if(inputMonitor.isMouseButtonPressed(index, button)) return Action.PRESSED;
+        if(inputMonitor.isMouseButtonUp(index, button)) return Action.UP;
+        return Action.NONE;
+    }
+
+    public boolean isButtonDown(int index, MouseBtn button) {
+        return inputMonitor.isMouseButtonDown(index, button);
+    }
+
+    public boolean isButtonPressed(int index, MouseBtn button) {
+        return inputMonitor.isMouseButtonPressed(index, button);
+    }
+
+    public boolean isButtonUp(int index, MouseBtn button) {
+        return inputMonitor.isMouseButtonUp(index, button);
+    }
+
 
     public Action getMouseButton(MouseBtn button) {
         return this.getMouseButton(0, button);
     }
 
-
-    public abstract boolean isButtonDown(int index, MouseBtn button);
-
     public boolean isButtonDown(MouseBtn button) {
         return this.isButtonDown(0, button);
     }
 
-    public abstract boolean isButtonPressed(int index, MouseBtn button);
-
     public boolean isButtonPressed(MouseBtn button) {
         return this.isButtonPressed(0, button);
     }
-
-    public abstract boolean isButtonUp(int index, MouseBtn button);
 
     public boolean isButtonUp(MouseBtn button) {
         return this.isButtonUp(0, button);
     }
 
 
-    public abstract float getScrollX();
+    public float getScrollX() {
+        return inputMonitor.getScrollX();
+    }
 
-    public abstract float getScrollY();
+    public float getScrollY() {
+        return inputMonitor.getScrollY();
+    }
 
 
     public abstract String getClipboardString();
@@ -91,16 +128,36 @@ public abstract class AbstractInput {
 
 
 
-    public abstract Vec2f getCursorNativePos(Vec2f dst);
+    public abstract Vec2f getCursorNativePos(Vec2f dst, int mouseIndex);
 
-    public abstract Vec2f getCursorPos(Vec2f dst);
+    public Vec2f getCursorNativePos(Vec2f dst) {
+        return this.getCursorNativePos(dst, 0);
+    }
 
-    public abstract float getCursorX();
+    public abstract Vec2f getCursorPos(Vec2f dst, int mouseIndex);
 
-    public abstract float getCursorNativeY();
+    public Vec2f getCursorPos(Vec2f dst) {
+        return this.getCursorPos(dst, 0);
+    }
+
+    public abstract float getCursorX(int mouseIndex);
+
+    public float getCursorX() {
+        return this.getCursorX(0);
+    }
+
+    public abstract float getCursorNativeY(int mouseIndex);
+
+    public float getCursorNativeY() {
+        return this.getCursorNativeY(0);
+    }
+
+    public float getCursorY(int mouseIndex) {
+        return (Jpize.getHeight() - this.getCursorNativeY(mouseIndex));
+    }
 
     public float getCursorY() {
-        return (window.getHeight() - this.getCursorNativeY());
+        return this.getCursorY(0);
     }
 
     public abstract void setCursorPos(double x, double y);
