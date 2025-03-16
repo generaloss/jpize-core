@@ -88,6 +88,7 @@ public abstract class Context {
         // update fps & delta time counters
         fpsCounter.update();
         deltaTimeCounter.update();
+        this.getInput().getInputMonitor().clear();
     }
 
     protected void exit() {

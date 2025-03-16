@@ -2,6 +2,6 @@ package jpize.context.callback;
 
 public interface CursorPosCallback {
 
-    void invoke(float x, float y);
+    void invoke(int cursorIndex, float x, float y);
 
 }

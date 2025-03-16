@@ -216,8 +216,8 @@ public abstract class AbstractCallbacks {
         cursorPosition.remove(callback);
     }
 
-    public void invokeCursorPos(float x, float y) {
-        cursorPosition.forEach(callback -> callback.invoke(x, y));
+    public void invokeCursorPos(int cursorIndex, float x, float y) {
+        cursorPosition.forEach(callback -> callback.invoke(cursorIndex, x, y));
     }
 
 
@@ -229,8 +229,8 @@ public abstract class AbstractCallbacks {
         cursorEnter.remove(callback);
     }
 
-    public void invokeCursorEnter(boolean entered) {
-        cursorEnter.forEach(callback -> callback.invoke(entered));
+    public void invokeCursorEnter(int cursorIndex, boolean entered) {
+        cursorEnter.forEach(callback -> callback.invoke(cursorIndex, entered));
     }
 
 

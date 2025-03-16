@@ -43,7 +43,7 @@ public class RotationInput {
     }
 
 
-    private void onCursorCallback(float x, float y) {
+    private void onCursorCallback(int cursorIndex, float x, float y) {
         final float dx = (prevX - Jpize.input.getCursorX());
         final float dy = (prevY - Jpize.input.getCursorNativeY());
         this.centerCursor();

@@ -13,7 +13,7 @@ public abstract class AbstractInput {
     private final InputMonitor inputMonitor;
 
     public AbstractInput(Context context) {
-        this.inputMonitor = new InputMonitor(context, this);
+        this.inputMonitor = new InputMonitor(context);
     }
 
     public InputMonitor getInputMonitor() {
@@ -128,32 +128,32 @@ public abstract class AbstractInput {
 
 
 
-    public abstract Vec2f getCursorNativePos(Vec2f dst, int mouseIndex);
+    public abstract Vec2f getCursorNativePos(Vec2f dst, int cursorIndex);
 
     public Vec2f getCursorNativePos(Vec2f dst) {
         return this.getCursorNativePos(dst, 0);
     }
 
-    public abstract Vec2f getCursorPos(Vec2f dst, int mouseIndex);
+    public abstract Vec2f getCursorPos(Vec2f dst, int cursorIndex);
 
     public Vec2f getCursorPos(Vec2f dst) {
         return this.getCursorPos(dst, 0);
     }
 
-    public abstract float getCursorX(int mouseIndex);
+    public abstract float getCursorX(int cursorIndex);
 
     public float getCursorX() {
         return this.getCursorX(0);
     }
 
-    public abstract float getCursorNativeY(int mouseIndex);
+    public abstract float getCursorNativeY(int cursorIndex);
 
     public float getCursorNativeY() {
         return this.getCursorNativeY(0);
     }
 
-    public float getCursorY(int mouseIndex) {
-        return (Jpize.getHeight() - this.getCursorNativeY(mouseIndex));
+    public float getCursorY(int cursorIndex) {
+        return (Jpize.getHeight() - this.getCursorNativeY(cursorIndex));
     }
 
     public float getCursorY() {

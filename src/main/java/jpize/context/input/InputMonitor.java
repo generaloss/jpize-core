@@ -8,27 +8,33 @@ public class InputMonitor {
     public static final int KEYS_COUNT = (Key.values().length);
     public static final int BUTTONS_COUNT = (MouseBtn.values().length);
 
-    private final BitSet keysDown, keysPressed, keysUp;
-    private final BitSet btnsDown, btnsPressed, btnsUp;
-    private final int[] btnsPressedMousesCount;
+    private final Context context;
+    private BitSet keysDown, keysPressed, keysUp;
+    private BitSet btnsDown, btnsPressed, btnsUp;
+    private int[] btnsPressedMousesCount;
     private float scrollX, scrollY;
 
-    public InputMonitor(Context context, AbstractInput input) {
-        this.keysDown = new BitSet(KEYS_COUNT);
-        this.keysPressed = new BitSet(KEYS_COUNT);
-        this.keysUp = new BitSet(KEYS_COUNT);
+    public InputMonitor(Context context) {
+        this.context = context;
+        context.getCallbacks().addInit(this::onInit);
+    }
 
-        final int btnsSize = (BUTTONS_COUNT * input.getMaxMousesCount());
-        this.btnsDown = new BitSet(btnsSize);
-        this.btnsPressed = new BitSet(btnsSize);
-        this.btnsUp = new BitSet(btnsSize);
-        this.btnsPressedMousesCount = new int[BUTTONS_COUNT];
+
+    private void onInit() {
+        keysDown = new BitSet(KEYS_COUNT);
+        keysPressed = new BitSet(KEYS_COUNT);
+        keysUp = new BitSet(KEYS_COUNT);
+
+        final int btnsSize = (BUTTONS_COUNT * context.getInput().getMaxMousesCount());
+        btnsDown = new BitSet(btnsSize);
+        btnsPressed = new BitSet(btnsSize);
+        btnsUp = new BitSet(btnsSize);
+        btnsPressedMousesCount = new int[BUTTONS_COUNT];
 
         context.getCallbacks().addKey(this::onKey);
         context.getCallbacks().addMouseButton(this::onButton);
         context.getCallbacks().addScroll(this::onScroll);
     }
-
 
     private void onKey(Key key, int scancode, Action action, Mods mods) {
         final int index = key.ordinal();
