@@ -69,7 +69,6 @@ public interface GLI31 extends GLI30 {
     int GL_INVALID_INDEX = -1;
 
     void glDrawArraysInstanced(int mode, int first, int count, int primcount);
-    void nglDrawElementsInstanced(int mode, int count, int type, long indices, int primcount);
     void glDrawElementsInstanced(int mode, int count, int type, long indices, int primcount);
     void glDrawElementsInstanced(int mode, int type, ByteBuffer indices, int primcount);
     void glDrawElementsInstanced(int mode, ByteBuffer indices, int primcount);
@@ -78,24 +77,18 @@ public interface GLI31 extends GLI30 {
     void glCopyBufferSubData(int readTarget, int writeTarget, long readOffset, long writeOffset, long size);
     void glPrimitiveRestartIndex(int index);
     void glTexBuffer(int target, int internalformat, int buffer);
-    void nglGetUniformIndices(int program, int uniformCount, long uniformNames, long uniformIndices);
     // void glGetUniformIndices(int program, PointerBuffer uniformNames, IntBuffer uniformIndices);
     void glGetUniformIndices(int program, CharSequence[] uniformNames, IntBuffer uniformIndices);
     int glGetUniformIndices(int program, CharSequence uniformName);
-    void nglGetActiveUniformsiv(int program, int uniformCount, long uniformIndices, int pname, long params);
     void glGetActiveUniformsiv(int program, IntBuffer uniformIndices, int pname, IntBuffer params);
     int glGetActiveUniformsi(int program, int uniformIndex, int pname);
-    void nglGetActiveUniformName(int program, int uniformIndex, int bufSize, long length, long uniformName);
     void glGetActiveUniformName(int program, int uniformIndex, IntBuffer length, ByteBuffer uniformName);
     String glGetActiveUniformName(int program, int uniformIndex, int bufSize);
     String glGetActiveUniformName(int program, int uniformIndex);
-    int nglGetUniformBlockIndex(int program, long uniformBlockName);
     int glGetUniformBlockIndex(int program, ByteBuffer uniformBlockName);
     int glGetUniformBlockIndex(int program, CharSequence uniformBlockName);
-    void nglGetActiveUniformBlockiv(int program, int uniformBlockIndex, int pname, long params);
     void glGetActiveUniformBlockiv(int program, int uniformBlockIndex, int pname, IntBuffer params);
     int glGetActiveUniformBlocki(int program, int uniformBlockIndex, int pname);
-    void nglGetActiveUniformBlockName(int program, int uniformBlockIndex, int bufSize, long length, long uniformBlockName);
     void glGetActiveUniformBlockName(int program, int uniformBlockIndex, IntBuffer length, ByteBuffer uniformBlockName);
     String glGetActiveUniformBlockName(int program, int uniformBlockIndex, int bufSize);
     String glGetActiveUniformBlockName(int program, int uniformBlockIndex);

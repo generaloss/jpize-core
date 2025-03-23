@@ -119,7 +119,6 @@ public interface GLI42 extends GLI41 {
     int GL_NUM_SAMPLE_COUNTS = 37760;
     int GL_MIN_MAP_BUFFER_ALIGNMENT = 37052;
 
-    void nglGetActiveAtomicCounterBufferiv(int program, int bufferIndex, int pname, long params);
     void glGetActiveAtomicCounterBufferiv(int program, int bufferIndex, int pname, IntBuffer params);
     int glGetActiveAtomicCounterBufferi(int program, int bufferIndex, int pname);
     void glTexStorage1D(int target, int levels, int internalformat, int width);
@@ -128,13 +127,11 @@ public interface GLI42 extends GLI41 {
     void glDrawTransformFeedbackInstanced(int mode, int id, int primcount);
     void glDrawTransformFeedbackStreamInstanced(int mode, int id, int stream, int primcount);
     void glDrawArraysInstancedBaseInstance(int mode, int first, int count, int primcount, int baseinstance);
-    void nglDrawElementsInstancedBaseInstance(int mode, int count, int type, long indices, int primcount, int baseinstance);
     void glDrawElementsInstancedBaseInstance(int mode, int count, int type, long indices, int primcount, int baseinstance);
     void glDrawElementsInstancedBaseInstance(int mode, int type, ByteBuffer indices, int primcount, int baseinstance);
     void glDrawElementsInstancedBaseInstance(int mode, ByteBuffer indices, int primcount, int baseinstance);
     void glDrawElementsInstancedBaseInstance(int mode, ShortBuffer indices, int primcount, int baseinstance);
     void glDrawElementsInstancedBaseInstance(int mode, IntBuffer indices, int primcount, int baseinstance);
-    void nglDrawElementsInstancedBaseVertexBaseInstance(int mode, int count, int type, long indices, int primcount, int basevertex, int baseinstance);
     void glDrawElementsInstancedBaseVertexBaseInstance(int mode, int count, int type, long indices, int primcount, int basevertex, int baseinstance);
     void glDrawElementsInstancedBaseVertexBaseInstance(int mode, int type, ByteBuffer indices, int primcount, int basevertex, int baseinstance);
     void glDrawElementsInstancedBaseVertexBaseInstance(int mode, ByteBuffer indices, int primcount, int basevertex, int baseinstance);
@@ -142,7 +139,6 @@ public interface GLI42 extends GLI41 {
     void glDrawElementsInstancedBaseVertexBaseInstance(int mode, IntBuffer indices, int primcount, int basevertex, int baseinstance);
     void glBindImageTexture(int unit, int texture, int level, boolean layered, int layer, int access, int format);
     void glMemoryBarrier(int barriers);
-    void nglGetInternalformativ(int target, int internalformat, int pname, int bufSize, long params);
     void glGetInternalformativ(int target, int internalformat, int pname, IntBuffer params);
     int glGetInternalformati(int target, int internalformat, int pname);
     void glGetActiveAtomicCounterBufferiv(int program, int bufferIndex, int pname, int[] params);

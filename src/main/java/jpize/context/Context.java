@@ -52,9 +52,10 @@ public abstract class Context {
     }
 
 
-    protected void init() {
+    public void init() {
         if(app != null)
             app.init();
+        this.getCallbacks().addResize(this::resize);
         this.getCallbacks().invokeInit();
         // reset delta time counter after init
         fpsCounter.reset();
@@ -65,10 +66,9 @@ public abstract class Context {
         Jpize.GL11.glViewport(0, 0, width, height);
         if(app != null)
             app.resize(width, height);
-        this.getCallbacks().invokeResize(width, height);
     }
 
-    protected void loop() {
+    public void loop() {
         // close
         if(exitRequest){
             this.exit();
@@ -91,7 +91,7 @@ public abstract class Context {
         this.getInput().getInputMonitor().clear();
     }
 
-    protected void exit() {
+    public void exit() {
         // (context is current (calls in loop))
         this.getCallbacks().invokeExit();
         // free resources

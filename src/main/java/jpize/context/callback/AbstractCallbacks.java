@@ -22,8 +22,7 @@ public abstract class AbstractCallbacks {
     protected final List<WindowMaximizeCallback> windowMaximize = new CopyOnWriteArrayList<>();
     protected final List<WindowPosCallback> windowPosition = new CopyOnWriteArrayList<>();
     protected final List<Runnable> windowRefresh = new CopyOnWriteArrayList<>();
-    protected final List<WindowSizeCallback> windowSize = new CopyOnWriteArrayList<>();
-    protected final List<FramebufferSizeCallback> framebufferSize = new CopyOnWriteArrayList<>();
+    protected final List<ResizeCallback> windowResize = new CopyOnWriteArrayList<>();
 
     protected final List<CursorPosCallback> cursorPosition = new CopyOnWriteArrayList<>();
     protected final List<CursorEnterCallback> cursorEnter = new CopyOnWriteArrayList<>();
@@ -181,29 +180,16 @@ public abstract class AbstractCallbacks {
     }
 
 
-    public void addWindowSize(WindowSizeCallback callback) {
-        windowSize.add(callback);
+    public void addWindowResize(ResizeCallback callback) {
+        windowResize.add(callback);
     }
 
-    public void removeWindowSize(WindowSizeCallback callback) {
-        windowSize.remove(callback);
+    public void removeWindowResize(ResizeCallback callback) {
+        windowResize.remove(callback);
     }
 
-    public void invokeWindowSize(int width, int height) {
-        windowSize.forEach(callback -> callback.invoke(width, height));
-    }
-
-
-    public void addFramebufferSize(FramebufferSizeCallback callback) {
-        framebufferSize.add(callback);
-    }
-
-    public void removeFramebufferSize(FramebufferSizeCallback callback) {
-        framebufferSize.remove(callback);
-    }
-
-    public void invokeFramebufferSize(int width, int height) {
-        framebufferSize.forEach(callback -> callback.invoke(width, height));
+    public void invokeWindowResize(int width, int height) {
+        windowResize.forEach(callback -> callback.invoke(width, height));
     }
 
 

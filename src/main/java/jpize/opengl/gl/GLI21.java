@@ -28,17 +28,11 @@ public interface GLI21 extends GLI20 {
     int GL_COMPRESSED_SLUMINANCE = 35914;
     int GL_COMPRESSED_SLUMINANCE_ALPHA = 35915;
 
-    void nglUniformMatrix2x3fv(int location, int count, boolean transpose, long value);
     void glUniformMatrix2x3fv(int location, boolean transpose, FloatBuffer value);
-    void nglUniformMatrix3x2fv(int location, int count, boolean transpose, long value);
     void glUniformMatrix3x2fv(int location, boolean transpose, FloatBuffer value);
-    void nglUniformMatrix2x4fv(int location, int count, boolean transpose, long value);
     void glUniformMatrix2x4fv(int location, boolean transpose, FloatBuffer value);
-    void nglUniformMatrix4x2fv(int location, int count, boolean transpose, long value);
     void glUniformMatrix4x2fv(int location, boolean transpose, FloatBuffer value);
-    void nglUniformMatrix3x4fv(int location, int count, boolean transpose, long value);
     void glUniformMatrix3x4fv(int location, boolean transpose, FloatBuffer value);
-    void nglUniformMatrix4x3fv(int location, int count, boolean transpose, long value);
     void glUniformMatrix4x3fv(int location, boolean transpose, FloatBuffer value);
     void glUniformMatrix2x3fv(int location, boolean transpose, float[] value);
     void glUniformMatrix3x2fv(int location, boolean transpose, float[] value);
