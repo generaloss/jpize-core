@@ -280,7 +280,7 @@ public interface GLI43 extends GLI42 {
     void glDebugMessageInsert(int source, int type, int id, int severity, ByteBuffer message);
     void glDebugMessageInsert(int source, int type, int id, int severity, CharSequence message);
     interface GLDebugMessageCallback {
-        void invoke(int var1, int var2, int var3, int var4, int var5, long var6, long var8);
+        void invoke(int source, int type, int id, int severity, int length, String message, long userParam);
     }
     void glDebugMessageCallback(GLDebugMessageCallback callback, long userParam);
     int glGetDebugMessageLog(int count, IntBuffer sources, IntBuffer types, IntBuffer ids, IntBuffer severities, IntBuffer lengths, ByteBuffer messageLog);
