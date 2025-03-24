@@ -5,7 +5,7 @@ import jpize.util.res.Resource;
 
 import java.nio.ByteBuffer;
 
-public class FreeType implements Disposable {
+public class FreeType { //  implements Disposable
 
     private static int encode(char a, char b, char c, char d) {
         return (a << 24) | (b << 16) | (c << 8) | d;
@@ -149,7 +149,7 @@ public class FreeType implements Disposable {
 
     private static native void doneFreeType(long library);
 
-    @Override
+    // @Override
     public void dispose() {
         doneFreeType(address);
     }
