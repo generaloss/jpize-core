@@ -1,5 +1,6 @@
 package jpize.stb.freetype;
 
+import jpize.stb.NativeLibLoader;
 import jpize.util.res.Resource;
 import jpize.util.Disposable;
 import jpize.util.res.TempFileResource;
@@ -104,44 +105,13 @@ public class FreeType implements Disposable {
     private static native long initFreeType();
 
     public static FreeType init() {
-        loadNativeLibrary();
-        //System.loadLibrary("/lib/libjpize_freetype.so");
+        NativeLibLoader.load("jpize_freetype");
 
         final long address = initFreeType();
         if(address == 0)
             throw new RuntimeException("Couldn't initialize FreeType library, FreeType error code: " + getLastErrorCode());
 
         return new FreeType(address);
-    }
-
-    private static void loadNativeLibrary() {
-        final String osName = System.getProperty("os.name").toLowerCase();
-        final String arch = System.getProperty("os.arch").toLowerCase();
-
-        String libName;
-        if (osName.contains("win")) {
-            libName = "jpize_freetype.dll";
-        } else if (osName.contains("mac")) {
-            libName = "libjpize_freetype.dylib";
-        } else {
-            libName = "libjpize_freetype.so";
-        }
-
-        String resourcePath = "/lib/" + osName + "-" + arch + "/" + libName;
-
-        try {
-            final InputStream is = Resource.internal(resourcePath).inStream();
-            // Создаём временный файл
-            final TempFileResource tempFile = Resource.temp("libjpize_freetype", ".so");
-            tempFile.deleteOnExit();
-            Files.copy(is, tempFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
-
-            // Загружаем библиотеку
-            System.load(tempFile.absolutePath());
-
-        } catch (Exception e) {
-            throw new RuntimeException("Failed to load native library", e);
-        }
     }
 
 

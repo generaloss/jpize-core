@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.10)
 project(jpize_freetype)
 
-# Определяем платформу
+# platform
 if (ANDROID)
     set(TARGET_OS "android")
 elseif (WIN32)
@@ -10,25 +10,31 @@ elseif (UNIX)
     set(TARGET_OS "linux")
 endif()
 
-# Пути к заголовочным файлам JDK
+# jdk headers
 set(JAVA_HOME "/usr/lib/jvm/java-17-openjdk")
 include_directories("${JAVA_HOME}/include")
 include_directories("${JAVA_HOME}/include/linux") # Меняется для Windows/macOS
 
-# Добавляем исходники
-set(SOURCE_FILES src/jpize_stb_freetype_FreeType.cpp)
+# find sources
+file(GLOB_RECURSE SOURCE_FILES src/*.cpp)
 
-# Добавляем FreeType
+# add freetype lib
 find_package(Freetype REQUIRED)
 
-# Создаем динамическую библиотеку (JNI требует SHARED)
+# create SHARED library
 add_library(jpize_freetype SHARED ${SOURCE_FILES})
 
-# Подключаем заголовочные файлы и библиотеки
+# include headers
 target_include_directories(jpize_freetype PRIVATE ${FREETYPE_INCLUDE_DIRS})
 target_link_libraries(jpize_freetype PRIVATE ${FREETYPE_LIBRARIES})
 
-# Опции компиляции
+if(ANDROID)
+    set(CMAKE_TOOLCHAIN_FILE "${ANDROID_NDK}/build/cmake/android.toolchain.cmake")
+    set(ANDROID_ABI "arm64-v8a")
+    set(ANDROID_NATIVE_API_LEVEL 34)
+endif()
+
+# compilation options
 if (TARGET_OS STREQUAL "android")
     message(STATUS "Compiling for Android")
     target_link_libraries(jpize_freetype PRIVATE android log)
