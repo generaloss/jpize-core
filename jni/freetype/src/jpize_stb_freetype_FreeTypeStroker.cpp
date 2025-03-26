@@ -1,4 +1,4 @@
-#include "jpize_stb_freetype_FreeTypeStroker.h"
+#include "headers/jpize_stb_freetype_FreeTypeStroker.h"
 #include <ft2build.h>
 #include FT_FREETYPE_H
 #include FT_STROKER_H
