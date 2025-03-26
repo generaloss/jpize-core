@@ -1,11 +1,15 @@
 package jpize.stb.freetype;
 
-import jpize.util.Disposable;
 import jpize.util.res.Resource;
+import jpize.util.Disposable;
+import jpize.util.res.TempFileResource;
 
+import java.io.InputStream;
 import java.nio.ByteBuffer;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 
-public class FreeType { //  implements Disposable
+public class FreeType implements Disposable {
 
     private static int encode(char a, char b, char c, char d) {
         return (a << 24) | (b << 16) | (c << 8) | d;
@@ -97,16 +101,47 @@ public class FreeType { //  implements Disposable
 
     public static native int getLastErrorCode();
 
-    private static native long initFreeTypeJni();
+    private static native long initFreeType();
 
-    public static FreeType initFreeType() {
-        System.loadLibrary("freetype");
+    public static FreeType init() {
+        loadNativeLibrary();
+        //System.loadLibrary("/lib/libjpize_freetype.so");
 
-        final long address = initFreeTypeJni();
+        final long address = initFreeType();
         if(address == 0)
             throw new RuntimeException("Couldn't initialize FreeType library, FreeType error code: " + getLastErrorCode());
 
         return new FreeType(address);
+    }
+
+    private static void loadNativeLibrary() {
+        final String osName = System.getProperty("os.name").toLowerCase();
+        final String arch = System.getProperty("os.arch").toLowerCase();
+
+        String libName;
+        if (osName.contains("win")) {
+            libName = "jpize_freetype.dll";
+        } else if (osName.contains("mac")) {
+            libName = "libjpize_freetype.dylib";
+        } else {
+            libName = "libjpize_freetype.so";
+        }
+
+        String resourcePath = "/lib/" + osName + "-" + arch + "/" + libName;
+
+        try {
+            final InputStream is = Resource.internal(resourcePath).inStream();
+            // Создаём временный файл
+            final TempFileResource tempFile = Resource.temp("libjpize_freetype", ".so");
+            tempFile.deleteOnExit();
+            Files.copy(is, tempFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+
+            // Загружаем библиотеку
+            System.load(tempFile.absolutePath());
+
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to load native library", e);
+        }
     }
 
 
@@ -149,7 +184,7 @@ public class FreeType { //  implements Disposable
 
     private static native void doneFreeType(long library);
 
-    // @Override
+    @Override
     public void dispose() {
         doneFreeType(address);
     }

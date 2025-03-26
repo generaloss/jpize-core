@@ -1,4 +1,5 @@
-import jpize.stb.freetype.FreeType;
+import jpize.stb.freetype.*;
+import jpize.util.res.Resource;
 
 public class Test {
 
@@ -6,13 +7,13 @@ public class Test {
         return ((value + 63) & -64) >> 6;
     }
 
-    public static void main(String[] args) throws Exception {
-        final FreeType library = FreeType.initFreeType();
+    public static void main(String[] args) {
+        final FreeType library = FreeType.init();
 
-        // final Face face = library.newFace(Resource.internal("/lsans.ttf"), 0);
-        // face.setPixelSizes(0, 15);
-        // final SizeMetrics faceMetrics = face.getSize().getMetrics();
-        // System.out.println(toInt(faceMetrics.getAscender()) + ", " + toInt(faceMetrics.getDescender()) + ", " + toInt(faceMetrics.getHeight()));
+        final FreeTypeFace face = library.newFace(Resource.internal("/font/droidsans.ttf"), 0);
+        face.setPixelSizes(0, 15);
+        final FreeTypeSizeMetrics faceMetrics = face.getSize().getMetrics();
+        System.out.println(toInt(faceMetrics.getAscender()) + ", " + toInt(faceMetrics.getDescender()) + ", " + toInt(faceMetrics.getHeight()));
 
         // String chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890\"!`?'.,;:()[]{}<>|/@\\^$-%+=#_&~*�?�?�?�?�? ¡¢£¤¥¦§¨©ª«¬­®¯°±²³´µ¶·¸¹º»¼½¾¿À�?ÂÃÄÅÆÇÈÉÊËÌ�?Î�?�?ÑÒÓÔÕÖ×ØÙÚÛÜ�?Þßàáâãäåæçèéêëìíîïðñòóôõö÷øùúûüýþÿ";
         // for(int i = 0; i < chars.length(); i++) {
