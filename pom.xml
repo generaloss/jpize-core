@@ -26,14 +26,6 @@
             <version>25.3.2-SNAPSHOT-1</version>
             <scope>provided</scope>
         </dependency>
-        <!-- freetype-natives -->
-        <dependency>
-            <groupId>io.github.generaloss</groupId>
-            <artifactId>stb-freetype-natives</artifactId>
-            <version>25.3.1</version>
-            <systemPath>${basedir}/libs/jpize-freetype-natives.jar</systemPath>
-            <scope>system</scope>
-        </dependency>
     </dependencies>
 
     <scm>
@@ -59,19 +51,6 @@
 
     <build>
         <plugins>
-            <!-- generate header for native methods -->
-            <plugin>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.7.0</version>
-                <configuration>
-                    <compilerArgs>
-                        <arg>-h</arg>
-                        <arg>${basedir}/target/headers</arg>
-                    </compilerArgs>
-                    <source>17</source>
-                    <target>17</target>
-                </configuration>
-            </plugin>
             <!-- attach sources -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
