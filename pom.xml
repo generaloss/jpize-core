@@ -26,6 +26,13 @@
             <version>25.3.2-SNAPSHOT-1</version>
             <scope>provided</scope>
         </dependency>
+        <!-- freetype -->
+        <dependency>
+            <groupId>io.github.generaloss</groupId>
+            <artifactId>freetype-bindings</artifactId>
+            <version>24.3.1-SNAPSHOT-1</version>
+            <scope>provided</scope>
+        </dependency>
     </dependencies>
 
     <scm>

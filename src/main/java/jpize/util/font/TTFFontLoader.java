@@ -1,52 +1,91 @@
 package jpize.util.font;
 
+import generaloss.freetype.FreeType;
+import generaloss.freetype.FreeTypeBitmap;
+import jpize.context.Jpize;
 import jpize.opengl.texture.GlFilter;
 import jpize.opengl.texture.Texture2D;
+import jpize.util.color.AbstractColor;
+import jpize.util.color.Color;
 import jpize.util.math.Mathc;
+import jpize.util.pixmap.Pixmap;
 import jpize.util.pixmap.PixmapAlpha;
 import jpize.util.pixmap.PixmapRGBA;
 import jpize.util.region.Region;
 import jpize.util.res.Resource;
 
 import java.nio.ByteBuffer;
+import java.nio.IntBuffer;
 import java.util.Map;
 
 class TTFFontLoader {
 
-    public static Font loadDefault(Font font, int size, boolean linearFilter, Charset charset) {
-        return load(font, "/font/droidsans.ttf", size, linearFilter, charset);
-    }
+    private static FreeType freetype;
 
-    public static Font loadDefault(Font font, int size, boolean linearFilter) {
-        return loadDefault(font, size, linearFilter, Charset.DEFAULT_ENG_RUS);
-    }
+    private static Pixmap createPixmap(FreeTypeBitmap bitmap, AbstractColor color, float gamma) {
+        final int width = bitmap.getWidth();
+        final int rows = bitmap.getRows();
+        final int pixelMode = bitmap.getPixelMode();
+        final int rowBytes = Math.abs(bitmap.getPitch());
+        final ByteBuffer buffer = bitmap.getBuffer();
 
-    public static Font loadDefault(Font font, int size) {
-        return loadDefault(font, size, true);
-    }
+        if(color == Color.WHITE && pixelMode == FreeType.FT_PIXEL_MODE_GRAY && rowBytes == width && gamma == 1F)
+            return new PixmapAlpha(buffer, width, rows);
 
-    public static Font loadDefault(Font font) {
-        return loadDefault(font, 64);
-    }
+        final PixmapRGBA pixmap = new PixmapRGBA(width, rows);
+        final int rgba = color.getHexInteger();
+        final byte[] srcRow = new byte[rowBytes];
+        final int[] dstRow = new int[width];
 
-    public static Font loadDefaultBold(Font font, int size, boolean linearFilter, Charset charset) {
-        return load(font, "/font/droidsans-bold.ttf", size, linearFilter, charset);
-    }
-
-    public static Font loadDefaultBold(Font font, int size, boolean linearFilter) {
-        return loadDefaultBold(font, size, linearFilter, Charset.DEFAULT_ENG_RUS);
-    }
-
-    public static Font loadDefaultBold(Font font, int size) {
-        return loadDefaultBold(font, size, true);
-    }
-
-    public static Font loadDefaultBold(Font font) {
-        return loadDefaultBold(font, 64);
+        final IntBuffer dst = pixmap.buffer().asIntBuffer();
+        if(pixelMode == FreeType.FT_PIXEL_MODE_MONO) {
+            // use the specified color for each set bit
+            for(int y = 0; y < rows; y++) {
+                buffer.get(srcRow);
+                for(int i = 0, x = 0; x < width; i++, x += 8) {
+                    byte b = srcRow[i];
+                    for(int j = 0, n = Math.min(8, width - x); j < n; j++) {
+                        if((b & (1 << (7 - j))) != 0) {
+                            dstRow[x + j] = rgba;
+                        } else {
+                            dstRow[x + j] = 0;
+                        }
+                    }
+                }
+                dst.put(dstRow);
+            }
+        } else {
+            // use the specified color for RGB, blend the FreeType bitmap with alpha
+            final int rgb = (rgba & 0xffffff00);
+            final int a = (rgba & 0xff);
+            for(int y = 0; y < rows; y++) {
+                buffer.get(srcRow);
+                for(int x = 0; x < width; x++) {
+                    // zero raised to any power is always zero
+                    // 255 (= one) raised to any power is always one
+                    // we only need Math.pow() when alpha is NOT zero and NOT one
+                    final int alpha = srcRow[x] & 0xff;
+                    if(alpha == 0) {
+                        dstRow[x] = rgb;
+                    } else if(alpha == 255) {
+                        dstRow[x] = (rgb | a);
+                    } else {
+                        dstRow[x] = (rgb | (int) (a * Mathc.pow(alpha / 255f, gamma))); // inverse gamma
+                    }
+                }
+                dst.put(dstRow);
+            }
+        }
+        return pixmap;
     }
 
 
     public static Font load(Font font, Resource resource, int size, boolean linearFilter, Charset charset) {
+        if(freetype == null) {
+            freetype = FreeType.init();
+            Jpize.callbacks.addExit(freetype::done);
+        }
+
         // clear font
         font.pages().clear();
         font.glyphs().clear();
@@ -137,8 +176,7 @@ class TTFFontLoader {
         //         font.kernings().put(code_0, kerning);
         //     }
         // }
-        // return font;
-        return null; //TODO: Load TTF
+        return font;
     }
 
     public static Font load(Font font, String internalPath, int size, boolean linearFilter, Charset charset) {
@@ -151,6 +189,39 @@ class TTFFontLoader {
 
     public static Font load(Font font, String internalPath, int size, boolean linearFilter) {
         return load(font, internalPath, size, linearFilter, Charset.DEFAULT);
+    }
+
+
+    public static Font loadDefault(Font font, int size, boolean linearFilter, Charset charset) {
+        return load(font, "/font/droidsans.ttf", size, linearFilter, charset);
+    }
+
+    public static Font loadDefault(Font font, int size, boolean linearFilter) {
+        return loadDefault(font, size, linearFilter, Charset.DEFAULT_ENG_RUS);
+    }
+
+    public static Font loadDefault(Font font, int size) {
+        return loadDefault(font, size, true);
+    }
+
+    public static Font loadDefault(Font font) {
+        return loadDefault(font, 64);
+    }
+
+    public static Font loadDefaultBold(Font font, int size, boolean linearFilter, Charset charset) {
+        return load(font, "/font/droidsans-bold.ttf", size, linearFilter, charset);
+    }
+
+    public static Font loadDefaultBold(Font font, int size, boolean linearFilter) {
+        return loadDefaultBold(font, size, linearFilter, Charset.DEFAULT_ENG_RUS);
+    }
+
+    public static Font loadDefaultBold(Font font, int size) {
+        return loadDefaultBold(font, size, true);
+    }
+
+    public static Font loadDefaultBold(Font font) {
+        return loadDefaultBold(font, 64);
     }
 
 }
