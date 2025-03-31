@@ -21,8 +21,8 @@ public class FontLoadOptions {
         return linearFilter;
     }
 
-    public FontLoadOptions filter(boolean linear) {
-        this.linearFilter = linear;
+    public FontLoadOptions linearFilter(boolean linearFilter) {
+        this.linearFilter = linearFilter;
         return this;
     }
 

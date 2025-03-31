@@ -43,7 +43,6 @@ class TTFFontLoader {
         return pixmap;
     }
 
-
     public static Font load(Font font, Resource resource, FontLoadOptions options) {
         // clear font
         font.pages().clear();
@@ -55,7 +54,7 @@ class TTFFontLoader {
         // ft_face
         final FTFace face = freetype.newMemoryFace(resource, 0);
         if(!face.setPixelSizes(0, options.getSize()))
-            throw new RuntimeException(FTLibrary.getLastError().getDescription());
+            throw new RuntimeException(FTLibrary.getLastError().toString());
 
         // metrics
         final FTSizeMetrics fontMetrics = face.getSize().getMetrics();
@@ -77,19 +76,15 @@ class TTFFontLoader {
 
         final int borderWidth = options.getBorderWidth();
         if(borderWidth > 0) {
-
             final boolean borderStraight = options.isBorderStraight();
-            stroker.set(
-                borderWidth * 64,
-                (borderStraight ? FTStrokerLinecap.BUTT : FTStrokerLinecap.ROUND),
-                (borderStraight ? FTStrokerLinejoin.MITER_FIXED : FTStrokerLinejoin.ROUND),
-                0
-            );
+            final FTStrokerLinecap linecap = (borderStraight ? FTStrokerLinecap.BUTT : FTStrokerLinecap.ROUND);
+            final FTStrokerLinejoin linejoin = (borderStraight ? FTStrokerLinejoin.MITER_FIXED : FTStrokerLinejoin.ROUND);
+
+            stroker.set(borderWidth * 64, linecap, linejoin, 0);
         }
 
         // face
         final FTFaceFlags faceFlags = face.getFaceFlags();
-        final FTLoadFlags loadCharFlags = new FTLoadFlags().set(FTLoad.FORCE_AUTOHINT);
 
         // glyphs
         for(Character c: charset) {
@@ -97,13 +92,12 @@ class TTFFontLoader {
                 continue;
 
             // load glyph image into the slot (erase previous one)
-            final int glyph_index = face.getCharIndex(c);
-            if(!face.loadGlyph(glyph_index))
+            final int glyphIndex = face.getCharIndex(c);
+            if(!face.loadGlyph(glyphIndex))
                 continue;
 
             // glyph slot
             final FTGlyphSlot glyphSlot = face.getGlyph();
-
             final FTGlyph glyph = glyphSlot.getGlyph();
             // border
             if(borderWidth > 0)

@@ -37,7 +37,7 @@
         <dependency>
             <groupId>io.github.generaloss</groupId>
             <artifactId>jpize-core-lwjgl</artifactId>
-            <version>25.3.2-SNAPSHOT-2.3.0</version>
+            <version>25.3.2-SNAPSHOT-2.6.0</version>
             <scope>test</scope>
         </dependency>
     </dependencies>

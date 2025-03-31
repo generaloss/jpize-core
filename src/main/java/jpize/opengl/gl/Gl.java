@@ -99,6 +99,14 @@ public class Gl {
         clearColor(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha());
     }
 
+    public static void clearColorRGB(int color) {
+        // TODO: clearColor();
+    }
+
+    public static void clearColorRGBA(int color) {
+        // TODO: clearColor();
+    }
+
 
     public static void clearColorBuffer() {
         Jpize.GL11.glClear(GLI11.GL_COLOR_BUFFER_BIT);

@@ -128,12 +128,12 @@ class FNTFontLoader {
 
 
     public static Font load(Font font, Resource resource, boolean linearFilter) {
-        final FontLoadOptions options = new FontLoadOptions().filter(linearFilter);
+        final FontLoadOptions options = new FontLoadOptions().linearFilter(linearFilter);
         return load(font, resource, options);
     }
 
     public static Font load(Font font, String internalPath, boolean linearFilter) {
-        final FontLoadOptions options = new FontLoadOptions().filter(linearFilter);
+        final FontLoadOptions options = new FontLoadOptions().linearFilter(linearFilter);
         return load(font, Resource.internal(internalPath), options);
     }
 
