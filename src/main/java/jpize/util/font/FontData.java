@@ -10,7 +10,6 @@ public class FontData implements Disposable {
 
     private final Map<Integer, Texture2D> pages;  // pageID => texture
     private final Map<Integer, GlyphInfo> glyphs; // code   => glyph
-    private final Map<Integer, Map<Integer, Integer>> kernings; // (code_prev, code_curr) => advance
 
     private float height;
     private float ascent;
@@ -19,7 +18,6 @@ public class FontData implements Disposable {
     public FontData() {
         this.pages = new HashMap<>();
         this.glyphs = new HashMap<>();
-        this.kernings = new HashMap<>();
     }
 
     public Map<Integer, Texture2D> pages() {
@@ -28,10 +26,6 @@ public class FontData implements Disposable {
 
     public Map<Integer, GlyphInfo> glyphs() {
         return glyphs;
-    }
-
-    public Map<Integer, Map<Integer, Integer>> kernings() {
-        return kernings;
     }
 
 

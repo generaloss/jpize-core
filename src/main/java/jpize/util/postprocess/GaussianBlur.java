@@ -7,7 +7,7 @@ import jpize.opengl.tesselation.GlRenderbuffer;
 import jpize.opengl.shader.Shader;
 import jpize.util.res.Resource;
 
-public class GaussianBlur implements PostProcessEffect {
+public class GaussianBlur implements IPostProcessEffect {
 
     private final GlFramebuffer fbo1, fbo2;
     private final GlRenderbuffer rbo;
@@ -75,7 +75,7 @@ public class GaussianBlur implements PostProcessEffect {
     }
 
     @Override
-    public void end(PostProcessEffect target) {
+    public void end(IPostProcessEffect target) {
         fbo1.unbind();
         rbo.unbind();
 

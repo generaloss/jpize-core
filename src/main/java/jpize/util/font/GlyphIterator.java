@@ -184,18 +184,18 @@ public class GlyphIterator implements Iterator<GlyphSprite> {
                 continue;
             }
 
+            glyph = fontData.glyphs().get(code);
+            if(glyph == null)
+                continue;
+
             // build kerning
             final int kerning = (kerningEntry != null ? kerningEntry.getOrDefault(code, 0) : 0);
-            kerningEntry = fontData.kernings().get(code);
+            kerningEntry = glyph.kernings();
             kernings.add(kerning);
 
             // break line
             if(breakLineMaxWidth >= 0F){
                 lastLineIsNew = false;
-
-                glyph = fontData.glyphs().get(code);
-                if(glyph == null)
-                    continue;
 
                 // advance x
                 advanced.x = ((glyph.getAdvanceX() + kerning) * options.advanceFactor().x);
@@ -214,7 +214,6 @@ public class GlyphIterator implements Iterator<GlyphSprite> {
             size++;
         }
         this.addLine(lineBuilder, lastLineIsNew);
-
         // reset state
         advanced.x = 0;
     }

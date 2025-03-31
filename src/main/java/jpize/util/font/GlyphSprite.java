@@ -16,11 +16,11 @@ public class GlyphSprite {
     private final float offsetY;
 
     public GlyphSprite(FontData fontData, GlyphInfo glyph, Vec2f position, Vec2f scale) {
-        this.region = glyph.getRegion();
+        this.region = glyph.region();
         this.page = fontData.pages().get(glyph.getPageID());
-        this.position = position.copy().add(glyph.getOffset()).mul(scale);
-        this.size = glyph.getSize().copy().mul(scale);
-        this.offsetY = (glyph.getOffset().y * scale.y);
+        this.position = position.copy().add(glyph.offset()).mul(scale);
+        this.size = glyph.size().copy().mul(scale);
+        this.offsetY = (glyph.offset().y * scale.y);
     }
 
     public GlyphSprite(FontData fontData, Vec2f position, Vec2f scale) {

@@ -2,8 +2,8 @@ package jpize.util.postprocess;
 
 import jpize.util.Disposable;
 
-public interface PostProcessEffect extends Disposable {
+public interface IPostProcessEffect extends Disposable {
     void begin();
     void end();
-    void end(PostProcessEffect target);
+    void end(IPostProcessEffect target);
 }

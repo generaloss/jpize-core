@@ -8,8 +8,6 @@ import jpize.opengl.texture.Texture2D;
 import jpize.util.io.FastReader;
 
 import java.nio.file.Path;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.zip.ZipFile;
 
 class FNTFontLoader {
@@ -18,7 +16,15 @@ class FNTFontLoader {
         return token.split("=")[1];
     }
 
-    public static Font load(Font font, Resource resource, boolean linearFilter) {
+    private static int getIntValue(String token) {
+        return Integer.parseInt(getValue(token));
+    }
+
+    private static float getFloatValue(String token) {
+        return (float) getIntValue(token);
+    }
+
+    public static Font load(Font font, Resource resource, FontLoadOptions options) {
         // clear font
         font.pages().clear();
         font.glyphs().clear();
@@ -30,14 +36,14 @@ class FNTFontLoader {
             final String[] tokens = reader.nextLine().trim().split("\\s+");
 
             switch(tokens[0].toLowerCase()){
-                case "info" -> font.setItalic(Integer.parseInt(getValue(tokens[4])) == 1);
+                case "info" -> font.setItalic(getIntValue(tokens[4]) == 1);
                 case "common" -> {
-                    font.setHeight(Integer.parseInt(getValue(tokens[1])));
-                    font.setAscent(Integer.parseInt(getValue(tokens[2])));
+                    font.setHeight(getIntValue(tokens[1]));
+                    font.setAscent(getIntValue(tokens[2]));
                     font.setDescent(font.getAscent() - font.getHeight());
                 }
                 case "page" -> {
-                    final int pageID = Integer.parseInt(getValue(tokens[1]));
+                    final int pageID = getIntValue(tokens[1]);
                     String pageRelativePath = getValue(tokens[2]).replace("\"", "");
 
                     // page path
@@ -64,52 +70,51 @@ class FNTFontLoader {
 
                     // page texture
                     final Texture2D texture = new Texture2D()
-                        .setFilters(linearFilter ? GlFilter.LINEAR : GlFilter.NEAREST)
+                        .setFilters(options.isLinearFilter() ? GlFilter.LINEAR : GlFilter.NEAREST)
                         .setImage(pageResource);
 
                     font.pages().put(pageID, texture);
                 }
                 case "char" -> {
-                    final int code = Integer.parseInt(getValue(tokens[1]));
+                    final int code = getIntValue(tokens[1]);
 
-                    final int page = Integer.parseInt(getValue(tokens[9]));
-                    final Texture2D pageTexture = font.pages().get(page);
+                    final int pageID = getIntValue(tokens[9]);
+                    final Texture2D pageTexture = font.pages().get(pageID);
 
-                    final float s0 = (float) Integer.parseInt(getValue(tokens[2])) / pageTexture.getWidth();
-                    final float t0 = (float) Integer.parseInt(getValue(tokens[3])) / pageTexture.getHeight();
-                    final float s1 = (float) Integer.parseInt(getValue(tokens[4])) / pageTexture.getWidth() + s0;
-                    final float t1 = (float) Integer.parseInt(getValue(tokens[5])) / pageTexture.getHeight() + t0;
-
-                    final int offsetX = Integer.parseInt(getValue(tokens[6]));
-                    final int offsetY = Integer.parseInt(getValue(tokens[7]));
-                    final int advanceX = Integer.parseInt(getValue(tokens[8]));
+                    final float s0 = (getFloatValue(tokens[2]) / pageTexture.getWidth());
+                    final float t0 = (getFloatValue(tokens[3]) / pageTexture.getHeight());
+                    final float s1 = (getFloatValue(tokens[4]) / pageTexture.getWidth() + s0);
+                    final float t1 = (getFloatValue(tokens[5]) / pageTexture.getHeight() + t0);
 
                     final Region regionOnTexture = new Region(s0, t0, s1, t1);
-                    final float glyphHeight = regionOnTexture.getPixelHeight(font.pages().get(page));
-                    final float glyphWidth = regionOnTexture.getPixelWidth(font.pages().get(page));
+                    final float glyphHeight = regionOnTexture.getPixelHeight(font.pages().get(pageID));
+                    final float glyphWidth = regionOnTexture.getPixelWidth(font.pages().get(pageID));
 
-                    font.glyphs().put(code, new GlyphInfo(
-                        code,
+                    final int offsetX = getIntValue(tokens[6]);
+                    final float offsetY = (font.getHeight() - getIntValue(tokens[7]) - glyphHeight);
+                    final int advanceX = getIntValue(tokens[8]);
 
-                        offsetX,
-                        (font.getHeight() - offsetY - glyphHeight),
-                        glyphWidth,
-                        glyphHeight,
+                    final GlyphInfo glyph = font.glyphs()
+                            .getOrDefault(code, new GlyphInfo(code))
+                                .setAdvanceX(advanceX)
+                                .setPageID(pageID)
+                                .setRegion(regionOnTexture)
+                                .setSize(glyphWidth, glyphHeight)
+                                .setOffset(offsetX, offsetY);
 
-                        regionOnTexture,
-                        advanceX,
-                        page
-                    ));
+                    font.glyphs().put(code, glyph);
                 }
                 case "kerning" -> {
-                    final int code_0 = Integer.parseInt(getValue(tokens[1]));
-                    final int code_1 = Integer.parseInt(getValue(tokens[2]));
-                    final int advance = Integer.parseInt(getValue(tokens[3]));
+                    final int code_0 = getIntValue(tokens[1]);
+                    final int code_1 = getIntValue(tokens[2]);
+                    final int advance = getIntValue(tokens[3]);
 
+                    // get glyph
+                    final GlyphInfo glyph = font.glyphs()
+                            .getOrDefault(code_0, new GlyphInfo(code_0));
+                    
                     // add kerning entry
-                    final Map<Integer, Integer> kerning = font.kernings().getOrDefault(code_0, new HashMap<>());
-                    kerning.put(code_1, advance);
-                    font.kernings().put(code_0, kerning);
+                    glyph.kernings().put(code_1, advance);
                 }
             }
         }
@@ -117,8 +122,19 @@ class FNTFontLoader {
         return font;
     }
 
+    public static Font load(Font font, String internalPath, FontLoadOptions options) {
+        return load(font, Resource.internal(internalPath), options);
+    }
+
+
+    public static Font load(Font font, Resource resource, boolean linearFilter) {
+        final FontLoadOptions options = new FontLoadOptions().filter(linearFilter);
+        return load(font, resource, options);
+    }
+
     public static Font load(Font font, String internalPath, boolean linearFilter) {
-        return load(font, Resource.internal(internalPath), linearFilter);
+        final FontLoadOptions options = new FontLoadOptions().filter(linearFilter);
+        return load(font, Resource.internal(internalPath), options);
     }
 
 }

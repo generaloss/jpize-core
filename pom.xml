@@ -6,7 +6,7 @@
 
     <groupId>io.github.generaloss</groupId>
     <artifactId>jpize-core</artifactId>
-    <version>25.3.2-SNAPSHOT-2.5</version>
+    <version>25.3.2-SNAPSHOT-2.6</version>
     <name>jpize-core</name>
 
     <description>OpenGL Graphics Library Core</description>
@@ -23,15 +23,22 @@
         <dependency>
             <groupId>io.github.generaloss</groupId>
             <artifactId>jpize-utils</artifactId>
-            <version>25.3.2-SNAPSHOT-1</version>
+            <version>25.3.2-SNAPSHOT-5</version>
             <scope>provided</scope>
         </dependency>
         <!-- freetype -->
         <dependency>
             <groupId>io.github.generaloss</groupId>
             <artifactId>freetype-bindings</artifactId>
-            <version>24.3.1-SNAPSHOT-3</version>
+            <version>24.3.1-SNAPSHOT-13</version>
             <scope>provided</scope>
+        </dependency>
+        <!-- core-lwjgl for testing -->
+        <dependency>
+            <groupId>io.github.generaloss</groupId>
+            <artifactId>jpize-core-lwjgl</artifactId>
+            <version>25.3.2-SNAPSHOT-2.3.0</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 

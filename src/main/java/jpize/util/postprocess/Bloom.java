@@ -7,7 +7,7 @@ import jpize.opengl.tesselation.GlFramebuffer;
 import jpize.opengl.tesselation.GlRenderbuffer;
 import jpize.opengl.shader.Shader;
 
-public class Bloom implements PostProcessEffect {
+public class Bloom implements IPostProcessEffect {
 
     private final GlFramebuffer colorBuffer, fbo2, blurBuffer;
     private final GlRenderbuffer depthBuffer;
@@ -111,7 +111,7 @@ public class Bloom implements PostProcessEffect {
     }
 
     @Override
-    public void end(PostProcessEffect target) { }
+    public void end(IPostProcessEffect target) { }
 
     public void resize(int width, int height) {
         depthBuffer.resize(width, height);

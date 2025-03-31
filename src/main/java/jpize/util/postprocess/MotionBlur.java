@@ -8,7 +8,7 @@ import jpize.opengl.tesselation.GlRenderbuffer;
 import jpize.opengl.texture.Texture2D;
 import jpize.opengl.shader.Shader;
 
-public class MotionBlur implements PostProcessEffect {
+public class MotionBlur implements IPostProcessEffect {
 
     private final GlFramebuffer fbo1, fbo2;
     private final GlRenderbuffer rbo1, rbo2;
@@ -80,7 +80,7 @@ public class MotionBlur implements PostProcessEffect {
     }
 
     @Override
-    public void end(PostProcessEffect target) {
+    public void end(IPostProcessEffect target) {
         fbo1.unbind();
         rbo1.unbind();
 

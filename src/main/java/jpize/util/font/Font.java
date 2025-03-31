@@ -64,12 +64,34 @@ public class Font extends FontData {
     }
 
 
-    public Font loadDefault(int size, boolean linearFilter, Charset charset) {
-        return TTFFontLoader.loadDefault(this, size, linearFilter, charset);
+    public Font loadFNT(Resource resource, boolean linearFilter) {
+        return FNTFontLoader.load(this, resource, linearFilter);
     }
 
-    public Font loadDefault(int size, boolean linearFilter) {
-        return TTFFontLoader.loadDefault(this, size, linearFilter);
+    public Font loadFNT(String internalPath, boolean linearFilter) {
+        return FNTFontLoader.load(this, internalPath, linearFilter);
+    }
+
+
+    public Font loadTTF(Resource resource, FontLoadOptions options) {
+        return TTFFontLoader.load(this, resource, options);
+    }
+
+    public Font loadTTF(String internalPath, FontLoadOptions options) {
+        return TTFFontLoader.load(this, internalPath, options);
+    }
+
+    public Font loadTTF(Resource resource, int size) {
+        return TTFFontLoader.load(this, resource, size);
+    }
+
+    public Font loadTTF(String internalPath, int size) {
+        return TTFFontLoader.load(this, internalPath, size);
+    }
+
+
+    public Font loadDefault(FontLoadOptions options) {
+        return TTFFontLoader.loadDefault(this, options);
     }
 
     public Font loadDefault(int size) {
@@ -80,12 +102,9 @@ public class Font extends FontData {
         return TTFFontLoader.loadDefault(this);
     }
 
-    public Font loadDefaultBold(int size, boolean linearFilter, Charset charset) {
-        return TTFFontLoader.loadDefaultBold(this, size, linearFilter, charset);
-    }
 
-    public Font loadDefaultBold(int size, boolean linearFilter) {
-        return TTFFontLoader.loadDefaultBold(this, size, linearFilter);
+    public Font loadDefaultBold(FontLoadOptions options) {
+        return TTFFontLoader.loadDefaultBold(this, options);
     }
 
     public Font loadDefaultBold(int size) {
@@ -94,30 +113,6 @@ public class Font extends FontData {
 
     public Font loadDefaultBold() {
         return TTFFontLoader.loadDefaultBold(this);
-    }
-
-    public Font loadFNT(Resource resource, boolean linearFilter) {
-        return FNTFontLoader.load(this, resource, linearFilter);
-    }
-
-    public Font loadFNT(String internalPath, boolean linearFilter) {
-        return FNTFontLoader.load(this, internalPath, linearFilter);
-    }
-
-    public Font loadTTF(Resource resource, int size, boolean linearFilter, Charset charset) {
-        return TTFFontLoader.load(this, resource, size, linearFilter, charset);
-    }
-
-    public Font loadTTF(String internalPath, int size, boolean linearFilter, Charset charset) {
-        return TTFFontLoader.load(this, internalPath, size, linearFilter, charset);
-    }
-
-    public Font loadTTF(Resource resource, int size, boolean linearFilter) {
-        return TTFFontLoader.load(this, resource, size, linearFilter);
-    }
-
-    public Font loadTTF(String internalPath, int size, boolean linearFilter) {
-        return TTFFontLoader.load(this, internalPath, size, linearFilter);
     }
 
 
