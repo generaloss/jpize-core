@@ -6,7 +6,7 @@
 
     <groupId>io.github.generaloss</groupId>
     <artifactId>jpize-core</artifactId>
-    <version>25.3.2-SNAPSHOT-2.6</version>
+    <version>25.4.1-SNAPSHOT-1-4.3</version>
     <name>jpize-core</name>
 
     <description>OpenGL Graphics Library Core</description>
@@ -23,15 +23,32 @@
         <dependency>
             <groupId>io.github.generaloss</groupId>
             <artifactId>jpize-utils</artifactId>
-            <version>25.3.2-SNAPSHOT-5</version>
+            <version>25.4.1</version>
             <scope>provided</scope>
+        </dependency>
+        <!-- stb-image -->
+        <dependency>
+            <groupId>io.github.generaloss</groupId>
+            <artifactId>stb-image-jni</artifactId>
+            <version>25.4.2</version>
+        </dependency>
+        <dependency>
+            <groupId>io.github.generaloss</groupId>
+            <artifactId>stb-image-jni-natives-linux</artifactId>
+            <version>25.4.2</version>
+            <scope>test</scope>
         </dependency>
         <!-- freetype -->
         <dependency>
             <groupId>io.github.generaloss</groupId>
-            <artifactId>freetype-bindings</artifactId>
-            <version>24.3.1-SNAPSHOT-13</version>
-            <scope>provided</scope>
+            <artifactId>freetype-jni</artifactId>
+            <version>25.4.1</version>
+        </dependency>
+        <dependency>
+            <groupId>io.github.generaloss</groupId>
+            <artifactId>freetype-jni-natives-linux</artifactId>
+            <version>25.4.1</version>
+            <scope>test</scope>
         </dependency>
         <!-- core-lwjgl for testing -->
         <dependency>

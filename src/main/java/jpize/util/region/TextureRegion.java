@@ -104,9 +104,23 @@ public class TextureRegion extends Region {
         return this;
     }
 
+    public TextureRegion extrude(int x, int y) {
+        return this.extrude(
+            (float) x / texture.getWidth(),
+            (float) y / texture.getHeight()
+        );
+    }
+
     public TextureRegion translate(float x, float y) {
         super.translate(x, y);
         return this;
+    }
+
+    public TextureRegion translate(int x, int y) {
+        return this.translate(
+            (float) x / texture.getWidth(),
+            (float) y / texture.getHeight()
+        );
     }
 
 

@@ -1,7 +1,6 @@
 package jpize.util.mesh;
 
 import jpize.context.Jpize;
-import jpize.opengl.tesselation.GlPrimitive;
 import jpize.opengl.texture.Texture2D;
 import jpize.opengl.texture.TextureUtils;
 import jpize.util.Disposable;
@@ -21,6 +20,8 @@ import jpize.util.math.vector.Vec2f;
 import jpize.opengl.shader.Shader;
 
 public class TextureBatch implements Disposable {
+
+    private static final int QUAD_VERTEX_COUNT = 4;
 
     private final Mesh mesh;
     private final Shader defaultShader;
@@ -53,7 +54,6 @@ public class TextureBatch implements Disposable {
             new GlVertAttr(2, GlType.FLOAT), // uv
             new GlVertAttr(4, GlType.FLOAT)  // color
         );
-        this.mesh.setMode(GlPrimitive.QUADS);
         this.vertexList = new FloatList();
         // shader
         this.defaultShader = new Shader(
@@ -173,7 +173,10 @@ public class TextureBatch implements Disposable {
         vertexList.add(tmp_vertex1.x, tmp_vertex1.y, u2, v2, r, g, b, a);
         vertexList.add(tmp_vertex2.x, tmp_vertex2.y, u2, v1, r, g, b, a);
         vertexList.add(tmp_vertex3.x, tmp_vertex3.y, u1, v1, r, g, b, a);
+
+        vertexList.add(tmp_vertex3.x, tmp_vertex3.y, u1, v1, r, g, b, a);
         vertexList.add(tmp_vertex4.x, tmp_vertex4.y, u1, v2, r, g, b, a);
+        vertexList.add(tmp_vertex1.x, tmp_vertex1.y, u2, v2, r, g, b, a);
 
         size++;
     }

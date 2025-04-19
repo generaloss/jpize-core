@@ -97,7 +97,6 @@ public class TextRenderer {
                 new Shader(Resource.internal("/shader/text_renderer/vert.glsl"), Resource.internal("/shader/text_renderer/frag.glsl")),
                 new Matrix4f()
             );
-            renderer.mesh.setMode(GlPrimitive.QUADS);
             Jpize.callbacks.addExit(renderer::dispose);
             RENDERER_BY_THREAD.put(threadID, renderer);
         }
@@ -170,7 +169,10 @@ public class TextRenderer {
                 vertex1.x, vertex1.y, 0F,  u1, v1,  r, g, b, a,
                 vertex2.x, vertex2.y, 0F,  u1, v2,  r, g, b, a,
                 vertex3.x, vertex3.y, 0F,  u2, v2,  r, g, b, a,
-                vertex4.x, vertex4.y, 0F,  u2, v1,  r, g, b, a
+
+                vertex3.x, vertex3.y, 0F,  u2, v2,  r, g, b, a,
+                vertex4.x, vertex4.y, 0F,  u2, v1,  r, g, b, a,
+                vertex1.x, vertex1.y, 0F,  u1, v1,  r, g, b, a
             );
 
             // render mesh

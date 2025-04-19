@@ -52,7 +52,7 @@ class TTFFontLoader {
         final FTLibrary freetype = FTLibrary.init();
 
         // ft_face
-        final FTFace face = freetype.newMemoryFace(resource, 0);
+        final FTFace face = freetype.newMemoryFace(resource.readBytes(), 0);
         if(!face.setPixelSizes(0, options.getSize()))
             throw new RuntimeException(FTLibrary.getLastError().toString());
 
@@ -75,16 +75,13 @@ class TTFFontLoader {
         final FTStroker stroker = freetype.strokerNew();
 
         final int borderWidth = options.getBorderWidth();
-        if(borderWidth > 0) {
+        if(borderWidth != 0) {
             final boolean borderStraight = options.isBorderStraight();
             final FTStrokerLinecap linecap = (borderStraight ? FTStrokerLinecap.BUTT : FTStrokerLinecap.ROUND);
             final FTStrokerLinejoin linejoin = (borderStraight ? FTStrokerLinejoin.MITER_FIXED : FTStrokerLinejoin.ROUND);
 
-            stroker.set(borderWidth * 64, linecap, linejoin, 0);
+            stroker.set(Math.abs(borderWidth) * 64, linecap, linejoin, 0);
         }
-
-        // face
-        final FTFaceFlags faceFlags = face.getFaceFlags();
 
         // glyphs
         for(Character c: charset) {
@@ -100,8 +97,8 @@ class TTFFontLoader {
             final FTGlyphSlot glyphSlot = face.getGlyph();
             final FTGlyph glyph = glyphSlot.getGlyph();
             // border
-            if(borderWidth > 0)
-                glyph.strokeBorder(stroker, false);
+            if(borderWidth != 0)
+                glyph.strokeBorder(stroker, borderWidth < 0);
             // bitmap
             glyph.toBitmap(FTRenderMode.NORMAL);
 

@@ -7,6 +7,7 @@ import jpize.lwjgl.glfw.cursor.GlfwCursor;
 import jpize.lwjgl.glfw.cursor.GlfwCursorShape;
 import jpize.lwjgl.glfw.input.GlfwInput;
 import jpize.opengl.gl.Gl;
+import jpize.opengl.texture.Texture2D;
 import jpize.util.font.*;
 import jpize.util.input.TextInput;
 import jpize.util.math.Mathc;
@@ -14,6 +15,8 @@ import jpize.util.math.Maths;
 import jpize.util.math.vector.Vec2f;
 import jpize.util.math.vector.Vec2i;
 import jpize.util.mesh.TextureBatch;
+import jpize.util.pixmap.PixmapIO;
+import jpize.util.pixmap.PixmapRGBA;
 
 import java.util.List;
 import java.util.StringJoiner;
@@ -258,7 +261,9 @@ public class TextEditorTest extends JpizeApplication {
 
 
     public static void main(String[] args) {
-        GlfwContextBuilder.create(1280, 1280, "Editor").build().setApp(new TextEditorTest());
+        GlfwContextBuilder.create(1280, 1280, "Editor")
+              .icon("/icon2.png")
+              .build().setApp(new TextEditorTest());
         Jpize.run();
     }
 
