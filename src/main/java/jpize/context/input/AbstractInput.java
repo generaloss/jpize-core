@@ -27,10 +27,13 @@ public abstract class AbstractInput {
 
 
     public Action getKey(Key key) {
-        if(inputMonitor.isKeyDown(key)) return Action.DOWN;
-        if(inputMonitor.isKeyPressed(key)) return Action.PRESSED;
-        if(inputMonitor.isKeyUp(key)) return Action.UP;
-        return Action.NONE;
+        if(inputMonitor.isKeyDown(key))
+            return Action.DOWN;
+        if(inputMonitor.isKeyPressed(key))
+            return Action.PRESSED;
+        if(inputMonitor.isKeyUp(key))
+            return Action.UP;
+        return Action.NOT_PRESSED;
     }
 
     public boolean isKeyDown(Key key) {
@@ -49,26 +52,29 @@ public abstract class AbstractInput {
     public abstract int getMaxMousesCount();
 
     public int getMouseButtonPressedCount(MouseBtn button) {
-        return inputMonitor.getMouseButtonPressedCount(button);
+        return inputMonitor.getPressedCount(button);
     }
 
-    public Action getMouseButton(int index, MouseBtn button) {
-        if(inputMonitor.isMouseButtonDown(index, button)) return Action.DOWN;
-        if(inputMonitor.isMouseButtonPressed(index, button)) return Action.PRESSED;
-        if(inputMonitor.isMouseButtonUp(index, button)) return Action.UP;
-        return Action.NONE;
+    public Action getMouseButton(int mouseIndex, MouseBtn button) {
+        if(inputMonitor.isMouseButtonDown(mouseIndex, button))
+            return Action.DOWN;
+        if(inputMonitor.isMouseButtonPressed(mouseIndex, button))
+            return Action.PRESSED;
+        if(inputMonitor.isMouseButtonUp(mouseIndex, button))
+            return Action.UP;
+        return Action.NOT_PRESSED;
     }
 
-    public boolean isButtonDown(int index, MouseBtn button) {
-        return inputMonitor.isMouseButtonDown(index, button);
+    public boolean isButtonDown(int mouseIndex, MouseBtn button) {
+        return inputMonitor.isMouseButtonDown(mouseIndex, button);
     }
 
-    public boolean isButtonPressed(int index, MouseBtn button) {
-        return inputMonitor.isMouseButtonPressed(index, button);
+    public boolean isButtonPressed(int mouseIndex, MouseBtn button) {
+        return inputMonitor.isMouseButtonPressed(mouseIndex, button);
     }
 
-    public boolean isButtonUp(int index, MouseBtn button) {
-        return inputMonitor.isMouseButtonUp(index, button);
+    public boolean isButtonUp(int mouseIndex, MouseBtn button) {
+        return inputMonitor.isMouseButtonUp(mouseIndex, button);
     }
 
 
@@ -128,25 +134,25 @@ public abstract class AbstractInput {
 
 
 
-    public abstract Vec2f getCursorNativePos(Vec2f dst, int cursorIndex);
+    public abstract Vec2f getCursorNativePos(Vec2f dst, int mouseIndex);
 
     public Vec2f getCursorNativePos(Vec2f dst) {
         return this.getCursorNativePos(dst, 0);
     }
 
-    public abstract Vec2f getCursorPos(Vec2f dst, int cursorIndex);
+    public abstract Vec2f getCursorPos(Vec2f dst, int mouseIndex);
 
     public Vec2f getCursorPos(Vec2f dst) {
         return this.getCursorPos(dst, 0);
     }
 
-    public abstract float getCursorX(int cursorIndex);
+    public abstract float getCursorX(int mouseIndex);
 
     public float getCursorX() {
         return this.getCursorX(0);
     }
 
-    public abstract float getCursorNativeY(int cursorIndex);
+    public abstract float getCursorNativeY(int mouseIndex);
 
     public float getCursorNativeY() {
         return this.getCursorNativeY(0);

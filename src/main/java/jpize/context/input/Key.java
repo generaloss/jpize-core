@@ -133,7 +133,7 @@ public enum Key {
     public String getName() {
         return Jpize.input.getKeyName(this);
     }
-    
+
 
     public boolean pressed() {
         return Jpize.input.isKeyPressed(this);
@@ -145,6 +145,10 @@ public enum Key {
 
     public boolean up() {
         return Jpize.input.isKeyUp(this);
+    }
+
+    public Action action() {
+        return Jpize.input.getKey(this);
     }
     
 

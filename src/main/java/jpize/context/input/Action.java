@@ -1,11 +1,12 @@
 package jpize.context.input;
 
+// per-frame key/button action
 public enum Action {
 
     DOWN,
     PRESSED,
     UP,
-    NONE;
+    NOT_PRESSED;
 
     public boolean isDown() {
         return (this == DOWN);
@@ -19,8 +20,8 @@ public enum Action {
         return (this == UP);
     }
 
-    public boolean isNone() {
-        return (this == NONE || this.isUp());
+    public boolean isNotPressed() {
+        return (this == NOT_PRESSED || this.isUp());
     }
 
 }

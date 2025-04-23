@@ -13,7 +13,6 @@ public enum MouseBtn {
     B7,
     B8;
 
-
     public boolean pressed(int mouseIndex) {
         return Jpize.input.isButtonPressed(mouseIndex, this);
     }
@@ -24,6 +23,10 @@ public enum MouseBtn {
 
     public boolean up(int mouseIndex) {
         return Jpize.input.isButtonUp(mouseIndex, this);
+    }
+
+    public Action action(int mouseIndex) {
+        return Jpize.input.getMouseButton(mouseIndex, this);
     }
 
 
@@ -37,6 +40,10 @@ public enum MouseBtn {
 
     public boolean up() {
         return up(0);
+    }
+
+    public Action action() {
+        return action(0);
     }
 
 

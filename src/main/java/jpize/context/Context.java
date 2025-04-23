@@ -75,9 +75,9 @@ public abstract class Context {
             return;
         }
         // update
+        this.getCallbacks().invokeUpdate();
         if(app != null)
             app.update();
-        this.getCallbacks().invokeUpdate();
         // execute tasks in context thread
         syncExecutor.sync();
         // render

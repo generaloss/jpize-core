@@ -19,7 +19,6 @@ public class InputMonitor {
         context.getCallbacks().addInit(this::onInit);
     }
 
-
     private void onInit() {
         keysDown = new BitSet(KEYS_COUNT);
         keysPressed = new BitSet(KEYS_COUNT);
@@ -32,9 +31,10 @@ public class InputMonitor {
         btnsPressedMousesCount = new int[BUTTONS_COUNT];
 
         context.getCallbacks().addKey(this::onKey);
-        context.getCallbacks().addMouseButton(this::onButton);
+        context.getCallbacks().addMouseButton(this::onMouseButton);
         context.getCallbacks().addScroll(this::onScroll);
     }
+
 
     private void onKey(Key key, int scancode, Action action, Mods mods) {
         final int index = key.ordinal();
@@ -47,7 +47,7 @@ public class InputMonitor {
         }
     }
 
-    private void onButton(int mouseIndex, MouseBtn button, Action action, Mods mods) {
+    private void onMouseButton(int mouseIndex, MouseBtn button, Action action, Mods mods) {
         final int index = this.getButtonIndex(mouseIndex, button);
         if(action.isPressed()) {
             btnsDown.set(index);
@@ -108,7 +108,7 @@ public class InputMonitor {
         return btnsUp.get(index);
     }
 
-    public int getMouseButtonPressedCount(MouseBtn button) {
+    public int getPressedCount(MouseBtn button) {
         return btnsPressedMousesCount[button.ordinal()];
     }
 
