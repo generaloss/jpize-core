@@ -73,11 +73,10 @@ public class GlScissor<T> {
         final int[] array = new int[scissors.size() * 4];
         int i = 0;
         for(Recti scissor: scissors.values()){
-            array[i    ] = scissor.x;
-            array[i + 1] = scissor.y;
-            array[i + 2] = scissor.width;
-            array[i + 3] = scissor.height;
-            i += 4;
+            array[i++] = scissor.x;
+            array[i++] = scissor.y;
+            array[i++] = scissor.width;
+            array[i++] = scissor.height;
         }
 
         Gl.scissorArray(index, array);
