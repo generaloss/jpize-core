@@ -5,6 +5,7 @@ import jpize.opengl.gl.GLI11;
 import jpize.opengl.gl.GLI30;
 import jpize.opengl.texture.*;
 import jpize.opengl.type.GlType;
+import jpize.util.MemoryUtils;
 import jpize.util.postprocess.RenderQuad;
 import jpize.context.Jpize;
 import jpize.opengl.GlObject;
@@ -103,7 +104,7 @@ public class GlFramebuffer extends GlObject {
         final int height = texture.getHeight();
 
         final GlBaseFormat format = texture.getInternalFormat().base;
-        final ByteBuffer buffer = Jpize.allocator.memCalloc(width * height * format.channels);
+        final ByteBuffer buffer = MemoryUtils.alloc(width * height * format.channels);
         Jpize.GL30.glReadPixels(0, 0, width, height, format.value, type.value, buffer);
 
         this.unbind();

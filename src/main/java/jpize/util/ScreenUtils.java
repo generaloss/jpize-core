@@ -19,7 +19,7 @@ public class ScreenUtils{
         final int width = Jpize.getWidth();
         final int height = Jpize.getHeight();
         
-        final ByteBuffer buffer = Jpize.allocator.memCalloc(width * height * 4).order(ByteOrder.LITTLE_ENDIAN);
+        final ByteBuffer buffer = MemoryUtils.alloc(width * height * 4).order(ByteOrder.LITTLE_ENDIAN);
         Jpize.GL11.glReadPixels(0, 0, width, height, GlBaseFormat.BGRA.value, GlType.UNSIGNED_BYTE.value, buffer);
         
         final int[] pixels = new int[width * height];

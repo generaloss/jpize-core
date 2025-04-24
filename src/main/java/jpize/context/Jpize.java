@@ -1,14 +1,11 @@
 package jpize.context;
 
-import jpize.context.input.IAllocator;
 import jpize.context.callback.AbstractCallbacks;
 import jpize.context.input.AbstractInput;
 import jpize.opengl.gl.*;
 
 public class Jpize {
 
-    public static IContextManager contextManager;
-    public static IAllocator allocator;
     public static Context context;
     public static IWindow window;
     public static AbstractInput input;
@@ -95,28 +92,6 @@ public class Jpize {
 
     public static SyncExecutor syncExecutor() {
         return context.getSyncExecutor();
-    }
-
-
-    public static <T extends IContextBuilder> T create(T builder, int width, int height, String title) {
-        return builder;
-    }
-
-    public static <T extends IContextBuilder> T create(T builder) {
-        return builder;
-    }
-
-
-    public static void run() {
-        contextManager.run();
-    }
-
-    public static void exit() {
-        contextManager.closeAll();
-    }
-
-    public static void exitOthers() {
-        contextManager.closeAllThatNotCurrent();
     }
 
 }

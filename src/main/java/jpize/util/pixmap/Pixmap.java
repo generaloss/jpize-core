@@ -1,8 +1,8 @@
 package jpize.util.pixmap;
 
-import jpize.context.Jpize;
 import jpize.util.Disposable;
 import jpize.opengl.texture.GlInternalFormat;
+import jpize.util.MemoryUtils;
 import jpize.util.math.Maths;
 import jpize.util.math.vector.Vec2i;
 
@@ -23,7 +23,7 @@ public abstract class Pixmap implements Disposable {
     }
 
     public Pixmap(int width, int height, int channels) {
-        this(Jpize.allocator.memCalloc(width * height * channels), width, height, channels);
+        this(MemoryUtils.alloc(width * height * channels), width, height, channels);
     }
 
     public ByteBuffer buffer() {
@@ -77,8 +77,8 @@ public abstract class Pixmap implements Disposable {
         if(Vec2i.notEquals(width, height, this.width, this.height)){
             this.width = width;
             this.height = height;
-            Jpize.allocator.memFree(buffer);
-            buffer = Jpize.allocator.memCalloc(this.getBufferSize());
+            MemoryUtils.free(buffer);
+            buffer = MemoryUtils.alloc(this.getBufferSize());
         }
     }
 
@@ -121,7 +121,7 @@ public abstract class Pixmap implements Disposable {
 
     @Override
     public void dispose() {
-        Jpize.allocator.memFree(buffer);
+        MemoryUtils.free(buffer);
     }
 
 }
