@@ -55,26 +55,26 @@ public abstract class AbstractInput {
         return inputMonitor.getPressedCount(button);
     }
 
-    public Action getMouseButton(int mouseIndex, MouseBtn button) {
-        if(inputMonitor.isMouseButtonDown(mouseIndex, button))
+    public Action getMouseButton(int cursorIndex, MouseBtn button) {
+        if(inputMonitor.isMouseButtonDown(cursorIndex, button))
             return Action.DOWN;
-        if(inputMonitor.isMouseButtonPressed(mouseIndex, button))
+        if(inputMonitor.isMouseButtonPressed(cursorIndex, button))
             return Action.PRESSED;
-        if(inputMonitor.isMouseButtonUp(mouseIndex, button))
+        if(inputMonitor.isMouseButtonUp(cursorIndex, button))
             return Action.UP;
         return Action.NOT_PRESSED;
     }
 
-    public boolean isButtonDown(int mouseIndex, MouseBtn button) {
-        return inputMonitor.isMouseButtonDown(mouseIndex, button);
+    public boolean isButtonDown(int cursorIndex, MouseBtn button) {
+        return inputMonitor.isMouseButtonDown(cursorIndex, button);
     }
 
-    public boolean isButtonPressed(int mouseIndex, MouseBtn button) {
-        return inputMonitor.isMouseButtonPressed(mouseIndex, button);
+    public boolean isButtonPressed(int cursorIndex, MouseBtn button) {
+        return inputMonitor.isMouseButtonPressed(cursorIndex, button);
     }
 
-    public boolean isButtonUp(int mouseIndex, MouseBtn button) {
-        return inputMonitor.isMouseButtonUp(mouseIndex, button);
+    public boolean isButtonUp(int cursorIndex, MouseBtn button) {
+        return inputMonitor.isMouseButtonUp(cursorIndex, button);
     }
 
 
@@ -134,25 +134,25 @@ public abstract class AbstractInput {
 
 
 
-    public abstract Vec2f getCursorNativePos(Vec2f dst, int mouseIndex);
+    public abstract Vec2f getCursorNativePos(Vec2f dst, int cursorIndex);
 
     public Vec2f getCursorNativePos(Vec2f dst) {
         return this.getCursorNativePos(dst, 0);
     }
 
-    public abstract Vec2f getCursorPos(Vec2f dst, int mouseIndex);
+    public abstract Vec2f getCursorPos(Vec2f dst, int cursorIndex);
 
     public Vec2f getCursorPos(Vec2f dst) {
         return this.getCursorPos(dst, 0);
     }
 
-    public abstract float getCursorX(int mouseIndex);
+    public abstract float getCursorX(int cursorIndex);
 
     public float getCursorX() {
         return this.getCursorX(0);
     }
 
-    public abstract float getCursorNativeY(int mouseIndex);
+    public abstract float getCursorNativeY(int cursorIndex);
 
     public float getCursorNativeY() {
         return this.getCursorNativeY(0);

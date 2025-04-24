@@ -13,20 +13,20 @@ public enum MouseBtn {
     B7,
     B8;
 
-    public boolean pressed(int mouseIndex) {
-        return Jpize.input.isButtonPressed(mouseIndex, this);
+    public boolean pressed(int cursorIndex) {
+        return Jpize.input.isButtonPressed(cursorIndex, this);
     }
 
-    public boolean down(int mouseIndex) {
-        return Jpize.input.isButtonDown(mouseIndex, this);
+    public boolean down(int cursorIndex) {
+        return Jpize.input.isButtonDown(cursorIndex, this);
     }
 
-    public boolean up(int mouseIndex) {
-        return Jpize.input.isButtonUp(mouseIndex, this);
+    public boolean up(int cursorIndex) {
+        return Jpize.input.isButtonUp(cursorIndex, this);
     }
 
-    public Action action(int mouseIndex) {
-        return Jpize.input.getMouseButton(mouseIndex, this);
+    public Action action(int cursorIndex) {
+        return Jpize.input.getMouseButton(cursorIndex, this);
     }
 
 
@@ -47,21 +47,21 @@ public enum MouseBtn {
     }
 
 
-    public static boolean downAny(int mouseIndex, MouseBtn... buttons) {
+    public static boolean downAny(int cursorIndex, MouseBtn... buttons) {
         for(MouseBtn button: buttons)
             if(button.down())
                 return true;
         return false;
     }
 
-    public static boolean pressedAny(int mouseIndex, MouseBtn... buttons) {
+    public static boolean pressedAny(int cursorIndex, MouseBtn... buttons) {
         for(MouseBtn button: buttons)
             if(button.pressed())
                 return true;
         return false;
     }
 
-    public static boolean upAny(int mouseIndex, MouseBtn... buttons) {
+    public static boolean upAny(int cursorIndex, MouseBtn... buttons) {
         for(MouseBtn button: buttons)
             if(button.up())
                 return true;
@@ -82,21 +82,21 @@ public enum MouseBtn {
     }
 
 
-    public static boolean downAll(int mouseIndex, MouseBtn... buttons) {
+    public static boolean downAll(int cursorIndex, MouseBtn... buttons) {
         for(MouseBtn button: buttons)
             if(!button.down())
                 return false;
         return true;
     }
 
-    public static boolean pressedAll(int mouseIndex, MouseBtn... buttons) {
+    public static boolean pressedAll(int cursorIndex, MouseBtn... buttons) {
         for(MouseBtn button: buttons)
             if(!button.pressed())
                 return false;
         return true;
     }
 
-    public static boolean upAll(int mouseIndex, MouseBtn... buttons) {
+    public static boolean upAll(int cursorIndex, MouseBtn... buttons) {
         for(MouseBtn button: buttons)
             if(!button.up())
                 return false;

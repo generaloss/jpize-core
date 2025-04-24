@@ -47,8 +47,8 @@ public class InputMonitor {
         }
     }
 
-    private void onMouseButton(int mouseIndex, MouseBtn button, Action action, Mods mods) {
-        final int index = this.getButtonIndex(mouseIndex, button);
+    private void onMouseButton(int cursorIndex, MouseBtn button, Action action, Mods mods) {
+        final int index = this.getButtonIndex(cursorIndex, button);
         if(action.isPressed()) {
             btnsDown.set(index);
             btnsPressed.set(index, true);
@@ -66,8 +66,8 @@ public class InputMonitor {
     }
 
 
-    private int getButtonIndex(int mouseIndex, MouseBtn button) {
-        return (button.ordinal() + mouseIndex * BUTTONS_COUNT);
+    private int getButtonIndex(int cursorIndex, MouseBtn button) {
+        return (button.ordinal() + cursorIndex * BUTTONS_COUNT);
     }
 
     public void clear() {
@@ -93,18 +93,18 @@ public class InputMonitor {
     }
 
 
-    public boolean isMouseButtonDown(int mouseIndex, MouseBtn button) {
-        final int index = this.getButtonIndex(mouseIndex, button);
+    public boolean isMouseButtonDown(int cursorIndex, MouseBtn button) {
+        final int index = this.getButtonIndex(cursorIndex, button);
         return btnsDown.get(index);
     }
 
-    public boolean isMouseButtonPressed(int mouseIndex, MouseBtn button) {
-        final int index = this.getButtonIndex(mouseIndex, button);
+    public boolean isMouseButtonPressed(int cursorIndex, MouseBtn button) {
+        final int index = this.getButtonIndex(cursorIndex, button);
         return btnsPressed.get(index);
     }
 
-    public boolean isMouseButtonUp(int mouseIndex, MouseBtn button) {
-        final int index = this.getButtonIndex(mouseIndex, button);
+    public boolean isMouseButtonUp(int cursorIndex, MouseBtn button) {
+        final int index = this.getButtonIndex(cursorIndex, button);
         return btnsUp.get(index);
     }
 

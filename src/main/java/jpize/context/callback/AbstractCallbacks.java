@@ -228,8 +228,8 @@ public abstract class AbstractCallbacks {
         mouseButton.remove(callback);
     }
 
-    public void invokeMouseButton(int mouseIndex, MouseBtn button, Action action, Mods mods) {
-        mouseButton.forEach(callback -> callback.invoke(mouseIndex, button, action, mods));
+    public void invokeMouseButton(int cursorIndex, MouseBtn button, Action action, Mods mods) {
+        mouseButton.forEach(callback -> callback.invoke(cursorIndex, button, action, mods));
     }
 
 

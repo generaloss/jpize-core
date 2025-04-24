@@ -6,6 +6,6 @@ import jpize.context.input.MouseBtn;
 
 public interface MouseButtonCallback {
 
-    void invoke(int mouseIndex, MouseBtn button, Action action, Mods mods);
+    void invoke(int cursorIndex, MouseBtn button, Action action, Mods mods);
 
 }

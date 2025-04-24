@@ -54,24 +54,24 @@ public class Jpize {
     }
 
 
-    public static float getX(int mouseIndex) {
-        return input.getCursorX(mouseIndex);
+    public static float getX(int cursorIndex) {
+        return input.getCursorX(cursorIndex);
     }
 
     public static float getX() {
         return getX(0);
     }
 
-    public static float getY(int mouseIndex) {
-        return input.getCursorY(mouseIndex);
+    public static float getY(int cursorIndex) {
+        return input.getCursorY(cursorIndex);
     }
 
     public static float getY() {
         return getY(0);
     }
 
-    public static float getNativeY(int mouseIndex) {
-        return input.getCursorNativeY(mouseIndex);
+    public static float getNativeY(int cursorIndex) {
+        return input.getCursorNativeY(cursorIndex);
     }
 
     public static float getNativeY() {
