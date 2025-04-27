@@ -95,7 +95,7 @@ public class Jpize {
     }
     
     
-    public void exit() {
+    public static void exit() {
         context.close();
     }
 
