@@ -26,11 +26,11 @@ public enum GlType {
     INT_2_10_10_10_REV           (GL_INT_2_10_10_10_REV          , 4); // 36255
 
     public final int value;
-    public final int size;
+    public final int bytes;
 
-    GlType(int value, int size) {
+    GlType(int value, int bytes) {
         this.value = value;
-        this.size = size;
+        this.bytes = bytes;
     }
 
 

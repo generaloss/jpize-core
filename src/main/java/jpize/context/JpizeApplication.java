@@ -1,6 +1,8 @@
 package jpize.context;
 
-public abstract class JpizeApplication {
+import jpize.util.Disposable;
+
+public abstract class JpizeApplication implements Disposable {
 
     public void init(){ }
 
@@ -9,7 +11,8 @@ public abstract class JpizeApplication {
     public void render(){ }
 
     public void resize(int width, int height){ }
-    
+
+    @Override
     public void dispose(){ }
 
 }

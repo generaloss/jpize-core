@@ -9,31 +9,30 @@ public class GlVertexArray extends GlObject {
 
     public GlVertexArray() {
         super(Jpize.GL30.glGenVertexArrays());
+    }
+
+
+    public void drawArrays(int verticesCount, GlPrimitive mode) {
         this.bind();
+        Jpize.GL11.glDrawArrays(mode.value, 0, verticesCount);
+    }
+
+    public void drawArrays(int verticesCount) {
+        this.drawArrays(verticesCount, GlPrimitive.TRIANGLES);
     }
 
 
-    public void drawArrays(int verticesNum, GlPrimitive mode) {
+    public void drawElements(int indicesCount, GlPrimitive mode, GlIndexType indexType) {
         this.bind();
-        Jpize.GL11.glDrawArrays(mode.value, 0, verticesNum);
+        Jpize.GL11.glDrawElements(mode.value, indicesCount, indexType.type.value, 0L);
     }
 
-    public void drawArrays(int verticesNum) {
-        this.drawArrays(verticesNum, GlPrimitive.TRIANGLES);
+    public void drawElements(int indicesCount, GlPrimitive mode) {
+        this.drawElements(indicesCount, mode, GlIndexType.UNSIGNED_INT);
     }
 
-
-    public void drawElements(int indicesNum, GlPrimitive mode, GlIndexType indexType) {
-        this.bind();
-        Jpize.GL11.glDrawElements(mode.value, indicesNum, indexType.value, 0L);
-    }
-
-    public void drawElements(int indicesNum, GlPrimitive mode) {
-        this.drawElements(indicesNum, mode, GlIndexType.UNSIGNED_INT);
-    }
-
-    public void drawElements(int indicesNum) {
-        this.drawElements(indicesNum, GlPrimitive.TRIANGLES);
+    public void drawElements(int indicesCount) {
+        this.drawElements(indicesCount, GlPrimitive.TRIANGLES);
     }
 
     public void bind() {

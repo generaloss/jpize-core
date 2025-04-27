@@ -13,7 +13,7 @@ public abstract class Context {
 
     private JpizeApplication app;
     private boolean disableRender;
-    private boolean exitRequest;
+    private boolean closeRequest;
 
     public Context() {
         this.syncExecutor = new SyncExecutor();
@@ -52,26 +52,26 @@ public abstract class Context {
     }
 
 
-    public void init() {
+    protected void onInit() {
         if(app != null)
             app.init();
-        this.getCallbacks().addResize(this::resize);
+        this.getCallbacks().addResize(this::onResize);
         this.getCallbacks().invokeInit();
         // reset delta time counter after init
         fpsCounter.reset();
         deltaTimeCounter.reset();
     }
 
-    protected void resize(int width, int height) {
+    protected void onResize(int width, int height) {
         Jpize.GL11.glViewport(0, 0, width, height);
         if(app != null)
             app.resize(width, height);
     }
 
-    public void loop() {
+    protected void onUpdate() {
         // close
-        if(exitRequest){
-            this.exit();
+        if(closeRequest){
+            this.onClose();
             return;
         }
         // update
@@ -91,16 +91,16 @@ public abstract class Context {
         this.getInput().getInputMonitor().clear();
     }
 
-    public void exit() {
+    protected void onClose() {
         // (context is current (calls in loop))
-        this.getCallbacks().invokeExit();
+        this.getCallbacks().invokeCloseContext();
         // free resources
         if(app != null)
             app.dispose();
     }
 
     public void close() {
-        exitRequest = true;
+        closeRequest = true;
     }
 
 }

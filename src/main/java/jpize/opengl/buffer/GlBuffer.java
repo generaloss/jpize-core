@@ -12,6 +12,7 @@ public class GlBuffer extends GlObject {
 
     protected final GlBufTarget target;
     private GlBufUsage defaultUsage;
+    private int typeBytes;
 
     public GlBuffer(GlBufTarget target) {
         super(Jpize.GL15.glGenBuffers());
@@ -111,9 +112,18 @@ public class GlBuffer extends GlObject {
     }
 
 
-    public int getSize() {
+    public int getSizeBytes() {
         return this.getParameter(GlBufParam.BUFFER_SIZE);
     }
+
+    public int getSizeElements() {
+        if(typeBytes == 0)
+            return 0;
+
+        final int sizeBytes = this.getSizeBytes();
+        return (sizeBytes / typeBytes);
+    }
+
 
     public void copySubData(GlBuffer buffer, long readOffset, long writeOffset, long size) {
         Jpize.GL15.glBindBuffer(GLI32.GL_COPY_READ_BUFFER, ID);
@@ -125,122 +135,146 @@ public class GlBuffer extends GlObject {
     public void allocateData(long bytes, GlBufUsage usage) {
         this.bind();
         Jpize.GL15.glBufferData(target.value, bytes, usage.value);
+        typeBytes = 0;
     }
 
     public void allocateData(int bytes, GlBufUsage usage) {
         this.bind();
         Jpize.GL15.glBufferData(target.value, bytes, usage.value);
+        typeBytes = 0;
     }
 
     public void setData(int[] data, GlBufUsage usage) {
         this.bind();
         Jpize.GL15.glBufferData(target.value, data, usage.value);
+        typeBytes = Integer.BYTES;
     }
 
     public void setData(long[] data, GlBufUsage usage) {
         this.bind();
         Jpize.GL15.glBufferData(target.value, data, usage.value);
+        typeBytes = Long.BYTES;
     }
 
     public void setData(float[] data, GlBufUsage usage) {
         this.bind();
         Jpize.GL15.glBufferData(target.value, data, usage.value);
+        typeBytes = Float.BYTES;
     }
 
     public void setData(short[] data, GlBufUsage usage) {
         this.bind();
         Jpize.GL15.glBufferData(target.value, data, usage.value);
+        typeBytes = Short.BYTES;
     }
 
     public void setData(double[] data, GlBufUsage usage) {
         this.bind();
         Jpize.GL15.glBufferData(target.value, data, usage.value);
+        typeBytes = Double.BYTES;
     }
 
     public void setData(IntBuffer data, GlBufUsage usage) {
         this.bind();
         Jpize.GL15.glBufferData(target.value, data, usage.value);
+        typeBytes = Integer.BYTES;
     }
 
     public void setData(ByteBuffer data, GlBufUsage usage) {
         this.bind();
         Jpize.GL15.glBufferData(target.value, data, usage.value);
+        typeBytes = Byte.BYTES;
     }
 
     public void setData(LongBuffer data, GlBufUsage usage) {
         this.bind();
         Jpize.GL15.glBufferData(target.value, data, usage.value);
+        typeBytes = Long.BYTES;
     }
 
     public void setData(FloatBuffer data, GlBufUsage usage) {
         this.bind();
         Jpize.GL15.glBufferData(target.value, data, usage.value);
+        typeBytes = Float.BYTES;
     }
 
     public void setData(ShortBuffer data, GlBufUsage usage) {
         this.bind();
         Jpize.GL15.glBufferData(target.value, data, usage.value);
+        typeBytes = Short.BYTES;
     }
 
     public void setData(DoubleBuffer data, GlBufUsage usage) {
         this.bind();
         Jpize.GL15.glBufferData(target.value, data, usage.value);
+        typeBytes = Double.BYTES;
     }
 
 
     public void setSubData(long offsetBytes, int... data) {
         this.bind();
         Jpize.GL15.glBufferSubData(target.value, offsetBytes, data);
+        typeBytes = Integer.BYTES;
     }
 
     public void setSubData(long offsetBytes, long... data) {
         this.bind();
         Jpize.GL15.glBufferSubData(target.value, offsetBytes, data);
+        typeBytes = Long.BYTES;
     }
 
     public void setSubData(long offsetBytes, float... data) {
         this.bind();
         Jpize.GL15.glBufferSubData(target.value, offsetBytes, data);
+        typeBytes = Float.BYTES;
     }
 
     public void setSubData(long offsetBytes, short... data) {
         this.bind();
         Jpize.GL15.glBufferSubData(target.value, offsetBytes, data);
+        typeBytes = Short.BYTES;
     }
 
     public void setSubData(long offsetBytes, double... data) {
         this.bind();
         Jpize.GL15.glBufferSubData(target.value, offsetBytes, data);
+        typeBytes = Double.BYTES;
     }
 
     public void setSubData(long offsetBytes, IntBuffer data) {
         this.bind();
         Jpize.GL15.glBufferSubData(target.value, offsetBytes, data);
+        typeBytes = Integer.BYTES;
     }
 
     public void setSubData(long offsetBytes, ByteBuffer data) {
         this.bind();
         Jpize.GL15.glBufferSubData(target.value, offsetBytes, data);
+        typeBytes = Byte.BYTES;
     }
 
     public void setSubData(long offsetBytes, LongBuffer data) {
         this.bind();
         Jpize.GL15.glBufferSubData(target.value, offsetBytes, data);
+        typeBytes = Long.BYTES;
     }
 
     public void setSubData(long offsetBytes, FloatBuffer data) {
         this.bind();
         Jpize.GL15.glBufferSubData(target.value, offsetBytes, data);
+        typeBytes = Float.BYTES;
     }
 
     public void setSubData(long offsetBytes, ShortBuffer data) {
         this.bind();
         Jpize.GL15.glBufferSubData(target.value, offsetBytes, data);
+        typeBytes = Short.BYTES;
     }
 
     public void setSubData(long offsetBytes, DoubleBuffer data) {
         this.bind();
         Jpize.GL15.glBufferSubData(target.value, offsetBytes, data);
+        typeBytes = Double.BYTES;
     }
 
 

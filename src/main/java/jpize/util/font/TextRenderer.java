@@ -97,7 +97,7 @@ public class TextRenderer {
                 new Shader(Resource.internal("/shader/text_renderer/vert.glsl"), Resource.internal("/shader/text_renderer/frag.glsl")),
                 new Matrix4f()
             );
-            Jpize.callbacks.addExit(renderer::dispose);
+            Jpize.callbacks.addCloseContext(renderer::dispose);
             RENDERER_BY_THREAD.put(threadID, renderer);
         }
         final Renderer renderer = RENDERER_BY_THREAD.get(threadID);
@@ -219,8 +219,7 @@ public class TextRenderer {
                 new Shader(Resource.internal("/shader/text_renderer/vert.glsl"), Resource.internal("/shader/text_renderer/frag.glsl")),
                 new Matrix4f()
             );
-            renderer.mesh.setMode(GlPrimitive.QUADS);
-            Jpize.callbacks.addExit(renderer::dispose);
+            Jpize.callbacks.addCloseContext(renderer::dispose);
             RENDERER_BY_THREAD.put(threadID, renderer);
         }
         final Renderer renderer = RENDERER_BY_THREAD.get(threadID);
@@ -291,7 +290,10 @@ public class TextRenderer {
                     vertex1.x, vertex1.y, vertex1.z,  u1, v1,  r, g, b, a,
                     vertex2.x, vertex2.y, vertex2.z,  u1, v2,  r, g, b, a,
                     vertex3.x, vertex3.y, vertex3.z,  u2, v2,  r, g, b, a,
-                    vertex4.x, vertex4.y, vertex4.z,  u2, v1,  r, g, b, a
+
+                    vertex3.x, vertex3.y, vertex3.z,  u2, v2,  r, g, b, a,
+                    vertex4.x, vertex4.y, vertex4.z,  u2, v1,  r, g, b, a,
+                    vertex1.x, vertex1.y, vertex1.z,  u1, v1,  r, g, b, a
             );
 
             // render mesh

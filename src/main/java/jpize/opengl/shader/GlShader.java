@@ -57,8 +57,7 @@ public class GlShader extends GlObject {
         Jpize.GL20.glCompileShader(ID);
     }
 
-    public void compileAndCheckError() {
-        this.compile();
+    public void checkCompileError() {
         if(!this.getCompileStatus()) {
             final String log = this.getInfoLog();
             throw new RuntimeException("Failed to compile shader" + (log.isEmpty() ? "" : (":\n" + log)));

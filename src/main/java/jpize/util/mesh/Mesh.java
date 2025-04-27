@@ -1,20 +1,24 @@
 package jpize.util.mesh;
 
+import jpize.opengl.buffer.GlVertexBuffer;
 import jpize.opengl.tesselation.GlPrimitive;
 import jpize.opengl.vertex.GlVertexArray;
 import jpize.opengl.vertex.GlVertAttr;
-import jpize.opengl.buffer.VertexBuffer;
 
 public class Mesh implements IMesh {
 
     private final GlVertexArray vertexArray;
-    private final VertexBuffer vertexBuffer;
+    private final GlVertexBuffer vertexBuffer;
     private GlPrimitive mode;
 
     public Mesh(GlVertAttr... attributes) {
         this.vertexArray = new GlVertexArray();
-        this.vertexBuffer = new VertexBuffer();
+        this.vertexArray.bind();
+
+        this.vertexBuffer = new GlVertexBuffer();
+        this.vertexBuffer.bind();
         this.vertexBuffer.enableAttributes(attributes);
+
         this.mode = GlPrimitive.TRIANGLES;
     }
 
@@ -33,12 +37,12 @@ public class Mesh implements IMesh {
 
     @Override
     public void render() {
-        this.render(vertexBuffer.getVertexCount());
+        this.render(vertexBuffer.getVerticesCount());
     }
 
 
     @Override
-    public VertexBuffer vertices() {
+    public GlVertexBuffer vertices() {
         return vertexBuffer;
     }
 

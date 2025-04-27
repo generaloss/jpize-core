@@ -16,7 +16,7 @@ public class TextureUtils {
             pixmap.clearRGB(0xFFFFFF);
             final Texture2D texture = new Texture2D(pixmap);
             pixmap.dispose();
-            Jpize.callbacks.addExit(texture::dispose);
+            Jpize.callbacks.addCloseContext(texture::dispose);
             WHITE_TEXTURE_BY_THREAD.put(threadID, texture);
         }
         return WHITE_TEXTURE_BY_THREAD.get(threadID);

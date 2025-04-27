@@ -6,12 +6,12 @@ public class GlVertAttr {
 
     private final int count;
     private final GlType type;
-    private final boolean normalize;
+    private final boolean normalized;
 
-    public GlVertAttr(int count, GlType type, boolean normalize) {
+    public GlVertAttr(int count, GlType type, boolean normalized) {
         this.count = count;
         this.type = type;
-        this.normalize = normalize;
+        this.normalized = normalized;
     }
     
     public GlVertAttr(int count, GlType type) {
@@ -27,8 +27,8 @@ public class GlVertAttr {
         return type;
     }
 
-    public boolean isNormalize() {
-        return normalize;
+    public boolean isNormalized() {
+        return normalized;
     }
 
 }

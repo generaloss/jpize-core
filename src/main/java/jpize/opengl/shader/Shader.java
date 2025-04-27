@@ -49,15 +49,21 @@ public class Shader extends GlProgram {
 
         final GlShader vertexShader = new GlShader(GlShaderType.VERTEX);
         vertexShader.setSource(vertexCode);
-        vertexShader.compileAndCheckError();
+        vertexShader.compile();
+        vertexShader.checkCompileError();
         super.attach(vertexShader);
 
         final GlShader fragmentShader = new GlShader(GlShaderType.FRAGMENT);
         fragmentShader.setSource(fragmentCode);
-        fragmentShader.compileAndCheckError();
+        fragmentShader.compile();
+        fragmentShader.checkCompileError();
         super.attach(fragmentShader);
 
         super.link();
+        super.logLinkError();
+        super.validate();
+        super.logValidateError();
+
         vertexShader.dispose();
         fragmentShader.dispose();
 
@@ -76,20 +82,27 @@ public class Shader extends GlProgram {
 
         final GlShader geometryShader = new GlShader(GlShaderType.GEOMETRY);
         geometryShader.setSource(geometryCode);
-        geometryShader.compileAndCheckError();
+        geometryShader.compile();
+        geometryShader.checkCompileError();
         super.attach(geometryShader);
 
         final GlShader vertexShader = new GlShader(GlShaderType.VERTEX);
         vertexShader.setSource(vertexCode);
-        vertexShader.compileAndCheckError();
+        vertexShader.compile();
+        vertexShader.checkCompileError();
         super.attach(vertexShader);
 
         final GlShader fragmentShader = new GlShader(GlShaderType.FRAGMENT);
         fragmentShader.setSource(fragmentCode);
-        fragmentShader.compileAndCheckError();
+        fragmentShader.compile();
+        fragmentShader.checkCompileError();
         super.attach(fragmentShader);
 
         super.link();
+        super.logLinkError();
+        super.validate();
+        super.logValidateError();
+
         geometryShader.dispose();
         vertexShader.dispose();
         fragmentShader.dispose();

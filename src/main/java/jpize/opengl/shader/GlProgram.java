@@ -57,10 +57,18 @@ public class GlProgram extends GlObject {
 
     public void link() {
         Jpize.GL20.glLinkProgram(ID);
+    }
+
+    public void validate() {
+        Jpize.GL20.glValidateProgram(ID);
+    }
+
+    public void logLinkError() {
         if(Jpize.GL20.glGetProgrami(ID, GLI20.GL_LINK_STATUS) == GLI11.GL_FALSE)
             this.logError("Linking shader error");
+    }
 
-        Jpize.GL20.glValidateProgram(ID);
+    public void logValidateError() {
         if(Jpize.GL20.glGetProgrami(ID, GLI20.GL_VALIDATE_STATUS) == GLI11.GL_FALSE)
             this.logError("Validating shader error");
     }

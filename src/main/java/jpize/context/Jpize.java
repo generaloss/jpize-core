@@ -93,5 +93,10 @@ public class Jpize {
     public static SyncExecutor syncExecutor() {
         return context.getSyncExecutor();
     }
+    
+    
+    public void exit() {
+        context.close();
+    }
 
 }

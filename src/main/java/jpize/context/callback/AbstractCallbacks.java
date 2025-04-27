@@ -14,7 +14,7 @@ public abstract class AbstractCallbacks {
     protected final List<Runnable> render = new CopyOnWriteArrayList<>();
     protected final List<Runnable> update = new CopyOnWriteArrayList<>();
     protected final List<ResizeCallback> resize = new CopyOnWriteArrayList<>();
-    protected final List<Runnable> exit = new CopyOnWriteArrayList<>();
+    protected final List<Runnable> closeContext = new CopyOnWriteArrayList<>();
 
     protected final List<ContentScaleCallback> contentScale = new CopyOnWriteArrayList<>();
     protected final List<WindowFocusCallback> windowFocus = new CopyOnWriteArrayList<>();
@@ -89,16 +89,16 @@ public abstract class AbstractCallbacks {
     }
 
 
-    public void addExit(Runnable callback) {
-        exit.add(callback);
+    public void addCloseContext(Runnable callback) {
+        closeContext.add(callback);
     }
 
-    public void removeExit(Runnable callback) {
-        exit.remove(callback);
+    public void removeCloseContext(Runnable callback) {
+        closeContext.remove(callback);
     }
 
-    public void invokeExit() {
-        exit.forEach(Runnable::run);
+    public void invokeCloseContext() {
+        closeContext.forEach(Runnable::run);
     }
 
 

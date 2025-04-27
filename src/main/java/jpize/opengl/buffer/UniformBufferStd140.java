@@ -1,6 +1,5 @@
 package jpize.opengl.buffer;
 
-import jpize.util.math.Mathc;
 import jpize.util.math.matrix.Matrix4f;
 import jpize.util.math.vector.*;
 
@@ -12,113 +11,133 @@ public class UniformBufferStd140 extends GlUniformBuffer {
         offset = 0;
     }
 
-    private void offset(int value) {
-        offset += value;
-        offset = Mathc.ceil(offset / 16F) * 16;
+    private void alignOffset(int alignment) {
+        offset = (offset + (alignment - 1)) & -alignment;
     }
 
 
-    public void put(Matrix4f matrix) {
-        super.setSubData(offset, matrix.val);
-        this.offset(64);
+    public void put(Matrix4f mat) {
+        this.alignOffset(16);
+        for(int i = 0; i < 4; i++) {
+            final int j = (i * 4);
+            super.setSubData(offset, mat.val[j], mat.val[j + 1], mat.val[j + 2], mat.val[j + 3]);
+            offset += 16;
+        }
     }
 
 
     public void put(Vec2f vec) {
+        this.alignOffset(8);
         super.setSubData(offset, vec.x, vec.y);
-        this.offset(8);
+        offset += 8;
     }
 
     public void put(Vec3f vec) {
+        this.alignOffset(16);
         super.setSubData(offset, vec.x, vec.y, vec.z);
-        this.offset(16);
+        offset += 16;
     }
 
     public void put(Vec4f vec) {
+        this.alignOffset(16);
         super.setSubData(offset, vec.x, vec.y, vec.z, vec.w);
-        this.offset(16);
+        offset += 16;
     }
 
+
     public void put(Vec2f... vecs) {
+        this.alignOffset(16);
         for(Vec2f vec: vecs){
             super.setSubData(offset, vec.x, vec.y);
-            this.offset(16);
+            offset += 16;
         }
     }
 
     public void put(Vec3f... vecs) {
+        this.alignOffset(16);
         for(Vec3f vec: vecs){
             super.setSubData(offset, vec.x, vec.y, vec.z);
-            this.offset(16);
+            offset += 16;
         }
     }
 
     public void put(Vec4f... vecs) {
+        this.alignOffset(16);
         for(Vec4f vec: vecs){
             super.setSubData(offset, vec.x, vec.y, vec.z, vec.w);
-            this.offset(16);
+            offset += 16;
         }
     }
 
 
     public void put(int value) {
+        this.alignOffset(4);
         super.setSubData(offset, value);
-        this.offset(4);
+        offset += 4;
     }
 
     public void put(long value) {
+        this.alignOffset(8);
         super.setSubData(offset, value);
-        this.offset(8);
+        offset += 8;
     }
 
     public void put(float value) {
+        this.alignOffset(4);
         super.setSubData(offset, value);
-        this.offset(4);
+        offset += 4;
     }
 
     public void put(short value) {
-        super.setSubData(offset, value);
-        this.offset(2);
+        this.alignOffset(4);
+        super.setSubData(offset, (int) value);
+        offset += 4;
     }
 
     public void put(double value) {
+        this.alignOffset(8);
         super.setSubData(offset, value);
-        this.offset(8);
+        offset += 8;
     }
 
 
     public void put(int... values) {
+        this.alignOffset(16);
         for(int value: values){
             super.setSubData(offset, value);
-            this.offset(16);
+            offset += 16;
         }
     }
 
     public void put(long... values) {
+        this.alignOffset(16);
         for(long value: values){
             super.setSubData(offset, value);
-            this.offset(16);
+            offset += 16;
         }
     }
 
     public void put(float... values) {
+        this.alignOffset(16);
         for(float value: values){
             super.setSubData(offset, value);
-            this.offset(16);
+            offset += 16;
         }
     }
 
     public void put(short... values) {
+        this.alignOffset(16);
         for(short value: values){
             super.setSubData(offset, value);
-            this.offset(16);
+            offset += 16;
         }
     }
 
     public void put(double... values) {
+        this.alignOffset(16);
         for(double value: values){
             super.setSubData(offset, value);
-            this.offset(16);
+            offset += 16;
         }
     }
 
