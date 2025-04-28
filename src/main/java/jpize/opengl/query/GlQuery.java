@@ -23,6 +23,15 @@ public class GlQuery extends GlObject {
         Jpize.GL15.glEndQuery(type.value);
     }
 
+    public void beginEndAction(Runnable action) {
+        this.begin();
+        try {
+            action.run();
+        }finally{
+            this.end();
+        }
+    }
+
 
     public GlQueryTarget getType() {
         return type;

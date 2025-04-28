@@ -3,9 +3,8 @@ package jpize.opengl.framebuffer.attachment;
 import jpize.opengl.framebuffer.GlFramebuffer;
 import jpize.opengl.framebuffer.renderbuffer.GlRenderbuffer;
 import jpize.opengl.texture.GlInternalFormat;
-import jpize.util.Disposable;
 
-public class FramebufferRenderbuffer extends FramebufferAttachment implements Disposable {
+public class FramebufferRenderbuffer extends FramebufferAttachment {
 
     private final GlRenderbuffer renderbuffer;
 
@@ -28,7 +27,7 @@ public class FramebufferRenderbuffer extends FramebufferAttachment implements Di
     @Override
     public void attach(GlFramebuffer framebuffer) {
         this.setRenderbufferStorage(framebuffer.getWidth(), framebuffer.getHeight());
-        framebuffer.attachRenderbuffer(super.attachment, renderbuffer);
+        framebuffer.framebufferRenderbuffer(super.attachment, renderbuffer);
     }
 
     @Override

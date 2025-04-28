@@ -11,18 +11,28 @@ public class Framebuffer3D extends GlFramebuffer {
     private final FramebufferTexture colorAttachment;
     private final FramebufferTexture depthAttachment;
 
-    public Framebuffer3D(int width, int height) {
-        super(width, height);
+    public Framebuffer3D(GlFramebufferTarget target, int width, int height, boolean multisample) {
+        super(target, width, height, multisample);
+
         this.colorAttachment = FramebufferAttachment.color(0);
         this.depthAttachment = FramebufferAttachment.depth();
-        super.attach(colorAttachment);
-        super.attach(depthAttachment);
+
+        super.attach(colorAttachment, depthAttachment);
         super.checkCompletionError();
+    }
+
+    public Framebuffer3D(int width, int height, boolean multisample) {
+        this(GlFramebufferTarget.FRAMEBUFFER, width, height, multisample);
+    }
+
+    public Framebuffer3D(int width, int height) {
+        this(width, height, false);
     }
 
     public Framebuffer3D() {
         this(Jpize.getWidth(), Jpize.getHeight());
     }
+
 
     public Texture2D getColorTexture() {
         return colorAttachment.getTexture();
@@ -42,9 +52,19 @@ public class Framebuffer3D extends GlFramebuffer {
         super.unbind();
     }
 
+    public void beginEndAction(Runnable action) {
+        this.begin();
+        try {
+            action.run();
+        }finally{
+            this.end();
+        }
+    }
+
 
     @Override
     public void dispose() {
+        super.dispose();
         colorAttachment.dispose();
         depthAttachment.dispose();
     }

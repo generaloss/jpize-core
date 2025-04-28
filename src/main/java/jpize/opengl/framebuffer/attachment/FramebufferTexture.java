@@ -5,9 +5,8 @@ import jpize.opengl.texture.GlInternalFormat;
 import jpize.opengl.texture.GlWrap;
 import jpize.opengl.texture.Texture2D;
 import jpize.opengl.type.GlType;
-import jpize.util.Disposable;
 
-public class FramebufferTexture extends FramebufferAttachment implements Disposable {
+public class FramebufferTexture extends FramebufferAttachment {
 
     protected GlInternalFormat format;
     protected GlType type;
@@ -52,7 +51,7 @@ public class FramebufferTexture extends FramebufferAttachment implements Disposa
     @Override
     public void attach(GlFramebuffer framebuffer) {
         this.setTextureImage(framebuffer.getWidth(), framebuffer.getHeight());
-        framebuffer.attachTexture2D(super.attachment, texture);
+        framebuffer.framebufferTexture2D(super.attachment, texture);
     }
 
     @Override
