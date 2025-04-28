@@ -3,7 +3,7 @@ package jpize.opengl.gl;
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
 
-public interface GLI46 extends GLI45 {
+public interface GL46I extends GL45I {
 
     int GL_PARAMETER_BUFFER = 33006;
     int GL_PARAMETER_BUFFER_BINDING = 33007;

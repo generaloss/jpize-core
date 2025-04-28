@@ -2,7 +2,7 @@ package jpize.opengl.gl;
 
 import java.nio.*;
 
-public interface GLI11 {
+public interface GL11I {
 
     int GL_ACCUM = 256;
     int GL_LOAD = 257;

@@ -109,23 +109,23 @@ public class Gl {
 
 
     public static void clearColorBuffer() {
-        Jpize.GL11.glClear(GLI11.GL_COLOR_BUFFER_BIT);
+        Jpize.GL11.glClear(GL11I.GL_COLOR_BUFFER_BIT);
     }
 
     public static void clearDepthBuffer() {
-        Jpize.GL11.glClear(GLI11.GL_DEPTH_BUFFER_BIT);
+        Jpize.GL11.glClear(GL11I.GL_DEPTH_BUFFER_BIT);
     }
 
     public static void clearStencilBuffer() {
-        Jpize.GL11.glClear(GLI11.GL_STENCIL_BUFFER_BIT);
+        Jpize.GL11.glClear(GL11I.GL_STENCIL_BUFFER_BIT);
     }
 
     public static void clearColorDepthBuffers() {
-        Jpize.GL11.glClear(GLI11.GL_COLOR_BUFFER_BIT | GLI11.GL_DEPTH_BUFFER_BIT);
+        Jpize.GL11.glClear(GL11I.GL_COLOR_BUFFER_BIT | GL11I.GL_DEPTH_BUFFER_BIT);
     }
 
     public static void clearAllBuffers() {
-        Jpize.GL11.glClear(GLI11.GL_COLOR_BUFFER_BIT | GLI11.GL_DEPTH_BUFFER_BIT | GLI11.GL_STENCIL_BUFFER_BIT);
+        Jpize.GL11.glClear(GL11I.GL_COLOR_BUFFER_BIT | GL11I.GL_DEPTH_BUFFER_BIT | GL11I.GL_STENCIL_BUFFER_BIT);
     }
 
 
@@ -253,11 +253,11 @@ public class Gl {
 
 
     public static float getMaxTextureLodBias() {
-        return Jpize.GL11.glGetFloat(GLI14.GL_MAX_TEXTURE_LOD_BIAS);
+        return Jpize.GL11.glGetFloat(GL14I.GL_MAX_TEXTURE_LOD_BIAS);
     }
 
     public static float getMaxAnisotropy() {
-        return Jpize.GL11.glGetFloat(GLI46.GL_MAX_TEXTURE_MAX_ANISOTROPY);
+        return Jpize.GL11.glGetFloat(GL46I.GL_MAX_TEXTURE_MAX_ANISOTROPY);
     }
 
 }

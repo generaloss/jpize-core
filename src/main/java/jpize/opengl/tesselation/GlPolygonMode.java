@@ -1,6 +1,6 @@
 package jpize.opengl.tesselation;
 
-import static jpize.opengl.gl.GLI33.*;
+import static jpize.opengl.gl.GL33I.*;
 
 public enum GlPolygonMode{
 

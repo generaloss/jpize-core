@@ -5,7 +5,7 @@ import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import java.nio.LongBuffer;
 
-public interface GLI33 extends GLI32 {
+public interface GL33I extends GL32I {
 
     int GL_SRC1_COLOR = 35065;
     int GL_ONE_MINUS_SRC1_COLOR = 35066;

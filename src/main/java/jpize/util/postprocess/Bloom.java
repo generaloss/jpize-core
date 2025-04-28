@@ -1,16 +1,15 @@
 package jpize.util.postprocess;
 
-import jpize.context.Jpize;
+import jpize.opengl.framebuffer.Framebuffer2D;
+import jpize.opengl.framebuffer.Framebuffer3D;
 import jpize.util.res.Resource;
 import jpize.opengl.gl.Gl;
-import jpize.opengl.tesselation.GlFramebuffer;
-import jpize.opengl.tesselation.GlRenderbuffer;
 import jpize.opengl.shader.Shader;
 
 public class Bloom implements IPostProcessEffect {
 
-    private final GlFramebuffer colorBuffer, fbo2, blurBuffer;
-    private final GlRenderbuffer depthBuffer;
+    private final Framebuffer3D colorBuffer;
+    private final Framebuffer2D fbo2, blurBuffer;
     private final Shader brightShader, blurShader, combineShader;
     private float brightness, radius, bloom, exposure, gamma;
 
@@ -22,22 +21,12 @@ public class Bloom implements IPostProcessEffect {
         this.exposure = 2F;
         this.gamma = 0.6F;
 
-        final int width = Jpize.getWidth();
-        final int height = Jpize.getHeight();
-
         // Frame Buffer 1 & Render Buffer
-        this.colorBuffer = new GlFramebuffer(width, height);
-        this.colorBuffer.create();
-        this.colorBuffer.bind();
-        this.depthBuffer = new GlRenderbuffer(width, height);
-        this.depthBuffer.create();
-        this.colorBuffer.unbind();
+        this.colorBuffer = new Framebuffer3D();
 
         // Frame Buffers 2 & 3
-        this.fbo2 = new GlFramebuffer(width, height);
-        this.fbo2.create();
-        this.blurBuffer = new GlFramebuffer(width, height);
-        this.blurBuffer.create();
+        this.fbo2 = new Framebuffer2D();
+        this.blurBuffer = new Framebuffer2D();
 
         // Shader
         final Resource vertexShaderRes = Resource.internal("/shader/bloom/vert.glsl");
@@ -71,39 +60,36 @@ public class Bloom implements IPostProcessEffect {
     @Override
     public void begin() {
         // draw scene in fbo 1
-        depthBuffer.bind();
-        colorBuffer.bind();
-        Gl.clearColorDepthBuffers();
+        colorBuffer.begin();
     }
 
     @Override
     public void end() {
-        depthBuffer.unbind();
-        colorBuffer.unbind();
+        colorBuffer.end();
 
-        fbo2.bind();
+        fbo2.begin();
         Gl.clearColorBuffer();
         {
             brightShader.bind();
-            brightShader.uniform("u_frame", colorBuffer.getTexture());
+            brightShader.uniform("u_frame", colorBuffer.getColorTexture());
             brightShader.uniform("u_brightness", brightness);
             RenderQuad.instance().render();
         }
-        fbo2.unbind();
+        fbo2.end();
 
-        blurBuffer.bind();
+        blurBuffer.begin();
         Gl.clearColorBuffer();
         {
             blurShader.bind();
-            blurShader.uniform("u_frame", fbo2.getTexture());
+            blurShader.uniform("u_frame", fbo2.getColorTexture());
             blurShader.uniform("u_radius", radius);
             RenderQuad.instance().render();
         }
-        blurBuffer.unbind();
+        blurBuffer.end();
 
         combineShader.bind();
-        combineShader.uniform("u_frame1", colorBuffer.getTexture());
-        combineShader.uniform("u_frame2", blurBuffer.getTexture());
+        combineShader.uniform("u_frame1", colorBuffer.getColorTexture());
+        combineShader.uniform("u_frame2", blurBuffer.getColorTexture());
         combineShader.uniform("u_bloom", bloom);
         combineShader.uniform("u_exposure", exposure);
         combineShader.uniform("u_gamma", gamma);
@@ -114,7 +100,6 @@ public class Bloom implements IPostProcessEffect {
     public void end(IPostProcessEffect target) { }
 
     public void resize(int width, int height) {
-        depthBuffer.resize(width, height);
         colorBuffer.resize(width, height);
         fbo2.resize(width, height);
         blurBuffer.resize(width, height);
@@ -122,7 +107,6 @@ public class Bloom implements IPostProcessEffect {
 
     @Override
     public void dispose() {
-        depthBuffer.dispose();
         colorBuffer.dispose();
         fbo2.dispose();
         blurBuffer.dispose();

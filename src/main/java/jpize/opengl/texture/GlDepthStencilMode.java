@@ -1,7 +1,7 @@
 package jpize.opengl.texture;
 
-import static jpize.opengl.gl.GLI11.GL_DEPTH_COMPONENT;
-import static jpize.opengl.gl.GLI11.GL_STENCIL_INDEX;
+import static jpize.opengl.gl.GL11I.GL_DEPTH_COMPONENT;
+import static jpize.opengl.gl.GL11I.GL_STENCIL_INDEX;
 
 public enum GlDepthStencilMode {
 

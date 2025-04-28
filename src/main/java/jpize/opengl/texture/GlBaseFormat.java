@@ -5,7 +5,7 @@ import jpize.util.Utils;
 import java.util.HashMap;
 import java.util.Map;
 
-import static jpize.opengl.gl.GLI30.*;
+import static jpize.opengl.gl.GL30I.*;
 
 public enum GlBaseFormat {
 

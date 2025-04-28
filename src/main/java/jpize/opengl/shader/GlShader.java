@@ -2,7 +2,8 @@ package jpize.opengl.shader;
 
 import jpize.context.Jpize;
 import jpize.opengl.GlObject;
-import jpize.opengl.gl.GLI20;
+import jpize.opengl.gl.GL20I;
+import jpize.opengl.type.GlBool;
 
 public class GlShader extends GlObject {
 
@@ -10,14 +11,20 @@ public class GlShader extends GlObject {
         super(Jpize.GL20.glCreateShader(type.value));
     }
 
-    public GlShaderType getType() {
-        return GlShaderType.byValue(Jpize.GL20.glGetShaderi(ID, GLI20.GL_SHADER_TYPE));
+
+    public CharSequence getInfoLog() {
+        return Jpize.GL20.glGetShaderInfoLog(ID);
     }
 
-
-    public int getSourceLength() {
-        return Jpize.GL20.glGetShaderi(ID, GLI20.GL_SHADER_SOURCE_LENGTH);
+    public void logError(String error) {
+        final CharSequence log = this.getInfoLog();
+        if(!log.isEmpty()){
+            throw new RuntimeException(error + ":\n" + log);
+        }else{
+            throw new RuntimeException(error);
+        }
     }
+
 
     public String getSource() {
         return Jpize.GL20.glGetShaderSource(ID);
@@ -31,48 +38,50 @@ public class GlShader extends GlObject {
         Jpize.GL20.glShaderSource(ID, strings);
     }
 
-    // public void setSource(PointerBuffer strings, int[] lenghts) {
-    //     Jpize.GL20.glShaderSource(ID, strings, lenghts);
-    // }
+    /// LU: public void setSource(PointerBuffer strings, int[] lenghts) {
+    /// LU:     Jpize.GL20.glShaderSource(ID, strings, lenghts);
+    /// LU: }
 
-    // public void setSource(PointerBuffer strings, IntBuffer lenghts) {
-    //     Jpize.GL20.glShaderSource(ID, strings, lenghts);
-    // }
+    /// LU: public void setSource(PointerBuffer strings, IntBuffer lenghts) {
+    /// LU:     Jpize.GL20.glShaderSource(ID, strings, lenghts);
+    /// LU: }
 
-
-    public int getInfoLogLength() {
-        return Jpize.GL20.glGetShaderi(ID, GLI20.GL_INFO_LOG_LENGTH);
-    }
-
-    public String getInfoLog() {
-        return Jpize.GL20.glGetShaderInfoLog(ID);
-    }
-
-
-    public boolean getCompileStatus() {
-        return (Jpize.GL20.glGetShaderi(ID, GLI20.GL_COMPILE_STATUS) == GLI20.GL_TRUE);
-    }
 
     public void compile() {
         Jpize.GL20.glCompileShader(ID);
     }
 
     public void checkCompileError() {
-        if(!this.getCompileStatus()) {
-            final String log = this.getInfoLog();
-            throw new RuntimeException("Failed to compile shader" + (log.isEmpty() ? "" : (":\n" + log)));
-        }
+        if(!this.getCompileStatus())
+            this.logError("Compiling shader error");
     }
 
+
+    public GlShaderType getType() {
+        return GlShaderType.byValue(Jpize.GL20.glGetShaderi(ID, GL20I.GL_SHADER_TYPE));
+    }
+
+    public int getSourceLength() {
+        return Jpize.GL20.glGetShaderi(ID, GL20I.GL_SHADER_SOURCE_LENGTH);
+    }
+
+    public int getInfoLogLength() {
+        return Jpize.GL20.glGetShaderi(ID, GL20I.GL_INFO_LOG_LENGTH);
+    }
+
+    public boolean getCompileStatus() {
+        return GlBool.of(Jpize.GL20.glGetShaderi(ID, GL20I.GL_COMPILE_STATUS));
+    }
 
     public boolean getDeleteStatus() {
-        return (Jpize.GL20.glGetShaderi(ID, GLI20.GL_DELETE_STATUS) == GLI20.GL_TRUE);
+        return GlBool.of(Jpize.GL20.glGetShaderi(ID, GL20I.GL_DELETE_STATUS));
     }
+
 
     @Override
     public void dispose() {
         Jpize.GL20.glDeleteShader(ID);
-        if(!getDeleteStatus())
+        if(!this.getDeleteStatus())
             System.err.println("Failed to delete shader " + ID);
     }
 

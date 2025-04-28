@@ -4,7 +4,7 @@ import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
 import java.nio.ShortBuffer;
 
-public interface GLI31 extends GLI30 {
+public interface GL31I extends GL30I {
 
     int GL_R8_SNORM = 36756;
     int GL_RG8_SNORM = 36757;

@@ -4,6 +4,7 @@ import jpize.context.Jpize;
 import jpize.opengl.gl.*;
 import jpize.opengl.GlObject;
 import jpize.opengl.glenum.GlCompareFunc;
+import jpize.opengl.type.GlBool;
 import jpize.opengl.type.GlType;
 import jpize.util.pixmap.Pixmap;
 
@@ -42,7 +43,7 @@ public abstract class GlTexture extends GlObject {
 
 
     protected void glActiveTexture(int active) {
-        Jpize.GL15.glActiveTexture(GLI13.GL_TEXTURE0 + active);
+        Jpize.GL15.glActiveTexture(GL13I.GL_TEXTURE0 + active);
     }
 
 
@@ -113,238 +114,238 @@ public abstract class GlTexture extends GlObject {
 
 
     protected int glGetWidth(GlTexLevelTarget target, int level) {
-        return Jpize.GL15.glGetTexLevelParameteri(target.value, level, GLI11.GL_TEXTURE_WIDTH);
+        return Jpize.GL15.glGetTexLevelParameteri(target.value, level, GL11I.GL_TEXTURE_WIDTH);
     }
 
     protected int glGetHeight(GlTexLevelTarget target, int level) {
-        return Jpize.GL15.glGetTexLevelParameteri(target.value, level, GLI11.GL_TEXTURE_HEIGHT);
+        return Jpize.GL15.glGetTexLevelParameteri(target.value, level, GL11I.GL_TEXTURE_HEIGHT);
     }
 
     protected int glGetDepth(GlTexLevelTarget target, int level) {
-        return Jpize.GL15.glGetTexLevelParameteri(target.value, level, GLI12.GL_TEXTURE_DEPTH);
+        return Jpize.GL15.glGetTexLevelParameteri(target.value, level, GL12I.GL_TEXTURE_DEPTH);
     }
 
 
     protected GlInternalFormat glGetInternalFormat(GlTexLevelTarget target, int level) {
-        return GlInternalFormat.byValue(Jpize.GL15.glGetTexLevelParameteri(target.value, level, GLI11.GL_TEXTURE_INTERNAL_FORMAT));
+        return GlInternalFormat.byValue(Jpize.GL15.glGetTexLevelParameteri(target.value, level, GL11I.GL_TEXTURE_INTERNAL_FORMAT));
     }
 
 
     protected int glGetRedSize(GlTexLevelTarget target, int level) {
-        return Jpize.GL15.glGetTexLevelParameteri(target.value, level, GLI11.GL_TEXTURE_RED_SIZE);
+        return Jpize.GL15.glGetTexLevelParameteri(target.value, level, GL11I.GL_TEXTURE_RED_SIZE);
     }
 
     protected int glGetGreenSize(GlTexLevelTarget target, int level) {
-        return Jpize.GL15.glGetTexLevelParameteri(target.value, level, GLI11.GL_TEXTURE_GREEN_SIZE);
+        return Jpize.GL15.glGetTexLevelParameteri(target.value, level, GL11I.GL_TEXTURE_GREEN_SIZE);
     }
 
     protected int glGetBlueSize(GlTexLevelTarget target, int level) {
-        return Jpize.GL15.glGetTexLevelParameteri(target.value, level, GLI11.GL_TEXTURE_BLUE_SIZE);
+        return Jpize.GL15.glGetTexLevelParameteri(target.value, level, GL11I.GL_TEXTURE_BLUE_SIZE);
     }
 
     protected int glGetAlphaSize(GlTexLevelTarget target, int level) {
-        return Jpize.GL15.glGetTexLevelParameteri(target.value, level, GLI11.GL_TEXTURE_ALPHA_SIZE);
+        return Jpize.GL15.glGetTexLevelParameteri(target.value, level, GL11I.GL_TEXTURE_ALPHA_SIZE);
     }
 
 
     protected int glGetDepthSize(GlTexLevelTarget target, int level) {
-        return Jpize.GL15.glGetTexLevelParameteri(target.value, level, GLI14.GL_TEXTURE_DEPTH_SIZE);
+        return Jpize.GL15.glGetTexLevelParameteri(target.value, level, GL14I.GL_TEXTURE_DEPTH_SIZE);
     }
 
     protected int glGetCompressedImageSize(GlTexLevelTarget target, int level) {
-        return Jpize.GL15.glGetTexLevelParameteri(target.value, level, GLI13.GL_TEXTURE_COMPRESSED_IMAGE_SIZE);
+        return Jpize.GL15.glGetTexLevelParameteri(target.value, level, GL13I.GL_TEXTURE_COMPRESSED_IMAGE_SIZE);
     }
 
     protected boolean glIsCompressed(GlTexLevelTarget target, int level) {
-        return (Jpize.GL15.glGetTexLevelParameteri(target.value, level, GLI13.GL_TEXTURE_COMPRESSED) == GLI11.GL_TRUE);
+        return GlBool.of(Jpize.GL15.glGetTexLevelParameteri(target.value, level, GL13I.GL_TEXTURE_COMPRESSED));
     }
 
     protected int glGetBufferOffset(GlTexLevelTarget target, int level) {
-        return Jpize.GL15.glGetTexLevelParameteri(target.value, level, GLI43.GL_TEXTURE_BUFFER_OFFSET);
+        return Jpize.GL15.glGetTexLevelParameteri(target.value, level, GL43I.GL_TEXTURE_BUFFER_OFFSET);
     }
 
 
 
     protected void glSetDepthStencilTextureMode(GlTexParamTarget target, GlDepthStencilMode mode) {
-        Jpize.GL15.glTexParameteri(target.value, GLI43.GL_DEPTH_STENCIL_TEXTURE_MODE, mode.value);
+        Jpize.GL15.glTexParameteri(target.value, GL43I.GL_DEPTH_STENCIL_TEXTURE_MODE, mode.value);
     }
 
     protected GlDepthStencilMode glGetDepthStencilTextureMode(GlTexParamTarget target) {
-        return GlDepthStencilMode.byValue(Jpize.GL15.glGetTexParameteri(target.value, GLI43.GL_DEPTH_STENCIL_TEXTURE_MODE));
+        return GlDepthStencilMode.byValue(Jpize.GL15.glGetTexParameteri(target.value, GL43I.GL_DEPTH_STENCIL_TEXTURE_MODE));
     }
 
 
     protected void glSetBaseLevel(GlTexParamTarget target, int level) {
-        Jpize.GL15.glTexParameteri(target.value, GLI12.GL_TEXTURE_BASE_LEVEL, level);
+        Jpize.GL15.glTexParameteri(target.value, GL12I.GL_TEXTURE_BASE_LEVEL, level);
     }
 
     protected int glGetBaseLevel(GlTexParamTarget target) {
-        return Jpize.GL15.glGetTexParameteri(target.value, GLI12.GL_TEXTURE_BASE_LEVEL);
+        return Jpize.GL15.glGetTexParameteri(target.value, GL12I.GL_TEXTURE_BASE_LEVEL);
     }
 
 
     protected void glSetCompareFunc(GlTexParamTarget target, GlCompareFunc value) {
-        Jpize.GL15.glTexParameteri(target.value, GLI14.GL_TEXTURE_COMPARE_FUNC, value.value);
+        Jpize.GL15.glTexParameteri(target.value, GL14I.GL_TEXTURE_COMPARE_FUNC, value.value);
     }
 
     protected GlCompareFunc glGetCompareFunc(GlTexParamTarget target) {
-        return GlCompareFunc.byValue(Jpize.GL15.glGetTexParameteri(target.value, GLI14.GL_TEXTURE_COMPARE_FUNC));
+        return GlCompareFunc.byValue(Jpize.GL15.glGetTexParameteri(target.value, GL14I.GL_TEXTURE_COMPARE_FUNC));
     }
 
 
     protected void glSetCompareMode(GlTexParamTarget target, GlCompareMode value) {
-        Jpize.GL15.glTexParameteri(target.value, GLI14.GL_TEXTURE_COMPARE_MODE, value.value);
+        Jpize.GL15.glTexParameteri(target.value, GL14I.GL_TEXTURE_COMPARE_MODE, value.value);
     }
 
     protected GlCompareMode glGetCompareMode(GlTexParamTarget target) {
-        return GlCompareMode.byValue(Jpize.GL15.glGetTexParameteri(target.value, GLI14.GL_TEXTURE_COMPARE_MODE));
+        return GlCompareMode.byValue(Jpize.GL15.glGetTexParameteri(target.value, GL14I.GL_TEXTURE_COMPARE_MODE));
     }
 
 
     protected void glSetLodBias(GlTexParamTarget target, float lodBias) {
         lodBias = Math.min(lodBias, Gl.getMaxTextureLodBias());
-        Jpize.GL15.glTexParameterf(target.value, GLI14.GL_TEXTURE_LOD_BIAS, lodBias);
+        Jpize.GL15.glTexParameterf(target.value, GL14I.GL_TEXTURE_LOD_BIAS, lodBias);
     }
 
     protected float glGetLodBias(GlTexParamTarget target) {
-        return Jpize.GL15.glGetTexParameterf(target.value, GLI14.GL_TEXTURE_LOD_BIAS);
+        return Jpize.GL15.glGetTexParameterf(target.value, GL14I.GL_TEXTURE_LOD_BIAS);
     }
 
 
     protected void glSetMinFilter(GlTexParamTarget target, GlFilter filter) {
-        Jpize.GL15.glTexParameteri(target.value, GLI11.GL_TEXTURE_MIN_FILTER, filter.value);
+        Jpize.GL15.glTexParameteri(target.value, GL11I.GL_TEXTURE_MIN_FILTER, filter.value);
     }
 
     protected void glSetMagFilter(GlTexParamTarget target, GlFilter filter) {
-        Jpize.GL15.glTexParameteri(target.value, GLI11.GL_TEXTURE_MAG_FILTER, filter.value);
+        Jpize.GL15.glTexParameteri(target.value, GL11I.GL_TEXTURE_MAG_FILTER, filter.value);
     }
 
     protected GlFilter glGetMinFilter(GlTexParamTarget target) {
-        return GlFilter.byValue(Jpize.GL15.glGetTexParameteri(target.value, GLI11.GL_TEXTURE_MIN_FILTER));
+        return GlFilter.byValue(Jpize.GL15.glGetTexParameteri(target.value, GL11I.GL_TEXTURE_MIN_FILTER));
     }
 
     protected GlFilter glGetMagFilter(GlTexParamTarget target) {
-        return GlFilter.byValue(Jpize.GL15.glGetTexParameteri(target.value, GLI11.GL_TEXTURE_MAG_FILTER));
+        return GlFilter.byValue(Jpize.GL15.glGetTexParameteri(target.value, GL11I.GL_TEXTURE_MAG_FILTER));
     }
 
 
     protected void glSetMinLod(GlTexParamTarget target, int value) {
-        Jpize.GL15.glTexParameteri(target.value, GLI12.GL_TEXTURE_MIN_LOD, value);
+        Jpize.GL15.glTexParameteri(target.value, GL12I.GL_TEXTURE_MIN_LOD, value);
     }
 
     protected int glGetMinLod(GlTexParamTarget target) {
-        return Jpize.GL15.glGetTexParameteri(target.value, GLI12.GL_TEXTURE_MIN_LOD);
+        return Jpize.GL15.glGetTexParameteri(target.value, GL12I.GL_TEXTURE_MIN_LOD);
     }
 
 
     protected void glSetMaxLod(GlTexParamTarget target, int value) {
-        Jpize.GL15.glTexParameteri(target.value, GLI12.GL_TEXTURE_MAX_LOD, value);
+        Jpize.GL15.glTexParameteri(target.value, GL12I.GL_TEXTURE_MAX_LOD, value);
     }
 
     protected int glGetMaxLod(GlTexParamTarget target) {
-        return Jpize.GL15.glGetTexParameteri(target.value, GLI12.GL_TEXTURE_MAX_LOD);
+        return Jpize.GL15.glGetTexParameteri(target.value, GL12I.GL_TEXTURE_MAX_LOD);
     }
 
 
     protected void glSetMaxLevel(GlTexParamTarget target, int level) {
-        Jpize.GL15.glTexParameteri(target.value, GLI12.GL_TEXTURE_MAX_LEVEL, level);
+        Jpize.GL15.glTexParameteri(target.value, GL12I.GL_TEXTURE_MAX_LEVEL, level);
     }
 
     protected int glGetMaxLevel(GlTexParamTarget target) {
-        return Jpize.GL15.glGetTexParameteri(target.value, GLI12.GL_TEXTURE_MAX_LEVEL);
+        return Jpize.GL15.glGetTexParameteri(target.value, GL12I.GL_TEXTURE_MAX_LEVEL);
     }
 
 
     protected void glSetSqizzleR(GlTexParamTarget target, int value) {
-        Jpize.GL15.glTexParameteri(target.value, GLI33.GL_TEXTURE_SWIZZLE_R, value);
+        Jpize.GL15.glTexParameteri(target.value, GL33I.GL_TEXTURE_SWIZZLE_R, value);
     }
 
     protected int glGetSqizzleR(GlTexParamTarget target) {
-        return Jpize.GL15.glGetTexParameteri(target.value, GLI33.GL_TEXTURE_SWIZZLE_R);
+        return Jpize.GL15.glGetTexParameteri(target.value, GL33I.GL_TEXTURE_SWIZZLE_R);
     }
 
 
     protected void glSetSqizzleG(GlTexParamTarget target, int value) {
-        Jpize.GL15.glTexParameteri(target.value, GLI33.GL_TEXTURE_SWIZZLE_G, value);
+        Jpize.GL15.glTexParameteri(target.value, GL33I.GL_TEXTURE_SWIZZLE_G, value);
     }
 
     protected int glGetSqizzleG(GlTexParamTarget target) {
-        return Jpize.GL15.glGetTexParameteri(target.value, GLI33.GL_TEXTURE_SWIZZLE_G);
+        return Jpize.GL15.glGetTexParameteri(target.value, GL33I.GL_TEXTURE_SWIZZLE_G);
     }
 
 
     protected void glSetSqizzleB(GlTexParamTarget target, int value) {
-        Jpize.GL15.glTexParameteri(target.value, GLI33.GL_TEXTURE_SWIZZLE_B, value);
+        Jpize.GL15.glTexParameteri(target.value, GL33I.GL_TEXTURE_SWIZZLE_B, value);
     }
 
     protected int glGetSqizzleB(GlTexParamTarget target) {
-        return Jpize.GL15.glGetTexParameteri(target.value, GLI33.GL_TEXTURE_SWIZZLE_B);
+        return Jpize.GL15.glGetTexParameteri(target.value, GL33I.GL_TEXTURE_SWIZZLE_B);
     }
 
 
     protected void glSetSqizzleA(GlTexParamTarget target, int value) {
-        Jpize.GL15.glTexParameteri(target.value, GLI33.GL_TEXTURE_SWIZZLE_A, value);
+        Jpize.GL15.glTexParameteri(target.value, GL33I.GL_TEXTURE_SWIZZLE_A, value);
     }
 
     protected int glGetSqizzleA(GlTexParamTarget target) {
-        return Jpize.GL15.glGetTexParameteri(target.value, GLI33.GL_TEXTURE_SWIZZLE_A);
+        return Jpize.GL15.glGetTexParameteri(target.value, GL33I.GL_TEXTURE_SWIZZLE_A);
     }
 
 
     protected void glSetWrapS(GlTexParamTarget target, GlWrap wrap) {
-        Jpize.GL15.glTexParameteri(target.value, GLI11.GL_TEXTURE_WRAP_S, wrap.value);
+        Jpize.GL15.glTexParameteri(target.value, GL11I.GL_TEXTURE_WRAP_S, wrap.value);
     }
 
     protected void glSetWrapT(GlTexParamTarget target, GlWrap wrap) {
-        Jpize.GL15.glTexParameteri(target.value, GLI11.GL_TEXTURE_WRAP_T, wrap.value);
+        Jpize.GL15.glTexParameteri(target.value, GL11I.GL_TEXTURE_WRAP_T, wrap.value);
     }
 
     protected void glSetWrapR(GlTexParamTarget target, GlWrap wrap) {
-        Jpize.GL15.glTexParameteri(target.value, GLI12.GL_TEXTURE_WRAP_R, wrap.value);
+        Jpize.GL15.glTexParameteri(target.value, GL12I.GL_TEXTURE_WRAP_R, wrap.value);
     }
 
     protected GlWrap glGetWrapS(GlTexParamTarget target) {
-        return GlWrap.byValue(Jpize.GL15.glGetTexParameteri(target.value, GLI11.GL_TEXTURE_WRAP_S));
+        return GlWrap.byValue(Jpize.GL15.glGetTexParameteri(target.value, GL11I.GL_TEXTURE_WRAP_S));
     }
 
     protected GlWrap glGetWrapT(GlTexParamTarget target) {
-        return GlWrap.byValue(Jpize.GL15.glGetTexParameteri(target.value, GLI11.GL_TEXTURE_WRAP_T));
+        return GlWrap.byValue(Jpize.GL15.glGetTexParameteri(target.value, GL11I.GL_TEXTURE_WRAP_T));
     }
 
     protected GlWrap glGetWrapR(GlTexParamTarget target) {
-        return GlWrap.byValue(Jpize.GL15.glGetTexParameteri(target.value, GLI12.GL_TEXTURE_WRAP_R));
+        return GlWrap.byValue(Jpize.GL15.glGetTexParameteri(target.value, GL12I.GL_TEXTURE_WRAP_R));
     }
 
 
     protected void glSetBorderColor(GlTexParamTarget target, float... color) {
-        Jpize.GL15.glTexParameterfv(target.value, GLI11.GL_TEXTURE_BORDER_COLOR, color);
+        Jpize.GL15.glTexParameterfv(target.value, GL11I.GL_TEXTURE_BORDER_COLOR, color);
     }
 
     protected float[] glGetBorderColor(GlTexParamTarget target) {
         final float[] value = new float[4];
-        Jpize.GL15.glGetTexParameterfv(target.value, GLI11.GL_TEXTURE_BORDER_COLOR, value);
+        Jpize.GL15.glGetTexParameterfv(target.value, GL11I.GL_TEXTURE_BORDER_COLOR, value);
         return value;
     }
 
 
     protected void glSetSwizzle(GlTexParamTarget target, float... color) {
-        Jpize.GL15.glTexParameterfv(target.value, GLI33.GL_TEXTURE_SWIZZLE_RGBA, color);
+        Jpize.GL15.glTexParameterfv(target.value, GL33I.GL_TEXTURE_SWIZZLE_RGBA, color);
     }
 
     protected float[] glGetSwizzle(GlTexParamTarget target) {
         final float[] value = new float[4];
-        Jpize.GL15.glGetTexParameterfv(target.value, GLI33.GL_TEXTURE_SWIZZLE_RGBA, value);
+        Jpize.GL15.glGetTexParameterfv(target.value, GL33I.GL_TEXTURE_SWIZZLE_RGBA, value);
         return value;
     }
 
 
     protected void glSetMaxAnisotropy(GlTexParamTarget target, float levels) {
         levels = Math.min(levels, Gl.getMaxAnisotropy());
-        Jpize.GL15.glTexParameterf(target.value, GLI46.GL_TEXTURE_MAX_ANISOTROPY, levels);
+        Jpize.GL15.glTexParameterf(target.value, GL46I.GL_TEXTURE_MAX_ANISOTROPY, levels);
     }
 
     protected float glGetMaxAnisotropy(GlTexParamTarget target) {
-        return Jpize.GL15.glGetTexParameterf(target.value, GLI46.GL_TEXTURE_MAX_ANISOTROPY);
+        return Jpize.GL15.glGetTexParameterf(target.value, GL46I.GL_TEXTURE_MAX_ANISOTROPY);
     }
 
 }

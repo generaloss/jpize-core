@@ -1,6 +1,6 @@
 package jpize.opengl.texture;
 
-import static jpize.opengl.gl.GLI31.*;
+import static jpize.opengl.gl.GL31I.*;
 
 public enum GlTexImg2DTarget {
 

@@ -4,14 +4,16 @@ import jpize.opengl.buffer.GlUniformBuffer;
 import jpize.opengl.texture.TextureCubemap;
 import jpize.opengl.texture.Texture2D;
 import jpize.opengl.texture.Texture2DArray;
+import jpize.opengl.type.GlBool;
 import jpize.util.color.AbstractColor;
 import jpize.util.math.matrix.Matrix3f;
 import jpize.util.math.matrix.Matrix4f;
-import jpize.util.math.vector.Vec2f;
-import jpize.util.math.vector.Vec3f;
+import jpize.util.math.vector.*;
 import jpize.util.res.Resource;
 
 import java.util.HashMap;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Shader extends GlProgram {
 
@@ -43,26 +45,28 @@ public class Shader extends GlProgram {
     }
 
 
+    private static GlShader createAndCompileShader(GlShaderType type, String code) {
+        final GlShader shader = new GlShader(type);
+        shader.setSource(code);
+        shader.compile();
+        shader.checkCompileError();
+        return shader;
+    }
+
     public Shader load(String vertexCode, String fragmentCode) {
         uniforms.clear();
-        super.detachAll();
+        super.detachAll(3);
 
-        final GlShader vertexShader = new GlShader(GlShaderType.VERTEX);
-        vertexShader.setSource(vertexCode);
-        vertexShader.compile();
-        vertexShader.checkCompileError();
+        final GlShader vertexShader = createAndCompileShader(GlShaderType.VERTEX, vertexCode);
+        final GlShader fragmentShader = createAndCompileShader(GlShaderType.FRAGMENT, fragmentCode);
+
         super.attach(vertexShader);
-
-        final GlShader fragmentShader = new GlShader(GlShaderType.FRAGMENT);
-        fragmentShader.setSource(fragmentCode);
-        fragmentShader.compile();
-        fragmentShader.checkCompileError();
         super.attach(fragmentShader);
 
         super.link();
-        super.logLinkError();
+        super.checkLinkError();
         super.validate();
-        super.logValidateError();
+        super.checkValidateError();
 
         vertexShader.dispose();
         fragmentShader.dispose();
@@ -78,30 +82,20 @@ public class Shader extends GlProgram {
 
     public Shader load(String vertexCode, String fragmentCode, String geometryCode) {
         uniforms.clear();
-        super.detachAll();
+        super.detachAll(3);
 
-        final GlShader geometryShader = new GlShader(GlShaderType.GEOMETRY);
-        geometryShader.setSource(geometryCode);
-        geometryShader.compile();
-        geometryShader.checkCompileError();
+        final GlShader geometryShader = createAndCompileShader(GlShaderType.GEOMETRY, geometryCode);
+        final GlShader vertexShader = createAndCompileShader(GlShaderType.VERTEX, vertexCode);
+        final GlShader fragmentShader = createAndCompileShader(GlShaderType.FRAGMENT, fragmentCode);
+
         super.attach(geometryShader);
-
-        final GlShader vertexShader = new GlShader(GlShaderType.VERTEX);
-        vertexShader.setSource(vertexCode);
-        vertexShader.compile();
-        vertexShader.checkCompileError();
         super.attach(vertexShader);
-
-        final GlShader fragmentShader = new GlShader(GlShaderType.FRAGMENT);
-        fragmentShader.setSource(fragmentCode);
-        fragmentShader.compile();
-        fragmentShader.checkCompileError();
         super.attach(fragmentShader);
 
         super.link();
-        super.logLinkError();
+        super.checkLinkError();
         super.validate();
-        super.logValidateError();
+        super.checkValidateError();
 
         geometryShader.dispose();
         vertexShader.dispose();
@@ -118,15 +112,16 @@ public class Shader extends GlProgram {
     }
 
 
-    private void detectUniforms(String code) {                   // '..\nuniform type name [n] ;\n..'
-        final String[] uniformSplit = code.split("uniform");     // ' type name [n] ;\n..'
-        for(int i = 1; i < uniformSplit.length; i++){
-            String name = uniformSplit[i].split(";")[0];         // ' type name [n] '
-            if(name.contains("["))
-                name = name.substring(0, name.lastIndexOf("[")); // ' type name '
-            name = name.strip();                                 // 'type name'
-            name = name.substring(name.lastIndexOf(" ") + 1);    // 'name'
+    private void detectUniforms(String code) {
+        // remove comments
+        code = code.replaceAll("//.*|/\\*(.|\\R)*?\\*/", "");
 
+        // uniform <type> <name> [array optional]
+        final Pattern pattern = Pattern.compile("\\buniform\\s+\\w+\\s+(\\w+)");
+        final Matcher matcher = pattern.matcher(code);
+
+        while(matcher.find()) {
+            final String name = matcher.group(1);
             uniforms.put(name, super.getUniformLocation(name));
         }
     }
@@ -144,7 +139,7 @@ public class Shader extends GlProgram {
     }
 
     public Shader uniform(CharSequence uniformName, Matrix4f matrix4f) {
-        uniformMat4(uniformName, matrix4f.val);
+        this.uniformMat4(uniformName, matrix4f.val);
         return this;
     }
 
@@ -165,6 +160,26 @@ public class Shader extends GlProgram {
 
     public Shader uniform(CharSequence uniformName, Vec3f v) {
         super.uniform(this.getCachedUniformLocation(uniformName), v.x, v.y, v.z);
+        return this;
+    }
+
+    public Shader uniform(CharSequence uniformName, Vec4f v) {
+        super.uniform(this.getCachedUniformLocation(uniformName), v.x, v.y, v.z, v.w);
+        return this;
+    }
+
+    public Shader uniform(CharSequence uniformName, Vec2i v) {
+        super.uniform(this.getCachedUniformLocation(uniformName), v.x, v.y);
+        return this;
+    }
+
+    public Shader uniform(CharSequence uniformName, Vec3i v) {
+        super.uniform(this.getCachedUniformLocation(uniformName), v.x, v.y, v.z);
+        return this;
+    }
+
+    public Shader uniform(CharSequence uniformName, Vec4i v) {
+        super.uniform(this.getCachedUniformLocation(uniformName), v.x, v.y, v.z, v.w);
         return this;
     }
 
@@ -199,7 +214,7 @@ public class Shader extends GlProgram {
     }
 
     public Shader uniform(CharSequence uniformName, boolean value) {
-        this.uniform(uniformName, value ? 1 : 0);
+        this.uniform(uniformName, GlBool.by(value));
         return this;
     }
 
@@ -209,28 +224,24 @@ public class Shader extends GlProgram {
     }
 
     public Shader uniform(CharSequence uniformName, AbstractColor color) {
-        super.uniform(this.getCachedUniformLocation(uniformName),
-                color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha());
+        super.uniform(this.getCachedUniformLocation(uniformName), color);
         return this;
     }
 
-    public Shader uniform(CharSequence uniformName, Texture2D texture) {
-        texture.active(numSampler2D);
-        super.uniform(this.getCachedUniformLocation(uniformName), numSampler2D);
+    public Shader uniform(CharSequence uniformName, Texture2D sampler2D) {
+        super.uniform(this.getCachedUniformLocation(uniformName), sampler2D, numSampler2D);
         numSampler2D++;
         return this;
     }
 
-    public Shader uniform(CharSequence uniformName, Texture2DArray textureArray) {
-        textureArray.active(numSampler2DArray);
-        super.uniform(this.getCachedUniformLocation(uniformName), numSampler2DArray);
+    public Shader uniform(CharSequence uniformName, Texture2DArray sampler2DArray) {
+        super.uniform(this.getCachedUniformLocation(uniformName), sampler2DArray, numSampler2DArray);
         numSampler2DArray++;
         return this;
     }
 
-    public Shader uniform(CharSequence uniformName, TextureCubemap cubeMap) {
-        cubeMap.active(numSamplerCube);
-        super.uniform(this.getCachedUniformLocation(uniformName), numSamplerCube);
+    public Shader uniform(CharSequence uniformName, TextureCubemap samplerCube) {
+        super.uniform(this.getCachedUniformLocation(uniformName), samplerCube, numSamplerCube);
         numSamplerCube++;
         return this;
     }
@@ -245,7 +256,7 @@ public class Shader extends GlProgram {
     public Shader uniformBlockBinding(CharSequence uniformBlockName, int blockBindingPoint) {
         final int index = super.getUniformBlockIndex(uniformBlockName);
         if(index < 0)
-            throw new RuntimeException("No uniform block called '" + uniformBlockName + "'");
+            return this;
         super.uniformBlockBinding(index, blockBindingPoint);
         return this;
     }
@@ -272,6 +283,7 @@ public class Shader extends GlProgram {
     @Override
     public void dispose() {
         super.dispose();
+        uniforms.clear();
     }
 
 }

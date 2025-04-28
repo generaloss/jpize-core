@@ -1,6 +1,6 @@
 package jpize.opengl.buffer;
 
-import static jpize.opengl.gl.GLI44.*;
+import static jpize.opengl.gl.GL44I.*;
 
 public enum GlBufStorageFlag {
 

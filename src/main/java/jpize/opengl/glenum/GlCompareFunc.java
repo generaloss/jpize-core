@@ -1,6 +1,6 @@
 package jpize.opengl.glenum;
 
-import static jpize.opengl.gl.GLI11.*;
+import static jpize.opengl.gl.GL11I.*;
 
 public enum GlCompareFunc {
 

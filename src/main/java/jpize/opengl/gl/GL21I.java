@@ -2,7 +2,7 @@ package jpize.opengl.gl;
 
 import java.nio.FloatBuffer;
 
-public interface GLI21 extends GLI20 {
+public interface GL21I extends GL20I {
 
     int GL_CURRENT_RASTER_SECONDARY_COLOR = 33887;
     int GL_FLOAT_MAT2x3 = 35685;

@@ -1,6 +1,6 @@
 package jpize.opengl.buffer;
 
-import static jpize.opengl.gl.GLI15.*;
+import static jpize.opengl.gl.GL15I.*;
 
 public enum GlBufAccess {
 

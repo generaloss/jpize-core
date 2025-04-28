@@ -11,9 +11,9 @@ import java.nio.ByteBuffer;
 
 public class Texture2D extends GlTexture {
 
-    public static GlTexTarget TARGET = GlTexTarget.TEXTURE_2D;
-    public static GlTexParamTarget PARAM_TARGET = GlTexParamTarget.TEXTURE_2D;
-    public static GlTexLevelTarget LEVEL_TARGET = GlTexLevelTarget.TEXTURE_2D;
+    public static final GlTexTarget TARGET = GlTexTarget.TEXTURE_2D;
+    public static final GlTexParamTarget PARAM_TARGET = GlTexParamTarget.TEXTURE_2D;
+    public static final GlTexLevelTarget LEVEL_TARGET = GlTexLevelTarget.TEXTURE_2D;
 
     public Texture2D() {
         super();

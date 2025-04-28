@@ -10,24 +10,24 @@ public class Jpize {
     public static IWindow window;
     public static AbstractInput input;
     public static AbstractCallbacks callbacks;
-    public static GLI11 GL11;
-    public static GLI12 GL12;
-    public static GLI13 GL13;
-    public static GLI14 GL14;
-    public static GLI15 GL15;
-    public static GLI20 GL20;
-    public static GLI21 GL21;
-    public static GLI30 GL30;
-    public static GLI31 GL31;
-    public static GLI32 GL32;
-    public static GLI33 GL33;
-    public static GLI40 GL40;
-    public static GLI41 GL41;
-    public static GLI42 GL42;
-    public static GLI43 GL43;
-    public static GLI44 GL44;
-    public static GLI45 GL45;
-    public static GLI46 GL46;
+    public static GL11I GL11;
+    public static GL12I GL12;
+    public static GL13I GL13;
+    public static GL14I GL14;
+    public static GL15I GL15;
+    public static GL20I GL20;
+    public static GL21I GL21;
+    public static GL30I GL30;
+    public static GL31I GL31;
+    public static GL32I GL32;
+    public static GL33I GL33;
+    public static GL40I GL40;
+    public static GL41I GL41;
+    public static GL42I GL42;
+    public static GL43I GL43;
+    public static GL44I GL44;
+    public static GL45I GL45;
+    public static GL46I GL46;
 
 
     public static int getWidth() {

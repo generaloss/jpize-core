@@ -1,6 +1,6 @@
 package jpize.opengl.tesselation;
 
-import static jpize.opengl.gl.GLI11.*;
+import static jpize.opengl.gl.GL11I.*;
 
 public enum GlFace {
 

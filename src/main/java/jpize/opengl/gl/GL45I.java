@@ -2,7 +2,7 @@ package jpize.opengl.gl;
 
 import java.nio.*;
 
-public interface GLI45 extends GLI44 {
+public interface GL45I extends GL44I {
 
     int GL_NEGATIVE_ONE_TO_ONE = 37726;
     int GL_ZERO_TO_ONE = 37727;

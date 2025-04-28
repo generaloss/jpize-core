@@ -2,7 +2,7 @@ package jpize.opengl.gl;
 
 import java.nio.*;
 
-public interface GLI15 extends GLI14 {
+public interface GL15I extends GL14I {
 
     int GL_FOG_COORD_SRC = 33872;
     int GL_FOG_COORD = 33873;

@@ -1,11 +1,11 @@
-package jpize.opengl.tesselation;
+package jpize.opengl.framebuffer;
 
 import jpize.util.Utils;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import static jpize.opengl.gl.GLI32.*;
+import static jpize.opengl.gl.GL32I.*;
 
 public enum GlFramebufferStatus {
 

@@ -5,7 +5,7 @@ import jpize.util.Utils;
 import java.util.HashMap;
 import java.util.Map;
 
-import static jpize.opengl.gl.GLI42.*;
+import static jpize.opengl.gl.GL42I.*;
 
 public enum GlInternalFormat {
 
@@ -82,11 +82,19 @@ public enum GlInternalFormat {
     RGBA32I	       (GL_RGBA32I	     , GlBaseFormat.RGBA),
     RGBA32UI	   (GL_RGBA32UI	     , GlBaseFormat.RGBA),
 
-    // DEPTH AND STENCIL
+    // DEPTH
     DEPTH_COMPONENT16  (GL_DEPTH_COMPONENT16 , GlBaseFormat.DEPTH_COMPONENT),
     DEPTH_COMPONENT24  (GL_DEPTH_COMPONENT24 , GlBaseFormat.DEPTH_COMPONENT),
     DEPTH_COMPONENT32  (GL_DEPTH_COMPONENT32 , GlBaseFormat.DEPTH_COMPONENT),
     DEPTH_COMPONENT32F (GL_DEPTH_COMPONENT32F, GlBaseFormat.DEPTH_COMPONENT),
+
+    // STENCIL
+    STENCIL_INDEX1  (GL_STENCIL_INDEX1 , GlBaseFormat.STENCIL_INDEX),
+    STENCIL_INDEX4  (GL_STENCIL_INDEX4 , GlBaseFormat.STENCIL_INDEX),
+    STENCIL_INDEX8  (GL_STENCIL_INDEX8 , GlBaseFormat.STENCIL_INDEX),
+    STENCIL_INDEX16 (GL_STENCIL_INDEX16, GlBaseFormat.STENCIL_INDEX),
+
+    // DEPTH STENCIL
     DEPTH24_STENCIL8   (GL_DEPTH24_STENCIL8  , GlBaseFormat.DEPTH_STENCIL  ),
     DEPTH32F_STENCIL8  (GL_DEPTH32F_STENCIL8 , GlBaseFormat.DEPTH_STENCIL  ),
 

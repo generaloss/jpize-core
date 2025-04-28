@@ -2,7 +2,7 @@ package jpize.opengl.gl;
 
 import java.nio.*;
 
-public interface GLI12 extends GLI11 {
+public interface GL12I extends GL11I {
 
     int GL_ALIASED_POINT_SIZE_RANGE = 33901;
     int GL_ALIASED_LINE_WIDTH_RANGE = 33902;

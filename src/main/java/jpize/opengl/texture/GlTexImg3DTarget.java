@@ -1,6 +1,6 @@
 package jpize.opengl.texture;
 
-import static jpize.opengl.gl.GLI30.*;
+import static jpize.opengl.gl.GL30I.*;
 
 public enum GlTexImg3DTarget {
 

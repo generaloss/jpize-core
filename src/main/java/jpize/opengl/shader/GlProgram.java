@@ -2,9 +2,13 @@ package jpize.opengl.shader;
 
 import jpize.context.Jpize;
 import jpize.opengl.*;
-import jpize.opengl.gl.GLI11;
-import jpize.opengl.gl.GLI20;
-import jpize.opengl.gl.GLI41;
+import jpize.opengl.gl.GL20I;
+import jpize.opengl.gl.GL41I;
+import jpize.opengl.texture.Texture2D;
+import jpize.opengl.texture.Texture2DArray;
+import jpize.opengl.texture.TextureCubemap;
+import jpize.opengl.type.GlBool;
+import jpize.util.color.AbstractColor;
 
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
@@ -14,6 +18,20 @@ public class GlProgram extends GlObject {
 
     public GlProgram() {
         super(Jpize.GL20.glCreateProgram());
+    }
+
+
+    public CharSequence getInfoLog() {
+        return Jpize.GL20.glGetProgramInfoLog(ID);
+    }
+
+    public void logError(String error) {
+        final CharSequence log = this.getInfoLog();
+        if(!log.isEmpty()){
+            throw new RuntimeException(error + ":\n" + log);
+        }else{
+            throw new RuntimeException(error);
+        }
     }
 
 
@@ -27,14 +45,11 @@ public class GlProgram extends GlObject {
 
     public int[] getAttached(int maxCount) {
         final int[] countBuf = new int[1];
-        int[] shaderIDsBuf = new int[maxCount];
-        Jpize.GL20.glGetAttachedShaders(ID, countBuf, shaderIDsBuf);
-        return Arrays.copyOf(shaderIDsBuf, countBuf[0]);
+        int[] shaderIdsBuf = new int[maxCount];
+        Jpize.GL20.glGetAttachedShaders(ID, countBuf, shaderIdsBuf);
+        return Arrays.copyOf(shaderIdsBuf, countBuf[0]);
     }
 
-    public int[] getAttached() {
-        return this.getAttached(3);
-    }
 
     public void detach(int shaderID) {
         Jpize.GL20.glDetachShader(ID, shaderID);
@@ -50,36 +65,89 @@ public class GlProgram extends GlObject {
             this.detach(attachedID);
     }
 
-    public void detachAll() {
-        this.detachAll(3);
-    }
-
 
     public void link() {
         Jpize.GL20.glLinkProgram(ID);
     }
 
+    public boolean getLinkStatus() {
+        return GlBool.of(Jpize.GL20.glGetProgrami(ID, GL20I.GL_LINK_STATUS));
+    }
+
+    public void checkLinkError() {
+        if(!this.getLinkStatus())
+            this.logError("Linking shader error");
+    }
+
+
     public void validate() {
         Jpize.GL20.glValidateProgram(ID);
     }
 
-    public void logLinkError() {
-        if(Jpize.GL20.glGetProgrami(ID, GLI20.GL_LINK_STATUS) == GLI11.GL_FALSE)
-            this.logError("Linking shader error");
+    public boolean getValidateStatus() {
+        return GlBool.of(Jpize.GL20.glGetProgrami(ID, GL20I.GL_VALIDATE_STATUS));
     }
 
-    public void logValidateError() {
-        if(Jpize.GL20.glGetProgrami(ID, GLI20.GL_VALIDATE_STATUS) == GLI11.GL_FALSE)
+    public void checkValidateError() {
+        if(!this.getValidateStatus())
             this.logError("Validating shader error");
     }
 
-    private void logError(String error) {
-        final CharSequence log = Jpize.GL20.glGetProgramInfoLog(ID);
-        if(!log.isEmpty()){
-            throw new RuntimeException(error + ":\n" + log);
-        }else{
-            throw new RuntimeException(error);
-        }
+
+    public int getUniformLocation(CharSequence uniform) {
+        return Jpize.GL20.glGetUniformLocation(ID, uniform);
+    }
+
+    public float getUniformFloat(int location) {
+        return Jpize.GL20.glGetUniformf(ID, location);
+    }
+
+    public int getUniformInt(int location) {
+        return Jpize.GL20.glGetUniformi(ID, location);
+    }
+
+
+    public int getUniformIndices(CharSequence uniformName) {
+        return Jpize.GL31.glGetUniformIndices(ID, uniformName);
+    }
+
+    public void getUniformIndices(CharSequence[] uniformNames, IntBuffer uniformIndices) {
+        Jpize.GL31.glGetUniformIndices(ID, uniformNames, uniformIndices);
+    }
+
+    /// LU: public void getUniformIndices(PointerBuffer uniformNames, IntBuffer uniformIndices) {
+    /// LU:     Jpize.GL31.glGetUniformIndices(ID, uniformNames, uniformIndices);
+    /// LU: }
+
+    /// LU: public void getUniformIndices(PointerBuffer uniformNames, int[] uniformIndices) {
+    /// LU:     Jpize.GL31.glGetUniformIndices(ID, uniformNames, uniformIndices);
+    /// LU: }
+
+
+    public void bindAttributeLocation(int index, CharSequence name) {
+        Jpize.GL20.glBindAttribLocation(ID, index, name);
+    }
+
+    public void bindFragDataLocation(int index, CharSequence name) {
+        Jpize.GL30.glBindFragDataLocation(ID, index, name);
+    }
+
+
+    public int getUniformBlockIndex(CharSequence uniformBlockName) {
+        return Jpize.GL31.glGetUniformBlockIndex(ID, uniformBlockName);
+    }
+
+    public void uniformBlockBinding(int blockIndex, int blockBindingPoint) {
+        Jpize.GL31.glUniformBlockBinding(ID, blockIndex, blockBindingPoint);
+    }
+
+
+    public void setBinaryRetrievable(boolean value) {
+        Jpize.GL41.glProgramParameteri(ID, GL41I.GL_PROGRAM_BINARY_RETRIEVABLE_HINT, GlBool.by(value));
+    }
+
+    public int getBinaryLength() {
+        return Jpize.GL20.glGetProgrami(ID, GL41I.GL_PROGRAM_BINARY_LENGTH);
     }
 
 
@@ -172,59 +240,24 @@ public class GlProgram extends GlObject {
     }
 
 
-    public int getUniformLocation(CharSequence uniform) {
-        return Jpize.GL20.glGetUniformLocation(ID, uniform);
+    public void uniform(int location, Texture2D sampler2D, int active) {
+        sampler2D.active(active);
+        this.uniform(location, active);
     }
 
-    public float getUniformFloat(int location) {
-        return Jpize.GL20.glGetUniformf(ID, location);
+    public void uniform(int location, Texture2DArray sampler2DArray, int active) {
+        sampler2DArray.active(active);
+        this.uniform(location, active);
     }
 
-    public int getUniformInt(int location) {
-        return Jpize.GL20.glGetUniformi(ID, location);
-    }
-
-    public void bindAttributeLocation(int index, CharSequence name) {
-        Jpize.GL20.glBindAttribLocation(ID, index, name);
-    }
-
-    public void bindFragDataLocation(int index, CharSequence name) {
-        Jpize.GL30.glBindFragDataLocation(ID, index, name);
+    public void uniform(int location, TextureCubemap samplerCube, int active) {
+        samplerCube.active(active);
+        this.uniform(location, active);
     }
 
 
-    public int getUniformIndices(CharSequence uniformName) {
-        return Jpize.GL31.glGetUniformIndices(ID, uniformName);
-    }
-
-    public void getUniformIndices(CharSequence[] uniformNames, IntBuffer uniformIndices) {
-        Jpize.GL31.glGetUniformIndices(ID, uniformNames, uniformIndices);
-    }
-
-    // public void getUniformIndices(PointerBuffer uniformNames, IntBuffer uniformIndices) {
-    //     Jpize.GL31.glGetUniformIndices(ID, uniformNames, uniformIndices);
-    // }
-
-    // public void getUniformIndices(PointerBuffer uniformNames, int[] uniformIndices) {
-    //     Jpize.GL31.glGetUniformIndices(ID, uniformNames, uniformIndices);
-    // }
-
-
-    public int getUniformBlockIndex(CharSequence uniformBlockName) {
-        return Jpize.GL31.glGetUniformBlockIndex(ID, uniformBlockName);
-    }
-
-    public void uniformBlockBinding(int blockIndex, int blockBindingPoint) {
-        Jpize.GL31.glUniformBlockBinding(ID, blockIndex, blockBindingPoint);
-    }
-
-
-    public void setBinaryRetrievable(boolean value) {
-        Jpize.GL41.glProgramParameteri(ID, GLI41.GL_PROGRAM_BINARY_RETRIEVABLE_HINT, value ? 1 : 0);
-    }
-
-    public int getBinaryLength() {
-        return Jpize.GL20.glGetProgrami(ID, GLI41.GL_PROGRAM_BINARY_LENGTH);
+    public void uniform(int location, AbstractColor color) {
+        this.uniform(location, color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha());
     }
 
 

@@ -4,7 +4,7 @@ import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
 import java.nio.ShortBuffer;
 
-public interface GLI42 extends GLI41 {
+public interface GL42I extends GL41I {
 
     int GL_COPY_READ_BUFFER_BINDING = 36662;
     int GL_COPY_WRITE_BUFFER_BINDING = 36663;

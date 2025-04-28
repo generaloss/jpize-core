@@ -1,5 +1,7 @@
 package jpize.util;
 
+import sun.nio.ch.DirectBuffer;
+
 import java.nio.ByteBuffer;
 
 public class MemoryUtils {
@@ -47,7 +49,7 @@ public class MemoryUtils {
         // final long address = UNSAFE.allocateMemory(size);
 
         // final ByteBuffer buffer = ByteBuffer.allocateDirect(1);
-        // UNSAFE.freeMemory(((DirectBuffer) buffer).address());
+        // UNSAFE.freeMemory(address(buffer));
 
         // final Field addressField = getBufferField(buffer, "capacity");
         // final Field capacityField = getBufferField(buffer, "address");
@@ -64,8 +66,13 @@ public class MemoryUtils {
         return BufferUtils.createByteBuffer(size);
     }
 
+    public static long address(ByteBuffer buffer) {
+        final DirectBuffer directBuffer = ((DirectBuffer) buffer);
+        return directBuffer.address();
+    }
+
     public static void free(ByteBuffer buffer) {
-        // final long address = ((DirectBuffer) buffer).address();
+        // final long address = address(buffer);
         // UNSAFE.freeMemory(address);
     }
 

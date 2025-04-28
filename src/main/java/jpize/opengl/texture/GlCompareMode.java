@@ -1,7 +1,7 @@
 package jpize.opengl.texture;
 
-import static jpize.opengl.gl.GLI30.GL_COMPARE_REF_TO_TEXTURE;
-import static jpize.opengl.gl.GLI11.GL_NONE;
+import static jpize.opengl.gl.GL30I.GL_COMPARE_REF_TO_TEXTURE;
+import static jpize.opengl.gl.GL11I.GL_NONE;
 
 public enum GlCompareMode {
 

@@ -1,16 +1,11 @@
 package jpize.util.postprocess;
 
 import jpize.context.Jpize;
-import jpize.opengl.gl.GLI11;
+import jpize.opengl.framebuffer.Framebuffer3D;
+import jpize.opengl.gl.GL11I;
 import jpize.util.Disposable;
 import jpize.util.res.Resource;
 import jpize.opengl.gl.Gl;
-import jpize.opengl.buffer.GlAttachment;
-import jpize.opengl.texture.GlFilter;
-import jpize.opengl.texture.GlInternalFormat;
-import jpize.opengl.texture.GlWrap;
-import jpize.opengl.type.GlType;
-import jpize.opengl.tesselation.GlFramebuffer;
 import jpize.opengl.texture.Texture2D;
 import jpize.opengl.shader.Shader;
 import jpize.util.math.matrix.Matrix4f;
@@ -20,7 +15,7 @@ public class ShadowMapping implements Disposable {
 
     private final int width, height;
     private final Vec3f pos, dir;
-    private final GlFramebuffer fbo;
+    private final Framebuffer3D framebuffer;
     private final Shader shader;
     private final Matrix4f projectionMatrix, spaceMatrix, lookAtMatrix;
 
@@ -32,16 +27,9 @@ public class ShadowMapping implements Disposable {
         this.height = height;
 
         // framebuffer
-        this.fbo = new GlFramebuffer(width, height);
-
-        this.fbo.setAttachment(GlAttachment.DEPTH_ATTACHMENT);
-        this.fbo.setWrite(false);
-        this.fbo.setRead(false);
-
-        this.fbo.setInternalFormat(GlInternalFormat.DEPTH_COMPONENT32).setType(GlType.FLOAT);
-        this.fbo.getTexture().setWrapST(GlWrap.CLAMP_TO_BORDER).setFilters(GlFilter.NEAREST).setBorderColor(1F, 1F, 1F, 1F);
-
-        this.fbo.create();
+        this.framebuffer = new Framebuffer3D(width, height);
+        this.framebuffer.setDraw(false);
+        this.framebuffer.setRead(false);
 
         // shader
         this.shader = new Shader(Resource.internal("/shader/shadow_mapping/vert.glsl"), Resource.internal("/shader/shadow_mapping/frag.glsl"));
@@ -54,8 +42,8 @@ public class ShadowMapping implements Disposable {
 
     public void begin() {
         Gl.viewport(width, height);
-        fbo.bind();
-        Jpize.GL11.glClear(GLI11.GL_DEPTH_BUFFER_BIT);
+        framebuffer.bind();
+        Jpize.GL11.glClear(GL11I.GL_DEPTH_BUFFER_BIT);
         
         shader.bind();
         spaceMatrix.set(projectionMatrix.getMul(lookAtMatrix.setLookAlong(pos, dir)));
@@ -63,12 +51,12 @@ public class ShadowMapping implements Disposable {
     }
 
     public void end() {
-        fbo.unbind();
+        framebuffer.unbind();
         Gl.viewport(Jpize.getWidth(), Jpize.getHeight());
     }
 
     public Texture2D getShadowMap() {
-        return fbo.getTexture();
+        return framebuffer.getDepthTexture();
     }
 
     public Matrix4f getLightSpace() {
@@ -90,7 +78,7 @@ public class ShadowMapping implements Disposable {
     @Override
     public void dispose() {
         shader.dispose();
-        fbo.dispose();
+        framebuffer.dispose();
     }
 
 }

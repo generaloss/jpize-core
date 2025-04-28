@@ -2,7 +2,7 @@ package jpize.opengl.gl;
 
 import java.nio.*;
 
-public interface GLI20 extends GLI15 {
+public interface GL20I extends GL15I {
 
     int GL_SHADING_LANGUAGE_VERSION = 35724;
     int GL_CURRENT_PROGRAM = 35725;

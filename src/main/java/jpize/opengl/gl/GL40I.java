@@ -5,7 +5,7 @@ import java.nio.DoubleBuffer;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 
-public interface GLI40 extends GLI33 {
+public interface GL40I extends GL33I {
 
     int GL_DRAW_INDIRECT_BUFFER = 36671;
     int GL_DRAW_INDIRECT_BUFFER_BINDING = 36675;

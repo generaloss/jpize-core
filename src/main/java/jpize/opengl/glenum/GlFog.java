@@ -1,6 +1,6 @@
 package jpize.opengl.glenum;
 
-import static jpize.opengl.gl.GLI15.*;
+import static jpize.opengl.gl.GL15I.*;
 
 public enum GlFog {
 

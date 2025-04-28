@@ -2,7 +2,7 @@ package jpize.opengl.gl;
 
 import java.nio.*;
 
-public interface GLI30 extends GLI21 {
+public interface GL30I extends GL21I {
 
     int GL_MAJOR_VERSION = 33307;
     int GL_MINOR_VERSION = 33308;

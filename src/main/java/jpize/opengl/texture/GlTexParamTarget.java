@@ -1,6 +1,6 @@
 package jpize.opengl.texture;
 
-import static jpize.opengl.gl.GLI40.*;
+import static jpize.opengl.gl.GL40I.*;
 
 public enum GlTexParamTarget {
 

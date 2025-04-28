@@ -2,7 +2,7 @@ package jpize.opengl.gl;
 
 import java.nio.*;
 
-public interface GLI32 extends GLI31 {
+public interface GL32I extends GL31I {
 
     int GL_CONTEXT_PROFILE_MASK = 37158;
     int GL_CONTEXT_CORE_PROFILE_BIT = 1;

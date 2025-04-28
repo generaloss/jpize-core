@@ -2,7 +2,7 @@ package jpize.opengl.gl;
 
 import java.nio.*;
 
-public interface GLI13 extends GLI12 {
+public interface GL13I extends GL12I {
 
     int GL_COMPRESSED_ALPHA = 34025;
     int GL_COMPRESSED_LUMINANCE = 34026;

@@ -1,6 +1,6 @@
 package jpize.opengl.texture;
 
-import static jpize.opengl.gl.GLI11.*;
+import static jpize.opengl.gl.GL11I.*;
 
 public enum GlTexImg1DTarget {
 

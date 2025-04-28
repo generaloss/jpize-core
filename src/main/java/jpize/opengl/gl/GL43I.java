@@ -2,7 +2,7 @@ package jpize.opengl.gl;
 
 import java.nio.*;
 
-public interface GLI43 extends GLI42 {
+public interface GL43I extends GL42I {
 
     int GL_NUM_SHADING_LANGUAGE_VERSIONS = 33513;
     int GL_VERTEX_ATTRIB_ARRAY_LONG = 34638;

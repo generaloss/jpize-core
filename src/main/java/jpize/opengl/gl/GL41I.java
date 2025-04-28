@@ -5,7 +5,7 @@ import java.nio.DoubleBuffer;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 
-public interface GLI41 extends GLI40 {
+public interface GL41I extends GL40I {
 
     int GL_SHADER_COMPILER = 36346;
     int GL_SHADER_BINARY_FORMATS = 36344;

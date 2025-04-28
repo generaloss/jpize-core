@@ -2,7 +2,7 @@ package jpize.opengl.gl;
 
 import java.nio.*;
 
-public interface GLI44 extends GLI43 {
+public interface GL44I extends GL43I {
 
     int GL_MAX_VERTEX_ATTRIB_STRIDE = 33509;
     int GL_PRIMITIVE_RESTART_FOR_PATCHES_SUPPORTED = 33313;

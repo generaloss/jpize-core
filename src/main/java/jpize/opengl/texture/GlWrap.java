@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 // import static org.lwjgl.opengl.ARBTextureMirrorClampToEdge.GL_MIRROR_CLAMP_TO_EDGE;
-import static jpize.opengl.gl.GLI14.*;
+import static jpize.opengl.gl.GL14I.*;
 
 public enum GlWrap {
 

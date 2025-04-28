@@ -2,7 +2,7 @@ package jpize.opengl.gl;
 
 import java.nio.*;
 
-public interface GLI14 extends GLI13 {
+public interface GL14I extends GL13I {
 
     int GL_GENERATE_MIPMAP = 33169;
     int GL_GENERATE_MIPMAP_HINT = 33170;
