@@ -19,7 +19,7 @@ public enum GlShaderType {
             case GL_FRAGMENT_SHADER -> FRAGMENT;
             case GL_VERTEX_SHADER -> VERTEX;
             case GL_GEOMETRY_SHADER -> GEOMETRY;
-            default -> null;
+            default -> throw new IllegalArgumentException("Unknown GlShaderType value: " + value);
         };
     }
 
