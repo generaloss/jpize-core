@@ -1,6 +1,6 @@
 package jpize.opengl.tesselation;
 
-import jpize.opengl.gl.Gl;
+import jpize.opengl.gl.GL;
 import jpize.opengl.glenum.GlTarget;
 import jpize.util.math.Maths;
 import jpize.util.math.geometry.Recti;
@@ -58,15 +58,15 @@ public class GlScissor<T> {
 
     public GlScissor<T> apply() {
         if(scissors.isEmpty()){
-            Gl.disable(GlTarget.SCISSOR_TEST);
+            GL.disable(GlTarget.SCISSOR_TEST);
             return this;
         }
 
-        Gl.enable(GlTarget.SCISSOR_TEST);
+        GL.enable(GlTarget.SCISSOR_TEST);
         
         if(scissors.size() == 1){
             final Recti scissor = scissors.values().iterator().next();
-            Gl.scissorIndexed(index, scissor.x, scissor.y, scissor.width, scissor.height);
+            GL.scissorIndexed(index, scissor.x, scissor.y, scissor.width, scissor.height);
             return this;
         }
 
@@ -79,12 +79,12 @@ public class GlScissor<T> {
             array[i++] = scissor.height;
         }
 
-        Gl.scissorArray(index, array);
+        GL.scissorArray(index, array);
         return this;
     }
 
     public GlScissor<T> disable() {
-        Gl.disable(GlTarget.SCISSOR_TEST);
+        GL.disable(GlTarget.SCISSOR_TEST);
         return this;
     }
     

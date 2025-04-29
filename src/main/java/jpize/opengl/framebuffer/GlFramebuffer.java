@@ -10,7 +10,7 @@ import jpize.opengl.texture.*;
 import jpize.util.MemoryUtils;
 import jpize.util.array.IntList;
 import jpize.util.math.vector.Vec2i;
-import jpize.util.postprocess.RenderQuad;
+import jpize.util.RenderQuad;
 import jpize.context.Jpize;
 import jpize.opengl.GlObject;
 
@@ -35,7 +35,7 @@ public class GlFramebuffer extends GlObject {
         this.multisample = multisample;
 
         if(multisample)
-            resolveFramebuffer = new GlFramebuffer(target, width, height, false);
+            this.resolveFramebuffer = new GlFramebuffer(target, width, height, false);
 
         this.attachments = new ArrayList<>();
     }
@@ -70,6 +70,20 @@ public class GlFramebuffer extends GlObject {
     }
 
 
+    public Iterable<FramebufferAttachment> getAttachments() {
+        return attachments;
+    }
+
+    public <T extends FramebufferAttachment> T getAttachment(int index) {
+        // noinspection unchecked
+        return (T) attachments.get(index);
+    }
+
+    public FramebufferTexture getTextureAttachment(int index) {
+        return (FramebufferTexture) attachments.get(index);
+    }
+
+
     public GlFramebufferStatus checkStatus() {
         return GlFramebufferStatus.byValue(Jpize.GL30.glCheckFramebufferStatus(target.value));
     }
@@ -94,13 +108,13 @@ public class GlFramebuffer extends GlObject {
 
 
     public GlFramebuffer attach(FramebufferAttachment attachment) {
-        this.bind();
-
         attachments.add(attachment);
+
+        this.bind();
         attachment.attach(this);
         this.updateDrawBuffers();
-
         this.unbind();
+
         return this;
     }
 

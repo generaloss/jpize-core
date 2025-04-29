@@ -6,7 +6,7 @@
 
     <groupId>io.github.generaloss</groupId>
     <artifactId>jpize-core</artifactId>
-    <version>25.4.1-SNAPSHOT-1-4.12</version>
+    <version>25.4.1-SNAPSHOT-1-4.15</version>
     <name>jpize-core</name>
 
     <description>OpenGL Graphics Library Core</description>
@@ -69,18 +69,6 @@
 
     <build>
         <plugins>
-            <!-- compiler -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.13.0</version>
-                <configuration>
-                    <compilerArgs>
-                        <arg>--add-exports</arg>
-                        <arg>java.base/sun.nio.ch=ALL-UNNAMED</arg>
-                    </compilerArgs>
-                </configuration>
-            </plugin>
             <!-- attach sources -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

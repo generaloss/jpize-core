@@ -1,7 +1,7 @@
 package jpize.opengl.framebuffer;
 
 import jpize.context.Jpize;
-import jpize.opengl.gl.Gl;
+import jpize.opengl.gl.GL;
 import jpize.opengl.framebuffer.attachment.FramebufferAttachment;
 import jpize.opengl.framebuffer.attachment.FramebufferTexture;
 import jpize.opengl.texture.Texture2D;
@@ -37,7 +37,7 @@ public class Framebuffer2D extends GlFramebuffer {
 
     public void begin() {
         super.bind();
-        Gl.clearColorBuffer();
+        GL.clearColorBuffer();
     }
 
     public void end() {
@@ -51,6 +51,10 @@ public class Framebuffer2D extends GlFramebuffer {
         }finally{
             this.end();
         }
+    }
+
+    public void renderToScreen() {
+        super.renderToScreen(colorAttachment);
     }
 
 

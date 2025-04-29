@@ -1,6 +1,6 @@
 package jpize.opengl.texture;
 
-import jpize.opengl.gl.Gl;
+import jpize.opengl.gl.GL;
 import jpize.opengl.type.GlType;
 import jpize.opengl.vertex.GlVertAttr;
 import jpize.util.camera.Camera;
@@ -56,13 +56,13 @@ public class Skybox extends TextureCubemap {
 
 
     public void render(Matrix4f combined) {
-        Gl.depthMask(false);
+        GL.depthMask(false);
         shader.bind();
         shader.uniform("u_combined", combined);
         shader.uniform("u_cubemap", this);
         shader.uniform("u_color", color);
         mesh.render();
-        Gl.depthMask(true);
+        GL.depthMask(true);
     }
 
     public void render(Camera camera) {

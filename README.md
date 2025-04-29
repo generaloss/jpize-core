@@ -45,7 +45,7 @@ public class MyApp extends JpizeApplication {
 TextureBatch batch = new TextureBatch(); // canvas for textures
 Texture2D texture = new Texture2D("/texture.png");
 
-Gl.clearColorBuffer();
+GL.clearColorBuffer();
 batch.setup();
 
 // rotate, shear and scale for subsequent textures

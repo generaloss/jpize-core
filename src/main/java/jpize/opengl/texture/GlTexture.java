@@ -203,7 +203,7 @@ public abstract class GlTexture extends GlObject {
 
 
     protected void glSetLodBias(GlTexParamTarget target, float lodBias) {
-        lodBias = Math.min(lodBias, Gl.getMaxTextureLodBias());
+        lodBias = Math.min(lodBias, GL.getMaxTextureLodBias());
         Jpize.GL15.glTexParameterf(target.value, GL14I.GL_TEXTURE_LOD_BIAS, lodBias);
     }
 
@@ -340,7 +340,7 @@ public abstract class GlTexture extends GlObject {
 
 
     protected void glSetMaxAnisotropy(GlTexParamTarget target, float levels) {
-        levels = Math.min(levels, Gl.getMaxAnisotropy());
+        levels = Math.min(levels, GL.getMaxAnisotropy());
         Jpize.GL15.glTexParameterf(target.value, GL46I.GL_TEXTURE_MAX_ANISOTROPY, levels);
     }
 
