@@ -86,8 +86,6 @@ public class Camera3DTest extends JpizeApplication {
 
     @Override
     public void render() {
-        bloom.begin();
-
         GL.clearColorDepthBuffers();
 
         GL.enable(GlTarget.DEPTH_TEST);
@@ -103,16 +101,18 @@ public class Camera3DTest extends JpizeApplication {
         final FontRenderOptions options = font.getOptions();
         options.scale().set(0.2);
 
+        options.matrix().identity();
+        font.drawText(camera, "Static text\nPizza\npizza", 5F, 2F, 0F);
+
+        bloom.begin();
+
         float angleY = Vec2f.angle(camera.getX(), camera.getZ()) + 90;
         float angleX = Vec2f.angleBetween(Vec2f.len(camera.getX(), camera.getZ()), camera.getY(), 0, 1) - 90;
         float angleZ = camera.rotation().getYaw();
-
         options.matrix().setRotationXYZ(angleX, angleY, 0);
-
         font.drawText(camera, "Test text 3D\nPizza", -font.getTextWidth("Test text 3D\nPizza") * 0.5F, -font.getTextHeight("Test text 3D\nPizza") * 0.5F, 0F);
 
         GL.disable(GlTarget.DEPTH_TEST);
-
         bloom.end();
 
         options.scale().set(5);

@@ -209,7 +209,6 @@ public class GlFramebuffer extends GlObject {
             this.resolveMultisampling();
             resolveFramebuffer.renderToScreen(attachment);
         }else{
-            this.unbind();
             RenderQuad.instance().render(attachment.getTexture());
         }
     }

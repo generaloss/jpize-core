@@ -1,11 +1,11 @@
 package jpize.android.opengl;
 
-import android.opengl.GLES31;
 import jpize.opengl.gl.GL46I;
 
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
 
+// fully GLES unsupported
 public class AndroidGL46 extends AndroidGL45 implements GL46I {
 
     @Override
@@ -15,7 +15,7 @@ public class AndroidGL46 extends AndroidGL45 implements GL46I {
 
     @Override
     public void glMultiDrawArraysIndirectCount(int mode, long indirect, long drawcount, int maxdrawcount, int stride) {
-        GLES31.glDrawArraysIndirect(mode, indirect);
+        throw new UnsupportedOperationException();
     }
 
     @Override
@@ -30,7 +30,7 @@ public class AndroidGL46 extends AndroidGL45 implements GL46I {
 
     @Override
     public void glMultiDrawElementsIndirectCount(int mode, int type, long indirect, long drawcount, int maxdrawcount, int stride) {
-        GLES31.glDrawElementsIndirect(mode, type, indirect);
+        throw new UnsupportedOperationException();
     }
 
     @Override

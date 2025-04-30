@@ -28,5 +28,8 @@ void main() {
             col += texture(u_frame, p) * w;
         }
     }
-    fragColor=col;
+    if(col.a <= 0.5)
+        discard;
+
+    fragColor = col;
 }
