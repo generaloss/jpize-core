@@ -4,9 +4,9 @@ import jpize.lwjgl.context.ContextManager;
 import jpize.opengl.gl.GL;
 import jpize.util.camera.PerspectiveCamera;
 import jpize.util.shader.ShaderBuilder;
-import jpize.opengl.tesselation.GlPrimitive;
-import jpize.opengl.type.GlType;
-import jpize.opengl.vertex.GlVertAttr;
+import jpize.opengl.tesselation.GLPrimitive;
+import jpize.opengl.type.GLType;
+import jpize.opengl.vertex.GLVertAttr;
 import jpize.util.mesh.Mesh;
 import jpize.opengl.shader.Shader;
 import jpize.util.math.axisaligned.AABox;
@@ -26,8 +26,8 @@ public class RenderTest extends JpizeApplication {
         this.box1.position().set(-2, 0, 0);
         this.box2.position().set( 2, 0, 0);
         // mesh
-        this.mesh = new Mesh(new GlVertAttr(3, GlType.FLOAT), new GlVertAttr(4, GlType.FLOAT));
-        this.mesh.setMode(GlPrimitive.QUADS);
+        this.mesh = new Mesh(new GLVertAttr(3, GLType.FLOAT), new GLVertAttr(4, GLType.FLOAT));
+        this.mesh.setMode(GLPrimitive.QUADS);
         this.mesh.vertices().setData(
             -1,  1, 4,  1, 0, 0, 1F,
             -1, -1, 4,  1, 0, 0, 1F,

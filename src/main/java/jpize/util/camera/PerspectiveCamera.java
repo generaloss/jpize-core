@@ -44,12 +44,12 @@ public class PerspectiveCamera extends Camera3D {
     @Override
     public void update() {
         // update direction
-        quaternion.setRotation(-rotation.yaw + 90, -rotation.pitch, -rotation.roll);
+        quaternion.setRotation(-rotation.yaw + 90F, -rotation.pitch, -rotation.roll);
         quaternion.getDirection(direction);
         // update view
         this.updateViewMatrix();
         // update combined
-        combined.set(projection).mul(imaginaryView);
+        projection.mul(combined, imaginaryView);
         // update frustum
         frustum.setFrustum(combined);
     }

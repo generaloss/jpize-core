@@ -7,7 +7,7 @@ import generaloss.freetype.glyph.*;
 import generaloss.freetype.stroker.FTStroker;
 import generaloss.freetype.stroker.FTStrokerLinecap;
 import generaloss.freetype.stroker.FTStrokerLinejoin;
-import jpize.opengl.texture.GlFilter;
+import jpize.opengl.texture.GLFilter;
 import jpize.opengl.texture.Texture2D;
 import jpize.util.atlas.TextureAtlas;
 import jpize.util.math.Maths;
@@ -130,7 +130,7 @@ class TTFFontLoader {
         pageAtlas.build(pageSize, pageSize);
 
         final Texture2D pageTexture = pageAtlas.getTexture();
-        final GlFilter pageFilter = (options.isLinearFilter() ? GlFilter.LINEAR : GlFilter.NEAREST);
+        final GLFilter pageFilter = (options.isLinearFilter() ? GLFilter.LINEAR : GLFilter.NEAREST);
         pageTexture.setFilters(pageFilter);
 
         font.pages().put(0, pageTexture);

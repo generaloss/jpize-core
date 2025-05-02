@@ -1,6 +1,6 @@
 package jpize.util.postprocess;
 
-import jpize.opengl.framebuffer.GlFramebuffer;
+import jpize.opengl.framebuffer.GLFramebuffer;
 import jpize.opengl.framebuffer.attachment.FramebufferAttachment;
 import jpize.opengl.gl.GL;
 import jpize.opengl.shader.Shader;
@@ -13,9 +13,9 @@ public class MipChainedBloom implements IPostProcessEffect {
 
     private static final int MAX_MIPS = 5;
 
-    private final GlFramebuffer sceneBuffer;
-    private final GlFramebuffer brightBuffer;
-    private final GlFramebuffer[] mipChain;
+    private final GLFramebuffer sceneBuffer;
+    private final GLFramebuffer brightBuffer;
+    private final GLFramebuffer[] mipChain;
     private final Shader brightShader, blurShader, combineShader;
 
     private float brightness = 1F;
@@ -24,17 +24,17 @@ public class MipChainedBloom implements IPostProcessEffect {
     private float gamma = 1F;
 
     public MipChainedBloom() {
-        this.sceneBuffer = new GlFramebuffer()
+        this.sceneBuffer = new GLFramebuffer()
             .attach(FramebufferAttachment.color(0))
             .checkCompletionError();
 
-        this.brightBuffer = new GlFramebuffer()
+        this.brightBuffer = new GLFramebuffer()
             .attach(FramebufferAttachment.color(0))
             .checkCompletionError();
 
-        this.mipChain = new GlFramebuffer[MAX_MIPS];
+        this.mipChain = new GLFramebuffer[MAX_MIPS];
         for(int i = 0; i < MAX_MIPS; i++) {
-            this.mipChain[i] = new GlFramebuffer()
+            this.mipChain[i] = new GLFramebuffer()
                 .attach(FramebufferAttachment.color(0))
                 .checkCompletionError();
         }
@@ -69,7 +69,7 @@ public class MipChainedBloom implements IPostProcessEffect {
         // gen mip chain
         Texture2D currentTex = brightBuffer.getTextureAttachment(0).getTexture();
         for(int i = 0; i < MAX_MIPS; i++) {
-            final GlFramebuffer mip = mipChain[i];
+            final GLFramebuffer mip = mipChain[i];
 
             mip.bind();
             GL.clearColorBuffer();
@@ -121,7 +121,7 @@ public class MipChainedBloom implements IPostProcessEffect {
         int mipWidth = width / 2;
         int mipHeight = height / 2;
 
-        for(GlFramebuffer mip: mipChain) {
+        for(GLFramebuffer mip: mipChain) {
             mip.resize(mipWidth, mipHeight);
             mipWidth = Math.max(1, mipWidth / 2);
             mipHeight = Math.max(1, mipHeight / 2);
@@ -132,7 +132,7 @@ public class MipChainedBloom implements IPostProcessEffect {
     public void dispose() {
         sceneBuffer.dispose();
         brightBuffer.dispose();
-        for(GlFramebuffer mip: mipChain)
+        for(GLFramebuffer mip: mipChain)
             mip.dispose();
         brightShader.dispose();
         blurShader.dispose();

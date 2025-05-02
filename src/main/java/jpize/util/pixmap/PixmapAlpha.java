@@ -1,6 +1,6 @@
 package jpize.util.pixmap;
 
-import jpize.opengl.texture.GlInternalFormat;
+import jpize.opengl.texture.GLInternalFormat;
 
 import java.nio.ByteBuffer;
 
@@ -38,8 +38,8 @@ public class PixmapAlpha extends Pixmap {
 
 
     @Override
-    public GlInternalFormat getFormat() {
-        return GlInternalFormat.ALPHA8;
+    public GLInternalFormat getFormat() {
+        return GLInternalFormat.ALPHA8;
     }
 
     @Override

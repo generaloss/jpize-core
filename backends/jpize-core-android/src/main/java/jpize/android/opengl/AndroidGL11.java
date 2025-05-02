@@ -1,9 +1,9 @@
 package jpize.android.opengl;
 
 import android.opengl.*;
-import jpize.opengl.framebuffer.GlFramebufferStatus;
+import jpize.opengl.framebuffer.GLFramebufferStatus;
 import jpize.opengl.gl.GL11I;
-import jpize.opengl.type.GlType;
+import jpize.opengl.type.GLType;
 import jpize.util.BufferUtils;
 import jpize.util.math.geometry.Recti;
 
@@ -24,7 +24,7 @@ public class AndroidGL11 implements GL11I {
 
 
     protected static int bufferCount(Buffer buffer, int type) {
-        return (buffer.limit() / GlType.byValue(type).bytes);
+        return (buffer.limit() / GLType.byValue(type).bytes);
     }
 
 
@@ -226,7 +226,7 @@ public class AndroidGL11 implements GL11I {
 
         final int status = GLES20.glCheckFramebufferStatus(GLES20.GL_FRAMEBUFFER);
         if(status != GLES20.GL_FRAMEBUFFER_COMPLETE)
-            throw new RuntimeException("Framebuffer incomplete: " + GlFramebufferStatus.byValue(status));
+            throw new RuntimeException("Framebuffer incomplete: " + GLFramebufferStatus.byValue(status));
 
         GLES20.glReadPixels(xoffset, yoffset, width, height, format, type, pixels);
 

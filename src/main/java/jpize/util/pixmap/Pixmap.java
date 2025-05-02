@@ -1,7 +1,7 @@
 package jpize.util.pixmap;
 
 import jpize.util.Disposable;
-import jpize.opengl.texture.GlInternalFormat;
+import jpize.opengl.texture.GLInternalFormat;
 import jpize.util.MemoryUtils;
 import jpize.util.math.Maths;
 import jpize.util.math.vector.Vec2i;
@@ -115,7 +115,7 @@ public abstract class Pixmap implements Disposable {
     }
 
 
-    public abstract GlInternalFormat getFormat();
+    public abstract GLInternalFormat getFormat();
 
     public abstract Pixmap copy();
 

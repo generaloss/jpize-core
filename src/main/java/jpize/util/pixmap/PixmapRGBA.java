@@ -1,6 +1,6 @@
 package jpize.util.pixmap;
 
-import jpize.opengl.texture.GlInternalFormat;
+import jpize.opengl.texture.GLInternalFormat;
 import jpize.opengl.texture.Texture2D;
 import jpize.util.color.Color;
 import jpize.util.color.AbstractColor;
@@ -906,8 +906,8 @@ public class PixmapRGBA extends Pixmap {
 
 
     @Override
-    public GlInternalFormat getFormat() {
-        return GlInternalFormat.RGBA8;
+    public GLInternalFormat getFormat() {
+        return GLInternalFormat.RGBA8;
     }
 
     @Override

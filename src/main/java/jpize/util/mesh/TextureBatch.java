@@ -11,15 +11,15 @@ import jpize.util.math.geometry.Rectf;
 import jpize.util.region.Region;
 import jpize.util.region.TextureRegion;
 import jpize.util.res.Resource;
-import jpize.opengl.type.GlType;
-import jpize.opengl.vertex.GlVertAttr;
+import jpize.opengl.type.GLType;
+import jpize.opengl.vertex.GLVertAttr;
 import jpize.util.camera.Camera;
 import jpize.util.math.matrix.Matrix3f;
 import jpize.util.math.matrix.Matrix4f;
 import jpize.util.math.vector.Vec2f;
 import jpize.opengl.shader.Shader;
 
-public class TextureBatch implements Disposable {
+public class TextureBatch implements Disposable { // TODO: rename to RectBatch
 
     private static final int QUAD_VERTEX_COUNT = 4;
 
@@ -45,14 +45,14 @@ public class TextureBatch implements Disposable {
     private boolean roundVertices;
     // tmp
     private final Vec2f tmp_origin, tmp_vertex1, tmp_vertex2, tmp_vertex3, tmp_vertex4;
-    private Matrix4f tmp_projectionMat;
+    private Matrix4f tmp_projectionMat; // TODO: made final
 
     public TextureBatch() {
         // mesh
         this.mesh = new Mesh(
-            new GlVertAttr(2, GlType.FLOAT), // position
-            new GlVertAttr(2, GlType.FLOAT), // uv
-            new GlVertAttr(4, GlType.FLOAT)  // color
+                new GLVertAttr(2, GLType.FLOAT), // position
+                new GLVertAttr(2, GLType.FLOAT), // uv
+                new GLVertAttr(4, GLType.FLOAT)  // color
         );
         this.vertexList = new FloatList();
         // shader
@@ -146,7 +146,7 @@ public class TextureBatch implements Disposable {
 
         tmp_origin.set(width * transformOrigin.x, height * transformOrigin.y);
 
-        transformMat.set(rotationMat.getMul(shearMat));
+        rotationMat.mul(transformMat, shearMat);
 
         tmp_vertex1.set(0F,    height).sub(tmp_origin).mul(scale).mulMat3(transformMat).add(tmp_origin).add(x, y).add(position);
         tmp_vertex2.set(0F,    0F    ).sub(tmp_origin).mul(scale).mulMat3(transformMat).add(tmp_origin).add(x, y).add(position);

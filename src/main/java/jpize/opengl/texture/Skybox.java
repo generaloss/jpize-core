@@ -1,8 +1,8 @@
 package jpize.opengl.texture;
 
 import jpize.opengl.gl.GL;
-import jpize.opengl.type.GlType;
-import jpize.opengl.vertex.GlVertAttr;
+import jpize.opengl.type.GLType;
+import jpize.opengl.vertex.GLVertAttr;
 import jpize.util.camera.Camera;
 import jpize.util.color.Color;
 import jpize.util.mesh.IndexedMesh;
@@ -20,7 +20,7 @@ public class Skybox extends TextureCubemap {
 
     public Skybox() {
         this.shader = new Shader(Resource.internal("/shader/skybox/vert.glsl"), Resource.internal("/shader/skybox/frag.glsl"));
-        this.mesh = new IndexedMesh(new GlVertAttr(3, GlType.FLOAT));
+        this.mesh = new IndexedMesh(new GLVertAttr(3, GLType.FLOAT));
         this.mesh.vertices().setData(
             -2F, -2F,  2F, // 0
              2F, -2F,  2F, // 1

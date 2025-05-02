@@ -4,13 +4,13 @@ import jpize.context.input.Key;
 import jpize.lwjgl.context.ContextManager;
 import jpize.lwjgl.context.GlfwContextBuilder;
 import jpize.opengl.gl.GL;
-import jpize.opengl.glenum.GlTarget;
+import jpize.opengl.glenum.GLTarget;
 import jpize.opengl.shader.Shader;
-import jpize.opengl.tesselation.GlPrimitive;
+import jpize.opengl.tesselation.GLPrimitive;
 import jpize.opengl.texture.Skybox;
 import jpize.opengl.texture.Texture2D;
-import jpize.opengl.type.GlType;
-import jpize.opengl.vertex.GlVertAttr;
+import jpize.opengl.type.GLType;
+import jpize.opengl.vertex.GLVertAttr;
 import jpize.util.camera.PerspectiveCamera;
 import jpize.util.font.Font;
 import jpize.util.font.FontRenderOptions;
@@ -35,7 +35,7 @@ public class Camera3DTest extends JpizeApplication {
 
     public Camera3DTest() {
         GL.clearColor(0.5F, 0.6F, 0.7F);
-        GL.disable(GlTarget.CULL_FACE);
+        GL.disable(GLTarget.CULL_FACE);
 
         this.bloom = new GaussianBlur(10);
 
@@ -48,14 +48,14 @@ public class Camera3DTest extends JpizeApplication {
         this.motionInput = new MotionInput();
 
         this.mesh = new Mesh(
-            new GlVertAttr(3, GlType.FLOAT),
-            new GlVertAttr(2, GlType.FLOAT)
+            new GLVertAttr(3, GLType.FLOAT),
+            new GLVertAttr(2, GLType.FLOAT)
         );
         mesh.vertices().setData(
              0F, 0F, 0F,  1F, 1F,
              0F, 0F, 0F,  0F, 1F
         );
-        mesh.setMode(GlPrimitive.LINES);
+        mesh.setMode(GLPrimitive.LINES);
 
         this.shader = new Shader(Resource.internal("/shader.vert"), Resource.internal("/shader.frag"));
 
@@ -88,7 +88,7 @@ public class Camera3DTest extends JpizeApplication {
     public void render() {
         GL.clearColorDepthBuffers();
 
-        GL.enable(GlTarget.DEPTH_TEST);
+        GL.enable(GLTarget.DEPTH_TEST);
 
         // skybox
         skybox.render(camera);
@@ -112,7 +112,7 @@ public class Camera3DTest extends JpizeApplication {
         options.matrix().setRotationXYZ(angleX, angleY, 0);
         font.drawText(camera, "Test text 3D\nPizza", -font.getTextWidth("Test text 3D\nPizza") * 0.5F, -font.getTextHeight("Test text 3D\nPizza") * 0.5F, 0F);
 
-        GL.disable(GlTarget.DEPTH_TEST);
+        GL.disable(GLTarget.DEPTH_TEST);
         bloom.end();
 
         options.scale().set(5);

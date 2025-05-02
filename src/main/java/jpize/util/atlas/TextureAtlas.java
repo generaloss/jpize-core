@@ -1,6 +1,6 @@
 package jpize.util.atlas;
 
-import jpize.opengl.texture.GlWrap;
+import jpize.opengl.texture.GLWrap;
 import jpize.opengl.texture.Texture2D;
 import jpize.util.Disposable;
 import jpize.util.math.Maths;
@@ -28,7 +28,7 @@ public class TextureAtlas<T> implements Disposable {
         this.sizes = new HashMap<>();
         this.pixmap = new PixmapRGBA(0, 0);
         this.texture = new Texture2D()
-            .setWrapST(GlWrap.CLAMP_TO_EDGE);
+            .setWrapST(GLWrap.CLAMP_TO_EDGE);
     }
 
     public TextureAtlas<T> build(int width, int height) {

@@ -2,7 +2,7 @@ package jpize.util.font;
 
 import jpize.util.Utils;
 import jpize.util.res.*;
-import jpize.opengl.texture.GlFilter;
+import jpize.opengl.texture.GLFilter;
 import jpize.util.region.Region;
 import jpize.opengl.texture.Texture2D;
 import jpize.util.io.FastReader;
@@ -70,7 +70,7 @@ class FNTFontLoader {
 
                     // page texture
                     final Texture2D texture = new Texture2D()
-                        .setFilters(options.isLinearFilter() ? GlFilter.LINEAR : GlFilter.NEAREST)
+                        .setFilters(options.isLinearFilter() ? GLFilter.LINEAR : GLFilter.NEAREST)
                         .setImage(pageResource);
 
                     font.pages().put(pageID, texture);

@@ -1,10 +1,10 @@
 package jpize.opengl.shader;
 
-import jpize.opengl.buffer.GlUniformBuffer;
+import jpize.opengl.buffer.GLUniformBuffer;
 import jpize.opengl.texture.TextureCubemap;
 import jpize.opengl.texture.Texture2D;
 import jpize.opengl.texture.Texture2DArray;
-import jpize.opengl.type.GlBool;
+import jpize.opengl.type.GLBool;
 import jpize.util.color.AbstractColor;
 import jpize.util.math.matrix.Matrix3f;
 import jpize.util.math.matrix.Matrix4f;
@@ -15,7 +15,7 @@ import java.util.HashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class Shader extends GlProgram {
+public class Shader extends GLProgram {
 
     private final HashMap<CharSequence, Integer> uniforms;
     private int numSampler2D, numSamplerCube, numSampler2DArray, numUniformBuffer;
@@ -45,8 +45,8 @@ public class Shader extends GlProgram {
     }
 
 
-    private static GlShader createAndCompileShader(GlShaderType type, String code) {
-        final GlShader shader = new GlShader(type);
+    private static GLShader createAndCompileShader(GLShaderType type, String code) {
+        final GLShader shader = new GLShader(type);
         shader.setSource(code);
         shader.compile();
         shader.checkCompileError();
@@ -57,8 +57,8 @@ public class Shader extends GlProgram {
         uniforms.clear();
         super.detachAll(3);
 
-        final GlShader vertexShader = createAndCompileShader(GlShaderType.VERTEX, vertexCode);
-        final GlShader fragmentShader = createAndCompileShader(GlShaderType.FRAGMENT, fragmentCode);
+        final GLShader vertexShader = createAndCompileShader(GLShaderType.VERTEX, vertexCode);
+        final GLShader fragmentShader = createAndCompileShader(GLShaderType.FRAGMENT, fragmentCode);
 
         super.attach(vertexShader);
         super.attach(fragmentShader);
@@ -84,9 +84,9 @@ public class Shader extends GlProgram {
         uniforms.clear();
         super.detachAll(3);
 
-        final GlShader geometryShader = createAndCompileShader(GlShaderType.GEOMETRY, geometryCode);
-        final GlShader vertexShader = createAndCompileShader(GlShaderType.VERTEX, vertexCode);
-        final GlShader fragmentShader = createAndCompileShader(GlShaderType.FRAGMENT, fragmentCode);
+        final GLShader geometryShader = createAndCompileShader(GLShaderType.GEOMETRY, geometryCode);
+        final GLShader vertexShader = createAndCompileShader(GLShaderType.VERTEX, vertexCode);
+        final GLShader fragmentShader = createAndCompileShader(GLShaderType.FRAGMENT, fragmentCode);
 
         super.attach(geometryShader);
         super.attach(vertexShader);
@@ -139,7 +139,7 @@ public class Shader extends GlProgram {
     }
 
     public Shader uniform(CharSequence uniformName, Matrix4f matrix4f) {
-        this.uniformMat4(uniformName, matrix4f.val);
+        this.uniformMat4(uniformName, matrix4f.values);
         return this;
     }
 
@@ -149,7 +149,7 @@ public class Shader extends GlProgram {
     }
 
     public Shader uniform(CharSequence uniformName, Matrix3f matrix3f) {
-        this.uniformMat3(uniformName, matrix3f.val);
+        this.uniformMat3(uniformName, matrix3f.values);
         return this;
     }
 
@@ -214,7 +214,7 @@ public class Shader extends GlProgram {
     }
 
     public Shader uniform(CharSequence uniformName, boolean value) {
-        this.uniform(uniformName, GlBool.by(value));
+        this.uniform(uniformName, GLBool.by(value));
         return this;
     }
 
@@ -261,7 +261,7 @@ public class Shader extends GlProgram {
         return this;
     }
 
-    public Shader uniform(CharSequence uniformName, GlUniformBuffer uniformBuffer) {
+    public Shader uniform(CharSequence uniformName, GLUniformBuffer uniformBuffer) {
         uniformBuffer.bind(numUniformBuffer);
         return this.uniformBlockBinding(uniformName, numUniformBuffer++);
     }
@@ -276,7 +276,7 @@ public class Shader extends GlProgram {
     }
 
     public static void unbind() {
-        GlProgram.unbind();
+        GLProgram.unbind();
     }
 
 

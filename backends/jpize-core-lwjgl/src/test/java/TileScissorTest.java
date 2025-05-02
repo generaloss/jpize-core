@@ -4,7 +4,7 @@ import jpize.context.input.MouseBtn;
 import jpize.lwjgl.context.GlfwContextBuilder;
 import jpize.lwjgl.context.ContextManager;
 import jpize.opengl.gl.GL;
-import jpize.opengl.tesselation.GlScissor;
+import jpize.opengl.tesselation.GLScissor;
 import jpize.opengl.texture.Texture2D;
 import jpize.util.font.Font;
 import jpize.util.mesh.TextureBatch;
@@ -20,7 +20,7 @@ public class TileScissorTest extends JpizeApplication {
     private final OrthographicCameraCentered camera;
     private final Texture2D texture;
     private final Font font;
-    private final GlScissor<String> scissor;
+    private final GLScissor<String> scissor;
 
     private float scale = 0.05F;
     private final Vec2f prev = new Vec2f();
@@ -35,7 +35,7 @@ public class TileScissorTest extends JpizeApplication {
             new PixmapRGBA(21, 21).fillRGB(0, 0, 20, 20, 0xFFFFFF).fillRGB(0, 0, 17, 17, 0x666666)
         );
         this.font = new Font().loadFNT("/font.fnt", false);//.loadDefault();
-        this.scissor = new GlScissor<String>()
+        this.scissor = new GLScissor<String>()
             .put("scissor_1",  100, 100, camera.getWidth() - 200, camera.getHeight() - 200);
     }
 

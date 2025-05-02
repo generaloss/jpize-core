@@ -1,40 +1,40 @@
 package jpize.opengl.framebuffer.attachment;
 
-import jpize.opengl.framebuffer.GlFramebuffer;
-import jpize.opengl.texture.GlInternalFormat;
-import jpize.opengl.texture.GlWrap;
+import jpize.opengl.framebuffer.GLFramebuffer;
+import jpize.opengl.texture.GLInternalFormat;
+import jpize.opengl.texture.GLWrap;
 import jpize.opengl.texture.Texture2D;
-import jpize.opengl.type.GlType;
+import jpize.opengl.type.GLType;
 
 public class FramebufferTexture extends FramebufferAttachment {
 
-    protected GlInternalFormat format;
-    protected GlType type;
+    protected GLInternalFormat format;
+    protected GLType type;
     protected final Texture2D texture;
 
-    public FramebufferTexture(GlAttachment attachment, GlInternalFormat format, GlType type) {
+    public FramebufferTexture(GLAttachment attachment, GLInternalFormat format, GLType type) {
         super(attachment);
 
         this.format = format;
         this.type = type;
         this.texture = new Texture2D()
-            .setWrapST(GlWrap.CLAMP_TO_EDGE);
+            .setWrapST(GLWrap.CLAMP_TO_EDGE);
     }
 
 
-    public GlInternalFormat getFormat() {
+    public GLInternalFormat getFormat() {
         return format;
     }
 
-    public void setFormat(GlInternalFormat format) {
+    public void setFormat(GLInternalFormat format) {
         this.format = format;
     }
 
-    public GlType getType() {
+    public GLType getType() {
         return type;
     }
 
-    public void setType(GlType type) {
+    public void setType(GLType type) {
         this.type = type;
     }
 
@@ -49,7 +49,7 @@ public class FramebufferTexture extends FramebufferAttachment {
     }
 
     @Override
-    public void attach(GlFramebuffer framebuffer) {
+    public void attach(GLFramebuffer framebuffer) {
         this.setTextureImage(framebuffer.getWidth(), framebuffer.getHeight());
         framebuffer.framebufferTexture2D(super.attachment, texture);
     }

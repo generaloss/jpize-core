@@ -1,13 +1,13 @@
 package jpize.opengl.gl;
 
 import jpize.context.Jpize;
-import jpize.opengl.GlError;
+import jpize.opengl.GLError;
 import jpize.opengl.glenum.*;
-import jpize.opengl.tesselation.GlFace;
-import jpize.opengl.type.GlType;
-import jpize.opengl.tesselation.GlPolygonMode;
-import jpize.opengl.texture.GlBlendFactor;
-import jpize.opengl.texture.GlInternalFormat;
+import jpize.opengl.tesselation.GLFace;
+import jpize.opengl.type.GLType;
+import jpize.opengl.tesselation.GLPolygonMode;
+import jpize.opengl.texture.GLBlendFactor;
+import jpize.opengl.texture.GLInternalFormat;
 import jpize.util.color.Color;
 import jpize.util.color.AbstractColor;
 
@@ -17,48 +17,48 @@ import java.nio.IntBuffer;
 
 public class GL {
 
-    public static GlError getError() {
-        return GlError.byValue(Jpize.GL11.glGetError());
+    public static GLError getError() {
+        return GLError.byValue(Jpize.GL11.glGetError());
     }
 
     public static void checkError(){
-        final GlError error = getError();
-        if(error != GlError.NO_ERROR)
+        final GLError error = getError();
+        if(error != GLError.NO_ERROR)
             System.err.println("[GL] Error: " + error.description);
     }
 
 
-    public static boolean isEnabled(GlTarget target) {
+    public static boolean isEnabled(GLTarget target) {
         return Jpize.GL11.glIsEnabled(target.value);
     }
 
-    public static boolean isEnabled(GlTarget target, int index) {
+    public static boolean isEnabled(GLTarget target, int index) {
         return Jpize.GL30.glIsEnabledi(target.value, index);
     }
 
-    public static void enable(GlTarget target) {
+    public static void enable(GLTarget target) {
         Jpize.GL11.glEnable(target.value);
     }
 
-    public static void enable(GlTarget target, int index) {
+    public static void enable(GLTarget target, int index) {
         Jpize.GL30.glEnablei(target.value, index);
     }
 
-    public static void enable(GlTarget... targets) {
-        for(GlTarget target: targets)
+    public static void enable(GLTarget... targets) {
+        for(GLTarget target: targets)
             enable(target);
     }
 
-    public static void disable(GlTarget target) {
+    public static void disable(GLTarget target) {
         Jpize.GL11.glDisable(target.value);
     }
 
-    public static void disable(GlTarget target, int index) {
+    public static void disable(GLTarget target, int index) {
         Jpize.GL30.glDisablei(target.value, index);
     }
 
-    public static void disable(GlTarget... targets) {
-        for(GlTarget target: targets)
+    public static void disable(GLTarget... targets) {
+        for(GLTarget target: targets)
             disable(target);
     }
 
@@ -100,11 +100,11 @@ public class GL {
     }
 
     public static void clearColorRGB(int color) {
-        // TODO: clearColor();
+        clearColor(AbstractColor.rgbaRed(color), AbstractColor.rgbaGreen(color), AbstractColor.rgbaBlue(color));
     }
 
     public static void clearColorRGBA(int color) {
-        // TODO: clearColor();
+        clearColor(AbstractColor.rgbaRed(color), AbstractColor.rgbaGreen(color), AbstractColor.rgbaBlue(color), AbstractColor.rgbaAlpha(color));
     }
 
 
@@ -134,11 +134,11 @@ public class GL {
     }
 
 
-    public static void blendFunc(GlBlendFactor sFactor, GlBlendFactor dFactor) {
+    public static void blendFunc(GLBlendFactor sFactor, GLBlendFactor dFactor) {
         Jpize.GL11.glBlendFunc(sFactor.value, dFactor.value);
     }
 
-    public static void depthFunc(GlCompareFunc func) {
+    public static void depthFunc(GLCompareFunc func) {
         Jpize.GL11.glDepthFunc(func.value);
     }
 
@@ -147,7 +147,7 @@ public class GL {
         Jpize.GL11.glDepthMask(flag);
     }
 
-    public static void cullFace(GlFace mode) {
+    public static void cullFace(GLFace mode) {
         Jpize.GL11.glCullFace(mode.value);
     }
 
@@ -190,12 +190,12 @@ public class GL {
     }
 
 
-    public static void polygonMode(GlFace face, GlPolygonMode mode) {
+    public static void polygonMode(GLFace face, GLPolygonMode mode) {
         Jpize.GL11.glPolygonMode(face.value, mode.value);
     }
 
-    public static void polygonMode(GlPolygonMode mode) {
-        polygonMode(GlFace.FRONT_AND_BACK, mode);
+    public static void polygonMode(GLPolygonMode mode) {
+        polygonMode(GLFace.FRONT_AND_BACK, mode);
     }
 
     public static void polygonOffset(float factor, float units) {
@@ -220,29 +220,29 @@ public class GL {
     }
 
 
-    public static void hint(GlHint hint, GlMode mode) {
+    public static void hint(GLHint hint, GLMode mode) {
         Jpize.GL11.glHint(hint.value, mode.value);
     }
 
 
-    public static void fog(GlFog fog, int i) {
+    public static void fog(GLFog fog, int i) {
         Jpize.GL11.glFogi(fog.value, i);
     }
 
-    public static void fog(GlFog fog, float v) {
+    public static void fog(GLFog fog, float v) {
         Jpize.GL11.glFogf(fog.value, v);
     }
 
     public static void fog(Color color) {
-        Jpize.GL11.glFogfv(GlFog.COLOR.value, color.toArray());
+        Jpize.GL11.glFogfv(GLFog.COLOR.value, color.toArray());
     }
 
 
-    public static void drawPixels(int width, int height, GlInternalFormat format, GlType type, ByteBuffer pixels) {
+    public static void drawPixels(int width, int height, GLInternalFormat format, GLType type, ByteBuffer pixels) {
         Jpize.GL11.glDrawPixels(width, height, format.value, type.value, pixels);
     }
 
-    public static void readPixels(int x, int y, int width, int height, GlInternalFormat format, GlType type, ByteBuffer pixels) {
+    public static void readPixels(int x, int y, int width, int height, GLInternalFormat format, GLType type, ByteBuffer pixels) {
         Jpize.GL11.glReadPixels(x, y, width, height, format.value, type.value, pixels);
     }
 

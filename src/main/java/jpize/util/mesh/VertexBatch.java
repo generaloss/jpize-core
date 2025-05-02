@@ -2,9 +2,9 @@ package jpize.util.mesh;
 
 import jpize.context.Jpize;
 import jpize.opengl.shader.Shader;
-import jpize.opengl.tesselation.GlPrimitive;
-import jpize.opengl.type.GlType;
-import jpize.opengl.vertex.GlVertAttr;
+import jpize.opengl.tesselation.GLPrimitive;
+import jpize.opengl.type.GLType;
+import jpize.opengl.vertex.GLVertAttr;
 import jpize.util.Disposable;
 import jpize.util.array.FloatList;
 import jpize.util.camera.Camera;
@@ -33,11 +33,11 @@ public class VertexBatch implements Disposable {
     private Matrix4f tmp_combinedMat;
     private final Vec2f tmp_vertex;
 
-    public VertexBatch(GlPrimitive mode) {
+    public VertexBatch(GLPrimitive mode) {
         // mesh
         this.mesh = new Mesh(
-            new GlVertAttr(2, GlType.FLOAT), // position
-            new GlVertAttr(4, GlType.FLOAT)  // color
+                new GLVertAttr(2, GLType.FLOAT), // position
+                new GLVertAttr(4, GLType.FLOAT)  // color
         );
         this.mesh.setMode(mode);
         this.vertexList = new FloatList();

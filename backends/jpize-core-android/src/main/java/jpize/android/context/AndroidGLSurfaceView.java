@@ -5,9 +5,9 @@ import android.opengl.GLSurfaceView;
 import jpize.android.opengl.*;
 import jpize.context.Jpize;
 import jpize.opengl.gl.GL;
-import jpize.opengl.glenum.GlCompareFunc;
-import jpize.opengl.glenum.GlTarget;
-import jpize.opengl.texture.GlBlendFactor;
+import jpize.opengl.glenum.GLCompareFunc;
+import jpize.opengl.glenum.GLTarget;
+import jpize.opengl.texture.GLBlendFactor;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
@@ -46,10 +46,10 @@ public class AndroidGLSurfaceView extends GLSurfaceView implements GLSurfaceView
         Jpize.GL46 = new AndroidGL46();
 
         // default blending options, enable cullface
-        GL.enable(GlTarget.BLEND, GlTarget.CULL_FACE);
-        GL.blendFunc(GlBlendFactor.SRC_ALPHA, GlBlendFactor.ONE_MINUS_SRC_ALPHA);
+        GL.enable(GLTarget.BLEND, GLTarget.CULL_FACE);
+        GL.blendFunc(GLBlendFactor.SRC_ALPHA, GLBlendFactor.ONE_MINUS_SRC_ALPHA);
         // opengl left-handled coordinate system options
-        GL.depthFunc(GlCompareFunc.GEQUAL);
+        GL.depthFunc(GLCompareFunc.GEQUAL);
         GL.clearDepth(0);
 
         context.onInit();

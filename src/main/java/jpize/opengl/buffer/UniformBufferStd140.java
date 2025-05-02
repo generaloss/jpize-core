@@ -3,7 +3,7 @@ package jpize.opengl.buffer;
 import jpize.util.math.matrix.Matrix4f;
 import jpize.util.math.vector.*;
 
-public class UniformBufferStd140 extends GlUniformBuffer {
+public class UniformBufferStd140 extends GLUniformBuffer {
 
     private int offset;
 

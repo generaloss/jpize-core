@@ -3,8 +3,8 @@ package jpize.util;
 import jpize.context.Jpize;
 import jpize.opengl.shader.Shader;
 import jpize.opengl.texture.Texture2D;
-import jpize.opengl.type.GlType;
-import jpize.opengl.vertex.GlVertAttr;
+import jpize.opengl.type.GLType;
+import jpize.opengl.vertex.GLVertAttr;
 import jpize.util.mesh.IndexedMesh;
 import jpize.util.res.Resource;
 
@@ -18,8 +18,8 @@ public class RenderQuad implements Disposable {
 
     public RenderQuad(float[] vertices, int[] indices) {
         this.mesh = new IndexedMesh(
-                new GlVertAttr(2, GlType.FLOAT), // position
-                new GlVertAttr(2, GlType.FLOAT)  // texcoord
+                new GLVertAttr(2, GLType.FLOAT), // position
+                new GLVertAttr(2, GLType.FLOAT)  // texcoord
         );
         this.mesh.vertices().setData(vertices);
         this.mesh.indices().setData(indices);

@@ -8,15 +8,14 @@ import jpize.util.math.vector.Vec2i;
 public class OrthographicCameraCentered extends Camera2D {
     
     private float scale, rotation;
-    private final Matrix4f projection, view, combined, scalingMatrix, translationMatrix, rotationMatrix;
+    private final Matrix4f projection, view, combined, translationScaleMatrix, rotationMatrix;
     private boolean imaginaryX, imaginaryY;
 
     public OrthographicCameraCentered(int width, int height) {
         super(width, height);
 
         this.scale = 1F;
-        this.scalingMatrix = new Matrix4f();
-        this.translationMatrix = new Matrix4f();
+        this.translationScaleMatrix = new Matrix4f();
         this.rotationMatrix = new Matrix4f();
         this.view = new Matrix4f();
         this.projection = new Matrix4f();
@@ -41,10 +40,13 @@ public class OrthographicCameraCentered extends Camera2D {
     }
 
     private void updateViewMatrix() {
-        translationMatrix.setTranslate(imaginaryX ? 0 : -position.x, imaginaryY ? 0 : -position.y);
-        scalingMatrix.setScale(scale);
+        // setup translation & scale
+        translationScaleMatrix.setTranslatePart(imaginaryX ? 0F : -position.x, imaginaryY ? 0F : -position.y, 0F);
+        translationScaleMatrix.setScalePart(scale, scale, 1F);
+        // setup rotation
         rotationMatrix.setRotationZ(rotation);
-        view.set(scalingMatrix.mul(translationMatrix).mul(rotationMatrix));
+        // multiply
+        translationScaleMatrix.mul(view, rotationMatrix);
         this.updateCombinedMatrix();
     }
 

@@ -1,12 +1,12 @@
 package jpize.util.mesh;
 
-import jpize.opengl.buffer.GlVertexBuffer;
+import jpize.opengl.buffer.GLVertexBuffer;
 import jpize.util.Disposable;
 
 public interface IMesh extends Disposable {
 
     void render();
 
-    GlVertexBuffer vertices();
+    GLVertexBuffer vertices();
 
 }

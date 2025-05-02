@@ -1,36 +1,36 @@
 package jpize.util.mesh;
 
-import jpize.opengl.buffer.GlIndexBuffer;
-import jpize.opengl.tesselation.GlPrimitive;
-import jpize.opengl.vertex.GlVertexArray;
-import jpize.opengl.vertex.GlVertAttr;
-import jpize.opengl.buffer.GlVertexBuffer;
+import jpize.opengl.buffer.GLIndexBuffer;
+import jpize.opengl.tesselation.GLPrimitive;
+import jpize.opengl.vertex.GLVertexArray;
+import jpize.opengl.vertex.GLVertAttr;
+import jpize.opengl.buffer.GLVertexBuffer;
 
 public class IndexedMesh implements IMesh {
 
-    private final GlVertexArray vertexArray;
-    private final GlVertexBuffer vertexBuffer;
-    private final GlIndexBuffer indexBuffer;
-    private GlPrimitive mode;
+    private final GLVertexArray vertexArray;
+    private final GLVertexBuffer vertexBuffer;
+    private final GLIndexBuffer indexBuffer;
+    private GLPrimitive mode;
 
-    public IndexedMesh(GlVertAttr... attributes) {
-        this.vertexArray = new GlVertexArray();
+    public IndexedMesh(GLVertAttr... attributes) {
+        this.vertexArray = new GLVertexArray();
         this.vertexArray.bind();
 
-        this.vertexBuffer = new GlVertexBuffer();
+        this.vertexBuffer = new GLVertexBuffer();
         this.vertexBuffer.bind();
         this.vertexBuffer.enableAttributes(attributes);
 
-        this.indexBuffer = new GlIndexBuffer();
+        this.indexBuffer = new GLIndexBuffer();
 
-        this.mode = GlPrimitive.TRIANGLES;
+        this.mode = GLPrimitive.TRIANGLES;
     }
 
-    public GlPrimitive getMode() {
+    public GLPrimitive getMode() {
         return mode;
     }
 
-    public void setMode(GlPrimitive mode) {
+    public void setMode(GLPrimitive mode) {
         this.mode = mode;
     }
 
@@ -46,11 +46,11 @@ public class IndexedMesh implements IMesh {
 
 
     @Override
-    public GlVertexBuffer vertices() {
+    public GLVertexBuffer vertices() {
         return vertexBuffer;
     }
 
-    public GlIndexBuffer indices() {
+    public GLIndexBuffer indices() {
         return indexBuffer;
     }
 

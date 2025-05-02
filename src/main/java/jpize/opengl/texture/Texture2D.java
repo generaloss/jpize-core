@@ -1,7 +1,7 @@
 package jpize.opengl.texture;
 
-import jpize.opengl.glenum.GlCompareFunc;
-import jpize.opengl.type.GlType;
+import jpize.opengl.glenum.GLCompareFunc;
+import jpize.opengl.type.GLType;
 import jpize.util.pixmap.PixmapIO;
 import jpize.util.math.vector.Vec2i;
 import jpize.util.res.Resource;
@@ -9,15 +9,15 @@ import jpize.util.pixmap.Pixmap;
 
 import java.nio.ByteBuffer;
 
-public class Texture2D extends GlTexture {
+public class Texture2D extends GLTexture {
 
-    public static final GlTexTarget TARGET = GlTexTarget.TEXTURE_2D;
-    public static final GlTexParamTarget PARAM_TARGET = GlTexParamTarget.TEXTURE_2D;
-    public static final GlTexLevelTarget LEVEL_TARGET = GlTexLevelTarget.TEXTURE_2D;
+    public static final GLTexTarget TARGET = GLTexTarget.TEXTURE_2D;
+    public static final GLTexParamTarget PARAM_TARGET = GLTexParamTarget.TEXTURE_2D;
+    public static final GLTexLevelTarget LEVEL_TARGET = GLTexLevelTarget.TEXTURE_2D;
 
     public Texture2D() {
         super();
-        this.setFilters(GlFilter.NEAREST);
+        this.setFilters(GLFilter.NEAREST);
     }
 
     public Texture2D(int ID) {
@@ -54,7 +54,7 @@ public class Texture2D extends GlTexture {
     }
 
     public static void unbind() {
-        GlTexture.glUnbind(PARAM_TARGET);
+        GLTexture.glUnbind(PARAM_TARGET);
     }
 
 
@@ -85,15 +85,15 @@ public class Texture2D extends GlTexture {
 
     // image
 
-    public Texture2D setImage(int width, int height, int level, GlInternalFormat format, GlType type, ByteBuffer pixels) {
+    public Texture2D setImage(int width, int height, int level, GLInternalFormat format, GLType type, ByteBuffer pixels) {
         this.bind();
-        super.glSetImage2D(GlTexImg2DTarget.TEXTURE_2D, 0, width, height, format, type, pixels);
+        super.glSetImage2D(GLTexImg2DTarget.TEXTURE_2D, 0, width, height, format, type, pixels);
         return this;
     }
 
     public Texture2D setImage(int level, Pixmap pixmap) {
         this.bind();
-        super.glSetImage2D(GlTexImg2DTarget.TEXTURE_2D, 0, pixmap);
+        super.glSetImage2D(GLTexImg2DTarget.TEXTURE_2D, 0, pixmap);
         return this;
     }
 
@@ -122,19 +122,19 @@ public class Texture2D extends GlTexture {
 
 
     public Texture2D setDefaultImage(int width, int height, int level, ByteBuffer pixels) {
-        return this.setImage(width, height, level, GlInternalFormat.RGBA8, GlType.UNSIGNED_BYTE, pixels);
+        return this.setImage(width, height, level, GLInternalFormat.RGBA8, GLType.UNSIGNED_BYTE, pixels);
     }
 
     public Texture2D setDefaultImage(int width, int height, ByteBuffer pixels) {
         return this.setDefaultImage(width, height, 0, pixels);
     }
 
-    public Texture2D setImage(int width, int height, int level, GlInternalFormat format, GlType type) {
+    public Texture2D setImage(int width, int height, int level, GLInternalFormat format, GLType type) {
         return this.setImage(width, height, level, format, type, null);
     }
 
     public Texture2D setDefaultImage(int width, int height, int level) {
-        return this.setImage(width, height, level, GlInternalFormat.RGBA8, GlType.UNSIGNED_BYTE);
+        return this.setImage(width, height, level, GLInternalFormat.RGBA8, GLType.UNSIGNED_BYTE);
     }
 
     public Texture2D setDefaultImage(int width, int height) {
@@ -166,13 +166,13 @@ public class Texture2D extends GlTexture {
     // params
 
 
-    public Texture2D setDepthStencilTextureMode(GlDepthStencilMode mode) {
+    public Texture2D setDepthStencilTextureMode(GLDepthStencilMode mode) {
         this.bind();
         super.glSetDepthStencilTextureMode(PARAM_TARGET, mode);
         return this;
     }
 
-    public GlDepthStencilMode getDepthStencilTextureMode() {
+    public GLDepthStencilMode getDepthStencilTextureMode() {
         this.bind();
         return super.glGetDepthStencilTextureMode(PARAM_TARGET);
     }
@@ -190,25 +190,25 @@ public class Texture2D extends GlTexture {
     }
 
 
-    public Texture2D setCompareFunc(GlCompareFunc value) {
+    public Texture2D setCompareFunc(GLCompareFunc value) {
         this.bind();
         super.glSetCompareFunc(PARAM_TARGET, value);
         return this;
     }
 
-    public GlCompareFunc getCompareFunc() {
+    public GLCompareFunc getCompareFunc() {
         this.bind();
         return super.glGetCompareFunc(PARAM_TARGET);
     }
 
 
-    public Texture2D setCompareMode(GlCompareMode value) {
+    public Texture2D setCompareMode(GLCompareMode value) {
         this.bind();
         super.glSetCompareMode(PARAM_TARGET, value);
         return this;
     }
 
-    public GlCompareMode getCompareMode() {
+    public GLCompareMode getCompareMode() {
         this.bind();
         return super.glGetCompareMode(PARAM_TARGET);
     }
@@ -226,36 +226,36 @@ public class Texture2D extends GlTexture {
     }
 
 
-    public Texture2D setMinFilter(GlFilter filter) {
+    public Texture2D setMinFilter(GLFilter filter) {
         this.bind();
         super.glSetMinFilter(PARAM_TARGET, filter);
         return this;
     }
 
-    public Texture2D setMagFilter(GlFilter filter) {
+    public Texture2D setMagFilter(GLFilter filter) {
         this.bind();
         super.glSetMagFilter(PARAM_TARGET, filter);
         return this;
     }
 
-    public Texture2D setFilters(GlFilter min, GlFilter mag) {
+    public Texture2D setFilters(GLFilter min, GLFilter mag) {
         this.bind();
         super.glSetMinFilter(PARAM_TARGET, min);
         super.glSetMagFilter(PARAM_TARGET, mag);
         return this;
     }
 
-    public Texture2D setFilters(GlFilter minAndMag) {
+    public Texture2D setFilters(GLFilter minAndMag) {
         return this.setFilters(minAndMag, minAndMag);
     }
 
 
-    public GlFilter getMinFilter() {
+    public GLFilter getMinFilter() {
         this.bind();
         return super.glGetMinFilter(PARAM_TARGET);
     }
 
-    public GlFilter getMagFilter() {
+    public GLFilter getMagFilter() {
         this.bind();
         return super.glGetMagFilter(PARAM_TARGET);
     }
@@ -345,32 +345,32 @@ public class Texture2D extends GlTexture {
     }
 
 
-    public Texture2D setWrapS(GlWrap wrap) {
+    public Texture2D setWrapS(GLWrap wrap) {
         this.bind();
         super.glSetWrapS(PARAM_TARGET, wrap);
         return this;
     }
 
-    public Texture2D setWrapT(GlWrap wrap) {
+    public Texture2D setWrapT(GLWrap wrap) {
         this.bind();
         super.glSetWrapT(PARAM_TARGET, wrap);
         return this;
     }
 
-    public Texture2D setWrapR(GlWrap wrap) {
+    public Texture2D setWrapR(GLWrap wrap) {
         this.bind();
         super.glSetWrapR(PARAM_TARGET, wrap);
         return this;
     }
 
-    public Texture2D setWrap(GlWrap s, GlWrap t) {
+    public Texture2D setWrap(GLWrap s, GLWrap t) {
         this.bind();
         super.glSetWrapS(PARAM_TARGET, s);
         super.glSetWrapT(PARAM_TARGET, t);
         return this;
     }
 
-    public Texture2D setWrap(GlWrap s, GlWrap t, GlWrap r) {
+    public Texture2D setWrap(GLWrap s, GLWrap t, GLWrap r) {
         this.bind();
         super.glSetWrapS(PARAM_TARGET, s);
         super.glSetWrapT(PARAM_TARGET, t);
@@ -378,26 +378,26 @@ public class Texture2D extends GlTexture {
         return this;
     }
 
-    public Texture2D setWrapST(GlWrap wrap) {
+    public Texture2D setWrapST(GLWrap wrap) {
         return this.setWrap(wrap, wrap);
     }
 
-    public Texture2D setWrapSTR(GlWrap wrap) {
+    public Texture2D setWrapSTR(GLWrap wrap) {
         return this.setWrap(wrap, wrap, wrap);
     }
 
 
-    public GlWrap getWrapS() {
+    public GLWrap getWrapS() {
         this.bind();
         return super.glGetWrapS(PARAM_TARGET);
     }
 
-    public GlWrap getWrapT() {
+    public GLWrap getWrapT() {
         this.bind();
         return super.glGetWrapT(PARAM_TARGET);
     }
 
-    public GlWrap getWrapR() {
+    public GLWrap getWrapR() {
         this.bind();
         return super.glGetWrapR(PARAM_TARGET);
     }
@@ -468,12 +468,12 @@ public class Texture2D extends GlTexture {
     }
 
 
-    public GlInternalFormat getInternalFormat(int level) {
+    public GLInternalFormat getInternalFormat(int level) {
         this.bind();
         return super.glGetInternalFormat(LEVEL_TARGET, level);
     }
 
-    public GlInternalFormat getInternalFormat() {
+    public GLInternalFormat getInternalFormat() {
         return this.getInternalFormat(0);
     }
 

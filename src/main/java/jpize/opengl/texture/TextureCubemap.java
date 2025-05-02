@@ -1,19 +1,19 @@
 package jpize.opengl.texture;
 
-import jpize.opengl.glenum.GlCompareFunc;
-import jpize.opengl.type.GlType;
+import jpize.opengl.glenum.GLCompareFunc;
+import jpize.opengl.type.GLType;
 import jpize.util.pixmap.Pixmap;
 import jpize.util.pixmap.PixmapIO;
 
-public class TextureCubemap extends GlTexture {
+public class TextureCubemap extends GLTexture {
 
-    public static GlTexTarget TARGET = GlTexTarget.TEXTURE_CUBE_MAP;
-    public static GlTexParamTarget PARAM_TARGET = GlTexParamTarget.TEXTURE_CUBE_MAP;
+    public static GLTexTarget TARGET = GLTexTarget.TEXTURE_CUBE_MAP;
+    public static GLTexParamTarget PARAM_TARGET = GLTexParamTarget.TEXTURE_CUBE_MAP;
 
     public TextureCubemap() {
         super();
-        this.setFilters(GlFilter.LINEAR);
-        this.setWrapSTR(GlWrap.CLAMP_TO_EDGE);
+        this.setFilters(GLFilter.LINEAR);
+        this.setWrapSTR(GLWrap.CLAMP_TO_EDGE);
     }
 
     public TextureCubemap(Pixmap positiveX, Pixmap negativeX, Pixmap positiveY, Pixmap negativeY, Pixmap positiveZ, Pixmap negativeZ) {
@@ -38,7 +38,7 @@ public class TextureCubemap extends GlTexture {
     }
 
     public static void unbind() {
-        GlTexture.glUnbind(PARAM_TARGET);
+        GLTexture.glUnbind(PARAM_TARGET);
     }
 
 
@@ -66,22 +66,22 @@ public class TextureCubemap extends GlTexture {
 
 
 
-    public void setImage(GlCubemapTarget target, int level, Pixmap pixmap) {
+    public void setImage(GLCubemapTarget target, int level, Pixmap pixmap) {
         this.bind();
-        super.glSetImage2D(target.imageTarget, level, pixmap.getWidth(), pixmap.getHeight(), pixmap.getFormat(), GlType.UNSIGNED_BYTE, pixmap.buffer());
+        super.glSetImage2D(target.imageTarget, level, pixmap.getWidth(), pixmap.getHeight(), pixmap.getFormat(), GLType.UNSIGNED_BYTE, pixmap.buffer());
     }
 
-    public void setImage(GlCubemapTarget target, Pixmap pixmap) {
+    public void setImage(GLCubemapTarget target, Pixmap pixmap) {
         this.setImage(target, 0, pixmap);
     }
 
     public void setDefaultImages(int level, Pixmap positiveX, Pixmap negativeX, Pixmap positiveY, Pixmap negativeY, Pixmap positiveZ, Pixmap negativeZ) {
-        this.setImage(GlCubemapTarget.POSITIVE_X, level, positiveX);
-        this.setImage(GlCubemapTarget.NEGATIVE_X, level, negativeX);
-        this.setImage(GlCubemapTarget.POSITIVE_Y, level, positiveY);
-        this.setImage(GlCubemapTarget.NEGATIVE_Y, level, negativeY);
-        this.setImage(GlCubemapTarget.POSITIVE_Z, level, positiveZ);
-        this.setImage(GlCubemapTarget.NEGATIVE_Z, level, negativeZ);
+        this.setImage(GLCubemapTarget.POSITIVE_X, level, positiveX);
+        this.setImage(GLCubemapTarget.NEGATIVE_X, level, negativeX);
+        this.setImage(GLCubemapTarget.POSITIVE_Y, level, positiveY);
+        this.setImage(GLCubemapTarget.NEGATIVE_Y, level, negativeY);
+        this.setImage(GLCubemapTarget.POSITIVE_Z, level, positiveZ);
+        this.setImage(GLCubemapTarget.NEGATIVE_Z, level, negativeZ);
     }
 
     public void setDefaultImages(Pixmap positiveX, Pixmap negativeX, Pixmap positiveY, Pixmap negativeY, Pixmap positiveZ, Pixmap negativeZ) {
@@ -89,8 +89,8 @@ public class TextureCubemap extends GlTexture {
     }
 
     public void setDefaultImages(int level, Pixmap... pixmaps) {
-        for(int i = 0; i < Math.min(GlCubemapTarget.values().length, pixmaps.length); i++)
-            this.setImage(GlCubemapTarget.values()[i], level, pixmaps[i]);
+        for(int i = 0; i < Math.min(GLCubemapTarget.values().length, pixmaps.length); i++)
+            this.setImage(GLCubemapTarget.values()[i], level, pixmaps[i]);
     }
 
     public void setDefaultImages(Pixmap... pixmaps) {
@@ -117,13 +117,13 @@ public class TextureCubemap extends GlTexture {
 
 
 
-    public TextureCubemap setDepthStencilTextureMode(GlDepthStencilMode mode) {
+    public TextureCubemap setDepthStencilTextureMode(GLDepthStencilMode mode) {
         this.bind();
         super.glSetDepthStencilTextureMode(PARAM_TARGET, mode);
         return this;
     }
 
-    public GlDepthStencilMode getDepthStencilTextureMode() {
+    public GLDepthStencilMode getDepthStencilTextureMode() {
         this.bind();
         return super.glGetDepthStencilTextureMode(PARAM_TARGET);
     }
@@ -141,25 +141,25 @@ public class TextureCubemap extends GlTexture {
     }
 
 
-    public TextureCubemap setCompareFunc(GlCompareFunc value) {
+    public TextureCubemap setCompareFunc(GLCompareFunc value) {
         this.bind();
         super.glSetCompareFunc(PARAM_TARGET, value);
         return this;
     }
 
-    public GlCompareFunc getCompareFunc() {
+    public GLCompareFunc getCompareFunc() {
         this.bind();
         return super.glGetCompareFunc(PARAM_TARGET);
     }
 
 
-    public TextureCubemap setCompareMode(GlCompareMode value) {
+    public TextureCubemap setCompareMode(GLCompareMode value) {
         this.bind();
         super.glSetCompareMode(PARAM_TARGET, value);
         return this;
     }
 
-    public GlCompareMode getCompareMode() {
+    public GLCompareMode getCompareMode() {
         this.bind();
         return super.glGetCompareMode(PARAM_TARGET);
     }
@@ -177,36 +177,36 @@ public class TextureCubemap extends GlTexture {
     }
 
 
-    public TextureCubemap setMinFilter(GlFilter filter) {
+    public TextureCubemap setMinFilter(GLFilter filter) {
         this.bind();
         super.glSetMinFilter(PARAM_TARGET, filter);
         return this;
     }
 
-    public TextureCubemap setMagFilter(GlFilter filter) {
+    public TextureCubemap setMagFilter(GLFilter filter) {
         this.bind();
         super.glSetMagFilter(PARAM_TARGET, filter);
         return this;
     }
 
-    public TextureCubemap setFilters(GlFilter min, GlFilter mag) {
+    public TextureCubemap setFilters(GLFilter min, GLFilter mag) {
         this.bind();
         super.glSetMinFilter(PARAM_TARGET, min);
         super.glSetMagFilter(PARAM_TARGET, mag);
         return this;
     }
 
-    public TextureCubemap setFilters(GlFilter minAndMag) {
+    public TextureCubemap setFilters(GLFilter minAndMag) {
         return this.setFilters(minAndMag, minAndMag);
     }
 
 
-    public GlFilter getMinFilter() {
+    public GLFilter getMinFilter() {
         this.bind();
         return super.glGetMinFilter(PARAM_TARGET);
     }
 
-    public GlFilter getMagFilter() {
+    public GLFilter getMagFilter() {
         this.bind();
         return super.glGetMagFilter(PARAM_TARGET);
     }
@@ -296,32 +296,32 @@ public class TextureCubemap extends GlTexture {
     }
 
 
-    public TextureCubemap setWrapS(GlWrap wrap) {
+    public TextureCubemap setWrapS(GLWrap wrap) {
         this.bind();
         super.glSetWrapS(PARAM_TARGET, wrap);
         return this;
     }
 
-    public TextureCubemap setWrapT(GlWrap wrap) {
+    public TextureCubemap setWrapT(GLWrap wrap) {
         this.bind();
         super.glSetWrapT(PARAM_TARGET, wrap);
         return this;
     }
 
-    public TextureCubemap setWrapR(GlWrap wrap) {
+    public TextureCubemap setWrapR(GLWrap wrap) {
         this.bind();
         super.glSetWrapR(PARAM_TARGET, wrap);
         return this;
     }
 
-    public TextureCubemap setWrap(GlWrap s, GlWrap t) {
+    public TextureCubemap setWrap(GLWrap s, GLWrap t) {
         this.bind();
         super.glSetWrapS(PARAM_TARGET, s);
         super.glSetWrapT(PARAM_TARGET, t);
         return this;
     }
 
-    public TextureCubemap setWrap(GlWrap s, GlWrap t, GlWrap r) {
+    public TextureCubemap setWrap(GLWrap s, GLWrap t, GLWrap r) {
         this.bind();
         super.glSetWrapS(PARAM_TARGET, s);
         super.glSetWrapT(PARAM_TARGET, t);
@@ -329,26 +329,26 @@ public class TextureCubemap extends GlTexture {
         return this;
     }
 
-    public TextureCubemap setWrapST(GlWrap wrap) {
+    public TextureCubemap setWrapST(GLWrap wrap) {
         return this.setWrap(wrap, wrap);
     }
 
-    public TextureCubemap setWrapSTR(GlWrap wrap) {
+    public TextureCubemap setWrapSTR(GLWrap wrap) {
         return this.setWrap(wrap, wrap, wrap);
     }
 
 
-    public GlWrap getWrapS() {
+    public GLWrap getWrapS() {
         this.bind();
         return super.glGetWrapS(PARAM_TARGET);
     }
 
-    public GlWrap getWrapT() {
+    public GLWrap getWrapT() {
         this.bind();
         return super.glGetWrapT(PARAM_TARGET);
     }
 
-    public GlWrap getWrapR() {
+    public GLWrap getWrapR() {
         this.bind();
         return super.glGetWrapR(PARAM_TARGET);
     }
@@ -392,114 +392,114 @@ public class TextureCubemap extends GlTexture {
 
     // level params
 
-    public int getWidth(GlTexLevelTarget target, int level) {
+    public int getWidth(GLTexLevelTarget target, int level) {
         this.bind();
         return super.glGetWidth(target, level);
     }
 
-    public int getHeight(GlTexLevelTarget target, int level) {
+    public int getHeight(GLTexLevelTarget target, int level) {
         this.bind();
         return super.glGetHeight(target, level);
     }
 
-    public int getDepth(GlTexLevelTarget target, int level) {
+    public int getDepth(GLTexLevelTarget target, int level) {
         this.bind();
         return super.glGetDepth(target, level);
     }
 
-    public int getWidth(GlTexLevelTarget target) {
+    public int getWidth(GLTexLevelTarget target) {
         return this.getWidth(target, 0);
     }
 
-    public int getHeight(GlTexLevelTarget target) {
+    public int getHeight(GLTexLevelTarget target) {
         return this.getHeight(target, 0);
     }
 
-    public int getDepth(GlTexLevelTarget target) {
+    public int getDepth(GLTexLevelTarget target) {
         return this.getDepth(target, 0);
     }
 
 
-    public GlInternalFormat getInternalFormat(GlTexLevelTarget target, int level) {
+    public GLInternalFormat getInternalFormat(GLTexLevelTarget target, int level) {
         this.bind();
         return super.glGetInternalFormat(target, level);
     }
 
-    public GlInternalFormat getInternalFormat(GlTexLevelTarget target) {
+    public GLInternalFormat getInternalFormat(GLTexLevelTarget target) {
         return this.getInternalFormat(target, 0);
     }
 
 
-    public int getRedSize(GlTexLevelTarget target, int level) {
+    public int getRedSize(GLTexLevelTarget target, int level) {
         this.bind();
         return super.glGetRedSize(target, level);
     }
 
-    public int getRedSize(GlTexLevelTarget target) {
+    public int getRedSize(GLTexLevelTarget target) {
         return this.getRedSize(target, 0);
     }
 
-    public int getGreenSize(GlTexLevelTarget target, int level) {
+    public int getGreenSize(GLTexLevelTarget target, int level) {
         this.bind();
         return super.glGetGreenSize(target, level);
     }
 
-    public int getGreenSize(GlTexLevelTarget target) {
+    public int getGreenSize(GLTexLevelTarget target) {
         return this.getGreenSize(target, 0);
     }
 
-    public int getBlueSize(GlTexLevelTarget target, int level) {
+    public int getBlueSize(GLTexLevelTarget target, int level) {
         this.bind();
         return super.glGetBlueSize(target, level);
     }
 
-    public int getBlueSize(GlTexLevelTarget target) {
+    public int getBlueSize(GLTexLevelTarget target) {
         return this.getBlueSize(target, 0);
     }
 
-    public int getAlphaSize(GlTexLevelTarget target, int level) {
+    public int getAlphaSize(GLTexLevelTarget target, int level) {
         this.bind();
         return super.glGetAlphaSize(target, level);
     }
 
-    public int getAlphaSize(GlTexLevelTarget target) {
+    public int getAlphaSize(GLTexLevelTarget target) {
         return this.getAlphaSize(target, 0);
     }
 
 
-    public int getDepthSize(GlTexLevelTarget target, int level) {
+    public int getDepthSize(GLTexLevelTarget target, int level) {
         this.bind();
         return super.glGetDepthSize(target, level);
     }
 
-    public int getDepthSize(GlTexLevelTarget target) {
+    public int getDepthSize(GLTexLevelTarget target) {
         return this.getDepthSize(target, 0);
     }
 
-    public int getCompressedImageSize(GlTexLevelTarget target, int level) {
+    public int getCompressedImageSize(GLTexLevelTarget target, int level) {
         this.bind();
         return super.glGetCompressedImageSize(target, level);
     }
 
-    public int getCompressedImageSize(GlTexLevelTarget target) {
+    public int getCompressedImageSize(GLTexLevelTarget target) {
         return this.getCompressedImageSize(target, 0);
     }
 
-    public boolean isCompressed(GlTexLevelTarget target, int level) {
+    public boolean isCompressed(GLTexLevelTarget target, int level) {
         this.bind();
         return super.glIsCompressed(target, level);
     }
 
-    public boolean isCompressed(GlTexLevelTarget target) {
+    public boolean isCompressed(GLTexLevelTarget target) {
         return this.isCompressed(target, 0);
     }
 
-    public int getBufferOffset(GlTexLevelTarget target, int level) {
+    public int getBufferOffset(GLTexLevelTarget target, int level) {
         this.bind();
         return super.glGetBufferOffset(target, level);
     }
 
-    public int getBufferOffset(GlTexLevelTarget target) {
+    public int getBufferOffset(GLTexLevelTarget target) {
         return this.getBufferOffset(target, 0);
     }
     

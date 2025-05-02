@@ -4,8 +4,8 @@ import jpize.context.input.MouseBtn;
 import jpize.lwjgl.context.GlfwContextBuilder;
 import jpize.lwjgl.context.ContextManager;
 import jpize.opengl.gl.GL;
-import jpize.opengl.glenum.GlTarget;
-import jpize.opengl.tesselation.GlPrimitive;
+import jpize.opengl.glenum.GLTarget;
+import jpize.opengl.tesselation.GLPrimitive;
 import jpize.util.camera.OrthographicCameraCentered;
 import jpize.util.color.Color;
 import jpize.util.math.geometry.Intersector;
@@ -42,8 +42,8 @@ public class ClothSimulation extends JpizeApplication {
         this.cinematic_scale = 1F;
         this.prev_grab = new Vec2f();
 
-        this.point_batch = new VertexBatch(GlPrimitive.POINTS);
-        this.line_batch = new VertexBatch(GlPrimitive.LINES);
+        this.point_batch = new VertexBatch(GLPrimitive.POINTS);
+        this.line_batch = new VertexBatch(GLPrimitive.LINES);
 
         this.particles = new ArrayList<>();
         this.constraints = new ArrayList<>();
@@ -81,7 +81,7 @@ public class ClothSimulation extends JpizeApplication {
     @Override
     public void init() {
         GL.pointSize(PARTICLE_RADIUS);
-        GL.enable(GlTarget.POINT_SMOOTH);
+        GL.enable(GLTarget.POINT_SMOOTH);
         GL.lineWidth(CONSTRAINT_WIDTH);
     }
 

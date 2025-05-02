@@ -1,32 +1,32 @@
 package jpize.util.mesh;
 
-import jpize.opengl.buffer.GlVertexBuffer;
-import jpize.opengl.tesselation.GlPrimitive;
-import jpize.opengl.vertex.GlVertexArray;
-import jpize.opengl.vertex.GlVertAttr;
+import jpize.opengl.buffer.GLVertexBuffer;
+import jpize.opengl.tesselation.GLPrimitive;
+import jpize.opengl.vertex.GLVertexArray;
+import jpize.opengl.vertex.GLVertAttr;
 
 public class Mesh implements IMesh {
 
-    private final GlVertexArray vertexArray;
-    private final GlVertexBuffer vertexBuffer;
-    private GlPrimitive mode;
+    private final GLVertexArray vertexArray;
+    private final GLVertexBuffer vertexBuffer;
+    private GLPrimitive mode;
 
-    public Mesh(GlVertAttr... attributes) {
-        this.vertexArray = new GlVertexArray();
+    public Mesh(GLVertAttr... attributes) {
+        this.vertexArray = new GLVertexArray();
         this.vertexArray.bind();
 
-        this.vertexBuffer = new GlVertexBuffer();
+        this.vertexBuffer = new GLVertexBuffer();
         this.vertexBuffer.bind();
         this.vertexBuffer.enableAttributes(attributes);
 
-        this.mode = GlPrimitive.TRIANGLES;
+        this.mode = GLPrimitive.TRIANGLES;
     }
 
-    public GlPrimitive getMode() {
+    public GLPrimitive getMode() {
         return mode;
     }
 
-    public void setMode(GlPrimitive mode) {
+    public void setMode(GLPrimitive mode) {
         this.mode = mode;
     }
 
@@ -42,7 +42,7 @@ public class Mesh implements IMesh {
 
 
     @Override
-    public GlVertexBuffer vertices() {
+    public GLVertexBuffer vertices() {
         return vertexBuffer;
     }
 

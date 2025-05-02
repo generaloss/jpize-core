@@ -2,9 +2,8 @@ package jpize.util.font;
 
 import jpize.context.Jpize;
 import jpize.opengl.shader.Shader;
-import jpize.opengl.tesselation.GlPrimitive;
-import jpize.opengl.type.GlType;
-import jpize.opengl.vertex.GlVertAttr;
+import jpize.opengl.type.GLType;
+import jpize.opengl.vertex.GLVertAttr;
 import jpize.util.Disposable;
 import jpize.util.camera.Camera3D;
 import jpize.util.math.vector.Vec3f;
@@ -93,7 +92,7 @@ public class TextRenderer {
         final long threadID = Thread.currentThread().getId();
         if(!RENDERER_BY_THREAD.containsKey(threadID)){
             final Renderer renderer = new Renderer(
-                new Mesh(new GlVertAttr(3, GlType.FLOAT), new GlVertAttr(2, GlType.FLOAT), new GlVertAttr(4, GlType.FLOAT)),
+                new Mesh(new GLVertAttr(3, GLType.FLOAT), new GLVertAttr(2, GLType.FLOAT), new GLVertAttr(4, GLType.FLOAT)),
                 new Shader(Resource.internal("/shader/text_renderer/vert.glsl"), Resource.internal("/shader/text_renderer/frag.glsl")),
                 new Matrix4f()
             );
@@ -215,7 +214,7 @@ public class TextRenderer {
         final long threadID = Thread.currentThread().getId();
         if(!RENDERER_BY_THREAD.containsKey(threadID)){
             final Renderer renderer = new Renderer(
-                new Mesh(new GlVertAttr(3, GlType.FLOAT), new GlVertAttr(2, GlType.FLOAT), new GlVertAttr(4, GlType.FLOAT)),
+                new Mesh(new GLVertAttr(3, GLType.FLOAT), new GLVertAttr(2, GLType.FLOAT), new GLVertAttr(4, GLType.FLOAT)),
                 new Shader(Resource.internal("/shader/text_renderer/vert.glsl"), Resource.internal("/shader/text_renderer/frag.glsl")),
                 new Matrix4f()
             );

@@ -1,6 +1,6 @@
 package jpize.util.ninepatch;
 
-import jpize.opengl.texture.GlWrap;
+import jpize.opengl.texture.GLWrap;
 import jpize.opengl.texture.Texture2D;
 import jpize.util.Disposable;
 import jpize.util.array.IntList;
@@ -274,7 +274,7 @@ public class NinePatch implements Disposable {
                     texture.getSubImage(x, y, width, height, patchPixmap);
 
                     final Texture2D patchTexture = new Texture2D(patchPixmap);
-                    patchTexture.setWrapST(GlWrap.REPEAT);
+                    patchTexture.setWrapST(GLWrap.REPEAT);
 
                     region = new TextureRegion(patchTexture);
                     patchPixmap.dispose();

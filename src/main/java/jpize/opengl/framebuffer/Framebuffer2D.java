@@ -6,11 +6,11 @@ import jpize.opengl.framebuffer.attachment.FramebufferAttachment;
 import jpize.opengl.framebuffer.attachment.FramebufferTexture;
 import jpize.opengl.texture.Texture2D;
 
-public class Framebuffer2D extends GlFramebuffer {
+public class Framebuffer2D extends GLFramebuffer {
 
     private final FramebufferTexture colorAttachment;
 
-    public Framebuffer2D(GlFramebufferTarget target, int width, int height, boolean multisample) {
+    public Framebuffer2D(GLFramebufferTarget target, int width, int height, boolean multisample) {
         super(target, width, height, multisample);
         this.colorAttachment = FramebufferAttachment.color(0);
         super.attach(colorAttachment);
@@ -18,7 +18,7 @@ public class Framebuffer2D extends GlFramebuffer {
     }
 
     public Framebuffer2D(int width, int height, boolean multisample) {
-        this(GlFramebufferTarget.FRAMEBUFFER, width, height, multisample);
+        this(GLFramebufferTarget.FRAMEBUFFER, width, height, multisample);
     }
 
     public Framebuffer2D(int width, int height) {

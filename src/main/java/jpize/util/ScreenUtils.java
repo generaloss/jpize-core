@@ -3,8 +3,8 @@ package jpize.util;
 import jpize.util.res.FileResource;
 import jpize.context.Jpize;
 import jpize.util.res.Resource;
-import jpize.opengl.texture.GlBaseFormat;
-import jpize.opengl.type.GlType;
+import jpize.opengl.texture.GLBaseFormat;
+import jpize.opengl.type.GLType;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -20,7 +20,7 @@ public class ScreenUtils{
         final int height = Jpize.getHeight();
         
         final ByteBuffer buffer = MemoryUtils.alloc(width * height * 4).order(ByteOrder.LITTLE_ENDIAN);
-        Jpize.GL11.glReadPixels(0, 0, width, height, GlBaseFormat.BGRA.value, GlType.UNSIGNED_BYTE.value, buffer);
+        Jpize.GL11.glReadPixels(0, 0, width, height, GLBaseFormat.BGRA.value, GLType.UNSIGNED_BYTE.value, buffer);
         
         final int[] pixels = new int[width * height];
         buffer.asIntBuffer().get(pixels);

@@ -1,19 +1,19 @@
 package jpize.opengl.framebuffer.attachment;
 
-import jpize.opengl.framebuffer.GlFramebuffer;
-import jpize.opengl.framebuffer.renderbuffer.GlRenderbuffer;
-import jpize.opengl.texture.GlInternalFormat;
+import jpize.opengl.framebuffer.GLFramebuffer;
+import jpize.opengl.framebuffer.renderbuffer.GLRenderbuffer;
+import jpize.opengl.texture.GLInternalFormat;
 
 public class FramebufferRenderbuffer extends FramebufferAttachment {
 
-    private final GlRenderbuffer renderbuffer;
+    private final GLRenderbuffer renderbuffer;
 
-    public FramebufferRenderbuffer(GlAttachment attachment, GlInternalFormat format) {
+    public FramebufferRenderbuffer(GLAttachment attachment, GLInternalFormat format) {
         super(attachment);
-        this.renderbuffer = new GlRenderbuffer(format);
+        this.renderbuffer = new GLRenderbuffer(format);
     }
 
-    public GlRenderbuffer getRenderbuffer() {
+    public GLRenderbuffer getRenderbuffer() {
         return renderbuffer;
     }
 
@@ -25,7 +25,7 @@ public class FramebufferRenderbuffer extends FramebufferAttachment {
     }
 
     @Override
-    public void attach(GlFramebuffer framebuffer) {
+    public void attach(GLFramebuffer framebuffer) {
         this.setRenderbufferStorage(framebuffer.getWidth(), framebuffer.getHeight());
         framebuffer.framebufferRenderbuffer(super.attachment, renderbuffer);
     }
