@@ -20,7 +20,7 @@ public class UniformBufferStd140 extends GLUniformBuffer {
         this.alignOffset(16);
         for(int i = 0; i < 4; i++) {
             final int j = (i * 4);
-            super.setSubData(offset, mat.val[j], mat.val[j + 1], mat.val[j + 2], mat.val[j + 3]);
+            super.setSubData(offset, mat.values[j], mat.values[j + 1], mat.values[j + 2], mat.values[j + 3]);
             offset += 16;
         }
     }
