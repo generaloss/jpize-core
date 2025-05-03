@@ -6,7 +6,7 @@
 
     <groupId>io.github.generaloss</groupId>
     <artifactId>jpize-core-lwjgl</artifactId>
-    <version>25.4.1-SNAPSHOT-1-4.15-1</version>
+    <version>25.5.1-SNAPSHOT-1-1</version>
     <name>jpize-core-lwjgl</name>
 
     <description>OpenGL Graphics Library Lwjgl Backend</description>
@@ -37,13 +37,13 @@
         <dependency>
             <groupId>io.github.generaloss</groupId>
             <artifactId>jpize-utils</artifactId>
-            <version>25.5.1-SNAPSHOT-1</version>
+            <version>25.5.1-SNAPSHOT-2</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>io.github.generaloss</groupId>
             <artifactId>jpize-core</artifactId>
-            <version>25.4.1-SNAPSHOT-1-4.15</version>
+            <version>25.5.1-SNAPSHOT-1</version>
             <scope>provided</scope>
         </dependency>
         <!-- freetype -->
