@@ -6,6 +6,11 @@ import java.nio.*;
 
 public class LwjglGL46 extends LwjglGL45 implements GL46I {
 
+    public static final LwjglGL46 INSTANCE = new LwjglGL46();
+
+    protected LwjglGL46() { }
+
+
     @Override
     public void glMultiDrawArraysIndirectCount(int mode, ByteBuffer indirect, long drawcount, int maxdrawcount, int stride) {
         GL46.glMultiDrawArraysIndirectCount(mode, indirect, drawcount, maxdrawcount, stride);

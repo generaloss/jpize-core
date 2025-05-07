@@ -76,14 +76,14 @@ public class Animation<T> {
             case NORMAL -> Math.min(frameIndex, lastFrameIndex);
             case LOOP -> (frameIndex % frames.length);
             case LOOP_PINGPONG -> {
-                frameIndex = frameIndex % (lastFrameIndex * 2);
+                frameIndex = (frameIndex % (lastFrameIndex * 2));
                 if(frameIndex > lastFrameIndex)
-                    frameIndex = lastFrameIndex * 2 - frameIndex;
+                    frameIndex = (lastFrameIndex * 2 - frameIndex);
                 yield frameIndex;
             }
             case LOOP_RANDOM -> ((int) (prevTime / frameDuration) != frameIndex) ? Maths.random(lastFrameIndex) : prevFrameIndex;
             case REVERSED -> Math.max(0, lastFrameIndex - frameIndex);
-            case LOOP_REVERSED -> lastFrameIndex - (frameIndex % frames.length);
+            case LOOP_REVERSED -> (lastFrameIndex - (frameIndex % frames.length));
         };
 
         prevTime = time;

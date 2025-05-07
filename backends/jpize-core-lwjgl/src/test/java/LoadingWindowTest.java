@@ -1,7 +1,7 @@
 import jpize.context.Jpize;
 import jpize.context.JpizeApplication;
-import jpize.lwjgl.context.ContextManager;
-import jpize.lwjgl.context.GlfwContextBuilder;
+import jpize.lwjgl.glfw.context.GlfwContextManager;
+import jpize.lwjgl.glfw.context.GlfwContextBuilder;
 import jpize.util.font.Font;
 import jpize.opengl.texture.Texture2D;
 import jpize.util.mesh.TextureBatch;
@@ -36,7 +36,7 @@ public class LoadingWindowTest {
                     .icon("/icon.png").build()
                     .setApp(new MainWindow());
                 // close loading window
-                ContextManager.closeAllOtherContexts();
+                GlfwContextManager.closeAllOtherContexts();
             });
         }
         public void dispose() {
@@ -48,10 +48,11 @@ public class LoadingWindowTest {
 
     public static void main(String[] args) {
         GlfwContextBuilder.create(720, 480, "Loading...")
+            .icon("/icon2.png")
             .decorated(false).resizable(false)
             .build().setApp(new LoadingWindow());
 
-        ContextManager.run();
+        GlfwContextManager.run();
     }
 
 }

@@ -6,6 +6,11 @@ import java.nio.*;
 
 public class LwjglGL31 extends LwjglGL30 implements GL31I {
 
+    public static final LwjglGL31 INSTANCE = new LwjglGL31();
+
+    protected LwjglGL31() { }
+
+
     @Override
     public void glDrawArraysInstanced(int mode, int first, int count, int primcount) {
         GL31.glDrawArraysInstanced(mode, first, count, primcount);

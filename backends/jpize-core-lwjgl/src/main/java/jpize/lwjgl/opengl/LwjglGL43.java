@@ -8,6 +8,11 @@ import java.nio.*;
 
 public class LwjglGL43 extends LwjglGL42 implements GL43I {
 
+    public static final LwjglGL43 INSTANCE = new LwjglGL43();
+
+    protected LwjglGL43() { }
+
+
     @Override
     public void glClearBufferData(int target, int internalformat, int format, int type, ByteBuffer data) {
         GL43.glClearBufferData(target, internalformat, format, type, data);

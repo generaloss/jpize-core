@@ -52,7 +52,7 @@ public class GameParameters {
     public void init(){
         configResource = Resource.file("./config.conf");
 //        configResource =
-        configResource.mkAll();
+        configResource.createWithParents();
         config.load(configResource);
 
         spells = new Spell[]{

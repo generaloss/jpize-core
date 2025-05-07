@@ -6,6 +6,11 @@ import java.nio.*;
 
 public class LwjglGL11 implements GL11I {
 
+    public static final LwjglGL11 INSTANCE = new LwjglGL11();
+
+    protected LwjglGL11() { }
+
+
     @Override
     public void glEnable(int target) {
         GL11.glEnable(target);

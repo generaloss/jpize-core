@@ -1,7 +1,7 @@
 package jpize.lwjgl.glfw.callback;
 
-import jpize.lwjgl.context.GlfwContext;
-import jpize.lwjgl.context.ContextManager;
+import jpize.lwjgl.glfw.context.GlfwContext;
+import jpize.lwjgl.glfw.context.GlfwContextManager;
 import jpize.context.callback.*;
 import jpize.context.input.Action;
 import jpize.context.input.Key;
@@ -32,7 +32,7 @@ public class GlfwCallbacks extends AbstractCallbacks {
 
 
     private void makeContextCurrent() {
-        final GlfwContext context = ContextManager.instance().getContext(windowID);
+        final GlfwContext context = GlfwContextManager.instance().getContext(windowID);
         context.makeCurrent();
     }
 

@@ -7,8 +7,8 @@ import jpize.context.JpizeApplication;
 import jpize.context.input.Action;
 import jpize.context.input.Key;
 import jpize.context.input.MouseBtn;
-import jpize.lwjgl.context.ContextManager;
-import jpize.lwjgl.context.GlfwContextBuilder;
+import jpize.lwjgl.glfw.context.GlfwContextManager;
+import jpize.lwjgl.glfw.context.GlfwContextBuilder;
 import jpize.opengl.gl.GL;
 import jpize.opengl.texture.Texture2D;
 import jpize.util.font.Charset;
@@ -35,7 +35,7 @@ public class Main extends JpizeApplication {
     public static void main(String[] args) {
         GlfwContextBuilder.create(720, 1280, "Summoner")
             .build().setApp(new Main());
-        ContextManager.run();
+        GlfwContextManager.run();
     }
 
     @Override

@@ -1,4 +1,4 @@
-package jpize.lwjgl.context;
+package jpize.lwjgl.glfw.context;
 
 import jpize.context.IWindow;
 import jpize.lwjgl.glfw.Glfw;
@@ -10,19 +10,19 @@ import java.util.Queue;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-public class ContextManager {
+public class GlfwContextManager {
 
-    private static ContextManager INSTANCE;
+    private static class SingletonHelper {
+        private static final GlfwContextManager INSTANCE = new GlfwContextManager();
+    }
 
-    public static ContextManager instance() {
-        if(INSTANCE == null)
-            INSTANCE = new ContextManager();
-        return INSTANCE;
+    public static GlfwContextManager instance() {
+        return SingletonHelper.INSTANCE;
     }
 
 
     public static void run() {
-        final ContextManager manager = instance();
+        final GlfwContextManager manager = instance();
         manager.initContexts();
         manager.startLoop();
         GLFW.glfwTerminate();
@@ -34,7 +34,7 @@ public class ContextManager {
     }
 
     public static void closeAllOtherContexts() {
-        final ContextManager manager = instance();
+        final GlfwContextManager manager = instance();
         final GlfwContext current = manager.getCurrentContext();
 
         for(GlfwContext context: manager.contexts.values())
@@ -47,8 +47,8 @@ public class ContextManager {
     private final Map<Long, GlfwContext> contexts = new ConcurrentHashMap<>();
     private long currentContextID;
 
-    private ContextManager() {
-        // waiting for wayland fix in lwjgl
+    private GlfwContextManager() {
+        // waiting for wayland fix in lwjgl/glfw
         if(System.getProperty("os.name").equals("Linux"))
             Glfw.glfwInitHintPlatform(GlfwPlatform.X11);
         // init glfw

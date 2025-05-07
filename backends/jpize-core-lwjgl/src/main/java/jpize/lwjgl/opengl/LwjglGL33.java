@@ -6,6 +6,11 @@ import java.nio.*;
 
 public class LwjglGL33 extends LwjglGL32 implements GL33I {
 
+    public static final LwjglGL33 INSTANCE = new LwjglGL33();
+
+    protected LwjglGL33() { }
+
+
     @Override
     public void glBindFragDataLocationIndexed(int program, int colorNumber, int index, ByteBuffer name) {
         GL33.glBindFragDataLocationIndexed(program, colorNumber, index, name);

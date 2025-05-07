@@ -6,6 +6,11 @@ import java.nio.*;
 
 public class LwjglGL44 extends LwjglGL43 implements GL44I {
 
+    public static final LwjglGL44 INSTANCE = new LwjglGL44();
+
+    protected LwjglGL44() { }
+
+
     @Override
     public void glBufferStorage(int target, long size, int flags) {
         GL44.glBufferStorage(target, size, flags);

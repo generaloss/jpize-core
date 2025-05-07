@@ -1,8 +1,8 @@
 import jpize.context.Jpize;
 import jpize.context.JpizeApplication;
 import jpize.context.input.MouseBtn;
-import jpize.lwjgl.context.GlfwContextBuilder;
-import jpize.lwjgl.context.ContextManager;
+import jpize.lwjgl.glfw.context.GlfwContextBuilder;
+import jpize.lwjgl.glfw.context.GlfwContextManager;
 import jpize.opengl.gl.GL;
 import jpize.opengl.glenum.GLTarget;
 import jpize.opengl.tesselation.GLPrimitive;
@@ -274,10 +274,11 @@ public class ClothSimulation extends JpizeApplication {
 
     public static void main(String[] args) {
         GlfwContextBuilder.create(1080 / 2, 2400 / 2, "Cloth Simulation")
+            .icon("/icon2.png")
             .samples(8)
             .build().setApp(new ClothSimulation());
 
-        ContextManager.run();
+        GlfwContextManager.run();
     }
 
 }

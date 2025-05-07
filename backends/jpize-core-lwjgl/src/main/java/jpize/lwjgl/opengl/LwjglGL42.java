@@ -6,6 +6,11 @@ import java.nio.*;
 
 public class LwjglGL42 extends LwjglGL41 implements GL42I {
 
+    public static final LwjglGL42 INSTANCE = new LwjglGL42();
+
+    protected LwjglGL42() { }
+
+
     @Override
     public void glGetActiveAtomicCounterBufferiv(int program, int bufferIndex, int pname, IntBuffer params) {
         GL42.glGetActiveAtomicCounterBufferiv(program, bufferIndex, pname, params);

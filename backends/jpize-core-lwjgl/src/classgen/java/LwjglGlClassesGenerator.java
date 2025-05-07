@@ -69,6 +69,9 @@ public class LwjglGlClassesGenerator {
 
         final String lwjglGL = "GL" + version;
 
+        w.addField("public static final " + className + " INSTANCE = new " + className + "();");
+        w.addPrivateConstructor("()");
+
         final Scanner reader = new Scanner(srcRes.inStream());
         while(reader.hasNext()) {
             String line = reader.nextLine();

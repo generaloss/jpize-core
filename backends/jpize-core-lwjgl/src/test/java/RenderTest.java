@@ -1,6 +1,6 @@
 import jpize.context.JpizeApplication;
-import jpize.lwjgl.context.GlfwContextBuilder;
-import jpize.lwjgl.context.ContextManager;
+import jpize.lwjgl.glfw.context.GlfwContextBuilder;
+import jpize.lwjgl.glfw.context.GlfwContextManager;
 import jpize.opengl.gl.GL;
 import jpize.util.camera.PerspectiveCamera;
 import jpize.util.shader.ShaderBuilder;
@@ -69,8 +69,9 @@ public class RenderTest extends JpizeApplication {
 
     public static void main(String[] args) {
         GlfwContextBuilder.create(1280, 720, "Render Test")
-                  .build().setApp(new RenderTest());
-        ContextManager.run();
+            .icon("/icon2.png")
+            .build().setApp(new RenderTest());
+        GlfwContextManager.run();
     }
 
 }

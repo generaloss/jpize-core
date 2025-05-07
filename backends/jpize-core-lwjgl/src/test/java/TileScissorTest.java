@@ -1,8 +1,8 @@
 import jpize.context.Jpize;
 import jpize.context.JpizeApplication;
 import jpize.context.input.MouseBtn;
-import jpize.lwjgl.context.GlfwContextBuilder;
-import jpize.lwjgl.context.ContextManager;
+import jpize.lwjgl.glfw.context.GlfwContextBuilder;
+import jpize.lwjgl.glfw.context.GlfwContextManager;
 import jpize.opengl.gl.GL;
 import jpize.opengl.tesselation.GLScissor;
 import jpize.opengl.texture.Texture2D;
@@ -87,8 +87,9 @@ public class TileScissorTest extends JpizeApplication {
 
     public static void main(String[] args) {
         GlfwContextBuilder.create(1280, 720, "Tile Test")
+            .icon("/icon2.png")
             .build().setApp(new TileScissorTest());
-        ContextManager.run();
+        GlfwContextManager.run();
     }
 
 }

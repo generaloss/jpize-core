@@ -1,7 +1,7 @@
 import jpize.context.Jpize;
 import jpize.context.JpizeApplication;
-import jpize.lwjgl.context.ContextManager;
-import jpize.lwjgl.context.GlfwContextBuilder;
+import jpize.lwjgl.glfw.context.GlfwContextManager;
+import jpize.lwjgl.glfw.context.GlfwContextBuilder;
 import jpize.opengl.gl.GL;
 import jpize.opengl.buffer.UniformBufferStd140;
 import jpize.opengl.shader.Shader;
@@ -64,10 +64,11 @@ public class UBOTest extends JpizeApplication {
 
     public static void main(String[] args) throws IOException {
         GlfwContextBuilder.create(1080, 720, "Uniform Buffer Test")
+            .icon("/icon2.png")
             .samples(8)
             .build().setApp(new UBOTest());
 
-        ContextManager.run();
+        GlfwContextManager.run();
     }
 
 }

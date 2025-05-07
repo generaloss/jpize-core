@@ -1,9 +1,7 @@
-package jpize.lwjgl.context;
+package jpize.lwjgl.glfw.context;
 
 import jpize.opengl.gl.GL;
-import jpize.opengl.glenum.GLCompareFunc;
 import jpize.opengl.glenum.GLTarget;
-import jpize.opengl.texture.GLBlendFactor;
 import jpize.lwjgl.glfw.Glfw;
 import jpize.lwjgl.glfw.GlfwImage;
 import jpize.lwjgl.glfw.monitor.GlfwMonitor;
@@ -27,7 +25,8 @@ public class GlfwContextBuilder {
     private final String title;
 
     private GlfwContextBuilder(String title, int width, int height) {
-        ContextManager.instance(); // init
+        // noinspection ResultOfMethodCallIgnored (lazy glfw init)
+        GlfwContextManager.instance();
         this.title = title;
         this.width = width;
         this.height = height;
@@ -36,7 +35,6 @@ public class GlfwContextBuilder {
     public GlfwContext build() {
         // window hints
         Glfw.defaultWindowHints();
-        Glfw.windowHint(GlfwWindowHint.VISIBLE, false);
         Glfw.windowHint(GlfwWindowHint.VISIBLE, false);
         Glfw.windowHint(GlfwWindowHint.DECORATED, decorated);
         Glfw.windowHint(GlfwWindowHint.RESIZABLE, resizable);
@@ -51,12 +49,6 @@ public class GlfwContextBuilder {
 
         // context
         final GlfwContext context = new GlfwContext(window);
-        // default blending options, enable cullface
-        GL.enable(GLTarget.BLEND, GLTarget.CULL_FACE);
-        GL.blendFunc(GLBlendFactor.SRC_ALPHA, GLBlendFactor.ONE_MINUS_SRC_ALPHA);
-        // opengl left-handled coordinate system options
-        GL.depthFunc(GLCompareFunc.GEQUAL);
-        GL.clearDepth(0);
         // multisample
         if(samples > 0)
             GL.enable(GLTarget.MULTISAMPLE);

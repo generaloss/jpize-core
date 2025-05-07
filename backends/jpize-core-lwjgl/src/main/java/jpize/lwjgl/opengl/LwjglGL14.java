@@ -7,6 +7,11 @@ import java.nio.*;
 
 public class LwjglGL14 extends LwjglGL13 implements GL14I {
 
+    public static final LwjglGL14 INSTANCE = new LwjglGL14();
+
+    protected LwjglGL14() { }
+
+
     @Override
     public void glBlendColor(float red, float green, float blue, float alpha) {
         GL14.glBlendColor(red, green, blue, alpha);

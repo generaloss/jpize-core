@@ -6,6 +6,11 @@ import java.nio.*;
 
 public class LwjglGL32 extends LwjglGL31 implements GL32I {
 
+    public static final LwjglGL32 INSTANCE = new LwjglGL32();
+
+    protected LwjglGL32() { }
+
+
     @Override
     public void glGetBufferParameteri64v(int target, int pname, LongBuffer params) {
         GL32.glGetBufferParameteri64v(target, pname, params);

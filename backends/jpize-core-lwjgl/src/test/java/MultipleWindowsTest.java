@@ -1,8 +1,8 @@
 import jpize.context.Jpize;
 import jpize.context.JpizeApplication;
 import jpize.context.input.Key;
-import jpize.lwjgl.context.ContextManager;
-import jpize.lwjgl.context.GlfwContextBuilder;
+import jpize.lwjgl.glfw.context.GlfwContextManager;
+import jpize.lwjgl.glfw.context.GlfwContextBuilder;
 import jpize.opengl.gl.GL;
 import jpize.util.input.TextInput;
 import jpize.util.font.Font;
@@ -19,7 +19,7 @@ public class MultipleWindowsTest {
             GL.clearColor(1, 1, 1, 1F);
         }
         public void update() {
-            if(Key.E.down()) ContextManager.closeAllOtherContexts();
+            if(Key.E.down()) GlfwContextManager.closeAllOtherContexts();
             if(Key.ESCAPE.down()) Jpize.exit();
         }
         int angle = 0;
@@ -45,7 +45,7 @@ public class MultipleWindowsTest {
             GL.clearColor(0.02, 0.05, 0.12, 1F);
         }
         public void update() {
-            if(Key.E.down()) ContextManager.closeAllOtherContexts();
+            if(Key.E.down()) GlfwContextManager.closeAllOtherContexts();
             if(Key.ESCAPE.down()) Jpize.exit();
         }
         public void render() {
@@ -60,14 +60,14 @@ public class MultipleWindowsTest {
 
     public static void main(String[] args) {
         GlfwContextBuilder.create("Window 1", 800, 600)
-            .icon("/icon.png")
+            .icon("/icon2.png")
             .build().setApp(new Window1());
 
         GlfwContextBuilder.create("Window 2", 800, 600)
             .icon(new PixmapRGBA(16, 16).fill(0, 0, 15, 15, 1, 0, 1, 1F))
             .build().setApp(new Window2());
 
-        ContextManager.run();
+        GlfwContextManager.run();
     }
 
 }

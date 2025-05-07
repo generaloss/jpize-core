@@ -1,4 +1,4 @@
-package jpize.lwjgl.context;
+package jpize.lwjgl.glfw.context;
 
 import jpize.context.Context;
 import jpize.context.Jpize;
@@ -26,7 +26,7 @@ public class GlfwContext extends Context {
         this.makeCurrent();
         this.glCapabilities = GL.createCapabilities();
 
-        ContextManager.instance().contextToInit(this);
+        GlfwContextManager.instance().contextToInit(this);
         callbacks.addRender(window::swapBuffers);
     }
 
@@ -75,13 +75,13 @@ public class GlfwContext extends Context {
     public void onClose() {
         // (context is current (calls in loop))
         window.hide();
-        ContextManager.instance().unregister(this);
+        GlfwContextManager.instance().unregister(this);
         super.onClose();
     }
 
 
     public void makeCurrent() {
-        ContextManager.instance().makeContextCurrent(window);
+        GlfwContextManager.instance().makeContextCurrent(window);
         Jpize.context = this;
         Jpize.window = window;
         Jpize.input = input;
@@ -106,23 +106,23 @@ public class GlfwContext extends Context {
         Jpize.GL46 = GL46;
     }
 
-    private static final LwjglGL11 GL11 = new LwjglGL11();
-    private static final LwjglGL12 GL12 = new LwjglGL12();
-    private static final LwjglGL13 GL13 = new LwjglGL13();
-    private static final LwjglGL14 GL14 = new LwjglGL14();
-    private static final LwjglGL15 GL15 = new LwjglGL15();
-    private static final LwjglGL20 GL20 = new LwjglGL20();
-    private static final LwjglGL21 GL21 = new LwjglGL21();
-    private static final LwjglGL30 GL30 = new LwjglGL30();
-    private static final LwjglGL31 GL31 = new LwjglGL31();
-    private static final LwjglGL32 GL32 = new LwjglGL32();
-    private static final LwjglGL33 GL33 = new LwjglGL33();
-    private static final LwjglGL40 GL40 = new LwjglGL40();
-    private static final LwjglGL41 GL41 = new LwjglGL41();
-    private static final LwjglGL42 GL42 = new LwjglGL42();
-    private static final LwjglGL43 GL43 = new LwjglGL43();
-    private static final LwjglGL44 GL44 = new LwjglGL44();
-    private static final LwjglGL45 GL45 = new LwjglGL45();
-    private static final LwjglGL46 GL46 = new LwjglGL46();
+    private static final LwjglGL11 GL11 = LwjglGL11.INSTANCE;
+    private static final LwjglGL12 GL12 = LwjglGL12.INSTANCE;
+    private static final LwjglGL13 GL13 = LwjglGL13.INSTANCE;
+    private static final LwjglGL14 GL14 = LwjglGL14.INSTANCE;
+    private static final LwjglGL15 GL15 = LwjglGL15.INSTANCE;
+    private static final LwjglGL20 GL20 = LwjglGL20.INSTANCE;
+    private static final LwjglGL21 GL21 = LwjglGL21.INSTANCE;
+    private static final LwjglGL30 GL30 = LwjglGL30.INSTANCE;
+    private static final LwjglGL31 GL31 = LwjglGL31.INSTANCE;
+    private static final LwjglGL32 GL32 = LwjglGL32.INSTANCE;
+    private static final LwjglGL33 GL33 = LwjglGL33.INSTANCE;
+    private static final LwjglGL40 GL40 = LwjglGL40.INSTANCE;
+    private static final LwjglGL41 GL41 = LwjglGL41.INSTANCE;
+    private static final LwjglGL42 GL42 = LwjglGL42.INSTANCE;
+    private static final LwjglGL43 GL43 = LwjglGL43.INSTANCE;
+    private static final LwjglGL44 GL44 = LwjglGL44.INSTANCE;
+    private static final LwjglGL45 GL45 = LwjglGL45.INSTANCE;
+    private static final LwjglGL46 GL46 = LwjglGL46.INSTANCE;
 
 }

@@ -6,6 +6,11 @@ import java.nio.*;
 
 public class LwjglGL45 extends LwjglGL44 implements GL45I {
 
+    public static final LwjglGL45 INSTANCE = new LwjglGL45();
+
+    protected LwjglGL45() { }
+
+
     @Override
     public void glClipControl(int origin, int depth) {
         GL45.glClipControl(origin, depth);

@@ -6,6 +6,11 @@ import java.nio.*;
 
 public class LwjglGL21 extends LwjglGL20 implements GL21I {
 
+    public static final LwjglGL21 INSTANCE = new LwjglGL21();
+
+    protected LwjglGL21() { }
+
+
     @Override
     public void glUniformMatrix2x3fv(int location, boolean transpose, FloatBuffer value) {
         GL21.glUniformMatrix2x3fv(location, transpose, value);

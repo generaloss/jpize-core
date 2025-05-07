@@ -6,6 +6,11 @@ import java.nio.*;
 
 public class LwjglGL12 extends LwjglGL11 implements GL12I {
 
+    public static final LwjglGL12 INSTANCE = new LwjglGL12();
+
+    protected LwjglGL12() { }
+
+
     @Override
     public void glTexImage3D(int target, int level, int internalformat, int width, int height, int depth, int border, int format, int type, ByteBuffer pixels) {
         GL12.glTexImage3D(target, level, internalformat, width, height, depth, border, format, type, pixels);

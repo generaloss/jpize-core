@@ -2,6 +2,10 @@ package jpize.context;
 
 import jpize.context.callback.AbstractCallbacks;
 import jpize.context.input.AbstractInput;
+import jpize.opengl.gl.GL;
+import jpize.opengl.glenum.GLCompareFunc;
+import jpize.opengl.glenum.GLTarget;
+import jpize.opengl.texture.GLBlendFactor;
 import jpize.util.time.DeltaTimeCounter;
 import jpize.util.time.PerSecondCounter;
 
@@ -53,9 +57,16 @@ public abstract class Context {
 
 
     protected void onInit() {
+        // default blending options, enable cullface
+        GL.enable(GLTarget.BLEND, GLTarget.CULL_FACE);
+        GL.blendFunc(GLBlendFactor.SRC_ALPHA, GLBlendFactor.ONE_MINUS_SRC_ALPHA);
+        // opengl left-handled coordinate system options
+        GL.depthFunc(GLCompareFunc.GEQUAL);
+        GL.clearDepth(0);
+        // callbacks
+        this.getCallbacks().addResize(this::onResize);
         if(app != null)
             app.init();
-        this.getCallbacks().addResize(this::onResize);
         this.getCallbacks().invokeInit();
         // reset delta time counter after init
         fpsCounter.reset();

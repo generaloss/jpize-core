@@ -1,6 +1,6 @@
 import jpize.context.JpizeApplication;
-import jpize.lwjgl.context.ContextManager;
-import jpize.lwjgl.context.GlfwContextBuilder;
+import jpize.lwjgl.glfw.context.GlfwContextManager;
+import jpize.lwjgl.glfw.context.GlfwContextBuilder;
 import jpize.opengl.gl.GL;
 import jpize.util.atlas.TextureAtlas;
 import jpize.util.RenderQuad;
@@ -35,8 +35,9 @@ public class AtlasTest extends JpizeApplication {
 
     public static void main(String[] args) {
         GlfwContextBuilder.create(720, 720, "Atlas Test")
+            .icon("/icon2.png")
             .build().setApp(new AtlasTest());
-        ContextManager.run();
+        GlfwContextManager.run();
     }
 
 }

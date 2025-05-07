@@ -2,8 +2,8 @@ import jpize.context.Jpize;
 import jpize.context.JpizeApplication;
 import jpize.context.input.Key;
 import jpize.context.input.MouseBtn;
-import jpize.lwjgl.context.ContextManager;
-import jpize.lwjgl.context.GlfwContextBuilder;
+import jpize.lwjgl.glfw.context.GlfwContextManager;
+import jpize.lwjgl.glfw.context.GlfwContextBuilder;
 import jpize.lwjgl.glfw.cursor.GlfwCursor;
 import jpize.lwjgl.glfw.cursor.GlfwCursorShape;
 import jpize.lwjgl.glfw.input.GlfwInput;
@@ -265,8 +265,9 @@ public class TextEditorTest extends JpizeApplication {
 
     public static void main(String[] args) {
         GlfwContextBuilder.create(1280, 1280, "Editor")
-                .build().setApp(new TextEditorTest());
-        ContextManager.run();
+            .icon("/icon2.png")
+            .build().setApp(new TextEditorTest());
+        GlfwContextManager.run();
     }
 
 }

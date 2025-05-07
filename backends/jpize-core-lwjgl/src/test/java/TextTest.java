@@ -1,6 +1,6 @@
 import jpize.context.JpizeApplication;
-import jpize.lwjgl.context.GlfwContextBuilder;
-import jpize.lwjgl.context.ContextManager;
+import jpize.lwjgl.glfw.context.GlfwContextBuilder;
+import jpize.lwjgl.glfw.context.GlfwContextManager;
 import jpize.opengl.gl.GL;
 import jpize.util.font.Font;
 import jpize.util.font.FontRenderOptions;
@@ -59,10 +59,11 @@ public class TextTest extends JpizeApplication {
 
     public static void main(String[] args) throws IOException {
         GlfwContextBuilder.create(1080, 720, "Cloth Simulation")
+            .icon("/icon2.png")
             .samples(8)
             .build().setApp(new TextTest());
 
-        ContextManager.run();
+        GlfwContextManager.run();
     }
 
 }

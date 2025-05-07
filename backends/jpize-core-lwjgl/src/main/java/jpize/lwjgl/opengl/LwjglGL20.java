@@ -6,6 +6,11 @@ import java.nio.*;
 
 public class LwjglGL20 extends LwjglGL15 implements GL20I {
 
+    public static final LwjglGL20 INSTANCE = new LwjglGL20();
+
+    protected LwjglGL20() { }
+
+
     @Override
     public int glCreateProgram() {
         return GL20.glCreateProgram();

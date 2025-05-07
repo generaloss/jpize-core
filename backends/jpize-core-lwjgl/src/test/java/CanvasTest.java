@@ -1,7 +1,7 @@
 import jpize.context.Jpize;
 import jpize.context.JpizeApplication;
-import jpize.lwjgl.context.ContextManager;
-import jpize.lwjgl.context.GlfwContextBuilder;
+import jpize.lwjgl.glfw.context.GlfwContextManager;
+import jpize.lwjgl.glfw.context.GlfwContextBuilder;
 import jpize.opengl.gl.GL;
 import jpize.util.color.Color;
 import jpize.util.math.vector.Vec2i;
@@ -52,8 +52,9 @@ public class CanvasTest extends JpizeApplication {
 
     public static void main(String[] args) {
         GlfwContextBuilder.create(1080, 1080, "Window")
-                  .build().setApp(new CanvasTest());
-        ContextManager.run();
+            .icon("/icon2.png")
+            .build().setApp(new CanvasTest());
+        GlfwContextManager.run();
     }
 
 }

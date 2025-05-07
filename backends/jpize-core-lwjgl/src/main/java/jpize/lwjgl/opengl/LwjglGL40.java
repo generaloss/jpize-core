@@ -6,6 +6,11 @@ import java.nio.*;
 
 public class LwjglGL40 extends LwjglGL33 implements GL40I {
 
+    public static final LwjglGL40 INSTANCE = new LwjglGL40();
+
+    protected LwjglGL40() { }
+
+
     @Override
     public void glBlendEquationi(int buf, int mode) {
         GL40.glBlendEquationi(buf, mode);

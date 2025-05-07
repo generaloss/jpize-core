@@ -6,6 +6,11 @@ import java.nio.*;
 
 public class LwjglGL30 extends LwjglGL21 implements GL30I {
 
+    public static final LwjglGL30 INSTANCE = new LwjglGL30();
+
+    protected LwjglGL30() { }
+
+
     @Override
     public String glGetStringi(int name, int index) {
         return GL30.glGetStringi(name, index);

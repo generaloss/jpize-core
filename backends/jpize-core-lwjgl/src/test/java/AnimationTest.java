@@ -1,7 +1,7 @@
 import jpize.context.Jpize;
 import jpize.context.JpizeApplication;
-import jpize.lwjgl.context.GlfwContextBuilder;
-import jpize.lwjgl.context.ContextManager;
+import jpize.lwjgl.glfw.context.GlfwContextBuilder;
+import jpize.lwjgl.glfw.context.GlfwContextManager;
 import jpize.opengl.gl.GL;
 import jpize.opengl.texture.Texture2D;
 import jpize.util.mesh.TextureBatch;
@@ -51,8 +51,9 @@ public class AnimationTest extends JpizeApplication {
 
     public static void main(String[] args) {
         GlfwContextBuilder.create(720, 480, "Window")
+            .icon("/icon2.png")
             .build().setApp(new AnimationTest());
-        ContextManager.run();
+        GlfwContextManager.run();
     }
 
 }

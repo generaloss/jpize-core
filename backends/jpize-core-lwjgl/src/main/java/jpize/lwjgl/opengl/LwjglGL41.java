@@ -6,6 +6,11 @@ import java.nio.*;
 
 public class LwjglGL41 extends LwjglGL40 implements GL41I {
 
+    public static final LwjglGL41 INSTANCE = new LwjglGL41();
+
+    protected LwjglGL41() { }
+
+
     @Override
     public void glReleaseShaderCompiler() {
         GL41.glReleaseShaderCompiler();

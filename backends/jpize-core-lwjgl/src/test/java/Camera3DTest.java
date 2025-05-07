@@ -1,8 +1,8 @@
 import jpize.context.Jpize;
 import jpize.context.JpizeApplication;
 import jpize.context.input.Key;
-import jpize.lwjgl.context.ContextManager;
-import jpize.lwjgl.context.GlfwContextBuilder;
+import jpize.lwjgl.glfw.context.GlfwContextManager;
+import jpize.lwjgl.glfw.context.GlfwContextBuilder;
 import jpize.opengl.gl.GL;
 import jpize.opengl.glenum.GLTarget;
 import jpize.opengl.shader.Shader;
@@ -112,8 +112,8 @@ public class Camera3DTest extends JpizeApplication {
         options.matrix().setRotationXYZ(angleX, angleY, 0);
         font.drawText(camera, "Test text 3D\nPizza", -font.getTextWidth("Test text 3D\nPizza") * 0.5F, -font.getTextHeight("Test text 3D\nPizza") * 0.5F, 0F);
 
-        GL.disable(GLTarget.DEPTH_TEST);
         bloom.end();
+        GL.disable(GLTarget.DEPTH_TEST);
 
         options.scale().set(5);
         font.drawText("Test text", 100, 100);
@@ -136,9 +136,10 @@ public class Camera3DTest extends JpizeApplication {
 
     public static void main(String[] args) {
         GlfwContextBuilder.create(1280, 720, "Quaternion Camera")
+            .icon("/icon2.png")
             .build().setApp(new Camera3DTest());
 
-        ContextManager.run();
+        GlfwContextManager.run();
     }
 
 }

@@ -6,6 +6,11 @@ import java.nio.*;
 
 public class LwjglGL13 extends LwjglGL12 implements GL13I {
 
+    public static final LwjglGL13 INSTANCE = new LwjglGL13();
+
+    protected LwjglGL13() { }
+
+
     @Override
     public void glCompressedTexImage3D(int target, int level, int internalformat, int width, int height, int depth, int border, int imageSize, long data) {
         GL13.glCompressedTexImage3D(target, level, internalformat, width, height, depth, border, imageSize, data);

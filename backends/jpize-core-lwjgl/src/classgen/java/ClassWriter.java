@@ -36,6 +36,11 @@ public class ClassWriter {
         return this;
     }
 
+    public ClassWriter addPrivateConstructor(String header, String... lines) {
+        this.constructors.add(new Method(null, "private " + name + header, lines));
+        return this;
+    }
+
     public ClassWriter addConstructor(String header, String... lines) {
         this.constructors.add(new Method(null, "public " + name + header, lines));
         return this;
@@ -122,7 +127,7 @@ public class ClassWriter {
 
     public ClassWriter write(String path) {
         final FileResource res = Resource.file(path + "/" + name + ".java");
-        res.mkAll();
+        res.createWithParents();
         final String code = makeCode();
         res.writeString(code);
         System.out.println("Generated class '" + name + "' (" + code.split("\n").length + " lines)");

@@ -2,7 +2,7 @@ package jpize.lwjgl.glfw.input;
 
 import jpize.context.Jpize;
 import jpize.context.input.*;
-import jpize.lwjgl.context.GlfwContext;
+import jpize.lwjgl.glfw.context.GlfwContext;
 import jpize.lwjgl.glfw.Glfw;
 import jpize.lwjgl.glfw.cursor.GlfwCursor;
 import jpize.util.math.geometry.Recti;

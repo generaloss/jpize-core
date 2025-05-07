@@ -6,6 +6,11 @@ import java.nio.*;
 
 public class LwjglGL15 extends LwjglGL14 implements GL15I {
 
+    public static final LwjglGL15 INSTANCE = new LwjglGL15();
+
+    protected LwjglGL15() { }
+
+
     @Override
     public void glBindBuffer(int target, int buffer) {
         GL15.glBindBuffer(target, buffer);

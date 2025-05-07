@@ -1,8 +1,8 @@
 import jpize.context.JpizeApplication;
 import jpize.context.input.Key;
 import jpize.context.input.MouseBtn;
-import jpize.lwjgl.context.GlfwContextBuilder;
-import jpize.lwjgl.context.ContextManager;
+import jpize.lwjgl.glfw.context.GlfwContextBuilder;
+import jpize.lwjgl.glfw.context.GlfwContextManager;
 import jpize.opengl.gl.GL;
 import jpize.util.font.Font;
 import jpize.util.mesh.TextureBatch;
@@ -53,10 +53,11 @@ public class InputTest extends JpizeApplication {
 
     public static void main(String[] args) {
         GlfwContextBuilder.create(1280, 720, "Input Test")
+            .icon("/icon2.png")
             .decorated(false)
             .build().setApp(new InputTest());
 
-        ContextManager.run();
+        GlfwContextManager.run();
     }
 
 }
