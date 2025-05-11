@@ -9,6 +9,11 @@ import java.nio.*;
 
 public class AndroidGL45 extends AndroidGL44 implements GL45I {
 
+    public static final AndroidGL45 INSTANCE = new AndroidGL45();
+
+    protected AndroidGL45() { }
+
+
     @Override
     public void glClipControl(int origin, int depth) {
         throw new UnsupportedOperationException();

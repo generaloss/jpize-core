@@ -13,6 +13,11 @@ import java.nio.IntBuffer;
 
 public class AndroidGL41 extends AndroidGL40 implements GL41I {
 
+    public static final AndroidGL41 INSTANCE = new AndroidGL41();
+
+    protected AndroidGL41() { }
+
+
     @Override
     public void glReleaseShaderCompiler() {
         GLES20.glReleaseShaderCompiler();

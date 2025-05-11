@@ -10,6 +10,11 @@ import java.nio.ShortBuffer;
 
 public class AndroidGL31 extends AndroidGL30 implements GL31I {
 
+    public static final AndroidGL31 INSTANCE = new AndroidGL31();
+
+    protected AndroidGL31() { }
+
+
     @Override
     public void glDrawArraysInstanced(int mode, int first, int count, int primcount) {
         GLES30.glDrawArraysInstanced(mode, first, count, primcount);

@@ -2,6 +2,7 @@ package jpize.lwjgl.glfw.input;
 
 import jpize.context.Jpize;
 import jpize.context.input.*;
+import jpize.lwjgl.glfw.GlfwObject;
 import jpize.lwjgl.glfw.context.GlfwContext;
 import jpize.lwjgl.glfw.Glfw;
 import jpize.lwjgl.glfw.cursor.GlfwCursor;
@@ -14,6 +15,9 @@ import java.nio.DoubleBuffer;
 import java.nio.IntBuffer;
 
 public class GlfwInput extends AbstractInput {
+
+    private final double[] tmp_double_1 = new double[1];
+    private final double[] tmp_double_2 = new double[1];
 
     private final long windowID;
 
@@ -51,8 +55,7 @@ public class GlfwInput extends AbstractInput {
 
 
     public void setCursor(GlfwCursor cursor) {
-        final long cursorID = (cursor == null) ? 0L : cursor.getID();
-        GLFW.glfwSetCursor(windowID, cursorID);
+        GLFW.glfwSetCursor(windowID, GlfwObject.getID(cursor));
     }
 
 

@@ -6,6 +6,7 @@ import jpize.context.callback.KeyCallback;
 import jpize.context.input.Action;
 import jpize.context.input.Key;
 import jpize.context.input.Mods;
+import jpize.util.StringUtils;
 import jpize.util.array.StringList;
 import jpize.util.font.Charset;
 import jpize.util.math.Maths;
@@ -108,7 +109,7 @@ public class TextInput implements Iterable<String> {
 
 
     public TextInput insert(int x, int y, CharSequence string) {
-        if(string == null || string.isEmpty())
+        if(StringUtils.isEmpty(string))
             return this;
 
         final String[] lines = string.toString().split("\n");

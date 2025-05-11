@@ -6,6 +6,11 @@ import java.nio.*;
 
 public class AndroidGL14 extends AndroidGL13 implements GL14I {
 
+    public static final AndroidGL14 INSTANCE = new AndroidGL14();
+
+    protected AndroidGL14() { }
+
+
     @Override
     public void glBlendColor(float red, float green, float blue, float alpha) {
         GLES20.glBlendColor(red, green, blue, alpha);

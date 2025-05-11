@@ -6,6 +6,11 @@ import java.nio.*;
 
 public class AndroidGL30 extends AndroidGL21 implements GL30I {
 
+    public static final AndroidGL30 INSTANCE = new AndroidGL30();
+
+    protected AndroidGL30() { }
+
+
     @Override
     public String glGetStringi(int name, int index) {
         return GLES30.glGetStringi(name, index);

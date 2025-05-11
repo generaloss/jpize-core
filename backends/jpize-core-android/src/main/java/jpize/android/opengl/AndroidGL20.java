@@ -6,6 +6,11 @@ import java.nio.*;
 
 public class AndroidGL20 extends AndroidGL15 implements GL20I {
 
+    public static final AndroidGL20 INSTANCE = new AndroidGL20();
+
+    protected AndroidGL20() { }
+
+
     @Override
     public int glCreateProgram() {
         return GLES20.glCreateProgram();

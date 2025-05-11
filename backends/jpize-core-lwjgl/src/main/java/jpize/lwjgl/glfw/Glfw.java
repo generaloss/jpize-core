@@ -192,7 +192,7 @@ public class Glfw {
 
 
     public static GlfwWindow getCurrentContext() {
-        return GlfwWindow.getCurrentContext();
+        return GlfwWindowRegistry.getCurrent();
     }
 
 

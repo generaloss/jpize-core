@@ -11,6 +11,11 @@ import java.nio.IntBuffer;
 
 public class AndroidGL40 extends AndroidGL33 implements GL40I {
 
+    public static final AndroidGL40 INSTANCE = new AndroidGL40();
+
+    protected AndroidGL40() { }
+
+
     @Override
     public void glBlendEquationi(int buf, int mode) {
         GLES32.glBlendEquationi(buf, mode);

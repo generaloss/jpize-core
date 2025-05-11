@@ -6,6 +6,11 @@ import java.nio.*;
 
 public class AndroidGL13 extends AndroidGL12 implements GL13I {
 
+    public static final AndroidGL13 INSTANCE = new AndroidGL13();
+
+    protected AndroidGL13() { }
+
+
     @Override
     public void glCompressedTexImage3D(int target, int level, int internalformat, int width, int height, int depth, int border, int imageSize, long data) {
         GLES30.glCompressedTexImage3D(target, level, internalformat, width, height, depth, border, imageSize, (int) data);

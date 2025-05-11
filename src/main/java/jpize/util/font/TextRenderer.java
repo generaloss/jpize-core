@@ -5,6 +5,7 @@ import jpize.opengl.shader.Shader;
 import jpize.opengl.type.GLType;
 import jpize.opengl.vertex.GLVertAttr;
 import jpize.util.Disposable;
+import jpize.util.StringUtils;
 import jpize.util.camera.Camera3D;
 import jpize.util.math.vector.Vec3f;
 import jpize.util.mesh.Mesh;
@@ -23,7 +24,18 @@ import java.util.Map;
 
 public class TextRenderer {
 
-    private record Renderer(Mesh mesh, Shader shader, Matrix4f matrixCombined) implements Disposable {
+    private static class Renderer implements Disposable {
+
+        public final Mesh mesh;
+        public final Shader shader;
+        public final Matrix4f combinedMatrix;
+
+        public Renderer(Mesh mesh, Shader shader, Matrix4f combinedMatrix) {
+            this.mesh = mesh;
+            this.shader = shader;
+            this.combinedMatrix = combinedMatrix;
+        }
+
         @Override
         public void dispose() {
             mesh.dispose();
@@ -31,13 +43,12 @@ public class TextRenderer {
         }
     }
 
+
     private static final Map<Long, Renderer> RENDERER_BY_THREAD = new HashMap<>();
 
 
     public static GlyphIterator render(Font font, TextureBatch batch, String text, float x, float y) {
-        if(text == null)
-            return null;
-        if(text.isBlank())
+        if(StringUtils.isBlank(text))
             return font.iterator(text);
 
         // init
@@ -83,9 +94,7 @@ public class TextRenderer {
 
 
     public static GlyphIterator render(Font font, String text, float x, float y) {
-        if(text == null)
-            return null;
-        if(text.isBlank())
+        if(StringUtils.isBlank(text))
             return font.iterator(text);
 
         // context-local instance
@@ -103,7 +112,7 @@ public class TextRenderer {
 
         // init
         final FontRenderOptions options = font.getOptions();
-        renderer.matrixCombined.setOrthographic(0F, 0F, Jpize.getWidth(), Jpize.getHeight());
+        renderer.combinedMatrix.setOrthographic(0F, 0F, Jpize.getWidth(), Jpize.getHeight());
         final Color color = options.color();
 
         final Matrix3f transformMatrix = new Matrix3f()
@@ -185,7 +194,7 @@ public class TextRenderer {
                 vertices.clear();
 
                 renderer.shader.bind();
-                renderer.shader.uniform("u_combined", renderer.matrixCombined);
+                renderer.shader.uniform("u_combined", renderer.combinedMatrix);
                 renderer.shader.uniform("u_texture", lastTexture);
                 renderer.mesh.render();
             }
@@ -197,7 +206,7 @@ public class TextRenderer {
 
         renderer.mesh.vertices().setData(vertices.copyOf());
         renderer.shader.bind();
-        renderer.shader.uniform("u_combined", renderer.matrixCombined);
+        renderer.shader.uniform("u_combined", renderer.combinedMatrix);
         renderer.shader.uniform("u_texture", lastTexture);
         renderer.mesh.render();
 
@@ -205,9 +214,7 @@ public class TextRenderer {
     }
 
     public static GlyphIterator render(Font font, Camera3D camera, String text, float x, float y, float z) {
-        if(text == null)
-            return null;
-        if(text.isBlank())
+        if(StringUtils.isBlank(text))
             return font.iterator(text);
 
         // context-local instance

@@ -9,6 +9,11 @@ import java.nio.ShortBuffer;
 
 public class AndroidGL42 extends AndroidGL41 implements GL42I {
 
+    public static final AndroidGL42 INSTANCE = new AndroidGL42();
+
+    protected AndroidGL42() { }
+
+
     @Override
     public void glGetActiveAtomicCounterBufferiv(int program, int bufferIndex, int pname, IntBuffer params) {
         throw new UnsupportedOperationException();

@@ -2,7 +2,7 @@ package jpize.lwjgl.glfw.monitor;
 
 import jpize.context.input.ConnectEvent;
 import jpize.lwjgl.glfw.GlfwConnectEvent;
-import jpize.lwjgl.glfw.GlfwObjectLong;
+import jpize.lwjgl.glfw.GlfwObject;
 import jpize.lwjgl.glfw.callback.GlfwMonitorCallback;
 import jpize.util.math.vector.Vec2f;
 import jpize.util.math.vector.Vec2i;
@@ -21,7 +21,7 @@ import java.util.Map;
 
 import static org.lwjgl.glfw.GLFW.*;
 
-public class GlfwMonitor extends GlfwObjectLong {
+public class GlfwMonitor extends GlfwObject {
 
     private GlfwMonitor(long ID) {
         super(ID);

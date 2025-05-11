@@ -7,6 +7,11 @@ import java.nio.*;
 
 public class AndroidGL43 extends AndroidGL42 implements GL43I {
 
+    public static final AndroidGL43 INSTANCE = new AndroidGL43();
+
+    protected AndroidGL43() { }
+
+
     @Override
     public void glClearBufferData(int target, int internalformat, int format, int type, ByteBuffer data) {
         throw new UnsupportedOperationException();

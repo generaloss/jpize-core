@@ -5,7 +5,10 @@
 
 ---
 
+Java version: 17 +
+
 ## Examples
+
 #### 1. Application
 ``` java
 public class MyApp extends JpizeApplication {

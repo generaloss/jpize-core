@@ -7,6 +7,11 @@ import java.nio.*;
 
 public class AndroidGL44 extends AndroidGL43 implements GL44I {
 
+    public static final AndroidGL44 INSTANCE = new AndroidGL44();
+
+    protected AndroidGL44() { }
+
+
     @Override
     public void glBufferStorage(int target, long size, int flags) {
         throw new IllegalArgumentException();

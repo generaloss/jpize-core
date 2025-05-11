@@ -37,7 +37,7 @@
         <dependency>
             <groupId>io.github.generaloss</groupId>
             <artifactId>jpize-utils</artifactId>
-            <version>25.5.1-SNAPSHOT-4</version>
+            <version>25.5.1</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -151,6 +151,7 @@
                 <version>0.3.0</version>
                 <extensions>true</extensions>
                 <configuration>
+                    <deploymentName>jpize-core-lwjgl:${version}</deploymentName>
                     <publishingServerId>central</publishingServerId>
                     <tokenAuth>true</tokenAuth>
                 </configuration>

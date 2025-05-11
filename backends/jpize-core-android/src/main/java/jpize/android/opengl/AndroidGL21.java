@@ -6,6 +6,11 @@ import java.nio.*;
 
 public class AndroidGL21 extends AndroidGL20 implements GL21I {
 
+    public static final AndroidGL21 INSTANCE = new AndroidGL21();
+
+    protected AndroidGL21() { }
+
+
     @Override
     public void glUniformMatrix2x3fv(int location, boolean transpose, FloatBuffer value) {
         GLES30.glUniformMatrix2x3fv(location, value.limit(), transpose, value);

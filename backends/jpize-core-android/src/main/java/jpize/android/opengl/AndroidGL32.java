@@ -8,6 +8,11 @@ import java.nio.*;
 
 public class AndroidGL32 extends AndroidGL31 implements GL32I {
 
+    public static final AndroidGL32 INSTANCE = new AndroidGL32();
+
+    protected AndroidGL32() { }
+
+
     @Override
     public void glGetBufferParameteri64v(int target, int pname, LongBuffer params) {
         GLES30.glGetBufferParameteri64v(target, pname, params);

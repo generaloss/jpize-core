@@ -6,6 +6,11 @@ import java.nio.*;
 
 public class AndroidGL15 extends AndroidGL14 implements GL15I {
 
+    public static final AndroidGL15 INSTANCE = new AndroidGL15();
+
+    protected AndroidGL15() { }
+
+
     @Override
     public void glBindBuffer(int target, int buffer) {
         GLES11.glBindBuffer(target, buffer);

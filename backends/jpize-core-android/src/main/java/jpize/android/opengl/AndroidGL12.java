@@ -6,6 +6,11 @@ import java.nio.*;
 
 public class AndroidGL12 extends AndroidGL11 implements GL12I {
 
+    public static final AndroidGL12 INSTANCE = new AndroidGL12();
+
+    protected AndroidGL12() { }
+
+
     @Override
     public void glTexImage3D(int target, int level, int internalformat, int width, int height, int depth, int border, int format, int type, ByteBuffer pixels) {
         GLES30.glTexImage3D(target, level, internalformat, width, height, depth, border, format, type, pixels);

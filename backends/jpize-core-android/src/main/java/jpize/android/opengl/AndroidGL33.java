@@ -11,6 +11,11 @@ import java.nio.LongBuffer;
 
 public class AndroidGL33 extends AndroidGL32 implements GL33I {
 
+    public static final AndroidGL33 INSTANCE = new AndroidGL33();
+
+    protected AndroidGL33() { }
+
+
     @Override
     public void glBindFragDataLocationIndexed(int program, int colorNumber, int index, ByteBuffer name) {
         throw new UnsupportedOperationException();

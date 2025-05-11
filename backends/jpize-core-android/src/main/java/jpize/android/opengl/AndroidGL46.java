@@ -8,6 +8,11 @@ import java.nio.IntBuffer;
 // fully GLES unsupported
 public class AndroidGL46 extends AndroidGL45 implements GL46I {
 
+    public static final AndroidGL46 INSTANCE = new AndroidGL46();
+
+    protected AndroidGL46() { }
+
+
     @Override
     public void glMultiDrawArraysIndirectCount(int mode, ByteBuffer indirect, long drawcount, int maxdrawcount, int stride) {
         throw new UnsupportedOperationException();

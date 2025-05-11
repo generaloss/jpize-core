@@ -37,7 +37,7 @@ public class Camera3DTest extends JpizeApplication {
         GL.clearColor(0.5F, 0.6F, 0.7F);
         GL.disable(GLTarget.CULL_FACE);
 
-        this.bloom = new GaussianBlur(10);
+        this.bloom = new GaussianBlur(10F);
 
         this.camera = new PerspectiveCamera(0.1F, 100F, 90F);
 
@@ -87,7 +87,6 @@ public class Camera3DTest extends JpizeApplication {
     @Override
     public void render() {
         GL.clearColorDepthBuffers();
-
         GL.enable(GLTarget.DEPTH_TEST);
 
         // skybox
@@ -104,7 +103,7 @@ public class Camera3DTest extends JpizeApplication {
         options.matrix().identity();
         font.drawText(camera, "Static text\nPizza\npizza", 5F, 2F, 0F);
 
-        bloom.begin();
+        // bloom.begin();
 
         float angleY = Vec2f.angle(camera.getX(), camera.getZ()) + 90;
         float angleX = Vec2f.angleBetween(Vec2f.len(camera.getX(), camera.getZ()), camera.getY(), 0, 1) - 90;
@@ -112,7 +111,7 @@ public class Camera3DTest extends JpizeApplication {
         options.matrix().setRotationXYZ(angleX, angleY, 0);
         font.drawText(camera, "Test text 3D\nPizza", -font.getTextWidth("Test text 3D\nPizza") * 0.5F, -font.getTextHeight("Test text 3D\nPizza") * 0.5F, 0F);
 
-        bloom.end();
+        // bloom.end();
         GL.disable(GLTarget.DEPTH_TEST);
 
         options.scale().set(5);

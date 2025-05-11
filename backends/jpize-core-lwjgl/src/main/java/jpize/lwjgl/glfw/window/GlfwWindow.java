@@ -3,7 +3,7 @@ package jpize.lwjgl.glfw.window;
 import jpize.context.IWindow;
 import jpize.lwjgl.glfw.Glfw;
 import jpize.lwjgl.glfw.GlfwImage;
-import jpize.lwjgl.glfw.GlfwObjectLong;
+import jpize.lwjgl.glfw.GlfwObject;
 import jpize.lwjgl.glfw.monitor.GlfwMonitor;
 import jpize.util.Insetsi;
 import jpize.util.pixmap.PixmapRGBA;
@@ -15,21 +15,14 @@ import org.lwjgl.system.MemoryUtil;
 
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
 
 import static org.lwjgl.glfw.GLFW.*;
 
-public class GlfwWindow extends GlfwObjectLong implements IWindow {
+public class GlfwWindow extends GlfwObject implements IWindow {
 
     public GlfwWindow(int width, int height, String title, GlfwMonitor monitor, GlfwWindow share) {
-        super(glfwCreateWindow(
-            width, height, title,
-            (monitor == null) ? 0L : monitor.getID(),
-            (share == null) ? 0L : share.getID()
-        ));
-        registerContext(this);
+        super(glfwCreateWindow(width, height, title, GlfwObject.getID(monitor), GlfwObject.getID(share)));
+        GlfwWindowRegistry.registerContext(this);
     }
 
     public GlfwWindow(String title, int width, int height, GlfwMonitor monitor, GlfwWindow share) {
@@ -103,8 +96,7 @@ public class GlfwWindow extends GlfwObjectLong implements IWindow {
     }
 
     public void setMonitor(GlfwMonitor monitor, int x, int y, int width, int height, int refreshRate) {
-        final long monitorID = (monitor == null) ? 0L : monitor.getID();
-        glfwSetWindowMonitor(ID, monitorID, x, y, width, height, refreshRate);
+        glfwSetWindowMonitor(ID, GlfwObject.getID(monitor), x, y, width, height, refreshRate);
     }
 
 
@@ -366,28 +358,8 @@ public class GlfwWindow extends GlfwObjectLong implements IWindow {
 
     @Override
     public void dispose() {
-        unregisterContext(this);
+        GlfwWindowRegistry.unregisterContext(this);
         glfwDestroyWindow(ID);
-    }
-
-
-    private static final Map<Long, GlfwWindow> WINDOWS = new HashMap<>();
-
-    private static void registerContext(GlfwWindow window) {
-        WINDOWS.put(window.getID(), window);
-    }
-
-    private static void unregisterContext(GlfwWindow window) {
-        WINDOWS.remove(window.getID());
-    }
-
-    public static Collection<GlfwWindow> getContexts() {
-        return WINDOWS.values();
-    }
-
-    public static GlfwWindow getCurrentContext() {
-        final long windowID = GLFW.glfwGetCurrentContext();
-        return WINDOWS.get(windowID);
     }
 
 }

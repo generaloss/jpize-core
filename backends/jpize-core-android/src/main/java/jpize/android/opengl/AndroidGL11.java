@@ -13,7 +13,10 @@ import java.nio.charset.StandardCharsets;
 
 public class AndroidGL11 implements GL11I {
 
-    // replace regexp '(return )?GLES32\..*' => 'throw new UnsupportedOperationException();'
+    public static final AndroidGL11 INSTANCE = new AndroidGL11();
+
+    protected AndroidGL11() { }
+
 
     protected static final int[] tmp_int = new int[1];
     protected static final int[] tmp_int_arg = new int[1];
