@@ -6,10 +6,10 @@ import jpize.opengl.gl.*;
 
 public class Jpize {
 
-    public static Context context;
+    public static volatile Context context;
     public static IWindow window;
     public static AbstractInput input;
-    public static AbstractCallbacks callbacks;
+    public static volatile AbstractCallbacks callbacks;
     public static GL11I GL11;
     public static GL12I GL12;
     public static GL13I GL13;
