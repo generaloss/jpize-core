@@ -47,57 +47,57 @@ public abstract class GLTexture extends GLObject {
     }
 
 
-    protected void glGenerateMipmap(GLTexTarget target) {
+    protected void glGenerateMipmap(GLTextureTarget target) {
         Jpize.GL30.glGenerateMipmap(target.value);
     }
 
 
 
-    protected void glSetImage1D(GLTexImg1DTarget target, int level, int width, GLInternalFormat format, GLType type, ByteBuffer pixels) {
+    protected void glSetImage1D(GLTexImage1DTarget target, int level, int width, GLInternalFormat format, GLType type, ByteBuffer pixels) {
         Jpize.GL15.glTexImage1D(target.value, level, format.value, width, 0, format.base.value, type.value, pixels);
     }
 
 
-    protected void glSetImage2D(GLTexImg2DTarget target, int level, int width, int height, GLInternalFormat format, GLType type, ByteBuffer pixels) {
+    protected void glSetImage2D(GLTexImage2DTarget target, int level, int width, int height, GLInternalFormat format, GLType type, ByteBuffer pixels) {
         Jpize.GL15.glTexImage2D(target.value, level, format.value, width, height, 0, format.base.value, type.value, pixels);
     }
 
-    protected void glSetImage2D(GLTexImg2DTarget target, int level, Pixmap pixmap) {
+    protected void glSetImage2D(GLTexImage2DTarget target, int level, Pixmap pixmap) {
         this.glSetImage2D(target, level, pixmap.getWidth(), pixmap.getHeight(), pixmap.getFormat(), GLType.UNSIGNED_BYTE, pixmap.buffer());
     }
 
 
-    protected void glSetImage3D(GLTexImg3DTarget target, int level, int width, int height, int depth, GLInternalFormat format, GLType type, ByteBuffer pixels) {
+    protected void glSetImage3D(GLTexImage3DTarget target, int level, int width, int height, int depth, GLInternalFormat format, GLType type, ByteBuffer pixels) {
         Jpize.GL15.glTexImage3D(target.value, level, format.value, width, height, depth, 0, format.base.value, type.value, pixels);
     }
 
 
-    protected void glSetSubImage1D(GLTexImg1DTarget target, int level, int width, int height, int offsetX, GLBaseFormat format, GLType type, ByteBuffer pixels) {
+    protected void glSetSubImage1D(GLTexImage1DTarget target, int level, int width, int height, int offsetX, GLBaseFormat format, GLType type, ByteBuffer pixels) {
         Jpize.GL15.glTexSubImage1D(target.value, level, offsetX, width, format.value, type.value, pixels);
     }
 
 
-    protected void glSetSubImage2D(GLTexImg2DTarget target, int level, int width, int height, int offsetX, int offsetY, GLBaseFormat format, GLType type, ByteBuffer pixels) {
+    protected void glSetSubImage2D(GLTexImage2DTarget target, int level, int width, int height, int offsetX, int offsetY, GLBaseFormat format, GLType type, ByteBuffer pixels) {
         Jpize.GL15.glTexSubImage2D(target.value, level, offsetX, offsetY, width, height, format.value, type.value, pixels);
     }
 
 
-    protected void glSetSubImage3D(GLTexImg3DTarget target, int level, int width, int height, int depth, int offsetX, int offsetY, int offsetZ, GLBaseFormat format, GLType type, ByteBuffer pixels) {
+    protected void glSetSubImage3D(GLTexImage3DTarget target, int level, int width, int height, int depth, int offsetX, int offsetY, int offsetZ, GLBaseFormat format, GLType type, ByteBuffer pixels) {
         Jpize.GL15.glTexSubImage3D(target.value, level, offsetX, offsetY, offsetZ, width, height, depth, format.value, type.value, pixels);
     }
 
-    protected void glSetSubImage3D(GLTexImg3DTarget target, int level, int width, int height, int depth, int offsetX, int offsetY, int offsetZ, Pixmap pixmap) {
+    protected void glSetSubImage3D(GLTexImage3DTarget target, int level, int width, int height, int depth, int offsetX, int offsetY, int offsetZ, Pixmap pixmap) {
         final ByteBuffer pixels = (pixmap == null ? null : pixmap.buffer());
         final GLBaseFormat format = (pixmap == null ? GLBaseFormat.RGBA : pixmap.getFormat().base);
         this.glSetSubImage3D(target, level, width, height, depth, offsetX, offsetY, offsetZ, format, GLType.UNSIGNED_BYTE, pixels);
     }
 
 
-    protected void glGetImage(GLTexTarget target, int level, GLBaseFormat format, GLType type, ByteBuffer pixels) {
+    protected void glGetImage(GLTextureTarget target, int level, GLBaseFormat format, GLType type, ByteBuffer pixels) {
         Jpize.GL15.glGetTexImage(target.value, level, format.value, type.value, pixels);
     }
 
-    protected void glGetImage(GLTexTarget target, int level, int width, int height, Pixmap pixmap) {
+    protected void glGetImage(GLTextureTarget target, int level, int width, int height, Pixmap pixmap) {
         pixmap.resize(width, height);
         this.glGetImage(target, level, pixmap.getFormat().base, GLType.UNSIGNED_BYTE, pixmap.buffer());
     }

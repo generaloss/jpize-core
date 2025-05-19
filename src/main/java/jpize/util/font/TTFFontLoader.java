@@ -2,6 +2,7 @@ package jpize.util.font;
 
 import generaloss.freetype.*;
 import generaloss.freetype.bitmap.*;
+import generaloss.freetype.charmap.FTEncoding;
 import generaloss.freetype.face.*;
 import generaloss.freetype.glyph.*;
 import generaloss.freetype.stroker.FTStroker;
@@ -49,9 +50,10 @@ class TTFFontLoader {
         font.glyphs().clear();
 
         // init lib
-        final FTLibrary freetype = FTLibrary.init();
+        final FTLibrary freetype = new FTLibrary();
 
         // ft_face
+        System.out.println("Loading font " + resource);
         final FTFace face = freetype.newMemoryFace(resource.readBytes(), 0);
         if(!face.setPixelSizes(0, options.getSize()))
             throw new RuntimeException(FTLibrary.getLastError().toString());
@@ -85,13 +87,22 @@ class TTFFontLoader {
 
         // glyphs
         for(Character c: charset) {
+            System.out.println("#p0 - char: " + c + " " + (int) c);
+
+            final int glyphIndex = face.getCharIndex(c);
+
+            System.out.println("#p1 - index: " + glyphIndex);
+
             if(!face.loadChar(c))
                 continue;
 
+            System.out.println("#p2 - loaded char");
+
             // load glyph image into the slot (erase previous one)
-            final int glyphIndex = face.getCharIndex(c);
             if(!face.loadGlyph(glyphIndex))
                 continue;
+
+            System.out.println("#p4 - loaded glyph");
 
             // glyph slot
             final FTGlyphSlot glyphSlot = face.getGlyph();
@@ -100,10 +111,11 @@ class TTFFontLoader {
             if(borderWidth != 0)
                 glyph.strokeBorder(stroker, borderWidth < 0);
             // bitmap
-            glyph.toBitmap(FTRenderMode.NORMAL);
+            final FTBitmapGlyph bitmapGlyph = glyph.toBitmap(FTRenderMode.NORMAL);
 
             // pixmap
-            final FTBitmap bitmap = glyph.getBitmap();
+            final FTBitmap bitmap = bitmapGlyph.getBitmap();
+
             final PixmapRGBA pixmap = createPixmap(bitmap);
             final int bitmapWidth = pixmap.getWidth();
             final int bitmapHeight = pixmap.getHeight();

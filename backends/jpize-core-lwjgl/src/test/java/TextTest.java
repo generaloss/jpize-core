@@ -5,7 +5,7 @@ import jpize.opengl.gl.GL;
 import jpize.util.font.Font;
 import jpize.util.font.FontRenderOptions;
 import jpize.util.font.GlyphIterator;
-import jpize.util.mesh.TextureBatch;
+import jpize.util.mesh.RectBatch;
 import jpize.util.res.Resource;
 
 import java.io.IOException;
@@ -13,11 +13,11 @@ import java.util.zip.ZipFile;
 
 public class TextTest extends JpizeApplication {
 
-    private final TextureBatch batch;
+    private final RectBatch batch;
     private final Font font;
 
     public TextTest() throws IOException {
-        this.batch = new TextureBatch();
+        this.batch = new RectBatch();
         final ZipFile zip = new ZipFile("./backends/jpize-core-lwjgl/src/test/resources/font.zip");
         this.font = new Font().loadFNT(Resource.zip(zip, zip.getEntry("font.fnt")), false);
         final FontRenderOptions options = font.getOptions();

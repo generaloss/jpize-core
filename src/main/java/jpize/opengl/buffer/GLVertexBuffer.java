@@ -15,7 +15,7 @@ public class GLVertexBuffer extends GLBuffer {
     private int vertexBytes;
     
     public GLVertexBuffer() {
-        super(GLBufTarget.ARRAY_BUFFER);
+        super(GLBufferTarget.ARRAY);
     }
 
 

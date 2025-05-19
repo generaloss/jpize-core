@@ -10,7 +10,7 @@ import jpize.util.math.vector.Vec4f;
 import jpize.util.camera.PerspectiveCamera;
 import jpize.util.font.Font;
 import jpize.util.font.FontRenderOptions;
-import jpize.util.mesh.TextureBatch;
+import jpize.util.mesh.RectBatch;
 
 public class MainMenuScreen extends IScreen {
 
@@ -18,7 +18,7 @@ public class MainMenuScreen extends IScreen {
 
     private final Vec4f backgroundPosition;
     private final PerspectiveCamera camera;
-    private final TextureBatch batch;
+    private final RectBatch batch;
     private float width, height, ratio, hratio;
     private float fadeIn = 0;
     private float timer = 0;
@@ -28,7 +28,7 @@ public class MainMenuScreen extends IScreen {
     public MainMenuScreen(Main context) {
         super(context);
 
-        this.batch = new TextureBatch();
+        this.batch = new RectBatch();
 
         this.backgroundPosition = new Vec4f(0,0, Jpize.getWidth(),Jpize.getHeight());
         // camera

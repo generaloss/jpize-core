@@ -5,17 +5,17 @@ import jpize.lwjgl.glfw.context.GlfwContextBuilder;
 import jpize.lwjgl.glfw.context.GlfwContextManager;
 import jpize.opengl.gl.GL;
 import jpize.util.font.Font;
-import jpize.util.mesh.TextureBatch;
+import jpize.util.mesh.RectBatch;
 
 import java.util.StringJoiner;
 
 public class InputTest extends JpizeApplication {
 
-    private final TextureBatch batch;
+    private final RectBatch batch;
     private final Font font;
 
     public InputTest() {
-        this.batch = new TextureBatch();
+        this.batch = new RectBatch();
         this.font = new Font().loadFNT("/font.fnt", false);
         this.font.getOptions().scale().set(4F);
     }

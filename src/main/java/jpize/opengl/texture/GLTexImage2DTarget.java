@@ -2,7 +2,7 @@ package jpize.opengl.texture;
 
 import static jpize.opengl.gl.GL31I.*;
 
-public enum GLTexImg2DTarget {
+public enum GLTexImage2DTarget {
 
     TEXTURE_2D                  (GL_TEXTURE_2D                 ), // 3553
     PROXY_TEXTURE_2D            (GL_PROXY_TEXTURE_2D           ), // 32868
@@ -10,7 +10,7 @@ public enum GLTexImg2DTarget {
     PROXY_TEXTURE_1D_ARRAY      (GL_PROXY_TEXTURE_1D_ARRAY     ), // 35865
     TEXTURE_RECTANGLE           (GL_TEXTURE_RECTANGLE          ), // 34037
     PROXY_TEXTURE_RECTANGLE     (GL_PROXY_TEXTURE_RECTANGLE    ), // 34039
-
+    // GLCubemapTarget
     TEXTURE_CUBE_MAP_POSITIVE_X (GL_TEXTURE_CUBE_MAP_POSITIVE_X), // 340_69
     TEXTURE_CUBE_MAP_NEGATIVE_X (GL_TEXTURE_CUBE_MAP_NEGATIVE_X), // 340_70
     TEXTURE_CUBE_MAP_POSITIVE_Y (GL_TEXTURE_CUBE_MAP_POSITIVE_Y), // 340_71
@@ -21,7 +21,7 @@ public enum GLTexImg2DTarget {
 
     public final int value;
 
-    GLTexImg2DTarget(int value) {
+    GLTexImage2DTarget(int value) {
         this.value = value;
     }
 

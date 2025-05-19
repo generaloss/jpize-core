@@ -11,7 +11,7 @@ import jpize.util.math.vector.Vec3f;
 import jpize.util.mesh.Mesh;
 import jpize.util.region.Region;
 import jpize.opengl.texture.Texture2D;
-import jpize.util.mesh.TextureBatch;
+import jpize.util.mesh.RectBatch;
 import jpize.util.array.FloatList;
 import jpize.util.color.Color;
 import jpize.util.math.matrix.Matrix3f;
@@ -47,7 +47,7 @@ public class TextRenderer {
     private static final Map<Long, Renderer> RENDERER_BY_THREAD = new HashMap<>();
 
 
-    public static GlyphIterator render(Font font, TextureBatch batch, String text, float x, float y) {
+    public static GlyphIterator render(Font font, RectBatch batch, String text, float x, float y) {
         if(StringUtils.isBlank(text))
             return font.iterator(text);
 

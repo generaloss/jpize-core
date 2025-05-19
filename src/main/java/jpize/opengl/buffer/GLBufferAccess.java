@@ -2,7 +2,7 @@ package jpize.opengl.buffer;
 
 import static jpize.opengl.gl.GL15I.*;
 
-public enum GLBufAccess {
+public enum GLBufferAccess {
 
     READ_ONLY  (GL_READ_ONLY ), // 3500_0
     WRITE_ONLY (GL_WRITE_ONLY), // 3500_1
@@ -10,7 +10,7 @@ public enum GLBufAccess {
 
     public final int value;
 
-    GLBufAccess(int value) {
+    GLBufferAccess(int value) {
         this.value = value;
     }
 

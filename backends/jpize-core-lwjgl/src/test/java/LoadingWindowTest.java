@@ -4,14 +4,14 @@ import jpize.lwjgl.glfw.context.GlfwContextManager;
 import jpize.lwjgl.glfw.context.GlfwContextBuilder;
 import jpize.util.font.Font;
 import jpize.opengl.texture.Texture2D;
-import jpize.util.mesh.TextureBatch;
+import jpize.util.mesh.RectBatch;
 
 public class LoadingWindowTest {
 
     private static class MainWindow extends JpizeApplication { /* ... */ }
 
     private static class LoadingWindow extends JpizeApplication {
-        TextureBatch batch = new TextureBatch();
+        RectBatch batch = new RectBatch();
         Texture2D bg = new Texture2D("/bg.png");
         Font font = new Font().loadFNT("/font.fnt", false);//.loadDefault();
         public void init() {

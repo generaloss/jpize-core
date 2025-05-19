@@ -2,7 +2,7 @@ package jpize.opengl.texture;
 
 import static jpize.opengl.gl.GL30I.*;
 
-public enum GLTexImg3DTarget {
+public enum GLTexImage3DTarget {
 
     TEXTURE_2D_ARRAY       (GL_TEXTURE_2D_ARRAY      ), // 35866
     PROXY_TEXTURE_2D_ARRAY (GL_PROXY_TEXTURE_2D_ARRAY), // 35867
@@ -11,7 +11,7 @@ public enum GLTexImg3DTarget {
 
     public final int value;
 
-    GLTexImg3DTarget(int value) {
+    GLTexImage3DTarget(int value) {
         this.value = value;
     }
 

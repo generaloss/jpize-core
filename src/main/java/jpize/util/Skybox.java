@@ -1,12 +1,13 @@
-package jpize.opengl.texture;
+package jpize.util;
 
 import jpize.opengl.gl.GL;
+import jpize.opengl.texture.TextureCubemap;
 import jpize.opengl.type.GLType;
 import jpize.opengl.vertex.GLVertAttr;
 import jpize.util.camera.Camera;
 import jpize.util.color.Color;
-import jpize.util.mesh.IndexedMesh;
 import jpize.util.math.matrix.Matrix4f;
+import jpize.util.mesh.IndexedMesh;
 import jpize.util.pixmap.Pixmap;
 import jpize.util.res.Resource;
 import jpize.opengl.shader.Shader;

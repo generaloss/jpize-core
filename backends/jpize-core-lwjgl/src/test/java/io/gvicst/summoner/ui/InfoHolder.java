@@ -4,7 +4,7 @@ import io.gvicst.summoner.main.Main;
 import io.gvicst.summoner.screen.GameScreen;
 import io.gvicst.summoner.utils.Texter;
 import jpize.context.Jpize;
-import jpize.util.mesh.TextureBatch;
+import jpize.util.mesh.RectBatch;
 
 public class InfoHolder {
 
@@ -12,7 +12,7 @@ public class InfoHolder {
     public void draw(GameScreen game){
         Main main = game.main;
         Texter texter = game.getTexter();
-        TextureBatch batch = game.getBatch();
+        RectBatch batch = game.getBatch();
         float height = Jpize.getHeight();
         float width = Jpize.getWidth();
         float ratio = height/960f;

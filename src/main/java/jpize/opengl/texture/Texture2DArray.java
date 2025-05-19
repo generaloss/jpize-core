@@ -5,7 +5,7 @@ import jpize.util.pixmap.Pixmap;
 
 public class Texture2DArray extends GLTexture {
 
-    public static GLTexTarget TARGET = GLTexTarget.TEXTURE_2D_ARRAY;
+    public static GLTextureTarget TARGET = GLTextureTarget.TEXTURE_2D_ARRAY;
     public static GLTexParamTarget PARAM_TARGET = GLTexParamTarget.TEXTURE_2D_ARRAY;
     public static GLTexLevelTarget LEVEL_TARGET = GLTexLevelTarget.TEXTURE_2D_ARRAY;
 
@@ -66,7 +66,7 @@ public class Texture2DArray extends GLTexture {
         this.bind();
         for(int offsetZ = 0; offsetZ < pixmaps.length; offsetZ++){
             final Pixmap pixmap = pixmaps[offsetZ];
-            super.glSetSubImage3D(GLTexImg3DTarget.TEXTURE_2D_ARRAY, 0, pixmap.getWidth(), pixmap.getHeight(), 1, 0, 0, offsetZ, pixmap);
+            super.glSetSubImage3D(GLTexImage3DTarget.TEXTURE_2D_ARRAY, 0, pixmap.getWidth(), pixmap.getHeight(), 1, 0, 0, offsetZ, pixmap);
         }
         return this;
     }

@@ -7,10 +7,12 @@ import jpize.opengl.gl.GL;
 import jpize.opengl.glenum.GLTarget;
 import jpize.opengl.shader.Shader;
 import jpize.opengl.tesselation.GLPrimitive;
-import jpize.opengl.texture.Skybox;
+import jpize.opengl.texture.GLCubemapTarget;
+import jpize.util.Skybox;
 import jpize.opengl.texture.Texture2D;
 import jpize.opengl.type.GLType;
 import jpize.opengl.vertex.GLVertAttr;
+import jpize.util.RenderQuad;
 import jpize.util.camera.PerspectiveCamera;
 import jpize.util.font.Font;
 import jpize.util.font.FontRenderOptions;
@@ -19,6 +21,8 @@ import jpize.util.input.RotationInput;
 import jpize.util.math.vector.Vec2f;
 import jpize.util.math.vector.Vec3f;
 import jpize.util.mesh.Mesh;
+import jpize.util.pixmap.Pixmap;
+import jpize.util.pixmap.PixmapIO;
 import jpize.util.postprocess.GaussianBlur;
 import jpize.util.res.Resource;
 
@@ -59,10 +63,25 @@ public class Camera3DTest extends JpizeApplication {
 
         this.shader = new Shader(Resource.internal("/shader.vert"), Resource.internal("/shader.frag"));
 
-        this.skybox = new Skybox("/skybox_positive_x.png", "/skybox_negative_x.png",
-            "/skybox_positive_y.png", "/skybox_negative_y.png",
-            "/skybox_positive_z.png", "/skybox_negative_z.png"
-        );
+        this.skybox = new Skybox();
+        //     "/skybox_positive_x.png", "/skybox_negative_x.png",
+        //     "/skybox_positive_y.png", "/skybox_negative_y.png",
+        //     "/skybox_positive_z.png", "/skybox_negative_z.png"
+        // );
+
+        for(GLCubemapTarget target: GLCubemapTarget.values()) {
+            final Resource resource = Resource.internal("/skybox_" + target.toString().toLowerCase() + ".png");
+            final Pixmap pixmap = PixmapIO.load(resource);
+            skybox.setImage(target, pixmap);
+            pixmap.dispose();
+        }
+
+        for(GLCubemapTarget target: GLCubemapTarget.values()) {
+            final Resource resource = Resource.internal("/skybox_" + target.toString().toLowerCase() + ".png");
+            final Pixmap pixmap = PixmapIO.load(resource);
+            skybox.setImage(target, pixmap);
+            pixmap.dispose();
+        }
 
         this.font = new Font().loadFNT("/font.fnt", false);
     }
@@ -84,6 +103,8 @@ public class Camera3DTest extends JpizeApplication {
             Jpize.exit();
     }
 
+    final Texture2D ascii = new Texture2D("/ascii.png");
+
     @Override
     public void render() {
         GL.clearColorDepthBuffers();
@@ -91,6 +112,9 @@ public class Camera3DTest extends JpizeApplication {
 
         // skybox
         skybox.render(camera);
+
+        RenderQuad.instance().render(ascii);
+
         // quad
         shader.bind();
         shader.uniform("u_combined", camera.getCombined());

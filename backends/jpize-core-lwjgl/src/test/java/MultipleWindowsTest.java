@@ -8,12 +8,12 @@ import jpize.util.input.TextInput;
 import jpize.util.font.Font;
 import jpize.opengl.texture.Texture2D;
 import jpize.util.pixmap.PixmapRGBA;
-import jpize.util.mesh.TextureBatch;
+import jpize.util.mesh.RectBatch;
 
 public class MultipleWindowsTest {
 
     public static class Window1 extends JpizeApplication {
-        final TextureBatch batch = new TextureBatch();
+        final RectBatch batch = new RectBatch();
         final Texture2D texture = new Texture2D("/icon.png");
         public void init() {
             GL.clearColor(1, 1, 1, 1F);

@@ -19,14 +19,12 @@ import jpize.util.math.matrix.Matrix4f;
 import jpize.util.math.vector.Vec2f;
 import jpize.opengl.shader.Shader;
 
-public class TextureBatch implements Disposable { // TODO: rename to RectBatch
-
-    private static final int QUAD_VERTEX_COUNT = 4;
+public class RectBatch implements Disposable { // TODO: rename to RectBatch
 
     private final Mesh mesh;
     private final Shader defaultShader;
     private Shader currentShader;
-    private Matrix4f combinedMat;
+    private final Matrix4f currentMatrix;
     private final Color color;
     // quad
     private Texture2D quadTexture;
@@ -45,9 +43,8 @@ public class TextureBatch implements Disposable { // TODO: rename to RectBatch
     private boolean roundVertices;
     // tmp
     private final Vec2f tmp_origin, tmp_vertex1, tmp_vertex2, tmp_vertex3, tmp_vertex4;
-    private Matrix4f tmp_projectionMat; // TODO: made final
 
-    public TextureBatch() {
+    public RectBatch() {
         // mesh
         this.mesh = new Mesh(
                 new GLVertAttr(2, GLType.FLOAT), // position
@@ -55,6 +52,7 @@ public class TextureBatch implements Disposable { // TODO: rename to RectBatch
                 new GLVertAttr(4, GLType.FLOAT)  // color
         );
         this.vertexList = new FloatList();
+        this.currentMatrix = new Matrix4f();
         // shader
         this.defaultShader = new Shader(
             Resource.internal("/shader/texture_batch/vert.glsl"),
@@ -84,9 +82,14 @@ public class TextureBatch implements Disposable { // TODO: rename to RectBatch
 
 
     public void setup(Matrix4f combined) {
+        if(combined == null) {
+            combined = currentMatrix;
+            combined.setOrthographic(0F, 0F, Jpize.getWidth(), Jpize.getHeight());
+        }
+
         currentShader.bind();
         currentShader.uniform("u_combined", combined);
-        combinedMat = combined;
+        currentMatrix.set(combined);
     }
 
     public void setup(Camera camera) {
@@ -94,10 +97,7 @@ public class TextureBatch implements Disposable { // TODO: rename to RectBatch
     }
 
     public void setup() {
-        if(tmp_projectionMat == null)
-            tmp_projectionMat = new Matrix4f();
-        tmp_projectionMat.setOrthographic(0F, 0F, Jpize.getWidth(), Jpize.getHeight());
-        this.setup(tmp_projectionMat);
+        this.setup((Matrix4f) null);
     }
 
 
@@ -106,19 +106,21 @@ public class TextureBatch implements Disposable { // TODO: rename to RectBatch
     }
 
     public void setShader(Shader shader) {
-        if(shader == null){
-            currentShader = defaultShader;
-        }else{
-            currentShader = shader;
-        }
+        if(shader == null)
+            shader = defaultShader;
+
+        if(shader == currentShader)
+            return;
+
+        this.render();
+        currentShader = shader;
+        this.setup(currentMatrix);
     }
 
 
     public void render(boolean clearCache) {
         if(size == 0 || quadTexture == null)
             return;
-        if(combinedMat == null)
-            throw new IllegalStateException("No matrix found. Call TextureBatch.setup() first");
 
         // render
         currentShader.bind();

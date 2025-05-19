@@ -10,22 +10,22 @@ import java.nio.*;
 
 public class GLBuffer extends GLObject {
 
-    protected final GLBufTarget target;
-    private GLBufUsage defaultUsage;
+    protected final GLBufferTarget target;
+    private GLBufferUsage defaultUsage;
     private int typeBytes;
 
-    public GLBuffer(GLBufTarget target) {
+    public GLBuffer(GLBufferTarget target) {
         super(Jpize.GL15.glGenBuffers());
         this.target = target;
-        this.defaultUsage = GLBufUsage.STATIC_DRAW;
+        this.defaultUsage = GLBufferUsage.STATIC_DRAW;
     }
 
 
-    public GLBufUsage getDefaultUsage() {
+    public GLBufferUsage getDefaultUsage() {
         return defaultUsage;
     }
 
-    public void setDefaultUsage(GLBufUsage defaultUsage) {
+    public void setDefaultUsage(GLBufferUsage defaultUsage) {
         this.defaultUsage = defaultUsage;
     }
 
@@ -78,13 +78,13 @@ public class GLBuffer extends GLObject {
         return new GLBufferMapping(this, mapBuffer);
     }
 
-    public GLBufferMapping mapRange(long offset, long length, GLBufAccess access) {
+    public GLBufferMapping mapRange(long offset, long length, GLBufferAccess access) {
         this.bind();
         final ByteBuffer mapBuffer = Jpize.GL30.glMapBufferRange(target.value, offset, length, access.value);
         return createMapping(mapBuffer);
     }
 
-    public GLBufferMapping map(GLBufAccess access) {
+    public GLBufferMapping map(GLBufferAccess access) {
         this.bind();
         final ByteBuffer mapBuffer = Jpize.GL15.glMapBuffer(target.value, access.value);
         return createMapping(mapBuffer);
@@ -96,24 +96,24 @@ public class GLBuffer extends GLObject {
     }
 
 
-    public int getParameter(GLBufParam parameterName) {
+    public int getParameter(GLBufferParam parameterName) {
         this.bind();
         return Jpize.GL15.glGetBufferParameteri(target.value, parameterName.value);
     }
 
-    public void getParameter(GLBufParam parameterName, int[] params) {
+    public void getParameter(GLBufferParam parameterName, int[] params) {
         this.bind();
         Jpize.GL15.glGetBufferParameteriv(target.value, parameterName.value, params);
     }
 
-    public void getParameter(GLBufParam parameterName, IntBuffer params) {
+    public void getParameter(GLBufferParam parameterName, IntBuffer params) {
         this.bind();
         Jpize.GL15.glGetBufferParameteriv(target.value, parameterName.value, params);
     }
 
 
     public int getSizeBytes() {
-        return this.getParameter(GLBufParam.BUFFER_SIZE);
+        return this.getParameter(GLBufferParam.SIZE);
     }
 
     public int getSizeElements() {
@@ -126,85 +126,85 @@ public class GLBuffer extends GLObject {
 
 
     public void copySubData(GLBuffer buffer, long readOffset, long writeOffset, long size) {
-        Jpize.GL15.glBindBuffer(GL32I.GL_COPY_READ_BUFFER, ID);
-        Jpize.GL15.glBindBuffer(GL32I.GL_COPY_WRITE_BUFFER, buffer.ID);
+        this.bind(GLBufferTarget.COPY_READ);
+        buffer.bind(GLBufferTarget.COPY_WRITE);
         Jpize.GL31.glCopyBufferSubData(GL32I.GL_COPY_READ_BUFFER, GL32I.GL_COPY_WRITE_BUFFER, readOffset, writeOffset, size);
     }
 
 
-    public void allocateData(long bytes, GLBufUsage usage) {
+    public void allocateData(long bytes, GLBufferUsage usage) {
         this.bind();
         Jpize.GL15.glBufferData(target.value, bytes, usage.value);
         typeBytes = 0;
     }
 
-    public void allocateData(int bytes, GLBufUsage usage) {
+    public void allocateData(int bytes, GLBufferUsage usage) {
         this.bind();
         Jpize.GL15.glBufferData(target.value, bytes, usage.value);
         typeBytes = 0;
     }
 
-    public void setData(int[] data, GLBufUsage usage) {
+    public void setData(int[] data, GLBufferUsage usage) {
         this.bind();
         Jpize.GL15.glBufferData(target.value, data, usage.value);
         typeBytes = Integer.BYTES;
     }
 
-    public void setData(long[] data, GLBufUsage usage) {
+    public void setData(long[] data, GLBufferUsage usage) {
         this.bind();
         Jpize.GL15.glBufferData(target.value, data, usage.value);
         typeBytes = Long.BYTES;
     }
 
-    public void setData(float[] data, GLBufUsage usage) {
+    public void setData(float[] data, GLBufferUsage usage) {
         this.bind();
         Jpize.GL15.glBufferData(target.value, data, usage.value);
         typeBytes = Float.BYTES;
     }
 
-    public void setData(short[] data, GLBufUsage usage) {
+    public void setData(short[] data, GLBufferUsage usage) {
         this.bind();
         Jpize.GL15.glBufferData(target.value, data, usage.value);
         typeBytes = Short.BYTES;
     }
 
-    public void setData(double[] data, GLBufUsage usage) {
+    public void setData(double[] data, GLBufferUsage usage) {
         this.bind();
         Jpize.GL15.glBufferData(target.value, data, usage.value);
         typeBytes = Double.BYTES;
     }
 
-    public void setData(IntBuffer data, GLBufUsage usage) {
+    public void setData(IntBuffer data, GLBufferUsage usage) {
         this.bind();
         Jpize.GL15.glBufferData(target.value, data, usage.value);
         typeBytes = Integer.BYTES;
     }
 
-    public void setData(ByteBuffer data, GLBufUsage usage) {
+    public void setData(ByteBuffer data, GLBufferUsage usage) {
         this.bind();
         Jpize.GL15.glBufferData(target.value, data, usage.value);
         typeBytes = Byte.BYTES;
     }
 
-    public void setData(LongBuffer data, GLBufUsage usage) {
+    public void setData(LongBuffer data, GLBufferUsage usage) {
         this.bind();
         Jpize.GL15.glBufferData(target.value, data, usage.value);
         typeBytes = Long.BYTES;
     }
 
-    public void setData(FloatBuffer data, GLBufUsage usage) {
+    public void setData(FloatBuffer data, GLBufferUsage usage) {
         this.bind();
         Jpize.GL15.glBufferData(target.value, data, usage.value);
         typeBytes = Float.BYTES;
     }
 
-    public void setData(ShortBuffer data, GLBufUsage usage) {
+    public void setData(ShortBuffer data, GLBufferUsage usage) {
         this.bind();
         Jpize.GL15.glBufferData(target.value, data, usage.value);
         typeBytes = Short.BYTES;
     }
 
-    public void setData(DoubleBuffer data, GLBufUsage usage) {
+    public void setData(DoubleBuffer data, GLBufferUsage usage) {
         this.bind();
         Jpize.GL15.glBufferData(target.value, data, usage.value);
         typeBytes = Double.BYTES;
@@ -406,8 +406,12 @@ public class GLBuffer extends GLObject {
     }
 
 
-    public void bind() {
+    public void bind(GLBufferTarget target) {
         Jpize.GL15.glBindBuffer(target.value, ID);
+    }
+
+    public void bind() {
+        this.bind(target);
     }
 
     public void bind(int index) {
@@ -423,7 +427,7 @@ public class GLBuffer extends GLObject {
     }
 
     public static void unbindAll() {
-        for(GLBufTarget target: GLBufTarget.values())
+        for(GLBufferTarget target: GLBufferTarget.values())
             Jpize.GL15.glBindBuffer(target.value, 0);
     }
 

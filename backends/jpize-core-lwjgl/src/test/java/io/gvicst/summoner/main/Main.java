@@ -14,7 +14,7 @@ import jpize.opengl.texture.Texture2D;
 import jpize.util.font.Charset;
 import jpize.util.font.Font;
 import jpize.util.font.FontLoadOptions;
-import jpize.util.mesh.TextureBatch;
+import jpize.util.mesh.RectBatch;
 import jpize.util.pixmap.PixmapRGBA;
 import jpize.util.screen.ScreenManager;
 import io.gvicst.summoner.screen.GameScreen;
@@ -23,7 +23,7 @@ import jpize.util.time.Sync;
 
 public class Main extends JpizeApplication {
 
-    public TextureBatch batch;
+    public RectBatch batch;
     public Font font;
     public Resources res;
     public ScreenManager<String> screens;
@@ -41,7 +41,7 @@ public class Main extends JpizeApplication {
     @Override
     public void init() {
         this.screens = new ScreenManager<>();
-        this.batch = new TextureBatch();
+        this.batch = new RectBatch();
         this.params = new GameParameters();
         this.font = new Font().loadTTF(
             "/assets/fonts/main.ttf",

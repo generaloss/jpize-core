@@ -4,18 +4,18 @@ import jpize.lwjgl.glfw.context.GlfwContextBuilder;
 import jpize.lwjgl.glfw.context.GlfwContextManager;
 import jpize.opengl.gl.GL;
 import jpize.opengl.texture.Texture2D;
-import jpize.util.mesh.TextureBatch;
+import jpize.util.mesh.RectBatch;
 import jpize.util.Animation;
 import jpize.util.region.TextureRegion;
 
 public class AnimationTest extends JpizeApplication {
 
-    private TextureBatch batch;
+    private RectBatch batch;
     private Animation<TextureRegion> animation;
     private float time;
 
     public void init() {
-        this.batch = new TextureBatch();
+        this.batch = new RectBatch();
         GL.clearColor(0.3, 0.4, 0.7);
 
         final Texture2D texture = new Texture2D("/animation.png");

@@ -7,7 +7,7 @@ import jpize.util.pixmap.PixmapIO;
 
 public class TextureCubemap extends GLTexture {
 
-    public static GLTexTarget TARGET = GLTexTarget.TEXTURE_CUBE_MAP;
+    public static GLTextureTarget TARGET = GLTextureTarget.TEXTURE_CUBE_MAP;
     public static GLTexParamTarget PARAM_TARGET = GLTexParamTarget.TEXTURE_CUBE_MAP;
 
     public TextureCubemap() {

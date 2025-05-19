@@ -11,7 +11,7 @@ import java.nio.ByteBuffer;
 
 public class Texture2D extends GLTexture {
 
-    public static final GLTexTarget TARGET = GLTexTarget.TEXTURE_2D;
+    public static final GLTextureTarget TARGET = GLTextureTarget.TEXTURE_2D;
     public static final GLTexParamTarget PARAM_TARGET = GLTexParamTarget.TEXTURE_2D;
     public static final GLTexLevelTarget LEVEL_TARGET = GLTexLevelTarget.TEXTURE_2D;
 
@@ -87,13 +87,13 @@ public class Texture2D extends GLTexture {
 
     public Texture2D setImage(int width, int height, int level, GLInternalFormat format, GLType type, ByteBuffer pixels) {
         this.bind();
-        super.glSetImage2D(GLTexImg2DTarget.TEXTURE_2D, 0, width, height, format, type, pixels);
+        super.glSetImage2D(GLTexImage2DTarget.TEXTURE_2D, 0, width, height, format, type, pixels);
         return this;
     }
 
     public Texture2D setImage(int level, Pixmap pixmap) {
         this.bind();
-        super.glSetImage2D(GLTexImg2DTarget.TEXTURE_2D, 0, pixmap);
+        super.glSetImage2D(GLTexImage2DTarget.TEXTURE_2D, 0, pixmap);
         return this;
     }
 

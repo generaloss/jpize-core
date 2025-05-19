@@ -2,7 +2,7 @@ package jpize.opengl.texture;
 
 import static jpize.opengl.gl.GL40I.*;
 
-public enum GLTexTarget {
+public enum GLTextureTarget {
 
     TEXTURE_1D             (GL_TEXTURE_1D            ),
     TEXTURE_2D             (GL_TEXTURE_2D            ),
@@ -14,7 +14,7 @@ public enum GLTexTarget {
 
     public final int value;
 
-    GLTexTarget(int value) {
+    GLTextureTarget(int value) {
         this.value = value;
     }
 

@@ -2,7 +2,7 @@ package jpize.opengl.buffer;
 
 import static jpize.opengl.gl.GL44I.*;
 
-public enum GLBufMapFlag {
+public enum GLBufferMapFlag {
 
     READ              (GL_MAP_READ_BIT             ), // 1
     WRITE             (GL_MAP_WRITE_BIT            ), // 2
@@ -15,7 +15,7 @@ public enum GLBufMapFlag {
 
     public final int value;
 
-    GLBufMapFlag(int value) {
+    GLBufferMapFlag(int value) {
         this.value = value;
     }
 

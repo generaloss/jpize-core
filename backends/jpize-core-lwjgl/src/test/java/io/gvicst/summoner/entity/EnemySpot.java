@@ -6,7 +6,7 @@ import jpize.context.Jpize;
 import jpize.opengl.texture.Texture2D;
 import jpize.util.font.Font;
 import jpize.util.math.Mathc;
-import jpize.util.mesh.TextureBatch;
+import jpize.util.mesh.RectBatch;
 
 import java.util.ArrayList;
 
@@ -59,7 +59,7 @@ public class EnemySpot {
         }
     }
 
-    public void draw(TextureBatch batch, GameScreen game) {
+    public void draw(RectBatch batch, GameScreen game) {
         if (!enemy.isEmpty())
             enemy.get(0).draw(batch, game);
 
@@ -128,7 +128,7 @@ public class EnemySpot {
             }
         }
 
-        public void draw(TextureBatch batch, GameScreen game){
+        public void draw(RectBatch batch, GameScreen game){
             batch.setAlpha(Math.min(timer/3f, 1f));
             batch.flipX(true);
             batch.draw(tex, Jpize.getWidth()/2f+96*game.ratio+x*game.ratio-w*game.ratio, Jpize.getHeight()/2f+64*game.ratio+y*game.ratio, w*game.ratio*2, h*game.ratio*2);

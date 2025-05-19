@@ -3,15 +3,15 @@ package io.gvicst.summoner.utils;
 import jpize.context.Jpize;
 import jpize.util.font.Font;
 import jpize.util.font.FontRenderOptions;
-import jpize.util.mesh.TextureBatch;
+import jpize.util.mesh.RectBatch;
 
 public class Texter {
 
     private final Font font;
     private final FontRenderOptions font_r;
-    private final TextureBatch batch;
+    private final RectBatch batch;
 
-    public Texter(Font font, TextureBatch batch){
+    public Texter(Font font, RectBatch batch){
         this.font = font;
         this.font_r = font.getOptions();
         this.batch = batch;

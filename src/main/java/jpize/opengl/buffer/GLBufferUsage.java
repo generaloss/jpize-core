@@ -2,7 +2,7 @@ package jpize.opengl.buffer;
 
 import static jpize.opengl.gl.GL33I.*;
 
-public enum GLBufUsage {
+public enum GLBufferUsage {
 
     STREAM_DRAW  (GL_STREAM_DRAW ), // 35040
     STREAM_READ  (GL_STREAM_READ ), // 35041
@@ -18,7 +18,7 @@ public enum GLBufUsage {
 
     public final int value;
 
-    GLBufUsage(int value) {
+    GLBufferUsage(int value) {
         this.value = value;
     }
 
