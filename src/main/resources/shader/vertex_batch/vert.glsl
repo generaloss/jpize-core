@@ -1,8 +1,8 @@
 #version 300 es
 precision mediump float;
 
-in vec2 v_pos;
-in vec4 v_color;
+layout(location = 0) in vec2 v_pos;
+layout(location = 1) in vec4 v_color;
 
 out vec4 f_color;
 

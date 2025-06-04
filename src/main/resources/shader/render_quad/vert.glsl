@@ -1,8 +1,8 @@
 #version 300 es
 precision mediump float;
 
-in vec2 v_pos;
-in vec2 v_uv;
+layout(location = 0) in vec2 v_pos;
+layout(location = 1) in vec2 v_uv;
 
 out vec2 f_uv;
 

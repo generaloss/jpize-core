@@ -1,7 +1,7 @@
 #version 300 es
 precision mediump float;
 
-in vec3 v_pos;
+layout(location = 0) in vec3 v_pos;
 
 out vec3 f_pos;
 
