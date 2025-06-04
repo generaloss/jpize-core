@@ -1,5 +1,6 @@
 package jpize.opengl.texture;
 
+import jpize.opengl.gl.GL13I;
 import jpize.opengl.glenum.GLCompareFunc;
 import jpize.opengl.type.GLType;
 import jpize.util.pixmap.PixmapIO;
@@ -63,7 +64,7 @@ public class Texture2D extends GLTexture {
 
     public Texture2D active(int active) {
         this.bind();
-        super.glActiveTexture(active);
+        super.glActiveTexture(GL13I.GL_TEXTURE0 + active);
         return this;
     }
 
