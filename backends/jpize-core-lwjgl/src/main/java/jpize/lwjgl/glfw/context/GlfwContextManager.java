@@ -49,11 +49,14 @@ public class GlfwContextManager {
 
     private GlfwContextManager() {
         // waiting for wayland fix in lwjgl/glfw
-        if(System.getProperty("os.name").equals("Linux"))
+        final String osname = System.getProperty("os.name").toLowerCase();
+        if(osname.contains("linux"))
             Glfw.glfwInitHintPlatform(GlfwPlatform.X11);
+
         // init glfw
         if(!GLFW.glfwInit())
             throw new RuntimeException("GLFW init failed.");
+
         Glfw.enableVSync(true);
     }
 

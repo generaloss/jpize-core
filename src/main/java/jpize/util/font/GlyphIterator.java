@@ -7,6 +7,8 @@ import java.util.*;
 
 public class GlyphIterator implements Iterator<GlyphSprite> {
 
+    private static final char UNKNOWN_SYMBOL = '\0';
+
     // links
     private final FontData fontData;
     private final FontRenderOptions options;
@@ -176,13 +178,17 @@ public class GlyphIterator implements Iterator<GlyphSprite> {
         // iterate chars
         for(int i = 0; i < text.length(); i++){
             lastLineIsNew = true;
-            final int code = text.charAt(i);
+            int code = text.charAt(i);
             // new line
             if(code == '\n') {
                 this.addLine(lineBuilder, true);
                 kerningEntry = null;
                 continue;
             }
+
+            glyph = fontData.glyphs().get(code);
+            if(glyph == null)
+                code = UNKNOWN_SYMBOL;
 
             glyph = fontData.glyphs().get(code);
             if(glyph == null)
@@ -250,8 +256,6 @@ public class GlyphIterator implements Iterator<GlyphSprite> {
             cursor.y + line.getAdvanceY()
         );
         // sprite
-        if(glyph == null)
-            return new GlyphSprite(fontData, position, options.scale());
         return new GlyphSprite(fontData, glyph, position, options.scale());
     }
 
@@ -270,10 +274,7 @@ public class GlyphIterator implements Iterator<GlyphSprite> {
         glyph = fontData.glyphs().get(code);
         // next advance X
         advanced.x = nextAdvanceX;
-        nextAdvanceX = ((glyph != null) ?
-            (glyph.getAdvanceX() + this.nextKerning()) : // normal glyph
-            (fontData.getHeight() * 0.5F) // undefined glyph
-        ) * options.advanceFactor().x;
+        nextAdvanceX = (glyph.getAdvanceX() + this.nextKerning()) * options.advanceFactor().x;
     }
 
     public void nextNotEmptyLine() {

@@ -1,13 +1,12 @@
 package jpize.util.font;
 
-import generaloss.freetype.*;
-import generaloss.freetype.bitmap.*;
-import generaloss.freetype.charmap.FTEncoding;
-import generaloss.freetype.face.*;
+import generaloss.freetype.freetype.*;
 import generaloss.freetype.glyph.*;
-import generaloss.freetype.stroker.FTStroker;
-import generaloss.freetype.stroker.FTStrokerLinecap;
-import generaloss.freetype.stroker.FTStrokerLinejoin;
+import generaloss.freetype.image.FTBitmap;
+import generaloss.freetype.image.FTPixelMode;
+import generaloss.freetype.stroke.FTStroker;
+import generaloss.freetype.stroke.FTStrokerLineCap;
+import generaloss.freetype.stroke.FTStrokerLineJoin;
 import jpize.opengl.texture.GLFilter;
 import jpize.opengl.texture.Texture2D;
 import jpize.util.atlas.TextureAtlas;
@@ -20,9 +19,11 @@ import java.nio.ByteBuffer;
 
 class TTFFontLoader {
 
+    private static final char UNKNOWN_CHARACTER = '\0';
+
     private static PixmapRGBA createPixmap(FTBitmap bitmap) {
-        final int width = bitmap.getWidth();
-        final int height = bitmap.getRows();
+        final int width = (int) bitmap.getWidth();
+        final int height = (int) bitmap.getRows();
         final PixmapRGBA pixmap = new PixmapRGBA(width, height);
 
         final ByteBuffer sourceBuf = bitmap.getBuffer();
@@ -50,68 +51,55 @@ class TTFFontLoader {
         font.glyphs().clear();
 
         // init lib
-        final FTLibrary freetype = new FTLibrary();
+        final FTLibrary library = new FTLibrary();
 
         // ft_face
-        System.out.println("Loading font " + resource);
-        final FTFace face = freetype.newMemoryFace(resource.readBytes(), 0);
-        if(!face.setPixelSizes(0, options.getSize()))
-            throw new RuntimeException(FTLibrary.getLastError().toString());
+        final FTFace face = library.newMemoryFace(resource.readBytes(), 0);
+        face.setPixelSizes(0, options.getSize());
 
         // metrics
         final FTSizeMetrics fontMetrics = face.getSize().getMetrics();
-        final int ascender = fontMetrics.getAscender();
-        final int descender = fontMetrics.getDescender();
-        final int height = fontMetrics.getHeight();
+        final float ascender = fontMetrics.getAscender();
+        final float descender = fontMetrics.getDescender();
+        final float height = fontMetrics.getHeight();
         font.setHeight(height);
 
         // add missing char
         final Charset charset = options.getCharset().copy();
-        charset.add('\0');
+        charset.add(UNKNOWN_CHARACTER);
 
         // page atlas
         final TextureAtlas<Integer> pageAtlas = new TextureAtlas<>();
         pageAtlas.setPadding(1);
 
         // stroker
-        final FTStroker stroker = freetype.strokerNew();
+        final FTStroker stroker = library.newStroker();
 
-        final int borderWidth = options.getBorderWidth();
+        final int borderWidth = 3;// options.getBorderWidth();
         if(borderWidth != 0) {
             final boolean borderStraight = options.isBorderStraight();
-            final FTStrokerLinecap linecap = (borderStraight ? FTStrokerLinecap.BUTT : FTStrokerLinecap.ROUND);
-            final FTStrokerLinejoin linejoin = (borderStraight ? FTStrokerLinejoin.MITER_FIXED : FTStrokerLinejoin.ROUND);
+            final FTStrokerLineCap linecap = (borderStraight ? FTStrokerLineCap.BUTT : FTStrokerLineCap.ROUND);
+            final FTStrokerLineJoin linejoin = (borderStraight ? FTStrokerLineJoin.MITER_FIXED : FTStrokerLineJoin.ROUND);
 
-            stroker.set(Math.abs(borderWidth) * 64, linecap, linejoin, 0);
+            stroker.set(Math.abs(borderWidth) * 64F, linecap, linejoin, 0F);
         }
 
         // glyphs
         for(Character c: charset) {
-            System.out.println("#p0 - char: " + c + " " + (int) c);
-
-            final int glyphIndex = face.getCharIndex(c);
-
-            System.out.println("#p1 - index: " + glyphIndex);
-
-            if(!face.loadChar(c))
-                continue;
-
-            System.out.println("#p2 - loaded char");
+            final long glyphIndex = face.getCharIndex(c);
+            face.loadChar(c);
 
             // load glyph image into the slot (erase previous one)
-            if(!face.loadGlyph(glyphIndex))
-                continue;
-
-            System.out.println("#p4 - loaded glyph");
+            face.loadGlyph(glyphIndex);
 
             // glyph slot
-            final FTGlyphSlot glyphSlot = face.getGlyph();
-            final FTGlyph glyph = glyphSlot.getGlyph();
+            final FTGlyphSlot slot = face.getGlyph();
+            FTGlyph glyph = slot.getGlyph();
             // border
             if(borderWidth != 0)
-                glyph.strokeBorder(stroker, borderWidth < 0);
+                glyph = glyph.strokeBorder(stroker, borderWidth < 0, true);
             // bitmap
-            final FTBitmapGlyph bitmapGlyph = glyph.toBitmap(FTRenderMode.NORMAL);
+            final FTBitmapGlyph bitmapGlyph = glyph.toBitmap(FTRenderMode.NORMAL, null, true);
 
             // pixmap
             final FTBitmap bitmap = bitmapGlyph.getBitmap();
@@ -121,11 +109,11 @@ class TTFFontLoader {
             final int bitmapHeight = pixmap.getHeight();
 
             // glyph info
-            final FTGlyphMetrics metrics = glyphSlot.getMetrics();
+            final FTGlyphMetrics metrics = slot.getMetrics();
             final int code = (int) c;
-            final int offsetX = glyphSlot.getBitmapLeft();
-            final int offsetY = (glyphSlot.getBitmapTop() - bitmapHeight - ascender + height);
-            final int advanceX = (metrics.getHoriAdvance() + borderWidth);
+            final float offsetX = slot.getBitmapLeft();
+            final float offsetY = (slot.getBitmapTop() - bitmapHeight - ascender + height);
+            final float advanceX = (metrics.getHoriAdvance() + borderWidth);
 
             final GlyphInfo glyphInfo = new GlyphInfo(code)
                 .setSize(bitmapWidth, bitmapHeight)
@@ -136,8 +124,10 @@ class TTFFontLoader {
             pageAtlas.put(code, pixmap);
         }
 
+        stroker.done();
+
         // create page texture
-        final int glyphSize = (height + 1 + borderWidth);
+        final float glyphSize = (height + 1F + borderWidth);
         final int pageSize = Maths.nextPow2((int) Math.sqrt(glyphSize * glyphSize * charset.size()));
         pageAtlas.build(pageSize, pageSize);
 
@@ -165,7 +155,7 @@ class TTFFontLoader {
         // dispose
         pageAtlas.getPixmap().dispose();
         face.done();
-        freetype.done();
+        library.done();
 
         return font;
     }

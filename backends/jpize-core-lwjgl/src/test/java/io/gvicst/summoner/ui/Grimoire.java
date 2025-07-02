@@ -9,7 +9,7 @@ import jpize.util.color.Color;
 import jpize.util.math.Maths;
 import jpize.util.math.geometry.Intersector;
 import jpize.util.math.vector.Vec4f;
-import jpize.util.mesh.RectBatch;
+import jpize.util.mesh.TextureBatch;
 
 public class Grimoire {
 
@@ -55,11 +55,11 @@ public class Grimoire {
         }
     }
 
-    public void drawBg(RectBatch batch){
+    public void drawBg(TextureBatch batch){
         batch.draw(main.res.bgGrimoireCircle, game.width/2f-224* game.ratio, game.height/2f+2 * game.ratio, main.res.bgGrimoireCircle.getWidth()*2f * game.ratio, main.res.bgGrimoireCircle.getHeight()*2f * game.ratio, grimoireColor);
     }
 
-    public void drawHUD(RectBatch batch){
+    public void drawHUD(TextureBatch batch){
         float grimoireSize = 2.25f * game.ratio;
         this.grimoirePos.set(
                 game.width/2f - main.res.hudGrimoireCircle.getWidth() * grimoireSize /2f,

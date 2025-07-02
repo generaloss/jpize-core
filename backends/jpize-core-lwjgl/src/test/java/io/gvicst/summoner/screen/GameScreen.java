@@ -16,7 +16,7 @@ import jpize.util.math.geometry.Intersector;
 import jpize.context.Jpize;
 import jpize.opengl.gl.GL;
 import jpize.context.input.Key;
-import jpize.util.mesh.RectBatch;
+import jpize.util.mesh.TextureBatch;
 
 
 public class GameScreen extends IScreen{
@@ -24,7 +24,7 @@ public class GameScreen extends IScreen{
     public static final String SCREEN_ID = "game";
 
     private final OrthographicCamera camera;
-    private final RectBatch batch;
+    private final TextureBatch batch;
     private final Texter texter;
 
     private final InfoHolder info_holder;
@@ -45,7 +45,7 @@ public class GameScreen extends IScreen{
         super(main);
 
         this.camera = new OrthographicCamera();
-        this.batch = new RectBatch();
+        this.batch = new TextureBatch();
         this.batch.setRoundVertices(false);
         this.texter = new Texter(main.font(), batch);
 
@@ -204,7 +204,7 @@ public class GameScreen extends IScreen{
         camera.resize(width, height);
     }
 
-    public RectBatch getBatch() {
+    public TextureBatch getBatch() {
         return batch;
     }
 

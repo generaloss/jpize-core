@@ -7,7 +7,7 @@ import jpize.opengl.gl.GL;
 import jpize.opengl.tesselation.GLScissor;
 import jpize.opengl.texture.Texture2D;
 import jpize.util.font.Font;
-import jpize.util.mesh.RectBatch;
+import jpize.util.mesh.TextureBatch;
 import jpize.util.camera.OrthographicCameraCentered;
 import jpize.util.math.Mathc;
 import jpize.util.math.Maths;
@@ -16,7 +16,7 @@ import jpize.util.pixmap.PixmapRGBA;
 
 public class TileScissorTest extends JpizeApplication {
 
-    private final RectBatch batch;
+    private final TextureBatch batch;
     private final OrthographicCameraCentered camera;
     private final Texture2D texture;
     private final Font font;
@@ -28,7 +28,7 @@ public class TileScissorTest extends JpizeApplication {
     private final Vec2f cinematic_position = new Vec2f();
 
     public TileScissorTest() {
-        this.batch = new RectBatch();
+        this.batch = new TextureBatch();
         this.camera = new OrthographicCameraCentered();
         this.camera.setScale(scale);
         this.texture = new Texture2D(

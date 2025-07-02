@@ -9,6 +9,7 @@ import jpize.lwjgl.glfw.window.GlfwWindow;
 import jpize.lwjgl.glfw.window.GlfwWindowHint;
 import jpize.util.pixmap.PixmapRGBA;
 import jpize.util.res.Resource;
+import org.lwjgl.glfw.GLFW;
 
 public class GlfwContextBuilder {
 
@@ -41,12 +42,21 @@ public class GlfwContextBuilder {
         Glfw.windowHint(GlfwWindowHint.SAMPLES, samples);
         Glfw.windowHint(GlfwWindowHint.FOCUS_ON_SHOW, focusOnShow);
         Glfw.windowHint(GlfwWindowHint.TRANSPARENT_FRAMEBUFFER, transparentFramebuffer);
+        // macos
+        final String osname = System.getProperty("os.name").toLowerCase();
+        if(osname.contains("mac")) {
+            Glfw.windowHint(GlfwWindowHint.OPENGL_PROFILE, GLFW.GLFW_OPENGL_CORE_PROFILE);
+            Glfw.windowHint(GlfwWindowHint.OPENGL_FORWARD_COMPAT, true);
+            Glfw.windowHint(GlfwWindowHint.OPENGL_FORWARD_COMPAT, true);
+            Glfw.windowHint(GlfwWindowHint.CONTEXT_VERSION_MAJOR, 4);
+            Glfw.windowHint(GlfwWindowHint.CONTEXT_VERSION_MINOR, 1);
+        }
+
         // window
         final GlfwWindow window = new GlfwWindow(width, height, title, monitor, shared);
         // icon
         if(icons != null)
             window.setIcon(icons);
-
         // context
         final GlfwContext context = new GlfwContext(window);
         // multisample

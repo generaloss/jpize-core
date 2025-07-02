@@ -4,17 +4,17 @@ import jpize.lwjgl.glfw.context.GlfwContextBuilder;
 import jpize.lwjgl.glfw.context.GlfwContextManager;
 import jpize.opengl.gl.GL;
 import jpize.util.ninepatch.NinePatch;
-import jpize.util.mesh.RectBatch;
+import jpize.util.mesh.TextureBatch;
 import jpize.util.ninepatch.StretchMode;
 
 public class NinePatchTest extends JpizeApplication {
 
-    private RectBatch batch;
+    private TextureBatch batch;
     private NinePatch ninePatch;
 
     public void init() {
         GL.clearColor(0.3, 0.6, 0.9);
-        this.batch = new RectBatch();
+        this.batch = new TextureBatch();
         this.batch.position().add(50);
         this.batch.setRoundVertices(true);
         this.ninePatch = new NinePatch()

@@ -5,7 +5,7 @@ import jpize.lwjgl.glfw.context.GlfwContextManager;
 import jpize.opengl.gl.GL;
 import jpize.opengl.texture.Texture2D;
 import jpize.util.font.Font;
-import jpize.util.mesh.RectBatch;
+import jpize.util.mesh.TextureBatch;
 import jpize.util.screen.AbstractScreen;
 import jpize.util.screen.ScreenManager;
 
@@ -13,12 +13,12 @@ public class ScreensTest extends JpizeApplication {
 
     private static class TestScreen extends AbstractScreen<String> {
 
-        private final RectBatch batch;
+        private final TextureBatch batch;
         private final Texture2D texture;
         private final Font font;
 
         public TestScreen() {
-            this.batch = new RectBatch();
+            this.batch = new TextureBatch();
             this.texture = new Texture2D("/background.png");
             this.font = new Font().loadDefault();
         }

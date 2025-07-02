@@ -8,7 +8,7 @@ import jpize.context.Jpize;
 import jpize.context.input.MouseBtn;
 import jpize.util.math.geometry.Intersector;
 import jpize.util.math.vector.Vec2f;
-import jpize.util.mesh.RectBatch;
+import jpize.util.mesh.TextureBatch;
 
 public class Summoner {
 
@@ -49,7 +49,7 @@ public class Summoner {
             main.params.SUMMONER_HP=0;
     }
 
-    public void draw(RectBatch batch){
+    public void draw(TextureBatch batch){
         familiar_spot.drawUpper(batch);
         batch.draw(main.res.heroes.get(0).getFrame(getFrameIndex(game.timer)),
                 Jpize.getWidth()/2f - 164 * game.ratio + this.x * game.ratio,

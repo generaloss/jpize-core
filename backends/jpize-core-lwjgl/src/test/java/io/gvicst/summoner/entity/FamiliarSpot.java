@@ -5,7 +5,7 @@ import io.gvicst.summoner.screen.GameScreen;
 import io.gvicst.summoner.utils.Animation;
 import jpize.context.Jpize;
 import jpize.util.math.Mathc;
-import jpize.util.mesh.RectBatch;
+import jpize.util.mesh.TextureBatch;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -35,13 +35,13 @@ public class FamiliarSpot {
             }
     }
 
-    public void drawUpper(RectBatch batch){
+    public void drawUpper(TextureBatch batch){
         if(!familiars.isEmpty())
             for (Familiar familiar : familiars)
                 if (familiar.y > 0)
                     familiar.draw(batch);
     }
-    public void drawDown(RectBatch batch){
+    public void drawDown(TextureBatch batch){
         if(!familiars.isEmpty())
             for (Familiar familiar : familiars)
                 if (familiar.y < 0)
@@ -110,7 +110,7 @@ public class FamiliarSpot {
 
         }
 
-        public void draw(RectBatch batch){
+        public void draw(TextureBatch batch){
             batch.setAlpha(Math.min(timer*3,Math.min(Math.min(80 * main.params.LIFETIME_OF_FAMILIARS - 3, 80 * main.params.LIFETIME_OF_FAMILIARS - die_timer), 1f)));
             batch.draw(animation_familiar.getFrame((int) timer % num), Jpize.getWidth() / 2f - 96 * game.ratio + x * game.ratio - w * game.ratio / 4f,
                     Jpize.getHeight() / 2f + 64 * game.ratio + y * game.ratio, w * game.ratio / 2f, h * game.ratio / 2f);

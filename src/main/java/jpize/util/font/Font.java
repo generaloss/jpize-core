@@ -1,7 +1,7 @@
 package jpize.util.font;
 
 import jpize.util.camera.Camera3D;
-import jpize.util.mesh.RectBatch;
+import jpize.util.mesh.TextureBatch;
 import jpize.util.math.vector.Vec2f;
 import jpize.util.res.Resource;
 
@@ -117,7 +117,7 @@ public class Font extends FontData {
 
 
 
-    public GlyphIterator drawText(RectBatch batch, String text, float x, float y) {
+    public GlyphIterator drawText(TextureBatch batch, String text, float x, float y) {
         return TextRenderer.render(this, batch, text, x, y);
     }
 

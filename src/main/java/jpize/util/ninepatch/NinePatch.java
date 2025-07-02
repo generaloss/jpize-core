@@ -6,7 +6,7 @@ import jpize.util.Disposable;
 import jpize.util.array.IntList;
 import jpize.util.math.Maths;
 import jpize.util.math.vector.Vec2f;
-import jpize.util.mesh.RectBatch;
+import jpize.util.mesh.TextureBatch;
 import jpize.util.pixmap.Pixmap;
 import jpize.util.pixmap.PixmapRGBA;
 import jpize.util.region.TextureRegion;
@@ -395,7 +395,7 @@ public class NinePatch implements Disposable {
     }
 
 
-    public void draw(RectBatch batch, float x, float y, float width, float height) {
+    public void draw(TextureBatch batch, float x, float y, float width, float height) {
         if(patchesXY == null || width < 1F || height < 1F)
             return;
 

@@ -19,7 +19,7 @@ import jpize.util.math.matrix.Matrix4f;
 import jpize.util.math.vector.Vec2f;
 import jpize.opengl.shader.Shader;
 
-public class RectBatch implements Disposable { // TODO: rename to RectBatch
+public class TextureBatch implements Disposable {
 
     private final Mesh mesh;
     private final Shader defaultShader;
@@ -44,7 +44,7 @@ public class RectBatch implements Disposable { // TODO: rename to RectBatch
     // tmp
     private final Vec2f tmp_origin, tmp_vertex1, tmp_vertex2, tmp_vertex3, tmp_vertex4;
 
-    public RectBatch() {
+    public TextureBatch() {
         // mesh
         this.mesh = new Mesh(
                 new GLVertAttr(2, GLType.FLOAT), // position

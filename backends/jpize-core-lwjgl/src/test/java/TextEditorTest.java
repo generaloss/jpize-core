@@ -12,7 +12,7 @@ import jpize.util.font.FontRenderOptions;
 import jpize.util.font.GlyphIterator;
 import jpize.util.font.GlyphLine;
 import jpize.util.math.vector.Vec2f;
-import jpize.util.mesh.RectBatch;
+import jpize.util.mesh.TextureBatch;
 import jpize.util.input.TextInput;
 import jpize.util.font.Font;
 import jpize.util.math.Mathc;
@@ -27,7 +27,7 @@ public class TextEditorTest extends JpizeApplication {
     private final TextInput input;
     private final Font font;
     private final FontRenderOptions renderOptions;
-    private final RectBatch batch;
+    private final TextureBatch batch;
     private final GlfwCursor cursorArrow, cursorIbeam;
 
     private final Vec2f editorScale;
@@ -43,7 +43,7 @@ public class TextEditorTest extends JpizeApplication {
         this.font = new Font().loadDefault();
         this.renderOptions = font.getOptions().setInvLineWrap(true);
         // this.renderOptions.setNewLineGap(40);
-        this.batch = new RectBatch();
+        this.batch = new TextureBatch();
 
         this.cursorArrow = new GlfwCursor(GlfwCursorShape.ARROW);
         this.cursorIbeam = new GlfwCursor(GlfwCursorShape.IBEAM);

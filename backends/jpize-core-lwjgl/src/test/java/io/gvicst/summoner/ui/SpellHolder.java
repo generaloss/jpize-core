@@ -6,7 +6,7 @@ import io.gvicst.summoner.utils.Texter;
 import jpize.context.Jpize;
 import jpize.util.color.Color;
 import jpize.util.math.vector.Vec2f;
-import jpize.util.mesh.RectBatch;
+import jpize.util.mesh.TextureBatch;
 
 public class SpellHolder {
 
@@ -14,7 +14,7 @@ public class SpellHolder {
     public void draw(GameScreen game){
         Main main = game.main;
         Texter texter = game.getTexter();
-        RectBatch batch = game.getBatch();
+        TextureBatch batch = game.getBatch();
         float height = Jpize.getHeight();
         float width = Jpize.getWidth();
         float ratio = height/960f;

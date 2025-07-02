@@ -23,14 +23,6 @@ public class GlyphSprite {
         this.offsetY = (glyph.offset().y * scale.y);
     }
 
-    public GlyphSprite(FontData fontData, Vec2f position, Vec2f scale) {
-        this.region = new Region();
-        this.page = TextureUtils.whiteTexture();
-        this.position = position.copy().mul(scale);
-        this.size = new Vec2f(fontData.getHeight() * 0.5F, fontData.getHeight()).mul(0.9F).mul(scale);
-        this.offsetY = 0F;
-    }
-
 
     public Region getRegion() {
         return region;

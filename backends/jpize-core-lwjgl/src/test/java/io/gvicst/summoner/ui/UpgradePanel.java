@@ -8,7 +8,7 @@ import jpize.context.input.Key;
 import jpize.context.input.MouseBtn;
 import jpize.util.color.Color;
 import jpize.util.math.geometry.Intersector;
-import jpize.util.mesh.RectBatch;
+import jpize.util.mesh.TextureBatch;
 
 public class UpgradePanel {
 
@@ -25,7 +25,7 @@ public class UpgradePanel {
     public void draw(GameScreen game){
         Main main = game.main;
         Texter texter = game.getTexter();
-        RectBatch batch = game.getBatch();
+        TextureBatch batch = game.getBatch();
         float height = Jpize.getHeight();
         float width = Jpize.getWidth();
         float ratio = height/960f;
@@ -134,7 +134,7 @@ public class UpgradePanel {
 
     public void drawContent(GameScreen game, Texter texter){
         Main main = game.main;
-        RectBatch batch = game.getBatch();
+        TextureBatch batch = game.getBatch();
         float ratio = game.ratio;
         float height = game.height;
         float width = game.width;
@@ -158,7 +158,7 @@ public class UpgradePanel {
 //        }
     }
 
-    public void draw_first_page(GameScreen game, RectBatch batch, Texter texter, float left_border, float top_border, float r){
+    public void draw_first_page(GameScreen game, TextureBatch batch, Texter texter, float left_border, float top_border, float r){
         Main m = game.main;
         m.res.hudItemHolder.draw(batch, left_border, top_border - 300*r, 482*r, 300*r);
         texter.drawText(m.params.PLAYER_NAME, 0.4f, left_border + 10*r, (top_border - 20*r) / r, false, true);
@@ -218,7 +218,7 @@ public class UpgradePanel {
         m.res.hudButton.draw(batch, left_border + 352*r, top_border - (405 + 110 * 6)*r, 120*r, 50*r);
     }
 
-    public void draw_second_page(GameScreen game, RectBatch batch, Texter texter, float left_border, float top_border, float r){
+    public void draw_second_page(GameScreen game, TextureBatch batch, Texter texter, float left_border, float top_border, float r){
         Main m = game.main;
         m.res.hudItemHolder.draw(batch, left_border, top_border - 300*r, 482*r, 300*r);
         texter.drawText("Гримуар", 0.4f, left_border + 10*r, (top_border - 20*r) / r, false, true);
@@ -277,7 +277,7 @@ public class UpgradePanel {
         }
     }
 
-    public void draw_third_page(GameScreen game, RectBatch batch, Texter texter, float left_border, float top_border, float r) {
+    public void draw_third_page(GameScreen game, TextureBatch batch, Texter texter, float left_border, float top_border, float r) {
         Main m = game.main;
         for (Hero hero : m.params.heroes) {
             if(Jpize.getHeight() > top_border - (250 + 260 * hero.getId())*r && 0 < top_border - (250 + 260 * hero.getId())*r + Jpize.getHeight()) {
