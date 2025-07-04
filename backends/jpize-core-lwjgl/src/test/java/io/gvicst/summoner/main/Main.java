@@ -43,7 +43,7 @@ public class Main extends JpizeApplication {
         this.screens = new ScreenManager<>();
         this.batch = new TextureBatch();
         this.params = new GameParameters();
-        this.font = new Font().loadTTF(
+        this.font = new Font().loadFT(
             "/assets/fonts/main.ttf",
             new FontLoadOptions().size(48).charset(Charset.DEFAULT_ENG_RUS)
         );

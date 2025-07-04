@@ -73,46 +73,46 @@ public class Font extends FontData {
     }
 
 
-    public Font loadTTF(Resource resource, FontLoadOptions options) {
-        return TTFFontLoader.load(this, resource, options);
+    public Font loadFT(Resource resource, FontLoadOptions options) {
+        return FreeTypeFontLoader.load(this, resource, options);
     }
 
-    public Font loadTTF(String internalPath, FontLoadOptions options) {
-        return TTFFontLoader.load(this, internalPath, options);
+    public Font loadFT(String internalPath, FontLoadOptions options) {
+        return FreeTypeFontLoader.load(this, internalPath, options);
     }
 
-    public Font loadTTF(Resource resource, int size) {
-        return TTFFontLoader.load(this, resource, size);
+    public Font loadFT(Resource resource, int size) {
+        return FreeTypeFontLoader.load(this, resource, size);
     }
 
-    public Font loadTTF(String internalPath, int size) {
-        return TTFFontLoader.load(this, internalPath, size);
+    public Font loadFT(String internalPath, int size) {
+        return FreeTypeFontLoader.load(this, internalPath, size);
     }
 
 
     public Font loadDefault(FontLoadOptions options) {
-        return TTFFontLoader.loadDefault(this, options);
+        return FreeTypeFontLoader.loadDefault(this, options);
     }
 
     public Font loadDefault(int size) {
-        return TTFFontLoader.loadDefault(this, size);
+        return FreeTypeFontLoader.loadDefault(this, size);
     }
 
     public Font loadDefault() {
-        return TTFFontLoader.loadDefault(this);
+        return FreeTypeFontLoader.loadDefault(this);
     }
 
 
     public Font loadDefaultBold(FontLoadOptions options) {
-        return TTFFontLoader.loadDefaultBold(this, options);
+        return FreeTypeFontLoader.loadDefaultBold(this, options);
     }
 
     public Font loadDefaultBold(int size) {
-        return TTFFontLoader.loadDefaultBold(this, size);
+        return FreeTypeFontLoader.loadDefaultBold(this, size);
     }
 
     public Font loadDefaultBold() {
-        return TTFFontLoader.loadDefaultBold(this);
+        return FreeTypeFontLoader.loadDefaultBold(this);
     }
 
 

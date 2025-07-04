@@ -8,23 +8,23 @@ import java.util.Map;
 
 public class GlyphInfo {
 
-    private final int code;
+    private final int charcode;
     private final Vec2f offset;
     private final Vec2f size;
     private Region region;
     private float advanceX;
     private int pageID;
-    private final Map<Integer, Integer> kernings; // (code_next) => advance
+    private final Map<Integer, Integer> kernings; // (charcode_next) => advance
 
-    public GlyphInfo(int code) { //, float offsetX, float offsetY, float width, float height, Region region, float advanceX, int pageID
-        this.code = code;
+    public GlyphInfo(int charcode) {
+        this.charcode = charcode;
         this.offset = new Vec2f();
         this.size = new Vec2f();
         this.kernings = new HashMap<>();
     }
 
     public int getCode() {
-        return code;
+        return charcode;
     }
 
 
@@ -89,7 +89,7 @@ public class GlyphInfo {
 
     @Override
     public String toString() {
-        return String.valueOf((char) code);
+        return String.valueOf((char) charcode);
     }
 
 }

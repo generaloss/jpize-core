@@ -17,7 +17,7 @@ import jpize.util.res.Resource;
 
 import java.nio.ByteBuffer;
 
-class TTFFontLoader {
+class FreeTypeFontLoader {
 
     private static final char UNKNOWN_CHARACTER = '\0';
 
@@ -75,13 +75,13 @@ class TTFFontLoader {
         // stroker
         final FTStroker stroker = library.newStroker();
 
-        final int borderWidth = 3;// options.getBorderWidth();
+        final int borderWidth = 16;// options.getBorderWidth();
         if(borderWidth != 0) {
             final boolean borderStraight = options.isBorderStraight();
             final FTStrokerLineCap linecap = (borderStraight ? FTStrokerLineCap.BUTT : FTStrokerLineCap.ROUND);
             final FTStrokerLineJoin linejoin = (borderStraight ? FTStrokerLineJoin.MITER_FIXED : FTStrokerLineJoin.ROUND);
 
-            stroker.set(Math.abs(borderWidth) * 64F, linecap, linejoin, 0F);
+            stroker.set(Math.abs(borderWidth) / 2048F, linecap, linejoin, 0F);
         }
 
         // glyphs
@@ -110,18 +110,18 @@ class TTFFontLoader {
 
             // glyph info
             final FTGlyphMetrics metrics = slot.getMetrics();
-            final int code = (int) c;
+            final int charcode = (int) c;
             final float offsetX = slot.getBitmapLeft();
             final float offsetY = (slot.getBitmapTop() - bitmapHeight - ascender + height);
             final float advanceX = (metrics.getHoriAdvance() + borderWidth);
 
-            final GlyphInfo glyphInfo = new GlyphInfo(code)
+            final GlyphInfo glyphInfo = new GlyphInfo(charcode)
                 .setSize(bitmapWidth, bitmapHeight)
                 .setOffset(offsetX, offsetY)
                 .setAdvanceX(advanceX);
 
-            font.glyphs().put(code, glyphInfo);
-            pageAtlas.put(code, pixmap);
+            font.glyphs().put(charcode, glyphInfo);
+            pageAtlas.put(charcode, pixmap);
         }
 
         stroker.done();

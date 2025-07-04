@@ -64,7 +64,7 @@ public class MultipleWindowsTest {
             .build().setApp(new Window1());
 
         GlfwContextBuilder.create("Window 2", 800, 600)
-            .icon(new PixmapRGBA(16, 16).fill(0, 0, 15, 15, 1, 0, 1, 1F))
+            .icon(new PixmapRGBA(16, 16).fill(0, 0, 15, 15, 1F, 0F, 1F, 1F))
             .build().setApp(new Window2());
 
         GlfwContextManager.run();
