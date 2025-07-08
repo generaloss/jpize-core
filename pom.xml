@@ -36,7 +36,7 @@
         <dependency>
             <groupId>io.github.generaloss</groupId>
             <artifactId>freetype-jni</artifactId>
-            <version>25.7.1-SNAPSHOT-1</version>
+            <version>25.7.1-SNAPSHOT-3</version>
         </dependency>
     </dependencies>
 

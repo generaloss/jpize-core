@@ -1,5 +1,7 @@
 package jpize.util.font;
 
+import jpize.util.res.Resource;
+
 public class FontLoadOptions {
 
     private int size = 64;
@@ -8,7 +10,7 @@ public class FontLoadOptions {
         return size;
     }
 
-    /** Ignored is FNT fonts */
+    /** Ignored in FNT fonts */
     public FontLoadOptions size(int size) {
         this.size = size;
         return this;
@@ -33,21 +35,21 @@ public class FontLoadOptions {
         return charset;
     }
 
-    /** Ignored is FNT fonts */
+    /** Ignored in FNT fonts */
     public FontLoadOptions charset(Charset charset) {
         this.charset = charset;
         return this;
     }
 
 
-    private int borderWidth;
+    private float borderWidth;
 
-    public int getBorderWidth() {
+    public float getBorderWidth() {
         return borderWidth;
     }
 
-    /** Ignored is FNT fonts */
-    public FontLoadOptions borderWidth(int borderWidth) {
+    /** Ignored in FNT fonts */
+    public FontLoadOptions borderWidth(float borderWidth) {
         this.borderWidth = borderWidth;
         return this;
     }
@@ -59,17 +61,33 @@ public class FontLoadOptions {
         return borderStraight;
     }
 
-    /** Ignored is FNT fonts */
+    /** Ignored in FNT fonts */
     public FontLoadOptions borderStraight(boolean borderStraight) {
         this.borderStraight = borderStraight;
         return this;
     }
 
-    /** Ignored is FNT fonts */
-    public FontLoadOptions border(int width, boolean straight) {
+    /** Ignored in FNT fonts */
+    public FontLoadOptions border(float width, boolean straight) {
         this.borderWidth = width;
         this.borderStraight = straight;
         return this;
+    }
+
+
+    private Resource attachment;
+
+    public Resource getAttachment() {
+        return attachment;
+    }
+
+    public FontLoadOptions attachment(Resource resource) {
+        attachment = resource;
+        return this;
+    }
+
+    public FontLoadOptions attachment(String internalResource) {
+        return this.attachment(Resource.internal(internalResource));
     }
 
 }

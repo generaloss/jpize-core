@@ -7,6 +7,8 @@ import generaloss.freetype.image.FTPixelMode;
 import generaloss.freetype.stroke.FTStroker;
 import generaloss.freetype.stroke.FTStrokerLineCap;
 import generaloss.freetype.stroke.FTStrokerLineJoin;
+import generaloss.freetype.types.FTVector;
+import generaloss.freetype.types.PosType;
 import jpize.opengl.texture.GLFilter;
 import jpize.opengl.texture.Texture2D;
 import jpize.util.atlas.TextureAtlas;
@@ -21,48 +23,37 @@ class FreeTypeFontLoader {
 
     private static final char UNKNOWN_CHARACTER = '\0';
 
-    private static PixmapRGBA createPixmap(FTBitmap bitmap) {
-        final int width = (int) bitmap.getWidth();
-        final int height = (int) bitmap.getRows();
-        final PixmapRGBA pixmap = new PixmapRGBA(width, height);
-
-        final ByteBuffer sourceBuf = bitmap.getBuffer();
-        final FTPixelMode pixelMode = bitmap.getPixelMode();
-        final int rowBytes = Math.abs(bitmap.getPitch());
-
-        if(pixelMode != FTPixelMode.GRAY)
-            throw new IllegalStateException("TTFFontLoader: FTPixelMode not supported: " + pixelMode);
-
-        for(int x = 0; x < width; x++) {
-            for(int y = 0; y < height; y++) {
-                final int index = (x + rowBytes * y);
-                final int sourceColor = (sourceBuf.get(index) & 0xFF);
-                final int color = (0xFFFFFF00 | sourceColor);
-                pixmap.setPixelRGBA(x, y, color);
-            }
-        }
-
-        return pixmap;
-    }
-
     public static Font load(Font font, Resource resource, FontLoadOptions options) {
         // clear font
         font.pages().clear();
         font.glyphs().clear();
 
-        // init lib
         final FTLibrary library = new FTLibrary();
+        final FTFace face = library.newMemoryFace(resource.readByteBuffer(), 0);
 
-        // ft_face
-        final FTFace face = library.newMemoryFace(resource.readBytes(), 0);
-        face.setPixelSizes(0, options.getSize());
+        if(!face.getFaceFlags().has(FTFaceFlag.FIXED_SIZES))
+            face.setPixelSizes(0L, options.getSize());
+
+        // attachment
+        final Resource attachment = options.getAttachment();
+        if(attachment != null) {
+            final ByteBuffer attachmentBuffer = attachment.readByteBuffer();
+
+            final FTOpenArgs parameters = new FTOpenArgs();
+            parameters.setFlags(FTOpen.MEMORY);
+            parameters.setMemoryBase(attachmentBuffer);
+
+            face.attachStream(parameters);
+            parameters.free();
+        }
 
         // metrics
-        final FTSizeMetrics fontMetrics = face.getSize().getMetrics();
-        final float ascender = fontMetrics.getAscender();
-        final float descender = fontMetrics.getDescender();
-        final float height = fontMetrics.getHeight();
+        final FTSizeMetrics sizeMetrics = face.getSize().getMetrics();
+        final float ascender = sizeMetrics.getAscender();
+        final float descender = sizeMetrics.getDescender();
+        final float height = sizeMetrics.getHeight();
         font.setHeight(height);
+        System.out.println("Height: " + height);
 
         // add missing char
         final Charset charset = options.getCharset().copy();
@@ -73,31 +64,35 @@ class FreeTypeFontLoader {
         pageAtlas.setPadding(1);
 
         // stroker
-        final FTStroker stroker = library.newStroker();
+        FTStroker stroker = null;
 
-        final int borderWidth = 16;// options.getBorderWidth();
-        if(borderWidth != 0) {
+        final float borderWidth = options.getBorderWidth();
+        if(borderWidth != 0F) {
             final boolean borderStraight = options.isBorderStraight();
             final FTStrokerLineCap linecap = (borderStraight ? FTStrokerLineCap.BUTT : FTStrokerLineCap.ROUND);
             final FTStrokerLineJoin linejoin = (borderStraight ? FTStrokerLineJoin.MITER_FIXED : FTStrokerLineJoin.ROUND);
 
-            stroker.set(Math.abs(borderWidth) / 2048F, linecap, linejoin, 0F);
+            stroker = library.newStroker();
+            stroker.set(Math.abs(borderWidth), linecap, linejoin, 0F);
         }
 
         // glyphs
         for(Character c: charset) {
             final long glyphIndex = face.getCharIndex(c);
+            if(glyphIndex == 0)
+                continue;
+
             face.loadChar(c);
 
-            // load glyph image into the slot (erase previous one)
+            // load glyph image into the slot
             face.loadGlyph(glyphIndex);
 
             // glyph slot
             final FTGlyphSlot slot = face.getGlyph();
             FTGlyph glyph = slot.getGlyph();
             // border
-            if(borderWidth != 0)
-                glyph = glyph.strokeBorder(stroker, borderWidth < 0, true);
+            if(stroker != null)
+                glyph = glyph.strokeBorder(stroker, borderWidth < 0F, true);
             // bitmap
             final FTBitmapGlyph bitmapGlyph = glyph.toBitmap(FTRenderMode.NORMAL, null, true);
 
@@ -109,26 +104,41 @@ class FreeTypeFontLoader {
             final int bitmapHeight = pixmap.getHeight();
 
             // glyph info
-            final FTGlyphMetrics metrics = slot.getMetrics();
+            final FTGlyphMetrics glyphMetrics = slot.getMetrics();
             final int charcode = (int) c;
             final float offsetX = slot.getBitmapLeft();
             final float offsetY = (slot.getBitmapTop() - bitmapHeight - ascender + height);
-            final float advanceX = (metrics.getHoriAdvance() + borderWidth);
+            final float advanceX = (glyphMetrics.getHoriAdvance() + borderWidth);
 
             final GlyphInfo glyphInfo = new GlyphInfo(charcode)
                 .setSize(bitmapWidth, bitmapHeight)
                 .setOffset(offsetX, offsetY)
                 .setAdvanceX(advanceX);
 
+            // kerning
+            final FTVector kerningDst = new FTVector();
+            for(Character cRight: charset) {
+
+                face.getKerning(c, cRight, kerningDst);
+                final float x = kerningDst.getX(PosType.F26DOT6);
+                if(x == 0F)
+                    continue;
+
+                final int charcodeRight = (int) cRight;
+                glyphInfo.kernings().put(charcodeRight, (int) x);
+            }
+            kerningDst.free();
+
             font.glyphs().put(charcode, glyphInfo);
             pageAtlas.put(charcode, pixmap);
         }
 
-        stroker.done();
+        if(stroker != null)
+            stroker.done();
 
         // create page texture
         final float glyphSize = (height + 1F + borderWidth);
-        final int pageSize = Maths.nextPow2((int) Math.sqrt(glyphSize * glyphSize * charset.size()));
+        final int pageSize = Maths.nextPow2((int) Math.sqrt(glyphSize * glyphSize * charset.size()) * 100);
         pageAtlas.build(pageSize, pageSize);
 
         final Texture2D pageTexture = pageAtlas.getTexture();
@@ -159,6 +169,75 @@ class FreeTypeFontLoader {
 
         return font;
     }
+
+    private static PixmapRGBA createPixmap(FTBitmap bitmap) {
+        final int width = (int) bitmap.getWidth();
+        final int height = (int) bitmap.getRows();
+        final PixmapRGBA pixmap = new PixmapRGBA(width, height);
+
+        final int rowBytes = Math.abs(bitmap.getPitch());
+        final ByteBuffer sourceBuffer = bitmap.getBuffer();
+
+        final FTPixelMode pixelMode = bitmap.getPixelMode();
+        System.out.println(pixelMode + " " + width + "x" + height + " " + rowBytes);
+        switch(pixelMode) {
+            case GRAY -> fillPixmapGray(pixmap, sourceBuffer, width, height, rowBytes);
+            case MONO -> fillPixmapMono(pixmap, sourceBuffer, width, height, rowBytes);
+            case BGRA -> fillPixmapBGRA(pixmap, sourceBuffer, width, height, rowBytes);
+            default -> throw new IllegalStateException("TTFFontLoader: FTPixelMode not supported: " + pixelMode);
+        }
+
+        return pixmap;
+    }
+
+    private static void fillPixmapGray(PixmapRGBA pixmap, ByteBuffer sourceBuffer, int width, int height, int rowBytes) {
+        for(int x = 0; x < width; x++) {
+            for(int y = 0; y < height; y++) {
+                final int index = (x + rowBytes * y);
+                final int sourceColor = (sourceBuffer.get(index) & 0xFF);
+                final int color = (0xFFFFFF00 | sourceColor);
+                pixmap.setPixelRGBA(x, y, color);
+            }
+        }
+    }
+
+    private static void fillPixmapMono(PixmapRGBA pixmap, ByteBuffer sourceBuffer, int width, int height, int rowBytes) {
+        for(int y = 0; y < height; y++) {
+            final int rowStart = (y * rowBytes);
+
+            for(int x = 0; x < width; x++) {
+                final int byteIndex = rowStart + (x >> 3);
+                final int bitIndex = 7 - (x & 7);
+
+                final byte b = sourceBuffer.get(byteIndex);
+                final boolean bitSet = ((b >> bitIndex) & 1) != 0;
+
+                final int color = (bitSet ? 0xFFFFFFFF : 0);
+
+                pixmap.setPixelRGBA(x, y, color);
+            }
+        }
+    }
+
+    private static void fillPixmapBGRA(PixmapRGBA pixmap, ByteBuffer sourceBuffer, int width, int height, int rowBytes) {
+        for(int y = 0; y < height; y++) {
+            final int rowStart = (y * rowBytes);
+            for(int x = 0; x < width; x++) {
+                final int pixelOffset = (rowStart + x * 4);
+
+                final int b = sourceBuffer.get(pixelOffset    ) & 0xFF;
+                final int g = sourceBuffer.get(pixelOffset + 1) & 0xFF;
+                final int r = sourceBuffer.get(pixelOffset + 2) & 0xFF;
+                final int a = sourceBuffer.get(pixelOffset + 3) & 0xFF;
+
+                final int color = (r << 24) | (g << 16) | (b << 8) | a;
+
+                pixmap.setPixelRGBA(x, y, color);
+            }
+        }
+    }
+
+
     public static Font load(Font font, String internalPath, FontLoadOptions options) {
         return load(font, Resource.internal(internalPath), options);
     }

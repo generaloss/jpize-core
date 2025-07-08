@@ -8,13 +8,10 @@ import jpize.lwjgl.glfw.cursor.GlfwCursor;
 import jpize.lwjgl.glfw.cursor.GlfwCursorShape;
 import jpize.lwjgl.glfw.input.GlfwInput;
 import jpize.opengl.gl.GL;
-import jpize.util.font.FontRenderOptions;
-import jpize.util.font.GlyphIterator;
-import jpize.util.font.GlyphLine;
+import jpize.util.font.*;
 import jpize.util.math.vector.Vec2f;
 import jpize.util.mesh.TextureBatch;
 import jpize.util.input.TextInput;
-import jpize.util.font.Font;
 import jpize.util.math.Mathc;
 import jpize.util.math.Maths;
 import jpize.util.math.vector.Vec2i;
@@ -40,7 +37,8 @@ public class TextEditorTest extends JpizeApplication {
 
     public TextEditorTest() {
         this.input = new TextInput().enable().insert(Jpize.input.getClipboardString());
-        this.font = new Font().loadDefault();
+        this.font = new Font().loadFT("/font/va-11-hall-a-cyr-10px.ttf", new FontLoadOptions().charset(new Charset("asdf")));
+
         this.renderOptions = font.getOptions().setInvLineWrap(true);
         // this.renderOptions.setNewLineGap(40);
         this.batch = new TextureBatch();
@@ -194,8 +192,6 @@ public class TextEditorTest extends JpizeApplication {
 
     @Override
     public void render() {
-        System.out.println((Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()) / 1024 / 1024 + " / " + Runtime.getRuntime().totalMemory() / 1024 / 1024);
-
         GL.clearColorBuffer();
         batch.setup();
         {

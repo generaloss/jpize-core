@@ -14,7 +14,7 @@ public class GlyphInfo {
     private Region region;
     private float advanceX;
     private int pageID;
-    private final Map<Integer, Integer> kernings; // (charcode_next) => advance
+    private final Map<Integer, Integer> kernings; // (charcode_right) => advance
 
     public GlyphInfo(int charcode) {
         this.charcode = charcode;
