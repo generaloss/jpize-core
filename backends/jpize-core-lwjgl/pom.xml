@@ -56,8 +56,8 @@
             <scope>provided</scope>
         </dependency>
         <!-- freetype -->
-        <dependency><groupId>io.github.generaloss</groupId><artifactId>freetype-jni-natives-windows</artifactId><version>25.7.1-SNAPSHOT-3</version></dependency>
-        <dependency><groupId>io.github.generaloss</groupId><artifactId>freetype-jni-natives-linux</artifactId><version>25.7.1-SNAPSHOT-3</version></dependency>
+        <dependency><groupId>io.github.generaloss</groupId><artifactId>freetype-jni-natives-windows</artifactId><version>25.7.1-SNAPSHOT-4</version></dependency>
+        <dependency><groupId>io.github.generaloss</groupId><artifactId>freetype-jni-natives-linux</artifactId><version>25.7.1-SNAPSHOT-4</version></dependency>
         <!-- stb-image -->
         <dependency><groupId>io.github.generaloss</groupId><artifactId>stb-image-jni-natives-windows</artifactId><version>25.4.2</version></dependency>
         <dependency><groupId>io.github.generaloss</groupId><artifactId>stb-image-jni-natives-linux</artifactId><version>25.4.2</version></dependency>

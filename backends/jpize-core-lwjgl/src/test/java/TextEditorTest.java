@@ -37,7 +37,7 @@ public class TextEditorTest extends JpizeApplication {
 
     public TextEditorTest() {
         this.input = new TextInput().enable().insert(Jpize.input.getClipboardString());
-        this.font = new Font().loadFT("/font/va-11-hall-a-cyr-10px.ttf", new FontLoadOptions().charset(new Charset("asdf")));
+        this.font = new Font().loadFT("/font/apple-color-emoji.ttf", new FontLoadOptions().charset(new Charset("❤")));
 
         this.renderOptions = font.getOptions().setInvLineWrap(true);
         // this.renderOptions.setNewLineGap(40);

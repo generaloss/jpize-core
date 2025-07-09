@@ -31,8 +31,19 @@ class FreeTypeFontLoader {
         final FTLibrary library = new FTLibrary();
         final FTFace face = library.newMemoryFace(resource.readByteBuffer(), 0);
 
-        if(!face.getFaceFlags().has(FTFaceFlag.FIXED_SIZES))
+        // flags
+        final int glyphLoadFlags = options.getHinting().loadFlags;
+
+        final FaceFlags faceFlags = face.getFaceFlags();
+        final boolean hasKerning = faceFlags.hasKerning();
+        final boolean isFixedSizes = faceFlags.has(FTFaceFlag.FIXED_SIZES);
+
+        if(isFixedSizes) {
+            if(face.getNumFixedSizes() > 0)
+                face.selectSize(0);
+        }else{
             face.setPixelSizes(0L, options.getSize());
+        }
 
         // attachment
         final Resource attachment = options.getAttachment();
@@ -79,13 +90,7 @@ class FreeTypeFontLoader {
         // glyphs
         for(Character c: charset) {
             final long glyphIndex = face.getCharIndex(c);
-            if(glyphIndex == 0)
-                continue;
-
-            face.loadChar(c);
-
-            // load glyph image into the slot
-            face.loadGlyph(glyphIndex);
+            face.loadGlyph(glyphIndex, glyphLoadFlags);
 
             // glyph slot
             final FTGlyphSlot slot = face.getGlyph();
@@ -116,18 +121,19 @@ class FreeTypeFontLoader {
                 .setAdvanceX(advanceX);
 
             // kerning
-            final FTVector kerningDst = new FTVector();
-            for(Character cRight: charset) {
+            if(hasKerning) {
+                final FTVector kerningDst = new FTVector();
+                for(Character cRight : charset) {
 
-                face.getKerning(c, cRight, kerningDst);
-                final float x = kerningDst.getX(PosType.F26DOT6);
-                if(x == 0F)
-                    continue;
+                    face.getKerning(c, cRight, kerningDst);
+                    final float x = kerningDst.getX(PosType.F26DOT6);
+                    if(x == 0F) continue;
 
-                final int charcodeRight = (int) cRight;
-                glyphInfo.kernings().put(charcodeRight, (int) x);
+                    final int charcodeRight = (int) cRight;
+                    glyphInfo.kernings().put(charcodeRight, (int) x);
+                }
+                kerningDst.free();
             }
-            kerningDst.free();
 
             font.glyphs().put(charcode, glyphInfo);
             pageAtlas.put(charcode, pixmap);

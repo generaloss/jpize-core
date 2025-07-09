@@ -10,7 +10,7 @@ public class FontLoadOptions {
         return size;
     }
 
-    /** Ignored in FNT fonts */
+    /** 64 set by default. Ignored in FNT fonts */
     public FontLoadOptions size(int size) {
         this.size = size;
         return this;
@@ -23,6 +23,7 @@ public class FontLoadOptions {
         return linearFilter;
     }
 
+    /** True set by default */
     public FontLoadOptions linearFilter(boolean linearFilter) {
         this.linearFilter = linearFilter;
         return this;
@@ -81,13 +82,28 @@ public class FontLoadOptions {
         return attachment;
     }
 
+    /** Ignored in FNT fonts */
     public FontLoadOptions attachment(Resource resource) {
-        attachment = resource;
+        this.attachment = resource;
         return this;
     }
 
+    /** Ignored in FNT fonts */
     public FontLoadOptions attachment(String internalResource) {
         return this.attachment(Resource.internal(internalResource));
+    }
+
+
+    private FontHinting hinting = FontHinting.LIGHT;
+
+    public FontHinting getHinting() {
+        return hinting;
+    }
+
+    /** FontHinting.LIGHT set by default. Ignored in FNT fonts */
+    public FontLoadOptions hinting(FontHinting hinting) {
+        this.hinting = hinting;
+        return this;
     }
 
 }
