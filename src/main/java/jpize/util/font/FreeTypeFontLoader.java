@@ -25,14 +25,14 @@ class FreeTypeFontLoader {
 
     public static Font load(Font font, Resource resource, FontLoadOptions options) {
         // clear font
-        font.pages().clear();
-        font.glyphs().clear();
+        font.dispose();
 
         final FTLibrary library = new FTLibrary();
         final FTFace face = library.newMemoryFace(resource.readByteBuffer(), 0);
 
         // flags
-        final int glyphLoadFlags = options.getHinting().loadFlags;
+        final LoadFlags glyphLoadFlags = new LoadFlags(options.getHinting().loadFlags);
+        glyphLoadFlags.set(FTLoad.COLOR).set(FTLoad.RENDER);
 
         final FaceFlags faceFlags = face.getFaceFlags();
         final boolean hasKerning = faceFlags.hasKerning();
@@ -64,18 +64,17 @@ class FreeTypeFontLoader {
         final float descender = sizeMetrics.getDescender();
         final float height = sizeMetrics.getHeight();
         font.setHeight(height);
-        System.out.println("Height: " + height);
 
         // add missing char
         final Charset charset = options.getCharset().copy();
         charset.add(UNKNOWN_CHARACTER);
 
         // page atlas
-        final TextureAtlas<Integer> pageAtlas = new TextureAtlas<>();
-        pageAtlas.setPadding(1);
+        final TextureAtlas<Long> pageGlyphAtlas = new TextureAtlas<>();
+        pageGlyphAtlas.setPadding(1);
 
         // stroker
-        FTStroker stroker = null;
+        final FTStroker stroker;
 
         final float borderWidth = options.getBorderWidth();
         if(borderWidth != 0F) {
@@ -85,11 +84,21 @@ class FreeTypeFontLoader {
 
             stroker = library.newStroker();
             stroker.set(Math.abs(borderWidth), linecap, linejoin, 0F);
+        }else{
+            stroker = null;
         }
 
         // glyphs
-        for(Character c: charset) {
-            final long glyphIndex = face.getCharIndex(c);
+        charset.forEach((charcode, variationSelector) -> {
+            final long glyphIndex;
+            if(variationSelector != 0) {
+                glyphIndex = face.getCharVariantIndex(charcode, variationSelector);
+            }else{
+                glyphIndex = face.getCharIndex(charcode);
+            }
+
+            final long codepoint = GlyphInfo.getCodePoint(charcode, variationSelector);
+
             face.loadGlyph(glyphIndex, glyphLoadFlags);
 
             // glyph slot
@@ -110,12 +119,11 @@ class FreeTypeFontLoader {
 
             // glyph info
             final FTGlyphMetrics glyphMetrics = slot.getMetrics();
-            final int charcode = (int) c;
             final float offsetX = slot.getBitmapLeft();
             final float offsetY = (slot.getBitmapTop() - bitmapHeight - ascender + height);
             final float advanceX = (glyphMetrics.getHoriAdvance() + borderWidth);
 
-            final GlyphInfo glyphInfo = new GlyphInfo(charcode)
+            final GlyphInfo glyphInfo = new GlyphInfo(charcode, variationSelector)
                 .setSize(bitmapWidth, bitmapHeight)
                 .setOffset(offsetX, offsetY)
                 .setAdvanceX(advanceX);
@@ -123,53 +131,53 @@ class FreeTypeFontLoader {
             // kerning
             if(hasKerning) {
                 final FTVector kerningDst = new FTVector();
-                for(Character cRight : charset) {
+                charset.forEach((charcodeRight, variationSelectorRight) -> {
+                    final long codepointRight = GlyphInfo.getCodePoint(charcodeRight, variationSelectorRight);
 
-                    face.getKerning(c, cRight, kerningDst);
+                    face.getKerning(charcode, charcodeRight, kerningDst);
                     final float x = kerningDst.getX(PosType.F26DOT6);
-                    if(x == 0F) continue;
+                    if(x == 0F)
+                        return;
 
-                    final int charcodeRight = (int) cRight;
-                    glyphInfo.kernings().put(charcodeRight, (int) x);
-                }
+                    glyphInfo.kernings().put(codepointRight, (int) x);
+                });
                 kerningDst.free();
             }
 
-            font.glyphs().put(charcode, glyphInfo);
-            pageAtlas.put(charcode, pixmap);
-        }
+            font.glyphs().put(codepoint, glyphInfo);
+            pageGlyphAtlas.put(codepoint, pixmap);
+        });
 
         if(stroker != null)
             stroker.done();
 
         // create page texture
         final float glyphSize = (height + 1F + borderWidth);
-        final int pageSize = Maths.nextPow2((int) Math.sqrt(glyphSize * glyphSize * charset.size()) * 100);
-        pageAtlas.build(pageSize, pageSize);
+        final int pageSize = Maths.nextPow2((int) Math.sqrt(glyphSize * glyphSize * charset.size()));
+        pageGlyphAtlas.build(pageSize, pageSize);
 
-        final Texture2D pageTexture = pageAtlas.getTexture();
+        final Texture2D pageTexture = pageGlyphAtlas.getTexture();
         final GLFilter pageFilter = (options.isLinearFilter() ? GLFilter.LINEAR : GLFilter.NEAREST);
         pageTexture.setFilters(pageFilter);
 
         font.pages().put(0, pageTexture);
 
         // set glyphs regions
-        for(Character c: charset) {
-            final int code = (int) c;
+        charset.forEach((charcode, variationSelector) -> {
+            final long codepoint = GlyphInfo.getCodePoint(charcode, variationSelector);
 
-            final GlyphInfo glyphInfo = font.glyphs().get(code);
+            final GlyphInfo glyphInfo = font.glyphs().get(codepoint);
             if(glyphInfo == null)
-                continue;
+                return;
 
-            final Region region = pageAtlas.getRegion(code);
+            final Region region = pageGlyphAtlas.getRegion(codepoint);
             if(region == null)
-                continue;
-
+                return;
             glyphInfo.setRegion(region);
-        }
+        });
 
         // dispose
-        pageAtlas.getPixmap().dispose();
+        pageGlyphAtlas.getPixmap().dispose();
         face.done();
         library.done();
 
@@ -185,7 +193,6 @@ class FreeTypeFontLoader {
         final ByteBuffer sourceBuffer = bitmap.getBuffer();
 
         final FTPixelMode pixelMode = bitmap.getPixelMode();
-        System.out.println(pixelMode + " " + width + "x" + height + " " + rowBytes);
         switch(pixelMode) {
             case GRAY -> fillPixmapGray(pixmap, sourceBuffer, width, height, rowBytes);
             case MONO -> fillPixmapMono(pixmap, sourceBuffer, width, height, rowBytes);

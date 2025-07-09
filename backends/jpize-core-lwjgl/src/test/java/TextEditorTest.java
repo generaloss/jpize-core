@@ -37,7 +37,9 @@ public class TextEditorTest extends JpizeApplication {
 
     public TextEditorTest() {
         this.input = new TextInput().enable().insert(Jpize.input.getClipboardString());
-        this.font = new Font().loadFT("/font/apple-color-emoji.ttf", new FontLoadOptions().charset(new Charset("❤")));
+        this.font = new Font().loadFT("/font/va-11-hall-a-cyr-10px.ttf",
+            new FontLoadOptions().charset(new Charset("❤️♥️↗️Ⓜ️⚽0️"))
+        );
 
         this.renderOptions = font.getOptions().setInvLineWrap(true);
         // this.renderOptions.setNewLineGap(40);
@@ -247,6 +249,7 @@ public class TextEditorTest extends JpizeApplication {
             renderOptions.color().set(0.3, 0.32, 0.35);
             font.drawText(batch, numeration.toString(), 0F, Jpize.getHeight() + scrollY);
         }
+
         batch.render();
     }
 

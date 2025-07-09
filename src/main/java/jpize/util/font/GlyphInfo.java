@@ -9,22 +9,38 @@ import java.util.Map;
 public class GlyphInfo {
 
     private final int charcode;
+    private final int variationSelector;
+    private final long codepoint;
     private final Vec2f offset;
     private final Vec2f size;
     private Region region;
     private float advanceX;
     private int pageID;
-    private final Map<Integer, Integer> kernings; // (charcode_right) => advance
+    private final Map<Long, Integer> kernings; // (codepoint_right) => advance
 
-    public GlyphInfo(int charcode) {
+    public GlyphInfo(int charcode, int variationSelector) {
         this.charcode = charcode;
+        this.variationSelector = variationSelector;
+        this.codepoint = getCodePoint(charcode, variationSelector);
         this.offset = new Vec2f();
         this.size = new Vec2f();
         this.kernings = new HashMap<>();
     }
 
-    public int getCode() {
+    public GlyphInfo(int charcode) {
+        this(charcode, 0);
+    }
+
+    public int getCharCode() {
         return charcode;
+    }
+
+    public int getVariationSelector() {
+        return variationSelector;
+    }
+
+    public long getCodePoint() {
+        return codepoint;
     }
 
 
@@ -78,18 +94,23 @@ public class GlyphInfo {
     }
 
 
-    public Map<Integer, Integer> kernings() {
+    public Map<Long, Integer> kernings() {
         return kernings;
     }
 
-    public int getKerning(int charCodeB) {
-        return kernings.get(charCodeB);
+    public int getKerning(long codepointB) {
+        return kernings.get(codepointB);
     }
 
 
     @Override
     public String toString() {
-        return String.valueOf((char) charcode);
+        return "GlyphInfo{charcode=" + charcode + ", variationSelector=" + variationSelector + "}";
+    }
+
+
+    public static long getCodePoint(int charcode, int variationSelector) {
+        return (charcode | ((long) variationSelector << Integer.SIZE));
     }
 
 }

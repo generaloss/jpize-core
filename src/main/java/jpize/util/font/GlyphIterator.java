@@ -1,6 +1,8 @@
 package jpize.util.font;
 
+import generaloss.freetype.UnicodeVariationSelector;
 import jpize.util.array.IntList;
+import jpize.util.array.LongList;
 import jpize.util.math.vector.Vec2f;
 
 import java.util.*;
@@ -134,7 +136,7 @@ public class GlyphIterator implements Iterator<GlyphSprite> {
     public int code() {
         if(glyph == null)
             return -1;
-        return glyph.getCode();
+        return glyph.getCharCode();
     }
 
     public char character() {
@@ -154,48 +156,61 @@ public class GlyphIterator implements Iterator<GlyphSprite> {
     }
 
 
-    private void addLine(StringBuilder lineBuilder, boolean newLine) {
+    private void addLine(LongList lineBuilder, boolean newLine) {
         // calculate advance y
         final float lineGap = (newLine ? options.getNewLineGap() : options.getLineGap());
         final float lineHeight = (fontData.getHeight() * options.advanceFactor().y);
         final float lineAdvance = (lineGap + lineHeight);
 
         // add line
-        lines.add(new GlyphLine(lineBuilder.toString(), newLine, lineAdvance));
+        lines.add(new GlyphLine(lineBuilder.copyOf(), newLine, lineAdvance));
 
         // reset 'line' state
-        lineBuilder.delete(0, lineBuilder.length());
+        lineBuilder.clear();
         cursor.x = 0;
     }
 
     private void makeLines(CharSequence text) {
         // setup
-        final StringBuilder lineBuilder = new StringBuilder();
+        final LongList lineBuilder = new LongList();
         final float breakLineMaxWidth = (options.getLineBreakingWidth() / options.scale().x);
         boolean lastLineIsNew = true;
-        Map<Integer, Integer> kerningEntry = null;
+        Map<Long, Integer> kerningEntry = null;
 
         // iterate chars
-        for(int i = 0; i < text.length(); i++){
+        final int length = text.length();
+
+        for(int i = 0; i < length; i++){
             lastLineIsNew = true;
-            int code = text.charAt(i);
+            final int charcode = text.charAt(i);
             // new line
-            if(code == '\n') {
+            if(charcode == '\n') {
                 this.addLine(lineBuilder, true);
                 kerningEntry = null;
                 continue;
             }
 
-            glyph = fontData.glyphs().get(code);
-            if(glyph == null)
-                code = UNKNOWN_SYMBOL;
+            final int nextIndex = (i + 1);
+            final boolean hasNext = (nextIndex < length);
+            final char nextcode = (hasNext ? text.charAt(nextIndex) : 0);
 
-            glyph = fontData.glyphs().get(code);
+            final boolean hasVariation = (UnicodeVariationSelector.byCode(nextcode) != null);
+            if(hasVariation)
+                i++;
+
+            final int variationSelector = (hasVariation ? nextcode : 0);
+            long codepoint = GlyphInfo.getCodePoint(charcode, variationSelector);
+
+            glyph = fontData.glyphs().get(codepoint);
+            if(glyph == null)
+                codepoint = UNKNOWN_SYMBOL;
+
+            glyph = fontData.glyphs().get(codepoint);
             if(glyph == null)
                 continue;
 
             // build kerning
-            final int kerning = (kerningEntry != null ? kerningEntry.getOrDefault(code, 0) : 0);
+            final int kerning = (kerningEntry != null ? kerningEntry.getOrDefault(codepoint, 0) : 0);
             kerningEntry = glyph.kernings();
             kernings.add(kerning);
 
@@ -216,7 +231,7 @@ public class GlyphIterator implements Iterator<GlyphSprite> {
             }
 
             // build line
-            lineBuilder.append((char) code);
+            lineBuilder.add(codepoint);
             size++;
         }
         this.addLine(lineBuilder, lastLineIsNew);
@@ -270,8 +285,8 @@ public class GlyphIterator implements Iterator<GlyphSprite> {
                 return;
         }
         // next glyph
-        final int code = line.charAt(lineCharIndex);
-        glyph = fontData.glyphs().get(code);
+        final long codepoint = line.codepointAt(lineCharIndex);
+        glyph = fontData.glyphs().get(codepoint);
         // next advance X
         advanced.x = nextAdvanceX;
         nextAdvanceX = (glyph.getAdvanceX() + this.nextKerning()) * options.advanceFactor().x;

@@ -8,8 +8,8 @@ import java.util.Map;
 
 public class FontData implements Disposable {
 
-    private final Map<Integer, Texture2D> pages;  // pageID => texture
-    private final Map<Integer, GlyphInfo> glyphs; // code   => glyph
+    private final Map<Integer, Texture2D> pages; // pageID => texture
+    private final GlyphInfoMap glyphs;
 
     private float height;
     private float ascent;
@@ -17,14 +17,14 @@ public class FontData implements Disposable {
 
     public FontData() {
         this.pages = new HashMap<>();
-        this.glyphs = new HashMap<>();
+        this.glyphs = new GlyphInfoMap();
     }
 
     public Map<Integer, Texture2D> pages() {
         return pages;
     }
 
-    public Map<Integer, GlyphInfo> glyphs() {
+    public GlyphInfoMap glyphs() {
         return glyphs;
     }
 
@@ -56,6 +56,10 @@ public class FontData implements Disposable {
 
     @Override
     public void dispose() {
+        height = 0;
+        ascent = 0;
+        descent = 0;
+        glyphs.clear();
         for(Texture2D page: pages.values())
             page.dispose();
     }

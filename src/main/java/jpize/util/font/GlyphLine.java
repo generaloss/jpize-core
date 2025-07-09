@@ -2,26 +2,26 @@ package jpize.util.font;
 
 public class GlyphLine {
 
-    private final String text;
+    private final long[] codepoints;
     private final boolean newLine;
     private final float advanceY;
 
-    public GlyphLine(String text, boolean newLine, float advanceY) {
-        this.text = text;
+    public GlyphLine(long[] codepoints, boolean newLine, float advanceY) {
+        this.codepoints = codepoints;
         this.newLine = newLine;
         this.advanceY = advanceY;
     }
 
-    public String getText() {
-        return text;
+    public long[] getCodepoints() {
+        return codepoints;
     }
 
-    public char charAt(int index) {
-        return text.charAt(index);
+    public long codepointAt(int index) {
+        return codepoints[index];
     }
 
     public boolean isEmpty() {
-        return text.isEmpty();
+        return (codepoints.length == 0);
     }
 
     public boolean isNewLine() {
@@ -33,12 +33,7 @@ public class GlyphLine {
     }
 
     public int size() {
-        return text.length();
-    }
-
-    @Override
-    public String toString() {
-        return text;
+        return codepoints.length;
     }
 
 }

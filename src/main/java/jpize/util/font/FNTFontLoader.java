@@ -26,8 +26,7 @@ class FNTFontLoader {
 
     public static Font load(Font font, Resource resource, FontLoadOptions options) {
         // clear font
-        font.pages().clear();
-        font.glyphs().clear();
+        font.dispose();
 
         // read
         final FastReader reader = resource.reader();
@@ -114,7 +113,7 @@ class FNTFontLoader {
                             .getOrDefault(code_0, new GlyphInfo(code_0));
                     
                     // add kerning entry
-                    glyph.kernings().put(code_1, advance);
+                    glyph.kernings().put((long) code_1, advance);
                 }
             }
         }

@@ -1,6 +1,9 @@
 package jpize.util.font;
 
+import generaloss.freetype.UnicodeVariationSelector;
 import jpize.util.array.CharList;
+
+import java.util.function.BiConsumer;
 
 public class Charset extends CharList {
 
@@ -40,6 +43,26 @@ public class Charset extends CharList {
     public int maxChar() {
         return max;
     }
+
+    public void forEach(BiConsumer<Integer, Integer> action) {
+        final int size = super.size();
+
+        for(int i = 0; i < size; i++) {
+            final int charcode = super.get(i);
+
+            final int nextIndex = (i + 1);
+            final boolean hasNext = (nextIndex < size);
+            final char nextcode = (hasNext ? super.get(nextIndex) : 0);
+
+            final boolean hasVariation = (UnicodeVariationSelector.byCode(nextcode) != null);
+            if(hasVariation)
+                i++;
+
+            final int variationSelector = (hasVariation ? nextcode : 0);
+            action.accept(charcode, variationSelector);
+        }
+    }
+
 
     @Override
     public Charset copy() {
