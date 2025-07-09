@@ -1,5 +1,6 @@
 package jpize.util.font;
 
+import generaloss.freetype.FreeType;
 import generaloss.freetype.freetype.*;
 import generaloss.freetype.glyph.*;
 import generaloss.freetype.image.FTBitmap;
@@ -29,10 +30,10 @@ class FreeTypeFontLoader {
 
         final FTLibrary library = new FTLibrary();
         final FTFace face = library.newMemoryFace(resource.readByteBuffer(), 0);
+        final FTGlyphSlot slot = face.getGlyph();
 
         // flags
-        final LoadFlags glyphLoadFlags = new LoadFlags(options.getHinting().loadFlags);
-        glyphLoadFlags.set(FTLoad.COLOR).set(FTLoad.RENDER);
+        final int glyphLoadFlags = options.getHinting().loadFlags;
 
         final FaceFlags faceFlags = face.getFaceFlags();
         final boolean hasKerning = faceFlags.hasKerning();
@@ -65,14 +66,6 @@ class FreeTypeFontLoader {
         final float height = sizeMetrics.getHeight();
         font.setHeight(height);
 
-        // add missing char
-        final Charset charset = options.getCharset().copy();
-        charset.add(UNKNOWN_CHARACTER);
-
-        // page atlas
-        final TextureAtlas<Long> pageGlyphAtlas = new TextureAtlas<>();
-        pageGlyphAtlas.setPadding(1);
-
         // stroker
         final FTStroker stroker;
 
@@ -88,8 +81,18 @@ class FreeTypeFontLoader {
             stroker = null;
         }
 
+        // add missing char
+        final Charset charset = options.getCharset().copy();
+        charset.add(UNKNOWN_CHARACTER);
+
+        // page atlas
+        final TextureAtlas<Long> pageGlyphAtlas = new TextureAtlas<>();
+        pageGlyphAtlas.setPadding(1);
+
         // glyphs
         charset.forEach((charcode, variationSelector) -> {
+            final long codepoint = GlyphInfo.getCodePoint(charcode, variationSelector);
+
             final long glyphIndex;
             if(variationSelector != 0) {
                 glyphIndex = face.getCharVariantIndex(charcode, variationSelector);
@@ -97,22 +100,24 @@ class FreeTypeFontLoader {
                 glyphIndex = face.getCharIndex(charcode);
             }
 
-            final long codepoint = GlyphInfo.getCodePoint(charcode, variationSelector);
+            // coloring
+            int loadFlags = glyphLoadFlags;
+            if(isGlyphColored(face, charcode))
+                loadFlags |= FTLoad.COLOR.getBit();
 
-            face.loadGlyph(glyphIndex, glyphLoadFlags);
-
-            // glyph slot
-            final FTGlyphSlot slot = face.getGlyph();
+            // load glyph
+            face.loadGlyph(glyphIndex, loadFlags);
             FTGlyph glyph = slot.getGlyph();
+
             // border
             if(stroker != null)
                 glyph = glyph.strokeBorder(stroker, borderWidth < 0F, true);
-            // bitmap
-            final FTBitmapGlyph bitmapGlyph = glyph.toBitmap(FTRenderMode.NORMAL, null, true);
 
-            // pixmap
+            // bitmap
+            final FTBitmapGlyph bitmapGlyph = glyph.toBitmap(FTRenderMode.LCD_V, null, true);
             final FTBitmap bitmap = bitmapGlyph.getBitmap();
 
+            // pixmap
             final PixmapRGBA pixmap = createPixmap(bitmap);
             final int bitmapWidth = pixmap.getWidth();
             final int bitmapHeight = pixmap.getHeight();
@@ -122,6 +127,8 @@ class FreeTypeFontLoader {
             final float offsetX = slot.getBitmapLeft();
             final float offsetY = (slot.getBitmapTop() - bitmapHeight - ascender + height);
             final float advanceX = (glyphMetrics.getHoriAdvance() + borderWidth);
+
+            System.out.println(charcode + " <= " + variationSelector + " = " + codepoint);
 
             final GlyphInfo glyphInfo = new GlyphInfo(charcode, variationSelector)
                 .setSize(bitmapWidth, bitmapHeight)
@@ -184,6 +191,14 @@ class FreeTypeFontLoader {
         return font;
     }
 
+    private static boolean isGlyphColored(FTFace face, long charcode) {
+        if(FreeType.ftLoadChar(face, charcode, FTLoad.COLOR).hasError())
+            return false;
+
+        final FTBitmap bitmap = face.getGlyph().getBitmap();
+        return (bitmap.getPixelMode() == FTPixelMode.BGRA);
+    }
+
     private static PixmapRGBA createPixmap(FTBitmap bitmap) {
         final int width = (int) bitmap.getWidth();
         final int height = (int) bitmap.getRows();
@@ -194,24 +209,17 @@ class FreeTypeFontLoader {
 
         final FTPixelMode pixelMode = bitmap.getPixelMode();
         switch(pixelMode) {
-            case GRAY -> fillPixmapGray(pixmap, sourceBuffer, width, height, rowBytes);
             case MONO -> fillPixmapMono(pixmap, sourceBuffer, width, height, rowBytes);
+            case GRAY -> fillPixmapGray(pixmap, sourceBuffer, width, height, rowBytes);
+            case GRAY2 -> fillPixmapGray2(pixmap, sourceBuffer, width, height, rowBytes);
+            case GRAY4 -> fillPixmapGray4(pixmap, sourceBuffer, width, height, rowBytes);
+            case LCD -> fillPixmapLCD(pixmap, sourceBuffer, width, height, rowBytes);
+            case LCD_V -> fillPixmapLCD_V(pixmap, sourceBuffer, width, height, rowBytes);
             case BGRA -> fillPixmapBGRA(pixmap, sourceBuffer, width, height, rowBytes);
             default -> throw new IllegalStateException("TTFFontLoader: FTPixelMode not supported: " + pixelMode);
         }
 
         return pixmap;
-    }
-
-    private static void fillPixmapGray(PixmapRGBA pixmap, ByteBuffer sourceBuffer, int width, int height, int rowBytes) {
-        for(int x = 0; x < width; x++) {
-            for(int y = 0; y < height; y++) {
-                final int index = (x + rowBytes * y);
-                final int sourceColor = (sourceBuffer.get(index) & 0xFF);
-                final int color = (0xFFFFFF00 | sourceColor);
-                pixmap.setPixelRGBA(x, y, color);
-            }
-        }
     }
 
     private static void fillPixmapMono(PixmapRGBA pixmap, ByteBuffer sourceBuffer, int width, int height, int rowBytes) {
@@ -227,6 +235,87 @@ class FreeTypeFontLoader {
 
                 final int color = (bitSet ? 0xFFFFFFFF : 0);
 
+                pixmap.setPixelRGBA(x, y, color);
+            }
+        }
+    }
+
+    private static void fillPixmapGray(PixmapRGBA pixmap, ByteBuffer sourceBuffer, int width, int height, int rowBytes) {
+        for(int x = 0; x < width; x++) {
+            for(int y = 0; y < height; y++) {
+                final int index = (x + rowBytes * y);
+                final int sourceColor = (sourceBuffer.get(index) & 0xFF);
+                final int color = (0xFFFFFF00 | sourceColor);
+                pixmap.setPixelRGBA(x, y, color);
+            }
+        }
+    }
+
+    private static void fillPixmapGray2(PixmapRGBA pixmap, ByteBuffer sourceBuffer, int width, int height, int rowBytes) {
+        for(int y = 0; y < height; y++) {
+            final int rowStart = (y * rowBytes);
+            for(int x = 0; x < width; x++) {
+
+                final int byteIndex = (rowStart + (x >> 2));
+                final int shift = (3 - (x & 3)) * 2;
+                final int value2bit = (sourceBuffer.get(byteIndex) >> shift) & 0x03;
+
+                final int gray = (value2bit * 0x55); // 0, 85, 170, 255
+                final int color = (0xFFFFFF00 | gray);
+                pixmap.setPixelRGBA(x, y, color);
+            }
+        }
+    }
+
+    private static void fillPixmapGray4(PixmapRGBA pixmap, ByteBuffer sourceBuffer, int width, int height, int rowBytes) {
+        for(int y = 0; y < height; y++) {
+            final int rowStart = y * rowBytes;
+            for(int x = 0; x < width; x++) {
+
+                final int byteIndex = (rowStart + (x >> 1));
+                final boolean isHighNibble = ((x & 1) == 0);
+                final int nibble = (sourceBuffer.get(byteIndex) >> (isHighNibble ? 4 : 0)) & 0x0F;
+                final int gray = (nibble * 17); // 0..255
+                final int color = (0xFFFFFF00 | gray);
+                pixmap.setPixelRGBA(x, y, color);
+            }
+        }
+    }
+
+    private static void fillPixmapLCD(PixmapRGBA pixmap, ByteBuffer sourceBuffer, int width, int height, int rowBytes) {
+        final int pixelsPerRow = (width / 3);
+        for(int y = 0; y < height; y++) {
+            int rowStart = (y * rowBytes);
+
+            for(int x = 0; x < pixelsPerRow; x++) {
+                final int offset = (rowStart + x * 3);
+
+                if(offset + 2 >= sourceBuffer.limit())
+                    continue;
+
+                final int r = sourceBuffer.get(offset) & 0xFF;
+                final int g = sourceBuffer.get(offset + 1) & 0xFF;
+                final int b = sourceBuffer.get(offset + 2) & 0xFF;
+                final int a = 0xFF;
+
+                final int color = (r << 24) | (g << 16) | (b << 8) | a;
+                pixmap.setPixelRGBA(x, y, color);
+            }
+        }
+    }
+
+    private static void fillPixmapLCD_V(PixmapRGBA pixmap, ByteBuffer sourceBuffer, int width, int height, int rowBytes) {
+        for(int y = 0; y < height; y++) {
+            final int rowStart = (y * rowBytes);
+            for(int x = 0; x < width; x++) {
+                final int offset = (rowStart + x * 3);
+
+                final int r = sourceBuffer.get(offset) & 0xFF;
+                final int g = sourceBuffer.get(offset + 1) & 0xFF;
+                final int b = sourceBuffer.get(offset + 2) & 0xFF;
+                final int a = 0xFF;
+
+                final int color = (r << 24) | (g << 16) | (b << 8) | a;
                 pixmap.setPixelRGBA(x, y, color);
             }
         }
