@@ -43,7 +43,7 @@ public abstract class GLTexture extends GLObject {
 
 
     protected void glActiveTexture(int active) {
-        Jpize.GL15.glActiveTexture(GL13I.GL_TEXTURE0 + active);
+        Jpize.GL15.glActiveTexture(active);
     }
 
 

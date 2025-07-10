@@ -6,7 +6,7 @@
 
     <groupId>io.github.generaloss</groupId>
     <artifactId>jpize-core-android</artifactId>
-    <version>25.7.1-SNAPSHOT-1-1</version>
+    <version>25.7.1-SNAPSHOT-4-1</version>
     <name>jpize-core-android</name>
 
     <description>OpenGL Graphics Library Android Backend</description>
@@ -38,7 +38,7 @@
         <dependency>
             <groupId>io.github.generaloss</groupId>
             <artifactId>jpize-core</artifactId>
-            <version>25.7.1-SNAPSHOT-1</version>
+            <version>25.7.1-SNAPSHOT-4</version>
             <scope>provided</scope>
         </dependency>
         <!-- stb-image -->
@@ -52,7 +52,7 @@
         <dependency>
             <groupId>io.github.generaloss</groupId>
             <artifactId>freetype-jni-natives-android</artifactId>
-            <version>25.7.1-2.13.3-SNAPSHOT-2</version>
+            <version>25.7.1-2.13.3-SNAPSHOT-3</version>
             <type>aar</type>
         </dependency>
         <!-- android -->
