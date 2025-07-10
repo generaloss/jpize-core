@@ -106,6 +106,7 @@ class FreeTypeFontLoader {
                 loadFlags |= FTLoad.COLOR.getBit();
 
             // load glyph
+            face.loadChar(charcode, loadFlags);
             face.loadGlyph(glyphIndex, loadFlags);
             FTGlyph glyph = slot.getGlyph();
 
@@ -114,7 +115,7 @@ class FreeTypeFontLoader {
                 glyph = glyph.strokeBorder(stroker, borderWidth < 0F, true);
 
             // bitmap
-            final FTBitmapGlyph bitmapGlyph = glyph.toBitmap(FTRenderMode.LCD_V, null, true);
+            final FTBitmapGlyph bitmapGlyph = glyph.toBitmap(FTRenderMode.NORMAL, null, true);
             final FTBitmap bitmap = bitmapGlyph.getBitmap();
 
             // pixmap
@@ -127,8 +128,6 @@ class FreeTypeFontLoader {
             final float offsetX = slot.getBitmapLeft();
             final float offsetY = (slot.getBitmapTop() - bitmapHeight - ascender + height);
             final float advanceX = (glyphMetrics.getHoriAdvance() + borderWidth);
-
-            System.out.println(charcode + " <= " + variationSelector + " = " + codepoint);
 
             final GlyphInfo glyphInfo = new GlyphInfo(charcode, variationSelector)
                 .setSize(bitmapWidth, bitmapHeight)
@@ -200,14 +199,19 @@ class FreeTypeFontLoader {
     }
 
     private static PixmapRGBA createPixmap(FTBitmap bitmap) {
-        final int width = (int) bitmap.getWidth();
-        final int height = (int) bitmap.getRows();
+        final FTPixelMode pixelMode = bitmap.getPixelMode();
+
+        final int widthRaw = (int) bitmap.getWidth();
+        final int rows = (int) bitmap.getRows();
+        final int width = (pixelMode == FTPixelMode.LCD) ? (widthRaw / 3) : widthRaw;
+        final int height = (pixelMode == FTPixelMode.LCD_V) ? (rows / 3) : rows;
+
         final PixmapRGBA pixmap = new PixmapRGBA(width, height);
 
         final int rowBytes = Math.abs(bitmap.getPitch());
         final ByteBuffer sourceBuffer = bitmap.getBuffer();
 
-        final FTPixelMode pixelMode = bitmap.getPixelMode();
+
         switch(pixelMode) {
             case MONO -> fillPixmapMono(pixmap, sourceBuffer, width, height, rowBytes);
             case GRAY -> fillPixmapGray(pixmap, sourceBuffer, width, height, rowBytes);
@@ -283,21 +287,17 @@ class FreeTypeFontLoader {
     }
 
     private static void fillPixmapLCD(PixmapRGBA pixmap, ByteBuffer sourceBuffer, int width, int height, int rowBytes) {
-        final int pixelsPerRow = (width / 3);
         for(int y = 0; y < height; y++) {
-            int rowStart = (y * rowBytes);
+            final int rowStart = (y * rowBytes);
 
-            for(int x = 0; x < pixelsPerRow; x++) {
+            for(int x = 0; x < width; x++) {
                 final int offset = (rowStart + x * 3);
-
-                if(offset + 2 >= sourceBuffer.limit())
-                    continue;
 
                 final int r = sourceBuffer.get(offset) & 0xFF;
                 final int g = sourceBuffer.get(offset + 1) & 0xFF;
                 final int b = sourceBuffer.get(offset + 2) & 0xFF;
-                final int a = 0xFF;
 
+                final int a = (r + g + b) / 3;
                 final int color = (r << 24) | (g << 16) | (b << 8) | a;
                 pixmap.setPixelRGBA(x, y, color);
             }
@@ -306,14 +306,15 @@ class FreeTypeFontLoader {
 
     private static void fillPixmapLCD_V(PixmapRGBA pixmap, ByteBuffer sourceBuffer, int width, int height, int rowBytes) {
         for(int y = 0; y < height; y++) {
-            final int rowStart = (y * rowBytes);
             for(int x = 0; x < width; x++) {
-                final int offset = (rowStart + x * 3);
+                final int offsetR = (y * 3    ) * rowBytes + x;
+                final int offsetG = (y * 3 + 1) * rowBytes + x;
+                final int offsetB = (y * 3 + 2) * rowBytes + x;
 
-                final int r = sourceBuffer.get(offset) & 0xFF;
-                final int g = sourceBuffer.get(offset + 1) & 0xFF;
-                final int b = sourceBuffer.get(offset + 2) & 0xFF;
-                final int a = 0xFF;
+                final int r = sourceBuffer.get(offsetR) & 0xFF;
+                final int g = sourceBuffer.get(offsetG) & 0xFF;
+                final int b = sourceBuffer.get(offsetB) & 0xFF;
+                final int a = (r + g + b) / 3;
 
                 final int color = (r << 24) | (g << 16) | (b << 8) | a;
                 pixmap.setPixelRGBA(x, y, color);

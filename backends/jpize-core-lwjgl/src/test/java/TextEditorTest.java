@@ -139,7 +139,7 @@ public class TextEditorTest extends JpizeApplication {
         // cinematic
         renderOptions.scale().add(editorScale.copy().sub(font.getOptions().scale()).div(10));
         lineHeight = font.getHeightScaled();
-        numerationWidth = 200F * renderOptions.scale().x;
+        numerationWidth = 100F * renderOptions.scale().x;
         animatedScroll += (scroll - animatedScroll) / 10F;
         scrollY = animatedScroll * lineHeight - Jpize.getHeight() * 0.5F;
 
