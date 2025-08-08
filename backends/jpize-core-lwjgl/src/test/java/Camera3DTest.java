@@ -18,13 +18,13 @@ import jpize.util.font.Font;
 import jpize.util.font.FontRenderOptions;
 import jpize.util.input.MotionInput;
 import jpize.util.input.RotationInput;
-import jpize.util.math.vector.Vec2f;
-import jpize.util.math.vector.Vec3f;
+import spatialmath.vector.Vec2f;
+import spatialmath.vector.Vec3f;
 import jpize.util.mesh.Mesh;
 import jpize.util.pixmap.Pixmap;
 import jpize.util.pixmap.PixmapIO;
 import jpize.util.postprocess.GaussianBlur;
-import jpize.util.res.Resource;
+import resourceflow.resource.Resource;
 
 public class Camera3DTest extends JpizeApplication {
 

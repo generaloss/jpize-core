@@ -6,7 +6,7 @@ import jpize.context.Jpize;
 import jpize.context.input.Key;
 import jpize.context.input.MouseBtn;
 import jpize.opengl.gl.GL;
-import jpize.util.math.vector.Vec4f;
+import spatialmath.vector.Vec4f;
 import jpize.util.camera.PerspectiveCamera;
 import jpize.util.font.Font;
 import jpize.util.font.FontRenderOptions;

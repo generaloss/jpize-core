@@ -5,14 +5,14 @@ import jpize.opengl.shader.Shader;
 import jpize.opengl.tesselation.GLPrimitive;
 import jpize.opengl.type.GLType;
 import jpize.opengl.vertex.GLVertAttr;
-import jpize.util.Disposable;
-import jpize.util.array.FloatList;
+import resourceflow.Disposable;
+import rawlist.FloatList;
 import jpize.util.camera.Camera;
 import jpize.util.color.Color;
 import jpize.util.color.AbstractColor;
-import jpize.util.math.matrix.Matrix4f;
-import jpize.util.math.vector.Vec2f;
-import jpize.util.res.Resource;
+import spatialmath.matrix.Matrix4f;
+import spatialmath.vector.Vec2f;
+import resourceflow.resource.Resource;
 
 public class VertexBatch implements Disposable {
 

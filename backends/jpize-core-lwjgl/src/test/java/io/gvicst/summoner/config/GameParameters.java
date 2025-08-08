@@ -5,8 +5,8 @@ import io.gvicst.summoner.utils.Gold;
 import io.gvicst.summoner.utils.Hero;
 import io.gvicst.summoner.utils.Spell;
 import jpize.context.input.Key;
-import jpize.util.res.FileResource;
-import jpize.util.res.Resource;
+import resourceflow.resource.FileResource;
+import resourceflow.resource.Resource;
 
 import java.util.ArrayList;
 

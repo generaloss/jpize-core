@@ -1,6 +1,6 @@
 package jpize.util.camera;
 
-import jpize.util.math.vector.Vec3f;
+import spatialmath.vector.Vec3f;
 
 public abstract class Camera3D extends Camera {
 

@@ -13,10 +13,10 @@ import generaloss.freetype.types.PosType;
 import jpize.opengl.texture.GLFilter;
 import jpize.opengl.texture.Texture2D;
 import jpize.util.atlas.TextureAtlas;
-import jpize.util.math.Maths;
+import spatialmath.Maths;
 import jpize.util.pixmap.PixmapRGBA;
 import jpize.util.region.Region;
-import jpize.util.res.Resource;
+import resourceflow.resource.Resource;
 
 import java.nio.ByteBuffer;
 

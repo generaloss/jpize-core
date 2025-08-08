@@ -6,10 +6,10 @@ import jpize.opengl.type.GLType;
 import jpize.opengl.vertex.GLVertAttr;
 import jpize.util.camera.Camera;
 import jpize.util.color.Color;
-import jpize.util.math.matrix.Matrix4f;
+import spatialmath.matrix.Matrix4f;
 import jpize.util.mesh.IndexedMesh;
 import jpize.util.pixmap.Pixmap;
-import jpize.util.res.Resource;
+import resourceflow.resource.Resource;
 import jpize.opengl.shader.Shader;
 
 public class Skybox extends TextureCubemap {

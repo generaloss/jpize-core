@@ -3,8 +3,8 @@ package jpize.util.input;
 import jpize.context.Jpize;
 import jpize.context.callback.CursorPosCallback;
 import jpize.context.input.CursorMode;
-import jpize.util.math.EulerAngles;
-import jpize.util.math.Maths;
+import spatialmath.EulerAngles;
+import spatialmath.Maths;
 
 public class RotationInput {
 

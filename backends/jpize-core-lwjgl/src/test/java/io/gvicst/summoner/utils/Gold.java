@@ -1,6 +1,6 @@
 package io.gvicst.summoner.utils;
 
-import jpize.util.math.Mathc;
+import spatialmath.Mathc;
 
 public class Gold {
 

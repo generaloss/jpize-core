@@ -4,7 +4,7 @@ import io.gvicst.summoner.main.Main;
 import io.gvicst.summoner.screen.GameScreen;
 import io.gvicst.summoner.utils.Animation;
 import jpize.context.Jpize;
-import jpize.util.math.Mathc;
+import spatialmath.Mathc;
 import jpize.util.mesh.TextureBatch;
 
 import java.util.ArrayList;

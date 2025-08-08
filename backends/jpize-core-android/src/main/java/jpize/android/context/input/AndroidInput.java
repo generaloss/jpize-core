@@ -8,8 +8,8 @@ import android.content.res.Configuration;
 import jpize.android.context.JpizeAndroidContext;
 import jpize.context.Jpize;
 import jpize.context.input.*;
-import jpize.util.math.geometry.Recti;
-import jpize.util.math.vector.Vec2f;
+import spatialmath.geometry.Recti;
+import spatialmath.vector.Vec2f;
 import java.nio.IntBuffer;
 
 public class AndroidInput extends AbstractInput {

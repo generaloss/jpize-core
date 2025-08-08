@@ -1,7 +1,7 @@
 package jpize.util.mesh;
 
 import jpize.opengl.buffer.GLVertexBuffer;
-import jpize.util.Disposable;
+import resourceflow.Disposable;
 
 public interface IMesh extends Disposable {
 

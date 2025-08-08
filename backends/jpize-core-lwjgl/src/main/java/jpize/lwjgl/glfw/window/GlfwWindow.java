@@ -7,9 +7,9 @@ import jpize.lwjgl.glfw.GlfwObject;
 import jpize.lwjgl.glfw.monitor.GlfwMonitor;
 import jpize.util.Insetsi;
 import jpize.util.pixmap.PixmapRGBA;
-import jpize.util.math.vector.Vec2f;
-import jpize.util.math.vector.Vec2i;
-import jpize.util.res.Resource;
+import spatialmath.vector.Vec2f;
+import spatialmath.vector.Vec2i;
+import resourceflow.resource.Resource;
 import org.lwjgl.glfw.*;
 import org.lwjgl.system.MemoryUtil;
 

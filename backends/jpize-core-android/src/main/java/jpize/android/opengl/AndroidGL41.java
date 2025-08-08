@@ -4,7 +4,7 @@ import android.opengl.GLES20;
 import android.opengl.GLES30;
 import android.opengl.GLES31;
 import jpize.opengl.gl.GL41I;
-import jpize.util.math.geometry.Recti;
+import spatialmath.geometry.Recti;
 
 import java.nio.ByteBuffer;
 import java.nio.DoubleBuffer;

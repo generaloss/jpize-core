@@ -1,7 +1,7 @@
 package jpize.opengl.buffer;
 
-import jpize.util.math.matrix.Matrix4f;
-import jpize.util.math.vector.*;
+import spatialmath.matrix.Matrix4f;
+import spatialmath.vector.*;
 
 public class UniformBufferStd140 extends GLUniformBuffer {
 

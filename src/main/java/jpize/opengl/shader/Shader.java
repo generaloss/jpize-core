@@ -6,10 +6,10 @@ import jpize.opengl.texture.Texture2D;
 import jpize.opengl.texture.Texture2DArray;
 import jpize.opengl.type.GLBool;
 import jpize.util.color.AbstractColor;
-import jpize.util.math.matrix.Matrix3f;
-import jpize.util.math.matrix.Matrix4f;
-import jpize.util.math.vector.*;
-import jpize.util.res.Resource;
+import spatialmath.matrix.Matrix3f;
+import spatialmath.matrix.Matrix4f;
+import spatialmath.vector.*;
+import resourceflow.resource.Resource;
 
 import java.util.HashMap;
 import java.util.regex.Matcher;

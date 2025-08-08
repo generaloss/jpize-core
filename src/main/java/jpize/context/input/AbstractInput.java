@@ -2,9 +2,9 @@ package jpize.context.input;
 
 import jpize.context.Context;
 import jpize.context.Jpize;
-import jpize.util.math.geometry.Intersector;
-import jpize.util.math.geometry.Recti;
-import jpize.util.math.vector.Vec2f;
+import spatialmath.geometry.Intersector;
+import spatialmath.geometry.Recti;
+import spatialmath.vector.Vec2f;
 
 import java.nio.IntBuffer;
 

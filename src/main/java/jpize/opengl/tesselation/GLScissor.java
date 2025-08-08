@@ -2,8 +2,8 @@ package jpize.opengl.tesselation;
 
 import jpize.opengl.gl.GL;
 import jpize.opengl.glenum.GLTarget;
-import jpize.util.math.Maths;
-import jpize.util.math.geometry.Recti;
+import spatialmath.Maths;
+import spatialmath.geometry.Recti;
 
 import java.util.Hashtable;
 

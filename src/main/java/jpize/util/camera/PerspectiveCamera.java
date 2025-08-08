@@ -1,12 +1,12 @@
 package jpize.util.camera;
 
 import jpize.context.Jpize;
-import jpize.util.math.EulerAngles;
-import jpize.util.math.Frustum;
-import jpize.util.math.Quaternion;
-import jpize.util.math.matrix.Matrix4f;
-import jpize.util.math.vector.Vec2i;
-import jpize.util.math.vector.Vec3f;
+import spatialmath.EulerAngles;
+import spatialmath.Frustum;
+import spatialmath.Quaternion;
+import spatialmath.matrix.Matrix4f;
+import spatialmath.vector.Vec2i;
+import spatialmath.vector.Vec3f;
 
 public class PerspectiveCamera extends Camera3D {
 

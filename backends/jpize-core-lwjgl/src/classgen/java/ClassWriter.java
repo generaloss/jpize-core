@@ -1,5 +1,5 @@
-import jpize.util.res.FileResource;
-import jpize.util.res.Resource;
+import resourceflow.resource.FileResource;
+import resourceflow.resource.Resource;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,9 +1,9 @@
 package jpize.util.camera;
 
 import jpize.context.Jpize;
-import jpize.util.math.Maths;
-import jpize.util.math.matrix.Matrix4f;
-import jpize.util.math.vector.Vec2i;
+import spatialmath.Maths;
+import spatialmath.matrix.Matrix4f;
+import spatialmath.vector.Vec2i;
 
 public class OrthographicCameraCentered extends Camera2D {
     

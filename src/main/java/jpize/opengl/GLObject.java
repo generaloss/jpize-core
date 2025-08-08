@@ -1,6 +1,6 @@
 package jpize.opengl;
 
-import jpize.util.Disposable;
+import resourceflow.Disposable;
 
 public abstract class GLObject implements Disposable {
     

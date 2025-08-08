@@ -1,6 +1,6 @@
 package jpize.util;
 
-import jpize.util.math.Maths;
+import spatialmath.Maths;
 
 public class Animation<T> {
 

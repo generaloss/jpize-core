@@ -4,7 +4,7 @@ import jpize.lwjgl.glfw.context.GlfwContextBuilder;
 import jpize.opengl.gl.GL;
 import jpize.util.atlas.TextureAtlas;
 import jpize.util.RenderQuad;
-import jpize.util.res.Resource;
+import resourceflow.resource.Resource;
 
 public class AtlasTest extends JpizeApplication {
 

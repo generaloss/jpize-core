@@ -1,7 +1,7 @@
 package jpize.util.pixmap;
 
 import generaloss.stb.image.StbImage;
-import jpize.util.res.Resource;
+import resourceflow.resource.Resource;
 import java.nio.ByteBuffer;
 
 public class PixmapIO {

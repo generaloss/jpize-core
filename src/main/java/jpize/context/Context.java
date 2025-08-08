@@ -6,8 +6,8 @@ import jpize.opengl.gl.GL;
 import jpize.opengl.glenum.GLCompareFunc;
 import jpize.opengl.glenum.GLTarget;
 import jpize.opengl.texture.GLBlendFactor;
-import jpize.util.time.DeltaTimeCounter;
-import jpize.util.time.PerSecondCounter;
+import chronokit.DeltaTimeCounter;
+import chronokit.PerSecondCounter;
 
 public abstract class Context {
 

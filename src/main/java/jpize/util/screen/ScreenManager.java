@@ -1,7 +1,7 @@
 package jpize.util.screen;
 
 import jpize.context.Jpize;
-import jpize.util.Disposable;
+import resourceflow.Disposable;
 
 import java.util.Collection;
 import java.util.Map;

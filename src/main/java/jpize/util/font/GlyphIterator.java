@@ -1,9 +1,9 @@
 package jpize.util.font;
 
 import generaloss.freetype.UnicodeVariationSelector;
-import jpize.util.array.IntList;
-import jpize.util.array.LongList;
-import jpize.util.math.vector.Vec2f;
+import rawlist.IntList;
+import rawlist.LongList;
+import spatialmath.vector.Vec2f;
 
 import java.util.*;
 

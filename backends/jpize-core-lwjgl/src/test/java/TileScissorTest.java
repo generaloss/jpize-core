@@ -9,9 +9,9 @@ import jpize.opengl.texture.Texture2D;
 import jpize.util.font.Font;
 import jpize.util.mesh.TextureBatch;
 import jpize.util.camera.OrthographicCameraCentered;
-import jpize.util.math.Mathc;
-import jpize.util.math.Maths;
-import jpize.util.math.vector.Vec2f;
+import spatialmath.Mathc;
+import spatialmath.Maths;
+import spatialmath.vector.Vec2f;
 import jpize.util.pixmap.PixmapRGBA;
 
 public class TileScissorTest extends JpizeApplication {

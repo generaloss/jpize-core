@@ -6,9 +6,9 @@ import jpize.context.Jpize;
 import jpize.context.input.Key;
 import jpize.context.input.MouseBtn;
 import jpize.util.color.Color;
-import jpize.util.math.Maths;
-import jpize.util.math.geometry.Intersector;
-import jpize.util.math.vector.Vec4f;
+import spatialmath.Maths;
+import spatialmath.geometry.Intersector;
+import spatialmath.vector.Vec4f;
 import jpize.util.mesh.TextureBatch;
 
 public class Grimoire {

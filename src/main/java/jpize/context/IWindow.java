@@ -1,11 +1,11 @@
 package jpize.context;
 
-import jpize.util.Disposable;
+import resourceflow.Disposable;
 import jpize.util.Insetsi;
-import jpize.util.math.vector.Vec2f;
-import jpize.util.math.vector.Vec2i;
+import spatialmath.vector.Vec2f;
+import spatialmath.vector.Vec2i;
 import jpize.util.pixmap.PixmapRGBA;
-import jpize.util.res.Resource;
+import resourceflow.resource.Resource;
 
 public interface IWindow extends Disposable {
 

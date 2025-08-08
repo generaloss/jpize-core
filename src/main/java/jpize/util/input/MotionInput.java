@@ -1,8 +1,8 @@
 package jpize.util.input;
 
 import jpize.context.input.Key;
-import jpize.util.math.vector.Vec3f;
-import jpize.util.math.vector.Vec3i;
+import spatialmath.vector.Vec3f;
+import spatialmath.vector.Vec3i;
 public class MotionInput {
 
     private static final Vec3i FORWARD = new Vec3i(1, 0, 0);

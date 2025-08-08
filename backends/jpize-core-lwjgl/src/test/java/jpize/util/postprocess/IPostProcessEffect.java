@@ -1,6 +1,6 @@
 package jpize.util.postprocess;
 
-import jpize.util.Disposable;
+import resourceflow.Disposable;
 
 public interface IPostProcessEffect extends Disposable {
 

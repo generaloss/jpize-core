@@ -1,11 +1,11 @@
 package jpize.util.font;
 
-import jpize.util.Utils;
-import jpize.util.res.*;
+import resourceflow.ResUtils;
+import resourceflow.resource.*;
 import jpize.opengl.texture.GLFilter;
 import jpize.util.region.Region;
 import jpize.opengl.texture.Texture2D;
-import jpize.util.io.FastReader;
+import resourceflow.stream.FastReader;
 
 import java.nio.file.Path;
 import java.util.zip.ZipFile;
@@ -51,7 +51,7 @@ class FNTFontLoader {
                         final Path pagePath = Path.of(path.getParent() + "/" + pageRelativePath);
                         pageRelativePath = pagePath.normalize().toString();
                     }
-                    pageRelativePath = Utils.osGeneralizePath(pageRelativePath);
+                    pageRelativePath = ResUtils.osGeneralizePath(pageRelativePath);
 
                     // page resource
                     final Resource pageResource;

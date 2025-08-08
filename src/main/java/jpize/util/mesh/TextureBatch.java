@@ -3,20 +3,20 @@ package jpize.util.mesh;
 import jpize.context.Jpize;
 import jpize.opengl.texture.Texture2D;
 import jpize.opengl.texture.TextureUtils;
-import jpize.util.Disposable;
-import jpize.util.array.FloatList;
+import resourceflow.Disposable;
+import rawlist.FloatList;
 import jpize.util.color.Color;
 import jpize.util.color.AbstractColor;
-import jpize.util.math.geometry.Rectf;
+import spatialmath.geometry.Rectf;
 import jpize.util.region.Region;
 import jpize.util.region.TextureRegion;
-import jpize.util.res.Resource;
+import resourceflow.resource.Resource;
 import jpize.opengl.type.GLType;
 import jpize.opengl.vertex.GLVertAttr;
 import jpize.util.camera.Camera;
-import jpize.util.math.matrix.Matrix3f;
-import jpize.util.math.matrix.Matrix4f;
-import jpize.util.math.vector.Vec2f;
+import spatialmath.matrix.Matrix3f;
+import spatialmath.matrix.Matrix4f;
+import spatialmath.vector.Vec2f;
 import jpize.opengl.shader.Shader;
 
 public class TextureBatch implements Disposable {

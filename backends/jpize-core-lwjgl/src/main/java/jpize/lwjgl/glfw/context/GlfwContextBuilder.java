@@ -8,7 +8,7 @@ import jpize.lwjgl.glfw.monitor.GlfwMonitor;
 import jpize.lwjgl.glfw.window.GlfwWindow;
 import jpize.lwjgl.glfw.window.GlfwWindowHint;
 import jpize.util.pixmap.PixmapRGBA;
-import jpize.util.res.Resource;
+import resourceflow.resource.Resource;
 import org.lwjgl.glfw.GLFW;
 
 public class GlfwContextBuilder {

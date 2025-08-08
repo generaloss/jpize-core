@@ -4,7 +4,7 @@ import jpize.context.Jpize;
 import jpize.opengl.GLObject;
 import jpize.opengl.gl.GL15I;
 import jpize.opengl.type.GLBool;
-import jpize.util.time.TimeUtils;
+import chronokit.TimeUtils;
 
 public class GLQuery extends GLObject {
     

@@ -4,8 +4,8 @@ import jpize.opengl.gl.GL13I;
 import jpize.opengl.glenum.GLCompareFunc;
 import jpize.opengl.type.GLType;
 import jpize.util.pixmap.PixmapIO;
-import jpize.util.math.vector.Vec2i;
-import jpize.util.res.Resource;
+import spatialmath.vector.Vec2i;
+import resourceflow.resource.Resource;
 import jpize.util.pixmap.Pixmap;
 
 import java.nio.ByteBuffer;

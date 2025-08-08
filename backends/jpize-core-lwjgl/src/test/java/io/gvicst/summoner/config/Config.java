@@ -1,8 +1,7 @@
 package io.gvicst.summoner.config;
 
-import jpize.util.array.StringList;
-import jpize.util.res.FileResource;
-import jpize.util.res.Resource;
+import resourceflow.resource.FileResource;
+import resourceflow.resource.Resource;
 
 import java.io.PrintWriter;
 import java.util.Map;
@@ -24,7 +23,7 @@ public class Config {
     public Config load(Resource res) {
         table.clear();
         try {
-            final StringList lines = res.readLines();
+            final String[] lines = res.readLines();
 
             for (String line : lines) {
                 final String[] parts = line.split(":");
@@ -42,7 +41,7 @@ public class Config {
                 table.put(key, value);
             }
         }catch(Exception e){
-            System.out.println("Err: "+e);
+            System.out.println("Err: " + e);
         }
 
         return this;

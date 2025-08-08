@@ -1,9 +1,9 @@
 package jpize.util.region;
 
 import jpize.opengl.texture.Texture2D;
-import jpize.util.math.vector.Vec2d;
-import jpize.util.math.vector.Vec2f;
-import jpize.util.math.vector.Vec2i;
+import spatialmath.vector.Vec2d;
+import spatialmath.vector.Vec2f;
+import spatialmath.vector.Vec2i;
 
 public class Region {
 

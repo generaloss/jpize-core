@@ -1,7 +1,7 @@
 package jpize.util.font;
 
 import generaloss.freetype.UnicodeVariationSelector;
-import jpize.util.array.CharList;
+import rawlist.CharList;
 
 import java.util.function.BiConsumer;
 
@@ -11,8 +11,8 @@ public class Charset extends CharList {
     public static final Charset NUMBERS = new Charset("0123456789");
     public static final Charset ENG = new Charset("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz");
     public static final Charset RUS = new Charset("АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯабвгдеёжзийклмнопрстуфхцчшщъыьэюя");
-    public static final Charset DEFAULT = new Charset(SPECIAL_SYMBOLS.charsString() + NUMBERS.charsString() + ENG.charsString());
-    public static final Charset DEFAULT_ENG_RUS = new Charset(SPECIAL_SYMBOLS.charsString() + NUMBERS.charsString() + ENG.charsString() + RUS.charsString());
+    public static final Charset DEFAULT = new Charset(SPECIAL_SYMBOLS.getStringOf() + NUMBERS.getStringOf() + ENG.getStringOf());
+    public static final Charset DEFAULT_ENG_RUS = new Charset(SPECIAL_SYMBOLS.getStringOf() + NUMBERS.getStringOf() + ENG.getStringOf() + RUS.getStringOf());
 
     private int min, max;
 
