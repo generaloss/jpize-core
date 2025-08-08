@@ -1,6 +1,6 @@
 package jpize.util.font;
 
-import spatialmath.vector.Vec2f;
+import generaloss.spatialmath.vector.Vec2f;
 import jpize.util.region.Region;
 import jpize.opengl.texture.Texture2D;
 

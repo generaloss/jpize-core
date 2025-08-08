@@ -1,10 +1,10 @@
 package jpize.util.pixmap;
 
-import resourceflow.Disposable;
+import generaloss.resourceflow.Disposable;
 import jpize.opengl.texture.GLInternalFormat;
 import jpize.util.MemoryUtils;
-import spatialmath.Maths;
-import spatialmath.vector.Vec2i;
+import generaloss.spatialmath.Maths;
+import generaloss.spatialmath.vector.Vec2i;
 
 import java.nio.ByteBuffer;
 

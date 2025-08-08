@@ -4,8 +4,8 @@ import jpize.opengl.texture.GLInternalFormat;
 import jpize.opengl.texture.Texture2D;
 import jpize.util.color.Color;
 import jpize.util.color.AbstractColor;
-import spatialmath.Maths;
-import spatialmath.vector.Vec2f;
+import generaloss.spatialmath.Maths;
+import generaloss.spatialmath.vector.Vec2f;
 
 import java.nio.ByteBuffer;
 import java.util.function.BiConsumer;

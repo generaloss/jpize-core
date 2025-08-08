@@ -6,7 +6,7 @@ import jpize.lwjgl.glfw.init.GlfwInitHint;
 import jpize.lwjgl.glfw.init.GlfwPlatform;
 import jpize.lwjgl.glfw.init.GlfwWaylandLibdecor;
 import jpize.lwjgl.glfw.window.*;
-import spatialmath.vector.Vec3i;
+import generaloss.spatialmath.vector.Vec3i;
 import org.lwjgl.PointerBuffer;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWAllocator;

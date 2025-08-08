@@ -5,7 +5,7 @@ import io.gvicst.summoner.screen.GameScreen;
 import io.gvicst.summoner.utils.Texter;
 import jpize.context.Jpize;
 import jpize.util.color.Color;
-import spatialmath.vector.Vec2f;
+import generaloss.spatialmath.vector.Vec2f;
 import jpize.util.mesh.TextureBatch;
 
 public class SpellHolder {

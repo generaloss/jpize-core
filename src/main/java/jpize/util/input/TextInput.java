@@ -7,10 +7,10 @@ import jpize.context.input.Action;
 import jpize.context.input.Key;
 import jpize.context.input.Mods;
 import jpize.util.StringUtils;
-import rawlist.StringList;
+import generaloss.rawlist.StringList;
 import jpize.util.font.Charset;
-import spatialmath.Maths;
-import spatialmath.vector.Vec2i;
+import generaloss.spatialmath.Maths;
+import generaloss.spatialmath.vector.Vec2i;
 
 import java.util.*;
 

@@ -6,7 +6,7 @@ import jpize.util.font.Font;
 import jpize.util.font.FontRenderOptions;
 import jpize.util.font.GlyphIterator;
 import jpize.util.mesh.TextureBatch;
-import resourceflow.resource.Resource;
+import generaloss.resourceflow.resource.Resource;
 
 import java.io.IOException;
 import java.util.zip.ZipFile;

@@ -1,5 +1,5 @@
-import resourceflow.resource.FileResource;
-import resourceflow.resource.Resource;
+import generaloss.resourceflow.resource.FileResource;
+import generaloss.resourceflow.resource.Resource;
 
 import java.util.HashMap;
 import java.util.Map;

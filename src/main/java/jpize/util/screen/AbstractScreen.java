@@ -1,6 +1,6 @@
 package jpize.util.screen;
 
-import resourceflow.Disposable;
+import generaloss.resourceflow.Disposable;
 
 public class AbstractScreen<T> implements Disposable {
 

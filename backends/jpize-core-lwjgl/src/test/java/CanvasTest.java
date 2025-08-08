@@ -4,7 +4,7 @@ import jpize.lwjgl.glfw.context.GlfwContextManager;
 import jpize.lwjgl.glfw.context.GlfwContextBuilder;
 import jpize.opengl.gl.GL;
 import jpize.util.color.Color;
-import spatialmath.vector.Vec2i;
+import generaloss.spatialmath.vector.Vec2i;
 import jpize.util.pixmap.Canvas;
 import jpize.util.pixmap.PixmapIO;
 import jpize.util.pixmap.PixmapRGBA;

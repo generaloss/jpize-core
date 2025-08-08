@@ -1,6 +1,6 @@
 package jpize.util.font;
 
-import resourceflow.resource.Resource;
+import generaloss.resourceflow.resource.Resource;
 
 public class FontLoadOptions {
 

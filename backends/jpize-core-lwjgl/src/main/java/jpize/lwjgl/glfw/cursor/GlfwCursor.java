@@ -2,7 +2,7 @@ package jpize.lwjgl.glfw.cursor;
 
 import jpize.lwjgl.glfw.GlfwImage;
 import jpize.lwjgl.glfw.GlfwObject;
-import resourceflow.Disposable;
+import generaloss.resourceflow.Disposable;
 
 import static org.lwjgl.glfw.GLFW.*;
 

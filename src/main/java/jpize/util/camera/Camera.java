@@ -1,6 +1,6 @@
 package jpize.util.camera;
 
-import spatialmath.matrix.Matrix4f;
+import generaloss.spatialmath.matrix.Matrix4f;
 
 public abstract class Camera {
 

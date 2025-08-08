@@ -5,7 +5,7 @@ import io.gvicst.summoner.screen.GameScreen;
 import jpize.context.Jpize;
 import jpize.opengl.texture.Texture2D;
 import jpize.util.font.Font;
-import spatialmath.Mathc;
+import generaloss.spatialmath.Mathc;
 import jpize.util.mesh.TextureBatch;
 
 import java.util.ArrayList;

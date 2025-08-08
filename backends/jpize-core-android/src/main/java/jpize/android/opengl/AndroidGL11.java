@@ -5,7 +5,7 @@ import jpize.opengl.framebuffer.GLFramebufferStatus;
 import jpize.opengl.gl.GL11I;
 import jpize.opengl.type.GLType;
 import jpize.util.BufferUtils;
-import spatialmath.geometry.Recti;
+import generaloss.spatialmath.geometry.Recti;
 
 import java.nio.*;
 import java.nio.charset.Charset;

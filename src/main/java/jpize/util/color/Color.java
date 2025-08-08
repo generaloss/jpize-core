@@ -1,6 +1,6 @@
 package jpize.util.color;
 
-import spatialmath.Maths;
+import generaloss.spatialmath.Maths;
 
 public class Color extends AbstractColor {
 

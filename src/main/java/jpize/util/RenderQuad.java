@@ -6,8 +6,8 @@ import jpize.opengl.texture.Texture2D;
 import jpize.opengl.type.GLType;
 import jpize.opengl.vertex.GLVertAttr;
 import jpize.util.mesh.IndexedMesh;
-import resourceflow.Disposable;
-import resourceflow.resource.Resource;
+import generaloss.resourceflow.Disposable;
+import generaloss.resourceflow.resource.Resource;
 
 import java.util.HashMap;
 import java.util.Map;

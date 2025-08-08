@@ -1,6 +1,6 @@
 package jpize.context;
 
-import resourceflow.Disposable;
+import generaloss.resourceflow.Disposable;
 
 public abstract class JpizeApplication implements Disposable {
 

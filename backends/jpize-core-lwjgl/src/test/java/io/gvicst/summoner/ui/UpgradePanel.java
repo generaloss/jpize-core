@@ -7,7 +7,7 @@ import jpize.context.Jpize;
 import jpize.context.input.Key;
 import jpize.context.input.MouseBtn;
 import jpize.util.color.Color;
-import spatialmath.geometry.Intersector;
+import generaloss.spatialmath.geometry.Intersector;
 import jpize.util.mesh.TextureBatch;
 
 public class UpgradePanel {

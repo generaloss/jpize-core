@@ -1,7 +1,7 @@
 package jpize.util.font;
 
 import generaloss.freetype.UnicodeVariationSelector;
-import rawlist.CharList;
+import generaloss.rawlist.CharList;
 
 import java.util.function.BiConsumer;
 

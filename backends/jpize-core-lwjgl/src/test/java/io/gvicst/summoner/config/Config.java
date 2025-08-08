@@ -1,7 +1,7 @@
 package io.gvicst.summoner.config;
 
-import resourceflow.resource.FileResource;
-import resourceflow.resource.Resource;
+import generaloss.resourceflow.resource.FileResource;
+import generaloss.resourceflow.resource.Resource;
 
 import java.io.PrintWriter;
 import java.util.Map;

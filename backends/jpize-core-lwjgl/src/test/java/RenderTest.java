@@ -9,8 +9,8 @@ import jpize.opengl.type.GLType;
 import jpize.opengl.vertex.GLVertAttr;
 import jpize.util.mesh.Mesh;
 import jpize.opengl.shader.Shader;
-import spatialmath.axisaligned.AABox;
-import spatialmath.axisaligned.AABoxBody;
+import generaloss.spatialmath.axisaligned.AABox;
+import generaloss.spatialmath.axisaligned.AABoxBody;
 
 public class RenderTest extends JpizeApplication {
 

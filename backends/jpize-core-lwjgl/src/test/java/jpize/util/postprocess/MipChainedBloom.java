@@ -6,8 +6,8 @@ import jpize.opengl.gl.GL;
 import jpize.opengl.shader.Shader;
 import jpize.opengl.texture.Texture2D;
 import jpize.util.RenderQuad;
-import spatialmath.vector.Vec2f;
-import resourceflow.resource.Resource;
+import generaloss.spatialmath.vector.Vec2f;
+import generaloss.resourceflow.resource.Resource;
 
 public class MipChainedBloom implements IPostProcessEffect {
 

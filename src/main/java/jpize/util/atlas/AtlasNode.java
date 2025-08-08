@@ -1,6 +1,6 @@
 package jpize.util.atlas;
 
-import spatialmath.geometry.Recti;
+import generaloss.spatialmath.geometry.Recti;
 import jpize.util.pixmap.PixmapRGBA;
 
 class AtlasNode {

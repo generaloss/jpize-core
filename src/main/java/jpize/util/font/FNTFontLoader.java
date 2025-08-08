@@ -1,11 +1,11 @@
 package jpize.util.font;
 
-import resourceflow.ResUtils;
-import resourceflow.resource.*;
+import generaloss.resourceflow.ResUtils;
+import generaloss.resourceflow.resource.*;
 import jpize.opengl.texture.GLFilter;
 import jpize.util.region.Region;
 import jpize.opengl.texture.Texture2D;
-import resourceflow.stream.FastReader;
+import generaloss.resourceflow.stream.FastReader;
 
 import java.nio.file.Path;
 import java.util.zip.ZipFile;

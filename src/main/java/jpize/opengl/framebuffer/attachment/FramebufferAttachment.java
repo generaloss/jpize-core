@@ -3,7 +3,7 @@ package jpize.opengl.framebuffer.attachment;
 import jpize.opengl.framebuffer.GLFramebuffer;
 import jpize.opengl.texture.GLInternalFormat;
 import jpize.opengl.type.GLType;
-import resourceflow.Disposable;
+import generaloss.resourceflow.Disposable;
 
 public abstract class FramebufferAttachment implements Disposable {
 

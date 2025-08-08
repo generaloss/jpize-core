@@ -1,8 +1,8 @@
 package jpize.util;
 
-import resourceflow.resource.FileResource;
+import generaloss.resourceflow.resource.FileResource;
 import jpize.context.Jpize;
-import resourceflow.resource.Resource;
+import generaloss.resourceflow.resource.Resource;
 import jpize.opengl.texture.GLBaseFormat;
 import jpize.opengl.type.GLType;
 

@@ -5,7 +5,7 @@ import jpize.opengl.framebuffer.Framebuffer3D;
 import jpize.opengl.gl.GL;
 import jpize.opengl.shader.Shader;
 import jpize.util.RenderQuad;
-import resourceflow.resource.Resource;
+import generaloss.resourceflow.resource.Resource;
 
 public class GaussianBlur implements IPostProcessEffect {
 

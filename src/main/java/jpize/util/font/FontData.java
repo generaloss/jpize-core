@@ -1,7 +1,7 @@
 package jpize.util.font;
 
 import jpize.opengl.texture.Texture2D;
-import resourceflow.Disposable;
+import generaloss.resourceflow.Disposable;
 
 import java.util.HashMap;
 import java.util.Map;

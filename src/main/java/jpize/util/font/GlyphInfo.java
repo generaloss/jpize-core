@@ -1,7 +1,7 @@
 package jpize.util.font;
 
 import jpize.util.region.Region;
-import spatialmath.vector.Vec2f;
+import generaloss.spatialmath.vector.Vec2f;
 
 import java.util.HashMap;
 import java.util.Map;

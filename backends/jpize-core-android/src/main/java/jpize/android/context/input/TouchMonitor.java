@@ -1,7 +1,7 @@
 package jpize.android.context.input;
 
 import jpize.android.context.JpizeAndroidContext;
-import spatialmath.vector.Vec2f;
+import generaloss.spatialmath.vector.Vec2f;
 
 public class TouchMonitor {
 

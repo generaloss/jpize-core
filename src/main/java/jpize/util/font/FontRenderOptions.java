@@ -1,8 +1,8 @@
 package jpize.util.font;
 
 import jpize.util.color.Color;
-import spatialmath.matrix.Matrix4f;
-import spatialmath.vector.Vec2f;
+import generaloss.spatialmath.matrix.Matrix4f;
+import generaloss.spatialmath.vector.Vec2f;
 
 public class FontRenderOptions {
     

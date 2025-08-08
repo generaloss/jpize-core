@@ -8,9 +8,9 @@ import jpize.opengl.glenum.GLTarget;
 import jpize.opengl.tesselation.GLPrimitive;
 import jpize.util.camera.OrthographicCameraCentered;
 import jpize.util.color.Color;
-import spatialmath.geometry.Intersector;
-import spatialmath.Mathc;
-import spatialmath.vector.Vec2f;
+import generaloss.spatialmath.geometry.Intersector;
+import generaloss.spatialmath.Mathc;
+import generaloss.spatialmath.vector.Vec2f;
 import jpize.util.mesh.VertexBatch;
 
 import java.util.*;

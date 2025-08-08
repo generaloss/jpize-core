@@ -9,12 +9,12 @@ import jpize.lwjgl.glfw.cursor.GlfwCursorShape;
 import jpize.lwjgl.glfw.input.GlfwInput;
 import jpize.opengl.gl.GL;
 import jpize.util.font.*;
-import spatialmath.vector.Vec2f;
+import generaloss.spatialmath.vector.Vec2f;
 import jpize.util.mesh.TextureBatch;
 import jpize.util.input.TextInput;
-import spatialmath.Mathc;
-import spatialmath.Maths;
-import spatialmath.vector.Vec2i;
+import generaloss.spatialmath.Mathc;
+import generaloss.spatialmath.Maths;
+import generaloss.spatialmath.vector.Vec2i;
 
 import java.util.List;
 import java.util.StringJoiner;

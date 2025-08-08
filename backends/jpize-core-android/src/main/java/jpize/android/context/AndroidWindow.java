@@ -4,10 +4,10 @@ import android.app.Activity;
 import android.view.Window;
 import jpize.context.IWindow;
 import jpize.util.Insetsi;
-import spatialmath.vector.Vec2f;
-import spatialmath.vector.Vec2i;
+import generaloss.spatialmath.vector.Vec2f;
+import generaloss.spatialmath.vector.Vec2i;
 import jpize.util.pixmap.PixmapRGBA;
-import resourceflow.resource.Resource;
+import generaloss.resourceflow.resource.Resource;
 
 public class AndroidWindow implements IWindow {
 

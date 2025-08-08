@@ -6,8 +6,8 @@ import jpize.lwjgl.glfw.GlfwObject;
 import jpize.lwjgl.glfw.context.GlfwContext;
 import jpize.lwjgl.glfw.Glfw;
 import jpize.lwjgl.glfw.cursor.GlfwCursor;
-import spatialmath.geometry.Recti;
-import spatialmath.vector.Vec2f;
+import generaloss.spatialmath.geometry.Recti;
+import generaloss.spatialmath.vector.Vec2f;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.system.MemoryUtil;
 

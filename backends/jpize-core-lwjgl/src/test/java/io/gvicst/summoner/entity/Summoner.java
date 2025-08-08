@@ -6,8 +6,8 @@ import io.gvicst.summoner.ui.Grimoire;
 import io.gvicst.summoner.utils.Spell;
 import jpize.context.Jpize;
 import jpize.context.input.MouseBtn;
-import spatialmath.geometry.Intersector;
-import spatialmath.vector.Vec2f;
+import generaloss.spatialmath.geometry.Intersector;
+import generaloss.spatialmath.vector.Vec2f;
 import jpize.util.mesh.TextureBatch;
 
 public class Summoner {

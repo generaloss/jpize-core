@@ -19,7 +19,7 @@ import jpize.util.pixmap.PixmapRGBA;
 import jpize.util.screen.ScreenManager;
 import io.gvicst.summoner.screen.GameScreen;
 import io.gvicst.summoner.screen.MainMenuScreen;
-import chronokit.Sync;
+import generaloss.chronokit.Sync;
 
 public class Main extends JpizeApplication {
 

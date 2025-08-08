@@ -6,10 +6,10 @@ import jpize.opengl.gl.GL;
 import jpize.opengl.buffer.UniformBufferStd140;
 import jpize.opengl.shader.Shader;
 import jpize.opengl.texture.Texture2D;
-import spatialmath.matrix.Matrix4f;
-import spatialmath.vector.Vec2f;
+import generaloss.spatialmath.matrix.Matrix4f;
+import generaloss.spatialmath.vector.Vec2f;
 import jpize.util.RenderQuad;
-import resourceflow.resource.Resource;
+import generaloss.resourceflow.resource.Resource;
 
 import java.io.IOException;
 

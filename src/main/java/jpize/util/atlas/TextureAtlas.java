@@ -2,11 +2,11 @@ package jpize.util.atlas;
 
 import jpize.opengl.texture.GLWrap;
 import jpize.opengl.texture.Texture2D;
-import resourceflow.Disposable;
-import spatialmath.Maths;
-import spatialmath.vector.Vec2i;
+import generaloss.resourceflow.Disposable;
+import generaloss.spatialmath.Maths;
+import generaloss.spatialmath.vector.Vec2i;
 import jpize.util.region.TextureRegion;
-import resourceflow.resource.Resource;
+import generaloss.resourceflow.resource.Resource;
 import jpize.util.pixmap.PixmapRGBA;
 import jpize.util.pixmap.PixmapIO;
 

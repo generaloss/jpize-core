@@ -2,10 +2,10 @@ package jpize.util.ninepatch;
 
 import jpize.opengl.texture.GLWrap;
 import jpize.opengl.texture.Texture2D;
-import resourceflow.Disposable;
-import rawlist.IntList;
-import spatialmath.Maths;
-import spatialmath.vector.Vec2f;
+import generaloss.resourceflow.Disposable;
+import generaloss.rawlist.IntList;
+import generaloss.spatialmath.Maths;
+import generaloss.spatialmath.vector.Vec2f;
 import jpize.util.mesh.TextureBatch;
 import jpize.util.pixmap.Pixmap;
 import jpize.util.pixmap.PixmapRGBA;

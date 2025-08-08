@@ -1,7 +1,7 @@
 package jpize.util.color;
 
 import jpize.util.ByteUtils;
-import spatialmath.Maths;
+import generaloss.spatialmath.Maths;
 
 public abstract class AbstractColor {
 

@@ -2,8 +2,8 @@ package jpize.util.font;
 
 import jpize.util.camera.Camera3D;
 import jpize.util.mesh.TextureBatch;
-import spatialmath.vector.Vec2f;
-import resourceflow.resource.Resource;
+import generaloss.spatialmath.vector.Vec2f;
+import generaloss.resourceflow.resource.Resource;
 
 public class Font extends FontData {
 
