@@ -1,0 +1,40 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="jpize-lwjgl-test-texteditor">
+    <output-path>$PROJECT_DIR$/backends/jpize-core-lwjgl/src/test</output-path>
+    <root id="archive" name="jpize-core-lwjgl.jar">
+      <element id="directory" name="META-INF">
+        <element id="file-copy" path="$PROJECT_DIR$/backends/jpize-core-lwjgl/src/test/META-INF/MANIFEST.MF" />
+      </element>
+      <element id="module-output" name="jpize-core-lwjgl" />
+      <element id="module-test-output" name="jpize-core-lwjgl" />
+      <element id="module-output" name="jpize-core" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/lwjgl/lwjgl-stb/3.4.0-SNAPSHOT/lwjgl-stb-3.4.0-20250609.132446-8-natives-macos.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/lwjgl/lwjgl/3.4.0-SNAPSHOT/lwjgl-3.4.0-20250609.132446-8-natives-linux.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/io/github/generaloss/stb-image-jni-natives-windows/25.4.2/stb-image-jni-natives-windows-25.4.2.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/io/github/generaloss/raw-list/25.8.1-SNAPSHOT-1/raw-list-25.8.1-SNAPSHOT-1.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/lwjgl/lwjgl-stb/3.4.0-SNAPSHOT/lwjgl-stb-3.4.0-20250609.132446-8-natives-linux.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/io/github/generaloss/spatial-math/25.8.1-SNAPSHOT-1/spatial-math-25.8.1-SNAPSHOT-1.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/io/github/generaloss/freetype-jni-natives-linux/25.7.1-2.13.3-SNAPSHOT-3/freetype-jni-natives-linux-25.7.1-2.13.3-SNAPSHOT-3.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/lwjgl/lwjgl-glfw/3.4.0-SNAPSHOT/lwjgl-glfw-3.4.0-20250609.132446-8-natives-windows.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/lwjgl/lwjgl-opengl/3.4.0-SNAPSHOT/lwjgl-opengl-3.4.0-20250609.132446-8.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/lwjgl/lwjgl-stb/3.4.0-SNAPSHOT/lwjgl-stb-3.4.0-20250609.132446-8-natives-windows.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/lwjgl/lwjgl-glfw/3.4.0-SNAPSHOT/lwjgl-glfw-3.4.0-20250609.132446-8-natives-macos.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/io/github/generaloss/chrono-kit/25.8.1-SNAPSHOT-1/chrono-kit-25.8.1-SNAPSHOT-1.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/lwjgl/lwjgl-opengl/3.4.0-SNAPSHOT/lwjgl-opengl-3.4.0-20250609.132446-8-natives-windows.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/io/github/generaloss/freetype-jni/25.7.1-2.13.3-SNAPSHOT-3/freetype-jni-25.7.1-2.13.3-SNAPSHOT-3.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/io/github/generaloss/jpize-utils/25.5.1/jpize-utils-25.5.1.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/lwjgl/lwjgl-opengl/3.4.0-SNAPSHOT/lwjgl-opengl-3.4.0-20250609.132446-8-natives-macos.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/io/github/generaloss/stb-image-jni-natives-linux/25.4.2/stb-image-jni-natives-linux-25.4.2.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/lwjgl/lwjgl-opengl/3.4.0-SNAPSHOT/lwjgl-opengl-3.4.0-20250609.132446-8-natives-linux.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/io/github/generaloss/freetype-jni-natives-windows/25.7.1-2.13.3-SNAPSHOT-3/freetype-jni-natives-windows-25.7.1-2.13.3-SNAPSHOT-3.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/lwjgl/lwjgl/3.4.0-SNAPSHOT/lwjgl-3.4.0-20250609.132446-8-natives-macos.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/lwjgl/lwjgl-stb/3.4.0-SNAPSHOT/lwjgl-stb-3.4.0-20250609.132446-8.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/lwjgl/lwjgl-glfw/3.4.0-SNAPSHOT/lwjgl-glfw-3.4.0-20250609.132446-8.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/lwjgl/lwjgl-glfw/3.4.0-SNAPSHOT/lwjgl-glfw-3.4.0-20250609.132446-8-natives-linux.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/lwjgl/lwjgl/3.4.0-SNAPSHOT/lwjgl-3.4.0-20250609.132446-8.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/io/github/generaloss/resource-flow/25.8.1-SNAPSHOT-1/resource-flow-25.8.1-SNAPSHOT-1.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/io/github/generaloss/stb-image-jni/25.4.2/stb-image-jni-25.4.2.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/lwjgl/lwjgl/3.4.0-SNAPSHOT/lwjgl-3.4.0-20250609.132446-8-natives-windows.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>
