@@ -1,6 +1,7 @@
 package jpize.util;
 
 import jpize.context.Jpize;
+import jpize.opengl.gl.GL;
 import jpize.opengl.shader.Shader;
 import jpize.opengl.texture.Texture2D;
 import jpize.opengl.type.GLType;

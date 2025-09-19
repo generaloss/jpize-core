@@ -52,7 +52,7 @@ public abstract class Context {
     }
 
     protected float getDeltaTime() {
-        return deltaTimeCounter.get();
+        return deltaTimeCounter.getTime();
     }
 
 

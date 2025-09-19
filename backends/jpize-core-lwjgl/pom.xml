@@ -24,8 +24,8 @@
         <repository>
             <id>sonatype-snapshots</id>
             <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-            <releases><enabled>false</enabled></releases>
-            <snapshots><enabled>true</enabled></snapshots>
+            <releases><enabled>true</enabled></releases>
+            <snapshots><enabled>false</enabled></snapshots>
         </repository>
     </repositories>
 
@@ -43,12 +43,6 @@
 
     <dependencies>
         <!-- jpize -->
-        <dependency>
-            <groupId>io.github.generaloss</groupId>
-            <artifactId>jpize-utils</artifactId>
-            <version>25.5.1</version>
-            <scope>provided</scope>
-        </dependency>
         <dependency>
             <groupId>io.github.generaloss</groupId>
             <artifactId>jpize-core</artifactId>

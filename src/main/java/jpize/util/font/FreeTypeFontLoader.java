@@ -106,7 +106,7 @@ class FreeTypeFontLoader {
                 loadFlags |= FTLoad.COLOR.getBit();
 
             // load glyph
-            face.loadChar(charcode, loadFlags);
+            face.loadChar(charcode, loadFlags); // TODO: sometimes occures 'FTError: invalid outline (code: 20)'
             face.loadGlyph(glyphIndex, loadFlags);
             FTGlyph glyph = slot.getGlyph();
 
@@ -210,7 +210,6 @@ class FreeTypeFontLoader {
 
         final int rowBytes = Math.abs(bitmap.getPitch());
         final ByteBuffer sourceBuffer = bitmap.getBuffer();
-
 
         switch(pixelMode) {
             case MONO -> fillPixmapMono(pixmap, sourceBuffer, width, height, rowBytes);

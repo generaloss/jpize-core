@@ -15,6 +15,7 @@ public class GLVertexArray extends GLObject {
     public void drawArrays(int verticesCount, GLPrimitive mode) {
         this.bind();
         Jpize.GL11.glDrawArrays(mode.value, 0, verticesCount);
+        unbind();
     }
 
     public void drawArrays(int verticesCount) {
@@ -25,6 +26,7 @@ public class GLVertexArray extends GLObject {
     public void drawElements(int indicesCount, GLPrimitive mode, GLIndexType indexType) {
         this.bind();
         Jpize.GL11.glDrawElements(mode.value, indicesCount, indexType.type.value, 0L);
+        unbind();
     }
 
     public void drawElements(int indicesCount, GLPrimitive mode) {

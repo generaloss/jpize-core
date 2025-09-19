@@ -154,6 +154,22 @@ public class TextRenderer {
             renderPos.y += font.getDescentScaled();
 
             final Texture2D page = sprite.getPage();
+            if(lastTexture == null)
+                lastTexture = page;
+
+            // render mesh
+            if(lastTexture != page){
+                renderer.mesh.vertices().setData(vertices.array());
+                vertices.clear();
+
+                renderer.shader.bind();
+                renderer.shader.uniform("u_combined", renderer.combinedMatrix);
+                renderer.shader.uniform("u_texture", lastTexture);
+                renderer.mesh.render();
+
+                lastTexture = page;
+            }
+
             final float width = sprite.getWidth();
             final float height = sprite.getHeight();
             final Region region = sprite.getRegion();
@@ -182,22 +198,6 @@ public class TextRenderer {
                 vertex4.x, vertex4.y, 0F,  u2, v1,  r, g, b, a,
                 vertex1.x, vertex1.y, 0F,  u1, v1,  r, g, b, a
             );
-
-            // render mesh
-            if(lastTexture == null)
-                lastTexture = page;
-
-            if(lastTexture != page){
-                lastTexture = page;
-
-                renderer.mesh.vertices().setData(vertices.array());
-                vertices.clear();
-
-                renderer.shader.bind();
-                renderer.shader.uniform("u_combined", renderer.combinedMatrix);
-                renderer.shader.uniform("u_texture", lastTexture);
-                renderer.mesh.render();
-            }
         }
 
         // render mesh

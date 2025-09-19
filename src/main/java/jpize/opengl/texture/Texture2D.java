@@ -64,7 +64,7 @@ public class Texture2D extends GLTexture {
 
     public Texture2D active(int active) {
         this.bind();
-        super.glActiveTexture(GL13I.GL_TEXTURE0 + active);
+        super.glActiveTexture(active);
         return this;
     }
 

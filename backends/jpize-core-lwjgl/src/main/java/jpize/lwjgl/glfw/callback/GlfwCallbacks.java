@@ -33,7 +33,8 @@ public class GlfwCallbacks extends AbstractCallbacks {
 
     private void makeContextCurrent() {
         final GlfwContext context = GlfwContextManager.instance().getContext(windowID);
-        context.makeCurrent();
+        if(context != null)
+            context.makeCurrent();
     }
 
 

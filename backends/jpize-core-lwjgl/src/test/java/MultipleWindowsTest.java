@@ -39,6 +39,7 @@ public class MultipleWindowsTest {
     public static class Window2 extends JpizeApplication {
         final Font font = new Font().loadFNT("/font.fnt", false);//.loadDefaultBold();
         final TextInput textProc = new TextInput().enable();
+        TextureBatch batch = new TextureBatch();
         public void init() {
             font.getOptions().scale().set(3F);
             textProc.insert("I want pizza");
