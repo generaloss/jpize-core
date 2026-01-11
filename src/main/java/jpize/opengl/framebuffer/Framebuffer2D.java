@@ -48,7 +48,7 @@ public class Framebuffer2D extends GLFramebuffer {
         this.begin();
         try {
             action.run();
-        }finally{
+        } finally {
             this.end();
         }
     }

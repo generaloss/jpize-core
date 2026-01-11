@@ -196,6 +196,7 @@ public class TextEditorTest extends JpizeApplication {
     public void render() {
         GL.clearColorBuffer();
         batch.setup();
+        batch.draw(font.pages().get(0), 0, 0, Jpize.getWidth(), Jpize.getHeight());
         {
             // external vars
             final String text = input.makeString();

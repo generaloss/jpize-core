@@ -1,6 +1,5 @@
 package jpize.util.font;
 
-import generaloss.freetype.FreeType;
 import generaloss.freetype.freetype.*;
 import generaloss.freetype.glyph.*;
 import generaloss.freetype.image.FTBitmap;
@@ -22,26 +21,32 @@ import java.nio.ByteBuffer;
 
 class FreeTypeFontLoader {
 
-    private static final char UNKNOWN_CHARACTER = '\0';
+    private static final char MISSING_SYMBOL = '\0';
 
     public static Font load(Font font, Resource resource, FontLoadOptions options) {
         // clear font
         font.dispose();
 
+        final ByteBuffer dataBuffer = resource.readByteBuffer();
+
         final FTLibrary library = new FTLibrary();
-        final FTFace face = library.newMemoryFace(resource.readByteBuffer(), 0);
+        final FTFace face = library.newMemoryFace(dataBuffer, 0);
         final FTGlyphSlot slot = face.getGlyph();
 
         // flags
-        final int glyphLoadFlags = options.getHinting().loadFlags;
+        final LoadFlags glyphLoadFlags = new LoadFlags(options.getHinting().loadFlags);
 
         final FaceFlags faceFlags = face.getFaceFlags();
         final boolean hasKerning = faceFlags.hasKerning();
-        final boolean isFixedSizes = faceFlags.has(FTFaceFlag.FIXED_SIZES);
 
+        final boolean isColored = faceFlags.has(FTFaceFlag.COLOR);
+        if(isColored)
+            glyphLoadFlags.set(FTLoad.COLOR);
+
+        final boolean isFixedSizes = faceFlags.has(FTFaceFlag.FIXED_SIZES);
         if(isFixedSizes) {
             if(face.getNumFixedSizes() > 0)
-                face.selectSize(0);
+                face.selectSize(0); // select first size
         }else{
             face.setPixelSizes(0L, options.getSize());
         }
@@ -83,7 +88,7 @@ class FreeTypeFontLoader {
 
         // add missing char
         final Charset charset = options.getCharset().copy();
-        charset.add(UNKNOWN_CHARACTER);
+        charset.add(MISSING_SYMBOL);
 
         // page atlas
         final TextureAtlas<Long> pageGlyphAtlas = new TextureAtlas<>();
@@ -100,14 +105,8 @@ class FreeTypeFontLoader {
                 glyphIndex = face.getCharIndex(charcode);
             }
 
-            // coloring
-            int loadFlags = glyphLoadFlags;
-            if(isGlyphColored(face, charcode))
-                loadFlags |= FTLoad.COLOR.getBit();
-
             // load glyph
-            face.loadChar(charcode, loadFlags); // TODO: sometimes occures 'FTError: invalid outline (code: 20)'
-            face.loadGlyph(glyphIndex, loadFlags);
+            face.loadGlyph(glyphIndex, glyphLoadFlags); // sometimes occures 'FTError: invalid outline (code: 20)'
             FTGlyph glyph = slot.getGlyph();
 
             // border
@@ -122,6 +121,12 @@ class FreeTypeFontLoader {
             final PixmapRGBA pixmap = createPixmap(bitmap);
             final int bitmapWidth = pixmap.getWidth();
             final int bitmapHeight = pixmap.getHeight();
+            if(bitmapWidth == 0 || bitmapHeight == 0) {
+                System.err.println("Invalid '" + (char)(int) charcode + "' FTBitmap, size: " + bitmapWidth + "x" + bitmapHeight);
+                return;
+            }else {
+                System.out.println("Successfully loaded glyph '" + (char)(int) charcode + "', size: " + bitmapWidth + "x" + bitmapHeight);
+            }
 
             // glyph info
             final FTGlyphMetrics glyphMetrics = slot.getMetrics();
@@ -188,14 +193,6 @@ class FreeTypeFontLoader {
         library.done();
 
         return font;
-    }
-
-    private static boolean isGlyphColored(FTFace face, long charcode) {
-        if(FreeType.ftLoadChar(face, charcode, FTLoad.COLOR).hasError())
-            return false;
-
-        final FTBitmap bitmap = face.getGlyph().getBitmap();
-        return (bitmap.getPixelMode() == FTPixelMode.BGRA);
     }
 
     private static PixmapRGBA createPixmap(FTBitmap bitmap) {
