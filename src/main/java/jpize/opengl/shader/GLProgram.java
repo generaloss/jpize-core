@@ -94,6 +94,14 @@ public class GLProgram extends GLObject {
     }
 
 
+    public int getActiveUniforms() {
+        return Jpize.GL20.glGetProgrami(ID, GL20I.GL_ACTIVE_UNIFORMS);
+    }
+
+    public String getActiveUniformName(int index) {
+        return Jpize.GL31.glGetActiveUniformName(ID, index);
+    }
+
     public int getUniformLocation(CharSequence uniform) {
         return Jpize.GL20.glGetUniformLocation(ID, uniform);
     }

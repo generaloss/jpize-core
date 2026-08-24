@@ -12,13 +12,11 @@ import generaloss.spatialmath.vector.*;
 import generaloss.resourceflow.resource.Resource;
 
 import java.util.HashMap;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class Shader extends GLProgram {
 
     private final HashMap<CharSequence, Integer> uniforms;
-    private int numSampler2D, numSamplerCube, numSampler2DArray, numUniformBuffer;
+    private int numSampler, numUniformBuffer;
 
     public Shader() {
         this.uniforms = new HashMap<>();
@@ -68,11 +66,11 @@ public class Shader extends GLProgram {
         super.validate();
         super.checkValidateError();
 
+        this.detectUniforms();
+
         vertexShader.dispose();
         fragmentShader.dispose();
 
-        this.detectUniforms(vertexCode);
-        this.detectUniforms(fragmentCode);
         return this;
     }
 
@@ -97,13 +95,12 @@ public class Shader extends GLProgram {
         super.validate();
         super.checkValidateError();
 
+        this.detectUniforms();
+
         geometryShader.dispose();
         vertexShader.dispose();
         fragmentShader.dispose();
 
-        this.detectUniforms(vertexCode);
-        this.detectUniforms(fragmentCode);
-        this.detectUniforms(geometryCode);
         return this;
     }
 
@@ -112,44 +109,40 @@ public class Shader extends GLProgram {
     }
 
 
-    private void detectUniforms(String code) {
-        // remove comments
-        code = code.replaceAll("//.*|/\\*(.|\\R)*?\\*/", "");
+    private void detectUniforms() {
+        final int uniformCount = super.getActiveUniforms();
 
-        // uniform <type> <name> [array optional]
-        final Pattern pattern = Pattern.compile("\\buniform\\s+\\w+\\s+(\\w+)");
-        final Matcher matcher = pattern.matcher(code);
-
-        while(matcher.find()) {
-            final String name = matcher.group(1);
-            uniforms.put(name, super.getUniformLocation(name));
+        for(int i = 0; i < uniformCount; i++) {
+            String name = super.getActiveUniformName(i);
+            final int location = super.getUniformLocation(name);
+            uniforms.put(name, location);
         }
     }
 
     protected int getCachedUniformLocation(CharSequence uniformName) {
         if(!uniforms.containsKey(uniformName))
-            throw new IllegalArgumentException("No such uniform: " + uniformName);
+            return -1;
         return uniforms.get(uniformName);
     }
 
 
-    public Shader uniformMat4(CharSequence uniformName, float[] values) {
-        super.uniformMat4(this.getCachedUniformLocation(uniformName), false, values);
+    public Shader uniformMat4(CharSequence uniformName, boolean transpose, float[] values) {
+        super.uniformMat4(this.getCachedUniformLocation(uniformName), transpose, values);
         return this;
     }
 
     public Shader uniform(CharSequence uniformName, Matrix4f matrix4f) {
-        this.uniformMat4(uniformName, matrix4f.values);
+        this.uniformMat4(uniformName, false, matrix4f.values);
         return this;
     }
 
-    public Shader uniformMat3(CharSequence uniformName, float[] values) {
-        super.uniformMat3(this.getCachedUniformLocation(uniformName), false, values);
+    public Shader uniformMat3(CharSequence uniformName, boolean transpose, float[] values) {
+        super.uniformMat3(this.getCachedUniformLocation(uniformName), transpose, values);
         return this;
     }
 
     public Shader uniform(CharSequence uniformName, Matrix3f matrix3f) {
-        this.uniformMat3(uniformName, matrix3f.values);
+        this.uniformMat3(uniformName, false, matrix3f.values);
         return this;
     }
 
@@ -229,20 +222,20 @@ public class Shader extends GLProgram {
     }
 
     public Shader uniform(CharSequence uniformName, Texture2D sampler2D) {
-        super.uniform(this.getCachedUniformLocation(uniformName), sampler2D, numSampler2D);
-        numSampler2D++;
+        super.uniform(this.getCachedUniformLocation(uniformName), sampler2D, numSampler);
+        numSampler++;
         return this;
     }
 
     public Shader uniform(CharSequence uniformName, Texture2DArray sampler2DArray) {
-        super.uniform(this.getCachedUniformLocation(uniformName), sampler2DArray, numSampler2DArray);
-        numSampler2DArray++;
+        super.uniform(this.getCachedUniformLocation(uniformName), sampler2DArray, numSampler);
+        numSampler++;
         return this;
     }
 
     public Shader uniform(CharSequence uniformName, TextureCubemap samplerCube) {
-        super.uniform(this.getCachedUniformLocation(uniformName), samplerCube, numSamplerCube);
-        numSamplerCube++;
+        super.uniform(this.getCachedUniformLocation(uniformName), samplerCube, numSampler);
+        numSampler++;
         return this;
     }
 
@@ -268,9 +261,7 @@ public class Shader extends GLProgram {
 
     
     public void bind() {
-        numSampler2D = 0;
-        numSamplerCube = 0;
-        numSampler2DArray = 0;
+        numSampler = 0;
         numUniformBuffer = 0;
         super.bind();
     }

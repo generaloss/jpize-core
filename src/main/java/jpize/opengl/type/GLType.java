@@ -33,6 +33,17 @@ public enum GLType {
         this.bytes = bytes;
     }
 
+    public boolean isInteger() {
+        return (
+            this == GLType.BYTE ||
+            this == GLType.UNSIGNED_BYTE ||
+            this == GLType.SHORT ||
+            this == GLType.UNSIGNED_SHORT ||
+            this == GLType.INT ||
+            this == GLType.UNSIGNED_INT
+        );
+    }
+
 
     public static GLType byValue(int value) {
         return BY_VALUE.get(value);
