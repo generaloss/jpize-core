@@ -111,6 +111,9 @@ public class QuadNode {
 
 
     public boolean isOnEdge(Direction edgeDir) {
+        if(quadrant == null)
+            return false;
+
         return (
             (edgeDir.signX != 0 && edgeDir.signX == quadrant.signX) ||
             (edgeDir.signY != 0 && edgeDir.signY == quadrant.signY)
@@ -123,54 +126,40 @@ public class QuadNode {
             return;
 
         // Соседи на уровнях выше
-        final Quadrant neighborXQuadrant = quadrant.opposite(true, false);
-        final Quadrant neighborYQuadrant = quadrant.opposite(false, true);
-        final QuadNode neighborX = parent.getChild(neighborXQuadrant);
-        final QuadNode neighborY = parent.getChild(neighborYQuadrant);
+        //final Quadrant neighborXQuadrant = quadrant.opposite(true, false);
+        //final Quadrant neighborYQuadrant = quadrant.opposite(false, true);
+        //final QuadNode neighborX = parent.getChild(neighborXQuadrant);
+        //final QuadNode neighborY = parent.getChild(neighborYQuadrant);
 
-        final Direction dirFromNeighborX = (neighborX.quadrant.signX > 0 ? Direction.RIGHT : Direction.LEFT);
-        final Direction dirFromNeighborY = (neighborY.quadrant.signY > 0 ? Direction.UP : Direction.DOWN);
-        final Collection<QuadNode> neighborsX = collectLeafNeighbors(neighborX, dirFromNeighborX);
-        final Collection<QuadNode> neighborsY = collectLeafNeighbors(neighborY, dirFromNeighborY);
-        neighbors.addNeighbors(dirFromNeighborX, neighborsX);
-        neighbors.addNeighbors(dirFromNeighborY, neighborsY);
+        //final Direction dirFromNeighborX = (neighborX.quadrant.signX > 0 ? Direction.RIGHT : Direction.LEFT);
+        //final Direction dirFromNeighborY = (neighborY.quadrant.signY > 0 ? Direction.UP : Direction.DOWN);
+        //final Collection<QuadNode> neighborsX = collectLeafNeighbors(neighborX, dirFromNeighborX);
+        //final Collection<QuadNode> neighborsY = collectLeafNeighbors(neighborY, dirFromNeighborY);
+        //neighbors.addNeighbors(dirFromNeighborX, neighborsX);
+        //neighbors.addNeighbors(dirFromNeighborY, neighborsY);
 
         // Соседи на уровнях ниже
         final int grandNeighborDirSignX = (parent.quadrant.signX / quadrant.signX);
         final int grandNeighborDirSignY = (parent.quadrant.signY / quadrant.signY);
 
         if(grandNeighborDirSignX < 0) {
-            QuadNode grandparent = parent.getParent();
-            if(grandparent == null)
-                return;
+            final Direction toNeighborDir = Direction.bySign(parent.quadrant.signX, 0);
+            assert(toNeighborDir != null);
 
-            final Quadrant downNeighborQuadrantX = parent.quadrant.opposite(true, false);
-            final QuadNode downNeighborX = grandparent.getChild(downNeighborQuadrantX);
+            final QuadNode downNeighborX = findNeighborUp(parent, toNeighborDir);
 
-            final Direction toQuadrantDir = Direction.bySign(-parent.quadrant.signX, 0);
-            assert(toQuadrantDir != null);
-
-            if(downNeighborX.isLeaf()){
-                neighbors.addNeighbor(toQuadrantDir, downNeighborX);
-            }else{
-                final Collection<QuadNode> downNeighborsX = collectLeafNeighbors(downNeighborX, toQuadrantDir);
-                neighbors.addNeighbors(toQuadrantDir, downNeighborsX);
-            }
+            final Collection<QuadNode> downNeighborsX = collectLeafNeighbors(downNeighborX, toNeighborDir);
+            neighbors.addNeighbors(toNeighborDir, downNeighborsX);
         }
 
         if(grandNeighborDirSignY < 0) {
-            final QuadNode grandparent = parent.getParent();
-            if(grandparent == null)
-                return;
+            final Direction toNeighborDir = Direction.bySign(0, parent.quadrant.signY);
+            assert(toNeighborDir != null);
 
-            final Quadrant downNeighborQuadrantY = parent.quadrant.opposite(false, true);
-            final QuadNode downNeighborY = grandparent.getChild(downNeighborQuadrantY);
+            final QuadNode downNeighborY = findNeighborUp(parent, toNeighborDir);
 
-            final Direction dirFromQuadrant = Direction.bySign(0, -parent.quadrant.signY);
-            assert(dirFromQuadrant != null);
-
-            final Collection<QuadNode> downNeighborsY = collectLeafNeighbors(downNeighborY, dirFromQuadrant);
-            neighbors.addNeighbors(dirFromQuadrant, downNeighborsY);
+            final Collection<QuadNode> downNeighborsY = collectLeafNeighbors(downNeighborY, toNeighborDir);
+            neighbors.addNeighbors(toNeighborDir, downNeighborsY);
         }
     }
 
@@ -181,6 +170,9 @@ public class QuadNode {
     }
 
     private static void collectLeafNeighbors(QuadNode targetNode, Direction snuggleDir, List<QuadNode> output) {
+        if(targetNode == null)
+            return;
+
         if(targetNode.isLeaf()) {
             output.add(targetNode);
             return;
@@ -196,7 +188,28 @@ public class QuadNode {
 
 
     private static QuadNode findNeighborUp(QuadNode node, Direction neighborDir) {
-        return null;
+        QuadNode current = node;
+        QuadNode parent = node.getParent();
+
+        if(parent == null)
+            return null;
+
+        while(current != null && current.isOnEdge(neighborDir))
+            current = parent.getParent();
+
+        if(current == null)
+            return null;
+
+        final Quadrant quadrant = current.getQuadrant();
+        if(quadrant == null)
+            return null;
+
+        final Quadrant neighborQuadrant = quadrant.opposite(
+            neighborDir.signX != 0,
+            neighborDir.signY != 0
+        );
+
+        return node.getChild(neighborQuadrant);
     }
 
 

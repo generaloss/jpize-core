@@ -1,3 +1,4 @@
+import jpize.context.Jpize;
 import jpize.context.JpizeApplication;
 import jpize.context.input.Key;
 import jpize.context.input.MouseBtn;
@@ -31,6 +32,9 @@ public class InputTest extends JpizeApplication {
             System.out.println("pressed");
         if(Key.S.up())
             System.out.println("up");
+
+        if(Jpize.input.getScrollY() != 0)
+            System.out.println("Scroll " + Jpize.input.getScrollY());
 
         final StringJoiner keys = new StringJoiner(", ");
 
