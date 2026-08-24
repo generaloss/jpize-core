@@ -38,10 +38,11 @@ public class InputMonitor {
 
     private void onKey(Key key, int scancode, Action action, Mods mods) {
         final int index = key.ordinal();
-        if(action.isPressed()) {
+        if(action.isDown()) {
             keysDown.set(index);
             keysPressed.set(index, true);
-        }else{
+        }
+        if(action.isUp()) {
             keysUp.set(index);
             keysPressed.set(index, false);
         }
@@ -49,11 +50,12 @@ public class InputMonitor {
 
     private void onMouseButton(int cursorIndex, MouseBtn button, Action action, Mods mods) {
         final int index = this.getButtonIndex(cursorIndex, button);
-        if(action.isPressed()) {
+        if(action.isDown()) {
             btnsDown.set(index);
             btnsPressed.set(index, true);
             btnsPressedMousesCount[button.ordinal()]++;
-        }else{
+        }
+        if(action.isUp()) {
             btnsUp.set(index);
             btnsPressed.set(index, false);
             btnsPressedMousesCount[button.ordinal()]--;

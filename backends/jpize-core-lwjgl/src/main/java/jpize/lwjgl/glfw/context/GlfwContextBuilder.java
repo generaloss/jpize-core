@@ -1,5 +1,6 @@
 package jpize.lwjgl.glfw.context;
 
+import jpize.lwjgl.glfw.init.GlfwPlatform;
 import jpize.opengl.gl.GL;
 import jpize.opengl.glenum.GLTarget;
 import jpize.lwjgl.glfw.Glfw;
@@ -37,14 +38,17 @@ public class GlfwContextBuilder {
         // window hints
         Glfw.defaultWindowHints();
         Glfw.windowHint(GlfwWindowHint.VISIBLE, false);
+        Glfw.windowHint(GlfwWindowHint.DOUBLEBUFFER, true);
         Glfw.windowHint(GlfwWindowHint.DECORATED, decorated);
         Glfw.windowHint(GlfwWindowHint.RESIZABLE, resizable);
         Glfw.windowHint(GlfwWindowHint.SAMPLES, samples);
         Glfw.windowHint(GlfwWindowHint.FOCUS_ON_SHOW, focusOnShow);
         Glfw.windowHint(GlfwWindowHint.TRANSPARENT_FRAMEBUFFER, transparentFramebuffer);
+        Glfw.windowHint(GlfwWindowHint.DEPTH_BITS, depthBits);
+
         // macos
-        final String osname = System.getProperty("os.name").toLowerCase();
-        if(osname.contains("mac")) {
+        final String osName = System.getProperty("os.name").toLowerCase();
+        if(osName.contains("mac")) {
             Glfw.windowHint(GlfwWindowHint.OPENGL_PROFILE, GLFW.GLFW_OPENGL_CORE_PROFILE);
             Glfw.windowHint(GlfwWindowHint.OPENGL_FORWARD_COMPAT, true);
             Glfw.windowHint(GlfwWindowHint.OPENGL_FORWARD_COMPAT, true);
@@ -143,6 +147,13 @@ public class GlfwContextBuilder {
 
     public GlfwContextBuilder transparentFramebuffer() {
         this.transparentFramebuffer = true;
+        return this;
+    }
+
+    private int depthBits = 24;
+
+    public GlfwContextBuilder depthBits(int depthBits) {
+        this.depthBits = depthBits;
         return this;
     }
 

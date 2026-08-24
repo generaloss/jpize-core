@@ -178,7 +178,11 @@ public class GlfwCallbacks extends AbstractCallbacks {
         callbackMouseButton = glfwSetMouseButtonCallback(windowID, (windowID, rawButton, rawAction, rawMods) -> {
             this.makeContextCurrent();
             final MouseBtn button = GlfwMouseBtn.byGlfwValue(rawButton);
-            final Action action = ((rawAction == GLFW_PRESS) ? Action.DOWN : Action.UP);
+            final Action action = switch(rawAction) {
+                case GLFW_PRESS -> Action.DOWN;
+                case GLFW_REPEAT -> Action.PRESSED;
+                default -> Action.UP;
+            };
             final GlfwMods mods = new GlfwMods(rawMods);
             super.invokeMouseButton(0, button, action, mods);
         });
@@ -218,7 +222,8 @@ public class GlfwCallbacks extends AbstractCallbacks {
             if(key == null)
                 return;
             final Action action = switch(rawAction) {
-                case GLFW_PRESS, GLFW_REPEAT -> Action.PRESSED;
+                case GLFW_PRESS -> Action.DOWN;
+                case GLFW_REPEAT -> Action.PRESSED;
                 default -> Action.UP;
             };
             final GlfwMods mods = new GlfwMods(rawMods);
