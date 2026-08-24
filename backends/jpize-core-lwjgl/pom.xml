@@ -6,7 +6,7 @@
 
     <groupId>io.github.generaloss</groupId>
     <artifactId>jpize-core-lwjgl</artifactId>
-    <version>25.7.1-SNAPSHOT-4-1</version>
+    <version>26.8.1</version>
     <name>jpize-core-lwjgl</name>
 
     <description>OpenGL Graphics Library Lwjgl Backend</description>
@@ -17,7 +17,7 @@
         <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-        <lwjgl.version>3.3.6</lwjgl.version>
+        <lwjgl.version>3.4.3</lwjgl.version>
     </properties>
 
     <repositories>
@@ -46,7 +46,7 @@
         <dependency>
             <groupId>io.github.generaloss</groupId>
             <artifactId>jpize-core</artifactId>
-            <version>25.7.1-SNAPSHOT-4</version>
+            <version>26.8.1</version>
             <scope>provided</scope>
         </dependency>
         <!-- freetype -->
@@ -151,12 +151,11 @@
             <plugin>
                 <groupId>org.sonatype.central</groupId>
                 <artifactId>central-publishing-maven-plugin</artifactId>
-                <version>0.3.0</version>
+                <version>0.8.0</version>
                 <extensions>true</extensions>
                 <configuration>
                     <deploymentName>jpize-core-lwjgl:${version}</deploymentName>
                     <publishingServerId>central</publishingServerId>
-                    <tokenAuth>true</tokenAuth>
                 </configuration>
             </plugin>
         </plugins>
