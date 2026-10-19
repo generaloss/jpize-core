@@ -7,6 +7,7 @@ import jpize.util.BufferUtils;
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
 import java.nio.ShortBuffer;
+import java.nio.charset.StandardCharsets;
 
 public class AndroidGL31 extends AndroidGL30 implements GL31I {
 
@@ -103,7 +104,12 @@ public class AndroidGL31 extends AndroidGL30 implements GL31I {
 
     @Override
     public String glGetActiveUniformName(int program, int uniformIndex) {
-        return GLES20.glGetActiveUniform(program, uniformIndex, null, 0, null, 0);
+        final int[] lengthArr = new int[1];
+        final int[] sizeArr = new int[1];
+        final int[] typeArr = new int[1];
+        final byte[] nameArr = new byte[256];
+        GLES20.glGetActiveUniform(program, uniformIndex, nameArr.length, lengthArr, 0, sizeArr, 0, typeArr, 0, nameArr, 0);
+        return new String(nameArr, 0, lengthArr[0], StandardCharsets.UTF_8);
     }
 
     @Override

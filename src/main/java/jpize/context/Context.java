@@ -85,6 +85,7 @@ public abstract class Context {
             this.onClose();
             return;
         }
+        this.getInput().getInputMonitor().update();
         // update
         this.getCallbacks().invokeUpdate();
         if(app != null)
