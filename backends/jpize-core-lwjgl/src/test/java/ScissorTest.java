@@ -14,7 +14,7 @@ import generaloss.spatialmath.Maths;
 import generaloss.spatialmath.vector.Vec2f;
 import jpize.util.pixmap.PixmapRGBA;
 
-public class TileScissorTest extends JpizeApplication {
+public class ScissorTest extends JpizeApplication {
 
     private final TextureBatch batch;
     private final OrthographicCameraCentered camera;
@@ -27,7 +27,7 @@ public class TileScissorTest extends JpizeApplication {
     private final Vec2f position = new Vec2f();
     private final Vec2f cinematic_position = new Vec2f();
 
-    public TileScissorTest() {
+    public ScissorTest() {
         this.batch = new TextureBatch();
         this.camera = new OrthographicCameraCentered();
         this.camera.setScale(scale);
@@ -88,7 +88,7 @@ public class TileScissorTest extends JpizeApplication {
     public static void main(String[] args) {
         GlfwContextBuilder.create(1280, 720, "Tile Test")
             .icon("/icon2.png")
-            .build().setApp(new TileScissorTest());
+            .build().setApp(new ScissorTest());
         GlfwContextManager.run();
     }
 

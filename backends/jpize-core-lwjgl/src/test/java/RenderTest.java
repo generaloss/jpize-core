@@ -2,6 +2,7 @@ import jpize.context.JpizeApplication;
 import jpize.lwjgl.glfw.context.GlfwContextBuilder;
 import jpize.lwjgl.glfw.context.GlfwContextManager;
 import jpize.opengl.gl.GL;
+import jpize.util.camera.Camera;
 import jpize.util.camera.PerspectiveCamera;
 import jpize.util.shader.ShaderBuilder;
 import jpize.opengl.tesselation.GLPrimitive;
@@ -17,7 +18,7 @@ public class RenderTest extends JpizeApplication {
     private final AABoxBody box1, box2;
     private final Mesh mesh;
     private final Shader shader;
-    private final PerspectiveCamera camera;
+    private final Camera camera;
 
     public RenderTest() {
         // boxes
@@ -26,7 +27,10 @@ public class RenderTest extends JpizeApplication {
         this.box1.position().set(-2, 0, 0);
         this.box2.position().set( 2, 0, 0);
         // mesh
-        this.mesh = new Mesh(new GLVertAttr(3, GLType.FLOAT), new GLVertAttr(4, GLType.FLOAT));
+        this.mesh = new Mesh(
+            new GLVertAttr(3, GLType.FLOAT),
+            new GLVertAttr(4, GLType.FLOAT)
+        );
         this.mesh.setMode(GLPrimitive.QUADS);
         this.mesh.vertices().setData(
             -1,  1, 4,  1, 0, 0, 1F,

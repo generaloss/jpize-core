@@ -63,14 +63,16 @@ public class Shader extends GLProgram {
 
         super.link();
         super.checkLinkError();
+
         super.validate();
-        super.checkValidateError();
+        try {
+            super.checkValidateError();
 
-        this.detectUniforms();
-
-        vertexShader.dispose();
-        fragmentShader.dispose();
-
+            this.detectUniforms();
+        } finally {
+            vertexShader.dispose();
+            fragmentShader.dispose();
+        }
         return this;
     }
 
@@ -92,15 +94,17 @@ public class Shader extends GLProgram {
 
         super.link();
         super.checkLinkError();
+
         super.validate();
-        super.checkValidateError();
+        try {
+            super.checkValidateError();
 
-        this.detectUniforms();
-
-        geometryShader.dispose();
-        vertexShader.dispose();
-        fragmentShader.dispose();
-
+            this.detectUniforms();
+        } finally {
+            geometryShader.dispose();
+            vertexShader.dispose();
+            fragmentShader.dispose();
+        }
         return this;
     }
 

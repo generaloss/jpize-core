@@ -45,7 +45,7 @@ public class ScreensTest extends JpizeApplication {
         public void render() {
             batch.setup();
             batch.draw(texture, 0, 0, width, height);
-            font.drawText(batch, "Screen: '" + super.getID() + "'", 100, 100);
+            font.drawText(batch, "Screen: '" + super.getID() + "' (Press 'T' to switch)", 100, 100);
             batch.render();
         }
 

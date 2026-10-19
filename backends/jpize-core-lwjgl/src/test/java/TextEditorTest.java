@@ -44,6 +44,7 @@ public class TextEditorTest extends JpizeApplication {
         this.renderOptions = font.getOptions().setInvLineWrap(true);
         // this.renderOptions.setNewLineGap(40);
         this.batch = new TextureBatch();
+        batch.setRoundVertices(false);
 
         this.cursorArrow = new GlfwCursor(GlfwCursorShape.ARROW);
         this.cursorIbeam = new GlfwCursor(GlfwCursorShape.IBEAM);
@@ -196,7 +197,7 @@ public class TextEditorTest extends JpizeApplication {
     public void render() {
         GL.clearColorBuffer();
         batch.setup();
-        batch.draw(font.pages().get(0), 0, 0, Jpize.getWidth(), Jpize.getHeight());
+        //batch.draw(font.pages().get(0), 0, 0, Jpize.getWidth(), Jpize.getHeight());
         {
             // external vars
             final String text = input.makeString();

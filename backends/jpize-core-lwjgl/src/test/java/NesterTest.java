@@ -8,15 +8,12 @@ import jpize.lwjgl.glfw.context.GlfwContextManager;
 import jpize.opengl.gl.GL;
 import jpize.opengl.texture.Texture2D;
 import jpize.util.RenderQuad;
-import jpize.util.pixmap.Pixmap;
-import jpize.util.pixmap.PixmapIO;
 import jpize.util.pixmap.PixmapRGBA;
 import nester.Nester;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 public class NesterTest extends JpizeApplication {

@@ -63,8 +63,8 @@ public class Texture2D extends GLTexture {
 
 
     public Texture2D active(int active) {
-        this.bind();
         super.glActiveTexture(active);
+        this.bind();
         return this;
     }
 
@@ -88,13 +88,13 @@ public class Texture2D extends GLTexture {
 
     public Texture2D setImage(int width, int height, int level, GLInternalFormat format, GLType type, ByteBuffer pixels) {
         this.bind();
-        super.glSetImage2D(GLTexImage2DTarget.TEXTURE_2D, 0, width, height, format, type, pixels);
+        super.glSetImage2D(GLTexImage2DTarget.TEXTURE_2D, level, width, height, format, type, pixels);
         return this;
     }
 
     public Texture2D setImage(int level, Pixmap pixmap) {
         this.bind();
-        super.glSetImage2D(GLTexImage2DTarget.TEXTURE_2D, 0, pixmap);
+        super.glSetImage2D(GLTexImage2DTarget.TEXTURE_2D, level, pixmap);
         return this;
     }
 

@@ -38,8 +38,8 @@ public class Texture2DArray extends GLTexture {
 
 
     public Texture2DArray active(int active) {
-        this.bind();
         super.glActiveTexture(active);
+        this.bind();
         return this;
     }
 

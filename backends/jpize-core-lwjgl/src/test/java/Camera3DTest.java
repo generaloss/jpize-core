@@ -21,8 +21,6 @@ import jpize.util.input.RotationInput;
 import generaloss.spatialmath.vector.Vec2f;
 import generaloss.spatialmath.vector.Vec3f;
 import jpize.util.mesh.Mesh;
-import jpize.util.pixmap.Pixmap;
-import jpize.util.pixmap.PixmapIO;
 import jpize.util.postprocess.GaussianBlur;
 import generaloss.resourceflow.resource.Resource;
 
@@ -114,7 +112,7 @@ public class Camera3DTest extends JpizeApplication {
         skybox.render(camera);
 
 
-        RenderQuad.instance().render(ascii);
+        // RenderQuad.instance().render(ascii);
 
         // quad
         shader.bind();

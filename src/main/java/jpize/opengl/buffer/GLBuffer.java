@@ -3,6 +3,7 @@ package jpize.opengl.buffer;
 import jpize.context.Jpize;
 import jpize.opengl.GLObject;
 import jpize.opengl.gl.GL32I;
+import jpize.opengl.texture.GLBaseFormat;
 import jpize.opengl.texture.GLInternalFormat;
 import jpize.opengl.type.GLType;
 
@@ -12,12 +13,18 @@ public class GLBuffer extends GLObject {
 
     protected final GLBufferTarget target;
     private GLBufferUsage defaultUsage;
-    private int typeBytes;
+    private StoredType typeCache;
+    private long sizeBytesCache;
 
     public GLBuffer(GLBufferTarget target) {
         super(Jpize.GL15.glGenBuffers());
         this.target = target;
         this.defaultUsage = GLBufferUsage.STATIC_DRAW;
+    }
+
+
+    public StoredType getType() { // nullable
+        return typeCache;
     }
 
 
@@ -28,6 +35,7 @@ public class GLBuffer extends GLObject {
     public void setDefaultUsage(GLBufferUsage defaultUsage) {
         this.defaultUsage = defaultUsage;
     }
+
 
     public void allocateData(long bytes) {
         this.allocateData(bytes, defaultUsage);
@@ -116,12 +124,15 @@ public class GLBuffer extends GLObject {
         return this.getParameter(GLBufferParam.SIZE);
     }
 
-    public int getSizeElements() {
-        if(typeBytes == 0)
+    public boolean isEmpty() {
+        return (this.getSizeBytes() == 0);
+    }
+
+    public long getSizeElements() {
+        if(typeCache == null)
             return 0;
 
-        final int sizeBytes = this.getSizeBytes();
-        return (sizeBytes / typeBytes);
+        return (sizeBytesCache / typeCache.bytes);
     }
 
 
@@ -132,149 +143,274 @@ public class GLBuffer extends GLObject {
     }
 
 
-    public void allocateData(long bytes, GLBufferUsage usage) {
+    public void allocateData(long sizeBytes, GLBufferUsage usage) {
         this.bind();
-        Jpize.GL15.glBufferData(target.value, bytes, usage.value);
-        typeBytes = 0;
+        Jpize.GL15.glBufferData(target.value, sizeBytes, usage.value);
+
+        typeCache = null;
+        sizeBytesCache = sizeBytes;
     }
 
-    public void allocateData(int bytes, GLBufferUsage usage) {
+    public void allocateData(int sizeBytes, GLBufferUsage usage) {
         this.bind();
-        Jpize.GL15.glBufferData(target.value, bytes, usage.value);
-        typeBytes = 0;
+        Jpize.GL15.glBufferData(target.value, sizeBytes, usage.value);
+
+        typeCache = null;
+        sizeBytesCache = sizeBytes;
     }
 
     public void setData(int[] data, GLBufferUsage usage) {
         this.bind();
         Jpize.GL15.glBufferData(target.value, data, usage.value);
-        typeBytes = Integer.BYTES;
+
+        typeCache = StoredType.INT;
+        sizeBytesCache = (long) data.length * typeCache.bytes;
     }
 
     public void setData(long[] data, GLBufferUsage usage) {
         this.bind();
         Jpize.GL15.glBufferData(target.value, data, usage.value);
-        typeBytes = Long.BYTES;
+
+        typeCache = StoredType.LONG;
+        sizeBytesCache = (long) data.length * typeCache.bytes;
     }
 
     public void setData(float[] data, GLBufferUsage usage) {
         this.bind();
         Jpize.GL15.glBufferData(target.value, data, usage.value);
-        typeBytes = Float.BYTES;
+
+        typeCache = StoredType.FLOAT;
+        sizeBytesCache = (long) data.length * typeCache.bytes;
     }
 
     public void setData(short[] data, GLBufferUsage usage) {
         this.bind();
         Jpize.GL15.glBufferData(target.value, data, usage.value);
-        typeBytes = Short.BYTES;
+
+        typeCache = StoredType.SHORT;
+        sizeBytesCache = (long) data.length * typeCache.bytes;
     }
 
     public void setData(double[] data, GLBufferUsage usage) {
         this.bind();
         Jpize.GL15.glBufferData(target.value, data, usage.value);
-        typeBytes = Double.BYTES;
+
+        typeCache = StoredType.DOUBLE;
+        sizeBytesCache = (long) data.length * typeCache.bytes;
     }
 
     public void setData(IntBuffer data, GLBufferUsage usage) {
+        final long remaining = data.remaining();
+
         this.bind();
         Jpize.GL15.glBufferData(target.value, data, usage.value);
-        typeBytes = Integer.BYTES;
+
+        typeCache = StoredType.INT;
+        sizeBytesCache = remaining * typeCache.bytes;
     }
 
     public void setData(ByteBuffer data, GLBufferUsage usage) {
+        final long remaining = data.remaining();
+
         this.bind();
         Jpize.GL15.glBufferData(target.value, data, usage.value);
-        typeBytes = Byte.BYTES;
+
+        typeCache = StoredType.BYTE;
+        sizeBytesCache = remaining * typeCache.bytes;
     }
 
     public void setData(LongBuffer data, GLBufferUsage usage) {
+        final long remaining = data.remaining();
+
         this.bind();
         Jpize.GL15.glBufferData(target.value, data, usage.value);
-        typeBytes = Long.BYTES;
+
+        typeCache = StoredType.LONG;
+        sizeBytesCache = remaining * typeCache.bytes;
     }
 
     public void setData(FloatBuffer data, GLBufferUsage usage) {
+        final long remaining = data.remaining();
+
         this.bind();
         Jpize.GL15.glBufferData(target.value, data, usage.value);
-        typeBytes = Float.BYTES;
+
+        typeCache = StoredType.FLOAT;
+        sizeBytesCache = remaining * typeCache.bytes;
     }
 
     public void setData(ShortBuffer data, GLBufferUsage usage) {
+        final long remaining = data.remaining();
+
         this.bind();
         Jpize.GL15.glBufferData(target.value, data, usage.value);
-        typeBytes = Short.BYTES;
+
+        typeCache = StoredType.SHORT;
+        sizeBytesCache = remaining * typeCache.bytes;
     }
 
     public void setData(DoubleBuffer data, GLBufferUsage usage) {
+        final long remaining = data.remaining();
+
         this.bind();
         Jpize.GL15.glBufferData(target.value, data, usage.value);
-        typeBytes = Double.BYTES;
+
+        typeCache = StoredType.DOUBLE;
+        sizeBytesCache = remaining * typeCache.bytes;
+    }
+
+
+    private void checkSubData(long dataSizeBytes, long offsetBytes) {
+        if (offsetBytes < 0 || dataSizeBytes > sizeBytesCache - offsetBytes) {
+            throw new IndexOutOfBoundsException(
+                "SubData range exceeds buffer size: offset=" + offsetBytes
+                    + ", size=" + dataSizeBytes
+                    + ", bufferSize=" + sizeBytesCache
+            );
+        }
     }
 
 
     public void setSubData(long offsetBytes, int... data) {
+        if (typeCache == null)
+            typeCache = StoredType.INT;
+        else if (StoredType.INT != typeCache)
+            throw new IllegalStateException("Buffer type mismatch: expected " + typeCache + ", got INT");
+
+        final long dataSizeBytes = (long) data.length * Integer.BYTES;
+        this.checkSubData(dataSizeBytes, offsetBytes);
+
         this.bind();
         Jpize.GL15.glBufferSubData(target.value, offsetBytes, data);
-        typeBytes = Integer.BYTES;
     }
 
     public void setSubData(long offsetBytes, long... data) {
+        if (typeCache == null)
+            typeCache = StoredType.LONG;
+        else if (StoredType.LONG != typeCache)
+            throw new IllegalStateException("Buffer type mismatch: expected " + typeCache + ", got LONG");
+
+        final long dataSizeBytes = (long) data.length * Long.BYTES;
+        this.checkSubData(dataSizeBytes, offsetBytes);
+
         this.bind();
         Jpize.GL15.glBufferSubData(target.value, offsetBytes, data);
-        typeBytes = Long.BYTES;
     }
 
     public void setSubData(long offsetBytes, float... data) {
+        if (typeCache == null)
+            typeCache = StoredType.FLOAT;
+        else if (StoredType.FLOAT != typeCache)
+            throw new IllegalStateException("Buffer type mismatch: expected " + typeCache + ", got FLOAT");
+
+        final long dataSizeBytes = (long) data.length * Float.BYTES;
+        this.checkSubData(dataSizeBytes, offsetBytes);
+
         this.bind();
         Jpize.GL15.glBufferSubData(target.value, offsetBytes, data);
-        typeBytes = Float.BYTES;
     }
 
     public void setSubData(long offsetBytes, short... data) {
+        if (typeCache == null)
+            typeCache = StoredType.SHORT;
+        else if (StoredType.SHORT != typeCache)
+            throw new IllegalStateException("Buffer type mismatch: expected " + typeCache + ", got SHORT");
+
+        final long dataSizeBytes = (long) data.length * Short.BYTES;
+        this.checkSubData(dataSizeBytes, offsetBytes);
+
         this.bind();
         Jpize.GL15.glBufferSubData(target.value, offsetBytes, data);
-        typeBytes = Short.BYTES;
     }
 
     public void setSubData(long offsetBytes, double... data) {
+        if (typeCache == null)
+            typeCache = StoredType.DOUBLE;
+        else if (StoredType.DOUBLE != typeCache)
+            throw new IllegalStateException("Buffer type mismatch: expected " + typeCache + ", got DOUBLE");
+
+        final long dataSizeBytes = (long) data.length * Double.BYTES;
+        this.checkSubData(dataSizeBytes, offsetBytes);
+
         this.bind();
         Jpize.GL15.glBufferSubData(target.value, offsetBytes, data);
-        typeBytes = Double.BYTES;
     }
 
     public void setSubData(long offsetBytes, IntBuffer data) {
+        if (typeCache == null)
+            typeCache = StoredType.INT;
+        else if (StoredType.INT != typeCache)
+            throw new IllegalStateException("Buffer type mismatch: expected " + typeCache + ", got INT");
+
+        final long dataSizeBytes = (long) data.remaining() * Integer.BYTES;
+        this.checkSubData(dataSizeBytes, offsetBytes);
+
         this.bind();
         Jpize.GL15.glBufferSubData(target.value, offsetBytes, data);
-        typeBytes = Integer.BYTES;
     }
 
     public void setSubData(long offsetBytes, ByteBuffer data) {
+        if (typeCache == null)
+            typeCache = StoredType.BYTE;
+        else if (StoredType.BYTE != typeCache)
+            throw new IllegalStateException("Buffer type mismatch: expected " + typeCache + ", got BYTE");
+
+        this.checkSubData(data.remaining(), offsetBytes);
+
         this.bind();
         Jpize.GL15.glBufferSubData(target.value, offsetBytes, data);
-        typeBytes = Byte.BYTES;
     }
 
     public void setSubData(long offsetBytes, LongBuffer data) {
+        if (typeCache == null)
+            typeCache = StoredType.LONG;
+        else if (StoredType.LONG != typeCache)
+            throw new IllegalStateException("Buffer type mismatch: expected " + typeCache + ", got LONG");
+
+        final long dataSizeBytes = (long) data.remaining() * Long.BYTES;
+        this.checkSubData(dataSizeBytes, offsetBytes);
+
         this.bind();
         Jpize.GL15.glBufferSubData(target.value, offsetBytes, data);
-        typeBytes = Long.BYTES;
     }
 
     public void setSubData(long offsetBytes, FloatBuffer data) {
+        if (typeCache == null)
+            typeCache = StoredType.FLOAT;
+        else if (StoredType.FLOAT != typeCache)
+            throw new IllegalStateException("Buffer type mismatch: expected " + typeCache + ", got FLOAT");
+
+        final long dataSizeBytes = (long) data.remaining() * Float.BYTES;
+        this.checkSubData(dataSizeBytes, offsetBytes);
+
         this.bind();
         Jpize.GL15.glBufferSubData(target.value, offsetBytes, data);
-        typeBytes = Float.BYTES;
     }
 
     public void setSubData(long offsetBytes, ShortBuffer data) {
+        if (typeCache == null)
+            typeCache = StoredType.SHORT;
+        else if (StoredType.SHORT != typeCache)
+            throw new IllegalStateException("Buffer type mismatch: expected " + typeCache + ", got SHORT");
+
+        final long dataSizeBytes = (long) data.remaining() * Short.BYTES;
+        this.checkSubData(dataSizeBytes, offsetBytes);
+
         this.bind();
         Jpize.GL15.glBufferSubData(target.value, offsetBytes, data);
-        typeBytes = Short.BYTES;
     }
 
     public void setSubData(long offsetBytes, DoubleBuffer data) {
+        if (typeCache == null)
+            typeCache = StoredType.DOUBLE;
+        else if (StoredType.DOUBLE != typeCache)
+            throw new IllegalStateException("Buffer type mismatch: expected " + typeCache + ", got DOUBLE");
+
+        final long dataSizeBytes = (long) data.remaining() * Double.BYTES;
+        this.checkSubData(dataSizeBytes, offsetBytes);
+
         this.bind();
         Jpize.GL15.glBufferSubData(target.value, offsetBytes, data);
-        typeBytes = Double.BYTES;
     }
 
 
@@ -334,39 +470,39 @@ public class GLBuffer extends GLObject {
     }
 
 
-    public void clearData(GLInternalFormat format, GLType type, int... data) {
+    public void clearData(GLInternalFormat internalFormat, GLBaseFormat format, GLType type, int... data) {
         this.bind();
-        Jpize.GL43.glClearBufferData(target.value, format.value, format.base.value, type.value, data);
+        Jpize.GL43.glClearBufferData(target.value, internalFormat.value, format.value, type.value, data);
     }
 
-    public void clearData(GLInternalFormat format, GLType type, float... data) {
+    public void clearData(GLInternalFormat internalFormat, GLBaseFormat format, GLType type, float... data) {
         this.bind();
-        Jpize.GL43.glClearBufferData(target.value, format.value, format.base.value, type.value, data);
+        Jpize.GL43.glClearBufferData(target.value, internalFormat.value, format.value, type.value, data);
     }
 
-    public void clearData(GLInternalFormat format, GLType type, short... data) {
+    public void clearData(GLInternalFormat internalFormat, GLBaseFormat format, GLType type, short... data) {
         this.bind();
-        Jpize.GL43.glClearBufferData(target.value, format.value, format.base.value, type.value, data);
+        Jpize.GL43.glClearBufferData(target.value, internalFormat.value, format.value, type.value, data);
     }
 
-    public void clearData(GLInternalFormat format, GLType type, IntBuffer data) {
+    public void clearData(GLInternalFormat internalFormat, GLBaseFormat format, GLType type, IntBuffer data) {
         this.bind();
-        Jpize.GL43.glClearBufferData(target.value, format.value, format.base.value, type.value, data);
+        Jpize.GL43.glClearBufferData(target.value, internalFormat.value, format.value, type.value, data);
     }
 
-    public void clearData(GLInternalFormat format, GLType type, ByteBuffer data) {
+    public void clearData(GLInternalFormat internalFormat, GLBaseFormat format, GLType type, ByteBuffer data) {
         this.bind();
-        Jpize.GL43.glClearBufferData(target.value, format.value, format.base.value, type.value, data);
+        Jpize.GL43.glClearBufferData(target.value, internalFormat.value, format.value, type.value, data);
     }
 
-    public void clearData(GLInternalFormat format, GLType type, FloatBuffer data) {
+    public void clearData(GLInternalFormat internalFormat, GLBaseFormat format, GLType type, FloatBuffer data) {
         this.bind();
-        Jpize.GL43.glClearBufferData(target.value, format.value, format.base.value, type.value, data);
+        Jpize.GL43.glClearBufferData(target.value, internalFormat.value, format.value, type.value, data);
     }
 
-    public void clearData(GLInternalFormat format, GLType type, ShortBuffer data) {
+    public void clearData(GLInternalFormat internalFormat, GLBaseFormat format, GLType type, ShortBuffer data) {
         this.bind();
-        Jpize.GL43.glClearBufferData(target.value, format.value, format.base.value, type.value, data);
+        Jpize.GL43.glClearBufferData(target.value, internalFormat.value, format.value, type.value, data);
     }
 
 

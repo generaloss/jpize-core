@@ -1,7 +1,9 @@
 package jpize.util.mesh;
 
 import jpize.opengl.buffer.GLIndexBuffer;
+import jpize.opengl.buffer.StoredType;
 import jpize.opengl.tesselation.GLPrimitive;
+import jpize.opengl.type.GLIndexType;
 import jpize.opengl.vertex.GLVertexArray;
 import jpize.opengl.vertex.GLVertAttr;
 import jpize.opengl.buffer.GLVertexBuffer;
@@ -22,6 +24,7 @@ public class IndexedMesh implements IMesh {
         this.vertexBuffer.enableAttributes(attributes);
 
         this.indexBuffer = new GLIndexBuffer();
+        this.indexBuffer.bind(); // just in case.
 
         this.mode = GLPrimitive.TRIANGLES;
     }
@@ -35,13 +38,23 @@ public class IndexedMesh implements IMesh {
     }
 
 
-    public void render(int indices) {
-        vertexArray.drawElements(indices, mode);
+    public void render(long offsetBytes, int indicesCount, GLIndexType indexType) {
+        vertexArray.drawElements(offsetBytes, indicesCount, mode, indexType);
+    }
+
+    public void render(long offsetBytes, int indicesCount) {
+        final GLIndexType indexType = indexBuffer.getIndexType();
+        if(indexType == null) {
+            if(indexBuffer.isEmpty())
+                throw new RuntimeException("GLIndexBuffer cannot be empty.");
+            throw new RuntimeException("Unable to determine GLIndexBuffer type, try to specify manually.");
+        }
+        this.render(offsetBytes, indicesCount, indexType);
     }
 
     @Override
     public void render() {
-        this.render(indexBuffer.getSizeElements());
+        this.render(0L, (int) indexBuffer.getSizeElements());
     }
 
 

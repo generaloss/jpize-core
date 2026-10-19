@@ -44,8 +44,8 @@ public class TextureCubemap extends GLTexture {
 
 
     public TextureCubemap active(int active) {
-        this.bind();
         super.glActiveTexture(active);
+        this.bind();
         return this;
     }
 

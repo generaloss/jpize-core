@@ -2,6 +2,7 @@ package jpize.opengl.vertex;
 
 import jpize.context.Jpize;
 import jpize.opengl.GLObject;
+import jpize.opengl.buffer.GLIndexBuffer;
 import jpize.opengl.tesselation.GLPrimitive;
 import jpize.opengl.type.GLIndexType;
 
@@ -23,18 +24,10 @@ public class GLVertexArray extends GLObject {
     }
 
 
-    public void drawElements(int indicesCount, GLPrimitive mode, GLIndexType indexType) {
+    public void drawElements(long offsetBytes, int indicesCount, GLPrimitive mode, GLIndexType indexType) {
         this.bind();
-        Jpize.GL11.glDrawElements(mode.value, indicesCount, indexType.type.value, 0L);
+        Jpize.GL11.glDrawElements(mode.value, indicesCount, indexType.type.value, offsetBytes); // 0L ?
         unbind();
-    }
-
-    public void drawElements(int indicesCount, GLPrimitive mode) {
-        this.drawElements(indicesCount, mode, GLIndexType.UNSIGNED_INT);
-    }
-
-    public void drawElements(int indicesCount) {
-        this.drawElements(indicesCount, GLPrimitive.TRIANGLES);
     }
 
     public void bind() {
