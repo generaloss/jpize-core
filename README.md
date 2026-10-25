@@ -9,18 +9,19 @@ Java version: 17 +
 
 ## Examples
 
-#### 1. Application
+#### 1. Desktop application example
 ``` java
 public class MyApp extends JpizeApplication {
 
     public static void main(String[] args) {
         // create window context
-        Jpize.create(1280, 720, "Window Title")
+        GlfwContextBuilder.create(1280, 720, "Window Title")
             .icon("/icon.png")
-            .build().setApp(new MyApp());
+            .build()
+            .setApp(new MyApp());
         
         // run created contexts
-        Jpize.run();
+        GlfwContextManager.run();
     }
     
     public MyApp() { } // constructor calls before init()
@@ -70,11 +71,11 @@ batch.render();
 ``` java
 // load
 Font font = new Font().loadDefault();
-Font font = new Font().loadFnt(path_or_resource, linearFilter);
-Font font = new Font().loadTrueType(path_or_resource, size, charset, linearFilter);
+Font font = new Font().loadFNT(path_or_resource, linearFilter);
+Font font = new Font().loadFT(path_or_resource, load_options);
 
 // options
-FontRenderOptions options = font.getRenderOptions();
+FontRenderOptions options = font.getOptions();
 
 options.enableCullLines(0F, Jpize.getHeight());
 options.color().set(0.95, 0.95, 0.93);
@@ -104,7 +105,7 @@ Jpize.getY()
 Jpize.getScroll() 
 
 // mouse buttons
-MouseBtn.LEFT.down()     
+MouseBtn.LEFT.down()
 MouseBtn.RIGHT.pressed()
 MouseBtn.MIDDLE.up()
 
@@ -126,7 +127,13 @@ Jpize.getDeltaTime()
 
 ## Used libs:
 * *[LWJGL3](https://github.com/LWJGL/lwjgl3)* (GLFW, OpenGL, STB)
-* *[Jpize-Utils](https://github.com/generaloss/jpize-utils)*
+* *[ResourceFlow](https://github.com/generaloss/resource-flow)*
+* *[SpatialMath](https://github.com/generaloss/spatial-math)*
+* *[RawList](https://github.com/generaloss/raw-list)*
+* *[ChronoKit](https://github.com/generaloss/chrono-kit)*
+* *[FreeType JNI](https://github.com/generaloss/freetype-jni)*
+* *[STB Image JNI](https://github.com/generaloss/stb-image-jni)*
+* *Android Platform-34 libs*
 
 
 ---
