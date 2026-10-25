@@ -1,7 +1,7 @@
 package jpize.context;
 
-import jpize.context.callback.AbstractCallbacks;
-import jpize.context.input.AbstractInput;
+import jpize.context.callback.AbstractJpizeCallbacks;
+import jpize.context.input.AbstractJpizeInput;
 import jpize.opengl.gl.GL;
 import jpize.opengl.glenum.GLCompareFunc;
 import jpize.opengl.glenum.GLTarget;
@@ -31,9 +31,9 @@ public abstract class Context {
 
     public abstract IWindow getWindow();
 
-    public abstract AbstractInput getInput();
+    public abstract AbstractJpizeInput getInput();
 
-    public abstract AbstractCallbacks getCallbacks();
+    public abstract AbstractJpizeCallbacks getCallbacks();
 
 
     public Context setApp(JpizeApplication app) {

@@ -1,7 +1,7 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="Camera3D Test" type="Application" factoryName="Application">
-    <option name="MAIN_CLASS_NAME" value="Camera3DTest" />
-    <module name="jpize-core-lwjgl" />
+    <option name="MAIN_CLASS_NAME" value="coretests.Camera3DTest" />
+    <module name="jpize-core-tests" />
     <method v="2">
       <option name="Make" enabled="true" />
     </method>

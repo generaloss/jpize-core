@@ -1,15 +1,16 @@
 package jpize.context;
 
-import jpize.context.callback.AbstractCallbacks;
-import jpize.context.input.AbstractInput;
+import jpize.context.callback.AbstractJpizeCallbacks;
+import jpize.context.input.AbstractJpizeInput;
 import jpize.opengl.gl.*;
 
 public class Jpize {
 
     public static volatile Context context;
     public static IWindow window;
-    public static AbstractInput input;
-    public static volatile AbstractCallbacks callbacks;
+    public static AbstractJpizeInput input;
+    public static volatile AbstractJpizeCallbacks callbacks;
+    public static AbstractJpizeFiles files;
     public static GL11I GL11;
     public static GL12I GL12;
     public static GL13I GL13;

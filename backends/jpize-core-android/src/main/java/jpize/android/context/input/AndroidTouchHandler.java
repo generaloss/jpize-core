@@ -2,7 +2,7 @@
 package jpize.android.context.input;
 
 import android.view.MotionEvent;
-import jpize.android.context.AndroidCallbacks;
+import jpize.android.context.AndroidJpizeCallbacks;
 import jpize.context.input.Action;
 import jpize.context.input.MouseBtn;
 
@@ -10,10 +10,10 @@ import java.util.Arrays;
 
 public final class AndroidTouchHandler {
 
-    private final AndroidCallbacks callbacks;
+    private final AndroidJpizeCallbacks callbacks;
     private final int[] pointerIds;
 
-    public AndroidTouchHandler(AndroidCallbacks callbacks, int maxTouches) {
+    public AndroidTouchHandler(AndroidJpizeCallbacks callbacks, int maxTouches) {
         if(maxTouches <= 0)
             throw new IllegalArgumentException("Argument 'maxTouches' must be positive");
 
@@ -97,10 +97,9 @@ public final class AndroidTouchHandler {
     }
 
     private int findSlot(int pointerId) {
-        for(int i = 0; i < pointerIds.length; i++) {
+        for(int i = 0; i < pointerIds.length; i++)
             if(pointerIds[i] == pointerId)
                 return i;
-        }
 
         return -1;
     }

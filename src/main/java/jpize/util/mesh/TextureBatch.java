@@ -40,7 +40,7 @@ public class TextureBatch implements Disposable {
     private final Vec2f position;
     private final Vec2f scale;
     private boolean flipX, flipY;
-    private boolean roundVertices;
+    private boolean coordRounding;
     // tmp
     private final Vec2f tmp_origin, tmp_vertex1, tmp_vertex2, tmp_vertex3, tmp_vertex4;
 
@@ -71,7 +71,7 @@ public class TextureBatch implements Disposable {
         this.position = new Vec2f();
         this.transformOrigin = new Vec2f(0.5F);
         this.scale = new Vec2f(1F);
-        this.roundVertices = true;
+        this.coordRounding = true;
         // tmp
         this.tmp_origin = new Vec2f();
         this.tmp_vertex1 = new Vec2f();
@@ -155,7 +155,7 @@ public class TextureBatch implements Disposable {
         tmp_vertex3.set(width, 0F    ).sub(tmp_origin).mul(scale).mulMat3(transformMat).add(tmp_origin).add(x, y).add(position);
         tmp_vertex4.set(width, height).sub(tmp_origin).mul(scale).mulMat3(transformMat).add(tmp_origin).add(x, y).add(position);
 
-        if(roundVertices) {
+        if(coordRounding) {
             tmp_vertex1.round();
             tmp_vertex2.round();
             tmp_vertex3.round();
@@ -236,6 +236,11 @@ public class TextureBatch implements Disposable {
 
     public void drawRGBA(Texture2D texture, float x, float y, float width, float height, int color) {
         quadColor.setRGBA(color);
+        this.drawColorless(texture, x, y, width, height);
+    }
+
+    public void drawARGB(Texture2D texture, float x, float y, float width, float height, int color) {
+        quadColor.setARGB(color);
         this.drawColorless(texture, x, y, width, height);
     }
 
@@ -367,6 +372,10 @@ public class TextureBatch implements Disposable {
         this.drawRGBA(TextureUtils.whiteTexture(), x, y, width, height, color);
     }
 
+    public void drawRectARGB(float x, float y, float width, float height, int color) {
+        this.drawARGB(TextureUtils.whiteTexture(), x, y, width, height, color);
+    }
+
     public void drawRectRGB(float x, float y, float width, float height, int color) {
         this.drawRGB(TextureUtils.whiteTexture(), x, y, width, height, color);
     }
@@ -438,8 +447,16 @@ public class TextureBatch implements Disposable {
         return position;
     }
 
+    public Matrix3f getRotationMatrix() {
+        return rotationMat;
+    }
+
     public void rotate(double angle) {
         rotationMat.setRotation(angle);
+    }
+
+    public Matrix3f getShearMatrix() {
+        return shearMat;
     }
 
     public void shear(double angleX, double angleY) {
@@ -448,6 +465,14 @@ public class TextureBatch implements Disposable {
 
     public Vec2f scale() {
         return scale;
+    }
+
+    public boolean isFlipX() {
+        return flipX;
+    }
+
+    public boolean isFlipY() {
+        return flipY;
     }
 
     public void flipX(boolean flip) {
@@ -463,13 +488,12 @@ public class TextureBatch implements Disposable {
         this.flipY(y);
     }
 
-
-    public boolean isRoundVertices() {
-        return roundVertices;
+    public boolean isCoordRoundingEnabled() {
+        return coordRounding;
     }
 
-    public void setRoundVertices(boolean roundVertices) {
-        this.roundVertices = roundVertices;
+    public void enableCoordRounding(boolean coordRounding) {
+        this.coordRounding = coordRounding;
     }
 
 

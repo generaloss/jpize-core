@@ -1,6 +1,5 @@
 package jpize.opengl.texture;
 
-import jpize.opengl.gl.GL13I;
 import jpize.opengl.glenum.GLCompareFunc;
 import jpize.opengl.type.GLType;
 import jpize.util.pixmap.PixmapIO;

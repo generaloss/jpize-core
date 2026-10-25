@@ -1,22 +1,21 @@
 package jpize.android.context;
 
-import android.app.Activity;
-import jpize.android.context.input.AndroidInput;
+import jpize.android.context.input.AndroidJpizeInput;
 import jpize.context.Context;
 import jpize.context.IWindow;
-import jpize.context.callback.AbstractCallbacks;
-import jpize.context.input.AbstractInput;
+import jpize.context.callback.AbstractJpizeCallbacks;
+import jpize.context.input.AbstractJpizeInput;
 
 public class JpizeAndroidContext extends Context {
 
     private final AndroidWindow window;
-    private final AndroidCallbacks callbacks;
-    private final AndroidInput input;
+    private final AndroidJpizeCallbacks callbacks;
+    private final AndroidJpizeInput input;
 
-    public JpizeAndroidContext(Activity activity) {
+    public JpizeAndroidContext(JpizeAndroidActivity activity) {
         this.window = new AndroidWindow(activity);
-        this.callbacks = new AndroidCallbacks();
-        this.input = new AndroidInput(this, activity);
+        this.callbacks = new AndroidJpizeCallbacks();
+        this.input = new AndroidJpizeInput(this, activity);
     }
 
 
@@ -26,12 +25,12 @@ public class JpizeAndroidContext extends Context {
     }
 
     @Override
-    public AbstractCallbacks getCallbacks() {
+    public AbstractJpizeCallbacks getCallbacks() {
         return callbacks;
     }
 
     @Override
-    public AbstractInput getInput() {
+    public AbstractJpizeInput getInput() {
         return input;
     }
 
@@ -54,6 +53,7 @@ public class JpizeAndroidContext extends Context {
     @Override
     protected void onClose() {
         super.onClose();
+        input.getTextInput().dispose();
     }
 
 }

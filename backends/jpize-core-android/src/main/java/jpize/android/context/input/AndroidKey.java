@@ -1,4 +1,5 @@
 package jpize.android.context.input;
+
 import jpize.context.input.Key;
 import jpize.util.Utils;
 

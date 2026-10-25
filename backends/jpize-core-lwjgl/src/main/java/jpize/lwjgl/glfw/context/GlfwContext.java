@@ -2,10 +2,10 @@ package jpize.lwjgl.glfw.context;
 
 import jpize.context.Context;
 import jpize.context.Jpize;
-import jpize.context.callback.AbstractCallbacks;
-import jpize.context.input.AbstractInput;
-import jpize.lwjgl.glfw.callback.GlfwCallbacks;
-import jpize.lwjgl.glfw.input.GlfwInput;
+import jpize.context.callback.AbstractJpizeCallbacks;
+import jpize.context.input.AbstractJpizeInput;
+import jpize.lwjgl.glfw.callback.GlfwJpizeCallbacks;
+import jpize.lwjgl.glfw.input.GlfwJpizeInput;
 import jpize.lwjgl.glfw.window.GlfwWindow;
 import jpize.lwjgl.opengl.*;
 import org.lwjgl.opengl.GL;
@@ -14,14 +14,16 @@ import org.lwjgl.opengl.GLCapabilities;
 public class GlfwContext extends Context {
 
     private final GlfwWindow window;
-    private final GlfwInput input;
-    private final GlfwCallbacks callbacks;
+    private final GlfwJpizeInput input;
+    private final GlfwJpizeCallbacks callbacks;
+    private final DesktopJpizeFiles files;
     private final GLCapabilities glCapabilities;
 
-    public GlfwContext(GlfwWindow window) {
+    public GlfwContext(GlfwWindow window, String appFolderName) {
         this.window = window;
-        this.callbacks = new GlfwCallbacks(window);
-        this.input = new GlfwInput(this); // uses callbacks in constructor
+        this.callbacks = new GlfwJpizeCallbacks(window);
+        this.input = new GlfwJpizeInput(this); // uses callbacks in constructor
+        this.files = new DesktopJpizeFiles(appFolderName);
 
         this.makeCurrent();
         this.glCapabilities = GL.createCapabilities();
@@ -36,12 +38,12 @@ public class GlfwContext extends Context {
     }
 
     @Override
-    public AbstractInput getInput() {
+    public AbstractJpizeInput getInput() {
         return input;
     }
 
     @Override
-    public AbstractCallbacks getCallbacks() {
+    public AbstractJpizeCallbacks getCallbacks() {
         return callbacks;
     }
 
@@ -86,6 +88,7 @@ public class GlfwContext extends Context {
         Jpize.window = window;
         Jpize.input = input;
         Jpize.callbacks = callbacks;
+        Jpize.files = files;
         Jpize.GL11 = LwjglGL11.INSTANCE;
         Jpize.GL12 = LwjglGL12.INSTANCE;
         Jpize.GL13 = LwjglGL13.INSTANCE;

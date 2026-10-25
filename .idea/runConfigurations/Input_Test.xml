@@ -1,7 +1,7 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="Input Test" type="Application" factoryName="Application">
-    <option name="MAIN_CLASS_NAME" value="InputTest" />
-    <module name="jpize-core-lwjgl" />
+    <option name="MAIN_CLASS_NAME" value="coretests.InputTest" />
+    <module name="jpize-core-tests" />
     <method v="2">
       <option name="Make" enabled="true" />
     </method>

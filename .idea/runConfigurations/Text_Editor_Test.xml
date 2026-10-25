@@ -1,7 +1,7 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="Text Editor Test" type="Application" factoryName="Application">
-    <option name="MAIN_CLASS_NAME" value="TextEditorTest" />
-    <module name="jpize-core-lwjgl" />
+    <option name="MAIN_CLASS_NAME" value="coretests.TextEditorTest" />
+    <module name="jpize-core-tests" />
     <method v="2">
       <option name="Make" enabled="true" />
     </method>

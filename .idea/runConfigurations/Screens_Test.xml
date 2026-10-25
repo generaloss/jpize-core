@@ -1,7 +1,7 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="Screens Test" type="Application" factoryName="Application">
-    <option name="MAIN_CLASS_NAME" value="ScreensTest" />
-    <module name="jpize-core-lwjgl" />
+    <option name="MAIN_CLASS_NAME" value="coretests.ScreensTest" />
+    <module name="jpize-core-tests" />
     <method v="2">
       <option name="Make" enabled="true" />
     </method>

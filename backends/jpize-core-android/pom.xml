@@ -6,13 +6,14 @@
 
     <groupId>io.github.generaloss</groupId>
     <artifactId>jpize-core-android</artifactId>
-    <version>26.3.1-SNAPSHOT-1</version>
+    <version>26.10.1</version>
     <name>jpize-core-android</name>
-
     <description>OpenGL Graphics Library Android Backend</description>
     <url>https://github.com/generaloss/jpize-core</url>
 
     <properties>
+        <jpize-core-version>26.10.1</jpize-core-version>
+
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -31,7 +32,7 @@
         <dependency>
             <groupId>io.github.generaloss</groupId>
             <artifactId>jpize-core</artifactId>
-            <version>26.3.1-SNAPSHOT-1</version>
+            <version>${jpize-core-version}</version>
             <scope>provided</scope>
         </dependency>
         <!-- stb-image -->
@@ -49,13 +50,14 @@
             <type>aar</type>
         </dependency>
         <!-- android -->
+        <!-- install android-34-stubs.jar with command:
+                mvn install:install-file -Dfile=android-34-stubs.jar -DgroupId=com.google.android -DartifactId=android -Dversion=34 -Dpackaging=jar -->
         <dependency>
             <groupId>com.google.android</groupId>
             <artifactId>android</artifactId>
             <version>34</version>
-            <systemPath>${basedir}/libs/android-34-stubs.jar</systemPath>
+            <scope>provided</scope>
             <optional>true</optional>
-            <scope>system</scope>
         </dependency>
         <dependency>
             <groupId>androidx.core</groupId>
@@ -127,7 +129,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>
-                <version>3.3.1</version>
+                <version>3.4.0</version>
                 <executions>
                     <execution>
                         <id>attach-sources</id>
@@ -141,7 +143,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
-                <version>3.8.0</version>
+                <version>3.12.0</version>
                 <executions>
                     <execution>
                         <id>attach-javadocs</id>
@@ -159,7 +161,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-gpg-plugin</artifactId>
-                <version>3.2.3</version>
+                <version>3.2.8</version>
                 <executions>
                     <execution>
                         <id>sign-artifacts</id>
@@ -174,12 +176,11 @@
             <plugin>
                 <groupId>org.sonatype.central</groupId>
                 <artifactId>central-publishing-maven-plugin</artifactId>
-                <version>0.3.0</version>
+                <version>0.11.0</version>
                 <extensions>true</extensions>
                 <configuration>
                     <deploymentName>jpize-core-android:${version}</deploymentName>
                     <publishingServerId>central</publishingServerId>
-                    <tokenAuth>true</tokenAuth>
                 </configuration>
             </plugin>
         </plugins>

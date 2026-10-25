@@ -18,6 +18,8 @@ import jpize.util.region.Region;
 import generaloss.resourceflow.resource.Resource;
 
 import java.nio.ByteBuffer;
+import java.util.HashMap;
+import java.util.Map;
 
 class FreeTypeFontLoader {
 
@@ -43,15 +45,18 @@ class FreeTypeFontLoader {
         if(isColored)
             glyphLoadFlags.set(FTLoad.COLOR);
 
-        final boolean isFixedSizes = faceFlags.has(FTFaceFlag.FIXED_SIZES);
-        if(isFixedSizes) {
-            if(face.getNumFixedSizes() > 0)
-                face.selectSize(0); // select first size
+        // select font size
+        if(faceFlags.has(FTFaceFlag.FIXED_SIZES)) {
+            if(face.getNumFixedSizes() > 0) {
+                face.selectSize(0); // select first
+            } else {
+                throw new IllegalStateException("Font has fixed sizes but no available strikes");
+            }
         }else{
             face.setPixelSizes(0L, options.getSize());
         }
 
-        // attachment
+        // attach additional font data, if requested
         final Resource attachment = options.getAttachment();
         if(attachment != null) {
             final ByteBuffer attachmentBuffer = attachment.readByteBuffer();
@@ -64,29 +69,29 @@ class FreeTypeFontLoader {
             parameters.free();
         }
 
-        // metrics
+        // font metrics
         final FTSizeMetrics sizeMetrics = face.getSize().getMetrics();
         final float ascender = sizeMetrics.getAscender();
-        final float descender = sizeMetrics.getDescender();
         final float height = sizeMetrics.getHeight();
         font.setHeight(height);
 
-        // stroker
+        // outline stroker
         final FTStroker stroker;
-
         final float borderWidth = options.getBorderWidth();
+
         if(borderWidth != 0F) {
             final boolean borderStraight = options.isBorderStraight();
+
             final FTStrokerLineCap linecap = (borderStraight ? FTStrokerLineCap.BUTT : FTStrokerLineCap.ROUND);
             final FTStrokerLineJoin linejoin = (borderStraight ? FTStrokerLineJoin.MITER_FIXED : FTStrokerLineJoin.ROUND);
 
             stroker = library.newStroker();
             stroker.set(Math.abs(borderWidth), linecap, linejoin, 0F);
-        }else{
+        } else {
             stroker = null;
         }
 
-        // add missing char
+        // add missing-symbol glyph
         final Charset charset = options.getCharset().copy();
         charset.add(MISSING_SYMBOL);
 
@@ -94,19 +99,33 @@ class FreeTypeFontLoader {
         final TextureAtlas<Long> pageGlyphAtlas = new TextureAtlas<>();
         pageGlyphAtlas.setPadding(1);
 
+        // cache glyph indices
+        final Map<Long, Long> glyphIndices = new HashMap<>();
+
+        charset.forEach((charcode, variationSelector) -> {
+            final long codepoint = GlyphInfo.getCodePoint(
+                charcode,
+                variationSelector
+            );
+
+            final long glyphIndex = (variationSelector != 0) ?
+                    face.getCharVariantIndex(charcode, variationSelector) :
+                    face.getCharIndex(charcode);
+
+            glyphIndices.put(codepoint, glyphIndex);
+        });
+
         // glyphs
         charset.forEach((charcode, variationSelector) -> {
             final long codepoint = GlyphInfo.getCodePoint(charcode, variationSelector);
-
-            final long glyphIndex;
-            if(variationSelector != 0) {
-                glyphIndex = face.getCharVariantIndex(charcode, variationSelector);
-            }else{
-                glyphIndex = face.getCharIndex(charcode);
-            }
+            final long glyphIndex = glyphIndices.get(codepoint);
 
             // load glyph
             face.loadGlyph(glyphIndex, glyphLoadFlags); // sometimes occures 'FTError: invalid outline (code: 20)'
+
+            final FTGlyphMetrics glyphMetrics = slot.getMetrics();
+            final float advanceX = glyphMetrics.getHoriAdvance();
+
             FTGlyph glyph = slot.getGlyph();
 
             // border
@@ -121,53 +140,71 @@ class FreeTypeFontLoader {
             final PixmapRGBA pixmap = createPixmap(bitmap);
             final int bitmapWidth = pixmap.getWidth();
             final int bitmapHeight = pixmap.getHeight();
-            if(bitmapWidth == 0 || bitmapHeight == 0) {
-                System.err.println("Invalid '" + (char)(int) charcode + "' FTBitmap, size: " + bitmapWidth + "x" + bitmapHeight);
-                return;
-            }else {
-                System.out.println("Successfully loaded glyph '" + (char)(int) charcode + "', size: " + bitmapWidth + "x" + bitmapHeight);
-            }
 
-            // glyph info
-            final FTGlyphMetrics glyphMetrics = slot.getMetrics();
-            final float offsetX = slot.getBitmapLeft();
-            final float offsetY = (slot.getBitmapTop() - bitmapHeight - ascender + height);
-            final float advanceX = (glyphMetrics.getHoriAdvance() + borderWidth);
-
-            final GlyphInfo glyphInfo = new GlyphInfo(charcode, variationSelector)
-                .setSize(bitmapWidth, bitmapHeight)
-                .setOffset(offsetX, offsetY)
+            // empty glyphs such as spaces can be valid
+            // preserve their advance even if they have no bitmap
+            final GlyphInfo glyphInfo =
+                new GlyphInfo(charcode, variationSelector)
                 .setAdvanceX(advanceX);
+
+            if(bitmapWidth > 0 && bitmapHeight > 0) {
+                // glyph info
+                final float offsetX = bitmapGlyph.getLeft();
+                final float offsetY = (bitmapGlyph.getTop() - bitmapHeight - ascender + height);
+
+                glyphInfo
+                    .setSize(bitmapWidth, bitmapHeight)
+                    .setOffset(offsetX, offsetY);
+
+                pageGlyphAtlas.put(codepoint, pixmap);
+
+                // Debug: System.out.println("Successfully loaded glyph '" + (char)(int) charcode + "', size: " + bitmapWidth + "x" + bitmapHeight);
+            }else {
+                pixmap.dispose();
+                glyphInfo.setSize(0F, 0F);
+
+                // Debug: System.err.println("Invalid '" + (char)(int) charcode + "' FTBitmap, size: " + bitmapWidth + "x" + bitmapHeight);
+            }
 
             // kerning
             if(hasKerning) {
                 final FTVector kerningDst = new FTVector();
+
                 charset.forEach((charcodeRight, variationSelectorRight) -> {
-                    final long codepointRight = GlyphInfo.getCodePoint(charcodeRight, variationSelectorRight);
+                    final long rightCodepoint = GlyphInfo.getCodePoint(charcodeRight, variationSelectorRight);
 
-                    face.getKerning(charcode, charcodeRight, kerningDst);
-                    final float x = kerningDst.getX(PosType.F26DOT6);
-                    if(x == 0F)
-                        return;
+                    final long leftIndex = glyphIndices.get(codepoint);
+                    final long rightIndex = glyphIndices.get(rightCodepoint);
 
-                    glyphInfo.kernings().put(codepointRight, (int) x);
+                    face.getKerning(leftIndex, rightIndex, kerningDst);
+
+                    final float kerningX = kerningDst.getX(PosType.F26DOT6);
+                    if(kerningX != 0F)
+                        glyphInfo.kernings().put(rightCodepoint, (int) kerningX);
                 });
                 kerningDst.free();
             }
 
             font.glyphs().put(codepoint, glyphInfo);
-            pageGlyphAtlas.put(codepoint, pixmap);
         });
 
-        if(stroker != null)
-            stroker.done();
-
         // create page texture
-        final float glyphSize = (height + 1F + borderWidth);
-        final int pageSize = Maths.nextPow2((int) Math.sqrt(glyphSize * glyphSize * charset.size()));
+        final float estimatedGlyphSize = (height + 1F + borderWidth);
+        final int pageSize = Maths.nextPow2(
+            Math.max(
+                1,
+                (int) Math.ceil(
+                    Math.sqrt(
+                        estimatedGlyphSize * estimatedGlyphSize * charset.size()
+                    )
+                )
+            )
+        );
+
         pageGlyphAtlas.build(pageSize, pageSize);
 
         final Texture2D pageTexture = pageGlyphAtlas.getTexture();
+
         final GLFilter pageFilter = (options.isLinearFilter() ? GLFilter.LINEAR : GLFilter.NEAREST);
         pageTexture.setFilters(pageFilter);
 
@@ -182,13 +219,15 @@ class FreeTypeFontLoader {
                 return;
 
             final Region region = pageGlyphAtlas.getRegion(codepoint);
-            if(region == null)
-                return;
-            glyphInfo.setRegion(region);
+            if(region != null)
+                glyphInfo.setRegion(region);
         });
 
         // dispose
         pageGlyphAtlas.getPixmap().dispose();
+
+        if(stroker != null)
+            stroker.done();
         face.done();
         library.done();
 

@@ -1,6 +1,5 @@
 package jpize.android.context;
 
-import android.app.Activity;
 import android.view.Window;
 import jpize.context.IWindow;
 import jpize.util.Insetsi;
@@ -11,10 +10,10 @@ import generaloss.resourceflow.resource.Resource;
 
 public class AndroidWindow implements IWindow {
 
-    private final Activity activity;
+    private final JpizeAndroidActivity activity;
     private final Window window;
 
-    public AndroidWindow(Activity activity) {
+    public AndroidWindow(JpizeAndroidActivity activity) {
         this.activity = activity;
         this.window = activity.getWindow();
     }

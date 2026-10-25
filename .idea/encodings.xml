@@ -5,6 +5,10 @@
     <file url="file://$PROJECT_DIR$/backends/jpize-core-android/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/backends/jpize-core-lwjgl/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/backends/jpize-core-lwjgl/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/examples/jpize-app-desktop/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/examples/jpize-app-desktop/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/examples/jpize-core-tests/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/examples/jpize-core-tests/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/resources" charset="UTF-8" />
   </component>

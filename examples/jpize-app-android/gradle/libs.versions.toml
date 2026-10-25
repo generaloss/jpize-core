@@ -1,0 +1,22 @@
+[versions]
+agp = "9.4.1"
+junit = "4.13.2"
+junitVersion = "1.3.0"
+espressoCore = "3.7.0"
+appcompat = "1.8.0"
+material = "1.14.0"
+jpize = "26.10.1" # Jpize version
+
+[libraries]
+junit = { group = "junit", name = "junit", version.ref = "junit" }
+ext-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
+espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
+appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
+material = { group = "com.google.android.material", name = "material", version.ref = "material" }
+# Jpize libs
+jpize-core = { group = "io.github.generaloss", name = "jpize-core", version.ref = "jpize" }
+jpize-core-android = { group = "io.github.generaloss", name = "jpize-core-android", version.ref = "jpize" }
+
+[plugins]
+android-application = { id = "com.android.application", version.ref = "agp" }
+

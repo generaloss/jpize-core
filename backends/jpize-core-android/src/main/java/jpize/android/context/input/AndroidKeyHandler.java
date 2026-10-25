@@ -1,17 +1,16 @@
 package jpize.android.context.input;
 
-import android.util.Log;
 import android.view.KeyEvent;
-import jpize.android.context.AndroidCallbacks;
+import jpize.android.context.AndroidJpizeCallbacks;
 import jpize.context.input.Action;
 import jpize.context.input.Key;
 import jpize.context.input.Mods;
 
 public final class AndroidKeyHandler {
 
-    private final AndroidCallbacks callbacks;
+    private final AndroidJpizeCallbacks callbacks;
 
-    public AndroidKeyHandler(AndroidCallbacks callbacks) {
+    public AndroidKeyHandler(AndroidJpizeCallbacks callbacks) {
         this.callbacks = callbacks;
     }
 
@@ -42,7 +41,7 @@ public final class AndroidKeyHandler {
     public boolean onKeyTyped(KeyEvent event) {
         final int unicode = event.getUnicodeChar();
 
-        if (unicode == 0)
+        if(unicode == 0)
             return false;
 
         callbacks.invokeChar((char) unicode);
@@ -52,7 +51,7 @@ public final class AndroidKeyHandler {
     public boolean onKeyTypedWithMods(KeyEvent event) {
         final int unicode = event.getUnicodeChar();
 
-        if (unicode == 0)
+        if(unicode == 0)
             return false;
 
         final Mods mods = new AndroidMods(event.getMetaState());

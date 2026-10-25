@@ -1,6 +1,5 @@
 package jpize.android.context;
 
-import android.app.Activity;
 import android.opengl.GLSurfaceView;
 import jpize.android.opengl.*;
 import jpize.context.Jpize;
@@ -10,13 +9,16 @@ import javax.microedition.khronos.opengles.GL10;
 
 public class AndroidGLSurfaceView extends GLSurfaceView implements GLSurfaceView.Renderer {
 
+    private final JpizeAndroidActivity activity;
     private final JpizeAndroidContext context;
 
-    public AndroidGLSurfaceView(Activity activity, JpizeAndroidContext context) {
+    public AndroidGLSurfaceView(JpizeAndroidActivity activity, JpizeAndroidContext context) {
         super(activity);
+        this.activity = activity;
         this.context = context;
 
         super.setEGLContextClientVersion(3);
+        super.setPreserveEGLContextOnPause(true);
         super.setRenderer(this);
     }
 
@@ -40,6 +42,7 @@ public class AndroidGLSurfaceView extends GLSurfaceView implements GLSurfaceView
         Jpize.GL44 = AndroidGL44.INSTANCE;
         Jpize.GL45 = AndroidGL45.INSTANCE;
         Jpize.GL46 = AndroidGL46.INSTANCE;
+        activity.onJpizeInitialized();
         context.onInit();
     }
 

@@ -165,6 +165,7 @@ public class TextInput implements Iterable<String> {
                 return "";
 
             final String line = lines.remove(position.y);
+            lines.trim();
             final String part2 = line.substring(position.x);
             position.y--;
             this.setEndX();
@@ -204,12 +205,12 @@ public class TextInput implements Iterable<String> {
             );
     }
 
-    public int wordLength(int x, int y, boolean invert) {
+    public int wordLength(int x, int y, boolean inverse) {
         final String line = this.getLine(y);
         final int length = line.length();
         int count = 0;
 
-        if(invert){
+        if(inverse){
             if(x == 0) return 0;
             else if(x == 1) return 1;
 
@@ -237,18 +238,21 @@ public class TextInput implements Iterable<String> {
         return count;
     }
 
-    public int wordLength(boolean invert) {
-        return this.wordLength(position.x, position.y, invert);
+    public int wordLength(boolean inverse) {
+        return this.wordLength(position.x, position.y, inverse);
     }
 
 
-    private void onChar(char codepoint) {
+    private void onChar(int codepoint) {
         if(!enabledCharInput)
             return;
 
-        final String character = String.valueOf(codepoint);
-        this.insert(character);
-        this.invokeInputCallbacks(character);
+        final char[] chars = Character.toChars(codepoint);
+        for(char character : chars) {
+            final String string = String.valueOf(character);
+            this.insert(string);
+            this.invokeInputCallbacks(string);
+        }
     }
 
     private void onKey(Key key, int scancode, Action action, Mods mods) {
@@ -411,6 +415,7 @@ public class TextInput implements Iterable<String> {
             return "";
 
         final String line = lines.remove(y);
+        lines.trim();
         if(position.y >= this.lines())
             this.setEndY();
 
@@ -557,9 +562,9 @@ public class TextInput implements Iterable<String> {
     }
 
 
-    public static String makeString(String[] lines, boolean invert) {
+    public static String makeString(String[] lines, boolean inverse) {
         final StringJoiner joiner = new StringJoiner("\n");
-        if(!invert){
+        if(!inverse){
             for(String line: lines)
                 joiner.add(line);
         }else{
@@ -570,8 +575,8 @@ public class TextInput implements Iterable<String> {
         return joiner.toString();
     }
 
-    public String makeString(boolean invert) {
-        return makeString(this.lines.array(), invert);
+    public String makeString(boolean inverse) {
+        return makeString(this.lines.array(), inverse);
     }
 
     public String makeString() {
@@ -580,7 +585,7 @@ public class TextInput implements Iterable<String> {
 
     public static class Selection implements Iterable<String>{
 
-        public final boolean invert, oneline;
+        public final boolean inverse, oneline;
         public final Vec2i start, end;
         public final String[] lines;
         public final int length;
@@ -593,13 +598,13 @@ public class TextInput implements Iterable<String> {
             x2 = Maths.clamp(x2, 0, input.getLine(y2).length());
 
             this.oneline = (y1 == y2);
-            this.invert = (y1 >= y2) && !oneline;
+            this.inverse = (y1 >= y2) && !oneline;
 
             final int startY = Math.min(y2, y1);
             final int endY = Math.max(y2, y1);
 
-            final int startX = (oneline ? Math.min(x1, x2) : (invert ? x2 : x1));
-            final int endX =   (oneline ? Math.max(x1, x2) : (invert ? x1 : x2));
+            final int startX = (oneline ? Math.min(x1, x2) : (inverse ? x2 : x1));
+            final int endX =   (oneline ? Math.max(x1, x2) : (inverse ? x1 : x2));
 
             this.start = new Vec2i(startX, startY);
             this.end = new Vec2i(endX, endY);

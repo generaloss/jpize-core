@@ -1,6 +1,5 @@
 package jpize.lwjgl.glfw.context;
 
-import jpize.lwjgl.glfw.init.GlfwPlatform;
 import jpize.opengl.gl.GL;
 import jpize.opengl.glenum.GLTarget;
 import jpize.lwjgl.glfw.Glfw;
@@ -41,7 +40,7 @@ public class GlfwContextBuilder {
         Glfw.windowHint(GlfwWindowHint.DOUBLEBUFFER, true);
         Glfw.windowHint(GlfwWindowHint.DECORATED, decorated);
         Glfw.windowHint(GlfwWindowHint.RESIZABLE, resizable);
-        Glfw.windowHint(GlfwWindowHint.SAMPLES, samples);
+        Glfw.windowHint(GlfwWindowHint.SAMPLES, msaaSamples);
         Glfw.windowHint(GlfwWindowHint.FOCUS_ON_SHOW, focusOnShow);
         Glfw.windowHint(GlfwWindowHint.TRANSPARENT_FRAMEBUFFER, transparentFramebuffer);
         Glfw.windowHint(GlfwWindowHint.DEPTH_BITS, depthBits);
@@ -62,9 +61,9 @@ public class GlfwContextBuilder {
         if(icons != null)
             window.setIcon(icons);
         // context
-        final GlfwContext context = new GlfwContext(window);
+        final GlfwContext context = new GlfwContext(window, appFolderName);
         // multisample
-        if(samples > 0)
+        if(msaaSamples > 0)
             GL.enable(GLTarget.MULTISAMPLE);
 
         return context;
@@ -129,10 +128,10 @@ public class GlfwContextBuilder {
         return this;
     }
 
-    private int samples = 0;
+    private int msaaSamples = 0;
 
-    public GlfwContextBuilder samples(int samples) {
-        this.samples = samples;
+    public GlfwContextBuilder multisample(int msaaSamples) {
+        this.msaaSamples = msaaSamples;
         return this;
     }
 
@@ -154,6 +153,13 @@ public class GlfwContextBuilder {
 
     public GlfwContextBuilder depthBits(int depthBits) {
         this.depthBits = depthBits;
+        return this;
+    }
+
+    private String appFolderName = "jpize-application";
+
+    public GlfwContextBuilder appFolderName(String appFolderName) {
+        this.appFolderName = appFolderName;
         return this;
     }
 
