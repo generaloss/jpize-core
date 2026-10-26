@@ -2,10 +2,19 @@
 ![jpize](logo.svg)
 
 [![Maven Central](https://img.shields.io/maven-central/v/io.github.generaloss/jpize-core.svg)](https://mvnrepository.com/artifact/io.github.generaloss/jpize-core)
+[![Maven Central](https://img.shields.io/maven-central/v/io.github.generaloss/jpize-core.svg)](https://mvnrepository.com/artifact/io.github.generaloss/jpize-core-lwjgl)
+[![Maven Central](https://img.shields.io/maven-central/v/io.github.generaloss/jpize-core.svg)](https://mvnrepository.com/artifact/io.github.generaloss/jpize-core-android)
 
 ---
 
 Java version: 17 +
+
+## How to use
+
+1. Add the [jpize-core](https://central.sonatype.com/artifact/io.github.generaloss/jpize-core) dependency.
+2. Add the backend you need:
+    * [jpize-core-lwjgl](https://central.sonatype.com/artifact/io.github.generaloss/jpize-core-lwjgl) (Windows, Linux, MacOS)
+    * [jpize-core-android](https://central.sonatype.com/artifact/io.github.generaloss/jpize-core-android)
 
 ## Examples
 
@@ -122,6 +131,8 @@ Jpize.getHeight()
 Jpize.getFPS()
 Jpize.getDeltaTime()
 ```
+
+#### See more in [examples](https://github.com/generaloss/jpize-core/tree/master/examples) directory.
 
 ---
 
