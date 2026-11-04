@@ -44,23 +44,23 @@ public class TextureCubemap extends GLTexture {
 
 
     public TextureCubemap active(int active) {
-        super.glActiveTexture(active);
+        GLTexture.glActiveTexture(active);
         this.bind();
         return this;
     }
 
     public TextureCubemap generateMipmap() {
         this.bind();
-        super.glGenerateMipmap(TARGET);
+        GLTexture.glGenerateMipmap(TARGET);
         return this;
     }
 
 
     public TextureCubemap generateMipmap(int baseLevel, int maxLevel) {
         this.bind();
-        super.glSetBaseLevel(PARAM_TARGET, baseLevel);
-        super.glSetMaxLevel(PARAM_TARGET, maxLevel);
-        super.glGenerateMipmap(TARGET);
+        GLTexture.glSetBaseLevel(PARAM_TARGET, baseLevel);
+        GLTexture.glSetMaxLevel(PARAM_TARGET, maxLevel);
+        GLTexture.glGenerateMipmap(TARGET);
         return this;
     }
 
@@ -68,7 +68,7 @@ public class TextureCubemap extends GLTexture {
 
     public void setImage(GLCubemapTarget target, int level, Pixmap pixmap) {
         this.bind();
-        super.glSetImage2D(target.imageTarget, level, pixmap.getWidth(), pixmap.getHeight(), pixmap.getFormat(), GLType.UNSIGNED_BYTE, pixmap.buffer());
+        GLTexture.glSetImage2D(target.imageTarget, level, pixmap.getWidth(), pixmap.getHeight(), pixmap.getFormat(), GLType.UNSIGNED_BYTE, pixmap.buffer());
     }
 
     public void setImage(GLCubemapTarget target, Pixmap pixmap) {
@@ -119,80 +119,80 @@ public class TextureCubemap extends GLTexture {
 
     public TextureCubemap setDepthStencilTextureMode(GLDepthStencilMode mode) {
         this.bind();
-        super.glSetDepthStencilTextureMode(PARAM_TARGET, mode);
+        GLTexture.glSetDepthStencilTextureMode(PARAM_TARGET, mode);
         return this;
     }
 
     public GLDepthStencilMode getDepthStencilTextureMode() {
         this.bind();
-        return super.glGetDepthStencilTextureMode(PARAM_TARGET);
+        return GLTexture.glGetDepthStencilTextureMode(PARAM_TARGET);
     }
 
 
     public TextureCubemap setBaseLevel(int level) {
         this.bind();
-        super.glSetBaseLevel(PARAM_TARGET, level);
+        GLTexture.glSetBaseLevel(PARAM_TARGET, level);
         return this;
     }
 
     public int getBaseLevel() {
         this.bind();
-        return super.glGetBaseLevel(PARAM_TARGET);
+        return GLTexture.glGetBaseLevel(PARAM_TARGET);
     }
 
 
     public TextureCubemap setCompareFunc(GLCompareFunc value) {
         this.bind();
-        super.glSetCompareFunc(PARAM_TARGET, value);
+        GLTexture.glSetCompareFunc(PARAM_TARGET, value);
         return this;
     }
 
     public GLCompareFunc getCompareFunc() {
         this.bind();
-        return super.glGetCompareFunc(PARAM_TARGET);
+        return GLTexture.glGetCompareFunc(PARAM_TARGET);
     }
 
 
     public TextureCubemap setCompareMode(GLCompareMode value) {
         this.bind();
-        super.glSetCompareMode(PARAM_TARGET, value);
+        GLTexture.glSetCompareMode(PARAM_TARGET, value);
         return this;
     }
 
     public GLCompareMode getCompareMode() {
         this.bind();
-        return super.glGetCompareMode(PARAM_TARGET);
+        return GLTexture.glGetCompareMode(PARAM_TARGET);
     }
 
 
     public TextureCubemap setLodBias(float lodBias) {
         this.bind();
-        super.glSetLodBias(PARAM_TARGET, lodBias);
+        GLTexture.glSetLodBias(PARAM_TARGET, lodBias);
         return this;
     }
 
     public float getLodBias() {
         this.bind();
-        return super.glGetMaxAnisotropy(PARAM_TARGET);
+        return GLTexture.glGetMaxAnisotropy(PARAM_TARGET);
     }
 
 
     public TextureCubemap setMinFilter(GLFilter filter) {
         this.bind();
-        super.glSetMinFilter(PARAM_TARGET, filter);
+        GLTexture.glSetMinFilter(PARAM_TARGET, filter);
         return this;
     }
 
     public TextureCubemap setMagFilter(GLFilter filter) {
         this.bind();
-        super.glSetMagFilter(PARAM_TARGET, filter);
+        GLTexture.glSetMagFilter(PARAM_TARGET, filter);
         return this;
     }
 
     public TextureCubemap setFilters(GLFilter min, GLFilter mag) {
         this.bind();
-        super.glSetMinFilter(PARAM_TARGET, min);
-        super.glSetMagFilter(PARAM_TARGET, mag);
+        GLTexture.glSetMinFilter(PARAM_TARGET, min);
+        GLTexture.glSetMagFilter(PARAM_TARGET, mag);
         return this;
     }
 
@@ -203,129 +203,129 @@ public class TextureCubemap extends GLTexture {
 
     public GLFilter getMinFilter() {
         this.bind();
-        return super.glGetMinFilter(PARAM_TARGET);
+        return GLTexture.glGetMinFilter(PARAM_TARGET);
     }
 
     public GLFilter getMagFilter() {
         this.bind();
-        return super.glGetMagFilter(PARAM_TARGET);
+        return GLTexture.glGetMagFilter(PARAM_TARGET);
     }
 
 
     public TextureCubemap setMinLod(int value) {
         this.bind();
-        super.glSetMinLod(PARAM_TARGET, value);
+        GLTexture.glSetMinLod(PARAM_TARGET, value);
         return this;
     }
 
     public int getMinLod() {
         this.bind();
-        return super.glGetMinLod(PARAM_TARGET);
+        return GLTexture.glGetMinLod(PARAM_TARGET);
     }
 
 
     public TextureCubemap setMaxLod(int value) {
         this.bind();
-        super.glSetMaxLod(PARAM_TARGET, value);
+        GLTexture.glSetMaxLod(PARAM_TARGET, value);
         return this;
     }
 
     public int getMaxLod() {
         this.bind();
-        return super.glGetMaxLod(PARAM_TARGET);
+        return GLTexture.glGetMaxLod(PARAM_TARGET);
     }
 
 
     public TextureCubemap setMaxLevel(int level) {
         this.bind();
-        super.glSetMaxLevel(PARAM_TARGET, level);
+        GLTexture.glSetMaxLevel(PARAM_TARGET, level);
         return this;
     }
 
     public int getMaxLevel() {
         this.bind();
-        return super.glGetMaxLevel(PARAM_TARGET);
+        return GLTexture.glGetMaxLevel(PARAM_TARGET);
     }
 
 
     public TextureCubemap setSqizzleR(int value) {
         this.bind();
-        super.glSetSqizzleR(PARAM_TARGET, value);
+        GLTexture.glSetSqizzleR(PARAM_TARGET, value);
         return this;
     }
 
     public int getSqizzleR() {
         this.bind();
-        return super.glGetSqizzleR(PARAM_TARGET);
+        return GLTexture.glGetSqizzleR(PARAM_TARGET);
     }
 
 
     public TextureCubemap setSqizzleG(int value) {
         this.bind();
-        super.glSetSqizzleG(PARAM_TARGET, value);
+        GLTexture.glSetSqizzleG(PARAM_TARGET, value);
         return this;
     }
 
     public int getSqizzleG() {
         this.bind();
-        return super.glGetSqizzleG(PARAM_TARGET);
+        return GLTexture.glGetSqizzleG(PARAM_TARGET);
     }
 
 
     public TextureCubemap setSqizzleB(int value) {
         this.bind();
-        super.glSetSqizzleB(PARAM_TARGET, value);
+        GLTexture.glSetSqizzleB(PARAM_TARGET, value);
         return this;
     }
 
     public int getSqizzleB() {
         this.bind();
-        return super.glGetSqizzleB(PARAM_TARGET);
+        return GLTexture.glGetSqizzleB(PARAM_TARGET);
     }
 
 
     public TextureCubemap setSqizzleA(int value) {
         this.bind();
-        super.glSetSqizzleA(PARAM_TARGET, value);
+        GLTexture.glSetSqizzleA(PARAM_TARGET, value);
         return this;
     }
 
     public int getSqizzleA() {
         this.bind();
-        return super.glGetSqizzleA(PARAM_TARGET);
+        return GLTexture.glGetSqizzleA(PARAM_TARGET);
     }
 
 
     public TextureCubemap setWrapS(GLWrap wrap) {
         this.bind();
-        super.glSetWrapS(PARAM_TARGET, wrap);
+        GLTexture.glSetWrapS(PARAM_TARGET, wrap);
         return this;
     }
 
     public TextureCubemap setWrapT(GLWrap wrap) {
         this.bind();
-        super.glSetWrapT(PARAM_TARGET, wrap);
+        GLTexture.glSetWrapT(PARAM_TARGET, wrap);
         return this;
     }
 
     public TextureCubemap setWrapR(GLWrap wrap) {
         this.bind();
-        super.glSetWrapR(PARAM_TARGET, wrap);
+        GLTexture.glSetWrapR(PARAM_TARGET, wrap);
         return this;
     }
 
     public TextureCubemap setWrap(GLWrap s, GLWrap t) {
         this.bind();
-        super.glSetWrapS(PARAM_TARGET, s);
-        super.glSetWrapT(PARAM_TARGET, t);
+        GLTexture.glSetWrapS(PARAM_TARGET, s);
+        GLTexture.glSetWrapT(PARAM_TARGET, t);
         return this;
     }
 
     public TextureCubemap setWrap(GLWrap s, GLWrap t, GLWrap r) {
         this.bind();
-        super.glSetWrapS(PARAM_TARGET, s);
-        super.glSetWrapT(PARAM_TARGET, t);
-        super.glSetWrapT(PARAM_TARGET, r);
+        GLTexture.glSetWrapS(PARAM_TARGET, s);
+        GLTexture.glSetWrapT(PARAM_TARGET, t);
+        GLTexture.glSetWrapT(PARAM_TARGET, r);
         return this;
     }
 
@@ -340,53 +340,53 @@ public class TextureCubemap extends GLTexture {
 
     public GLWrap getWrapS() {
         this.bind();
-        return super.glGetWrapS(PARAM_TARGET);
+        return GLTexture.glGetWrapS(PARAM_TARGET);
     }
 
     public GLWrap getWrapT() {
         this.bind();
-        return super.glGetWrapT(PARAM_TARGET);
+        return GLTexture.glGetWrapT(PARAM_TARGET);
     }
 
     public GLWrap getWrapR() {
         this.bind();
-        return super.glGetWrapR(PARAM_TARGET);
+        return GLTexture.glGetWrapR(PARAM_TARGET);
     }
 
 
     public TextureCubemap setBorderColor(float... color) {
         this.bind();
-        super.glSetBorderColor(PARAM_TARGET, color);
+        GLTexture.glSetBorderColor(PARAM_TARGET, color);
         return this;
     }
 
     public float[] getBorderColor() {
         this.bind();
-        return super.glGetBorderColor(PARAM_TARGET);
+        return GLTexture.glGetBorderColor(PARAM_TARGET);
     }
 
 
     public TextureCubemap setSwizzle(float... color) {
         this.bind();
-        super.glSetSwizzle(PARAM_TARGET, color);
+        GLTexture.glSetSwizzle(PARAM_TARGET, color);
         return this;
     }
 
     public float[] getSwizzle() {
         this.bind();
-        return super.glGetSwizzle(PARAM_TARGET);
+        return GLTexture.glGetSwizzle(PARAM_TARGET);
     }
 
 
     public TextureCubemap setMaxAnisotropy(float levels) {
         this.bind();
-        super.glSetMaxAnisotropy(PARAM_TARGET, levels);
+        GLTexture.glSetMaxAnisotropy(PARAM_TARGET, levels);
         return this;
     }
 
     public float getMaxAnisotropy() {
         this.bind();
-        return super.glGetMaxAnisotropy(PARAM_TARGET);
+        return GLTexture.glGetMaxAnisotropy(PARAM_TARGET);
     }
 
 
@@ -394,17 +394,17 @@ public class TextureCubemap extends GLTexture {
 
     public int getWidth(GLTexLevelTarget target, int level) {
         this.bind();
-        return super.glGetWidth(target, level);
+        return GLTexture.glGetWidth(target, level);
     }
 
     public int getHeight(GLTexLevelTarget target, int level) {
         this.bind();
-        return super.glGetHeight(target, level);
+        return GLTexture.glGetHeight(target, level);
     }
 
     public int getDepth(GLTexLevelTarget target, int level) {
         this.bind();
-        return super.glGetDepth(target, level);
+        return GLTexture.glGetDepth(target, level);
     }
 
     public int getWidth(GLTexLevelTarget target) {
@@ -422,7 +422,7 @@ public class TextureCubemap extends GLTexture {
 
     public GLInternalFormat getInternalFormat(GLTexLevelTarget target, int level) {
         this.bind();
-        return super.glGetInternalFormat(target, level);
+        return GLTexture.glGetInternalFormat(target, level);
     }
 
     public GLInternalFormat getInternalFormat(GLTexLevelTarget target) {
@@ -432,7 +432,7 @@ public class TextureCubemap extends GLTexture {
 
     public int getRedSize(GLTexLevelTarget target, int level) {
         this.bind();
-        return super.glGetRedSize(target, level);
+        return GLTexture.glGetRedSize(target, level);
     }
 
     public int getRedSize(GLTexLevelTarget target) {
@@ -441,7 +441,7 @@ public class TextureCubemap extends GLTexture {
 
     public int getGreenSize(GLTexLevelTarget target, int level) {
         this.bind();
-        return super.glGetGreenSize(target, level);
+        return GLTexture.glGetGreenSize(target, level);
     }
 
     public int getGreenSize(GLTexLevelTarget target) {
@@ -450,7 +450,7 @@ public class TextureCubemap extends GLTexture {
 
     public int getBlueSize(GLTexLevelTarget target, int level) {
         this.bind();
-        return super.glGetBlueSize(target, level);
+        return GLTexture.glGetBlueSize(target, level);
     }
 
     public int getBlueSize(GLTexLevelTarget target) {
@@ -459,7 +459,7 @@ public class TextureCubemap extends GLTexture {
 
     public int getAlphaSize(GLTexLevelTarget target, int level) {
         this.bind();
-        return super.glGetAlphaSize(target, level);
+        return GLTexture.glGetAlphaSize(target, level);
     }
 
     public int getAlphaSize(GLTexLevelTarget target) {
@@ -469,7 +469,7 @@ public class TextureCubemap extends GLTexture {
 
     public int getDepthSize(GLTexLevelTarget target, int level) {
         this.bind();
-        return super.glGetDepthSize(target, level);
+        return GLTexture.glGetDepthSize(target, level);
     }
 
     public int getDepthSize(GLTexLevelTarget target) {
@@ -478,7 +478,7 @@ public class TextureCubemap extends GLTexture {
 
     public int getCompressedImageSize(GLTexLevelTarget target, int level) {
         this.bind();
-        return super.glGetCompressedImageSize(target, level);
+        return GLTexture.glGetCompressedImageSize(target, level);
     }
 
     public int getCompressedImageSize(GLTexLevelTarget target) {
@@ -487,7 +487,7 @@ public class TextureCubemap extends GLTexture {
 
     public boolean isCompressed(GLTexLevelTarget target, int level) {
         this.bind();
-        return super.glIsCompressed(target, level);
+        return GLTexture.glIsCompressed(target, level);
     }
 
     public boolean isCompressed(GLTexLevelTarget target) {
@@ -496,7 +496,7 @@ public class TextureCubemap extends GLTexture {
 
     public int getBufferOffset(GLTexLevelTarget target, int level) {
         this.bind();
-        return super.glGetBufferOffset(target, level);
+        return GLTexture.glGetBufferOffset(target, level);
     }
 
     public int getBufferOffset(GLTexLevelTarget target) {

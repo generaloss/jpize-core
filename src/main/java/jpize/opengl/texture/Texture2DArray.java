@@ -45,16 +45,16 @@ public class Texture2DArray extends GLTexture {
 
     public Texture2DArray generateMipmap() {
         this.bind();
-        super.glGenerateMipmap(TARGET);
+        GLTexture.glGenerateMipmap(TARGET);
         return this;
     }
 
 
     public Texture2DArray generateMipmap(int baseLevel, int maxLevel) {
         this.bind();
-        super.glSetBaseLevel(PARAM_TARGET, baseLevel);
-        super.glSetMaxLevel(PARAM_TARGET, maxLevel);
-        super.glGenerateMipmap(TARGET);
+        GLTexture.glSetBaseLevel(PARAM_TARGET, baseLevel);
+        GLTexture.glSetMaxLevel(PARAM_TARGET, maxLevel);
+        GLTexture.glGenerateMipmap(TARGET);
         return this;
     }
 
@@ -66,7 +66,7 @@ public class Texture2DArray extends GLTexture {
         this.bind();
         for(int offsetZ = 0; offsetZ < pixmaps.length; offsetZ++){
             final Pixmap pixmap = pixmaps[offsetZ];
-            super.glSetSubImage3D(GLTexImage3DTarget.TEXTURE_2D_ARRAY, 0, pixmap.getWidth(), pixmap.getHeight(), 1, 0, 0, offsetZ, pixmap);
+            GLTexture.glSetSubImage3D(GLTexImage3DTarget.TEXTURE_2D_ARRAY, 0, pixmap.getWidth(), pixmap.getHeight(), 1, 0, 0, offsetZ, pixmap);
         }
         return this;
     }
@@ -77,7 +77,7 @@ public class Texture2DArray extends GLTexture {
 
     public Texture2DArray setDepthStencilTextureMode(GLDepthStencilMode mode) {
         this.bind();
-        super.glSetDepthStencilTextureMode(PARAM_TARGET, mode);
+        GLTexture.glSetDepthStencilTextureMode(PARAM_TARGET, mode);
         return this;
     }
 
@@ -89,7 +89,7 @@ public class Texture2DArray extends GLTexture {
 
     public Texture2DArray setBaseLevel(int level) {
         this.bind();
-        super.glSetBaseLevel(PARAM_TARGET, level);
+        GLTexture.glSetBaseLevel(PARAM_TARGET, level);
         return this;
     }
 
@@ -101,7 +101,7 @@ public class Texture2DArray extends GLTexture {
 
     public Texture2DArray setCompareFunc(GLCompareFunc value) {
         this.bind();
-        super.glSetCompareFunc(PARAM_TARGET, value);
+        GLTexture.glSetCompareFunc(PARAM_TARGET, value);
         return this;
     }
 
@@ -113,7 +113,7 @@ public class Texture2DArray extends GLTexture {
 
     public Texture2DArray setCompareMode(GLCompareMode value) {
         this.bind();
-        super.glSetCompareMode(PARAM_TARGET, value);
+        GLTexture.glSetCompareMode(PARAM_TARGET, value);
         return this;
     }
 
@@ -125,7 +125,7 @@ public class Texture2DArray extends GLTexture {
 
     public Texture2DArray setLodBias(float lodBias) {
         this.bind();
-        super.glSetLodBias(PARAM_TARGET, lodBias);
+        GLTexture.glSetLodBias(PARAM_TARGET, lodBias);
         return this;
     }
 
@@ -137,20 +137,20 @@ public class Texture2DArray extends GLTexture {
 
     public Texture2DArray setMinFilter(GLFilter filter) {
         this.bind();
-        super.glSetMinFilter(PARAM_TARGET, filter);
+        GLTexture.glSetMinFilter(PARAM_TARGET, filter);
         return this;
     }
 
     public Texture2DArray setMagFilter(GLFilter filter) {
         this.bind();
-        super.glSetMagFilter(PARAM_TARGET, filter);
+        GLTexture.glSetMagFilter(PARAM_TARGET, filter);
         return this;
     }
 
     public Texture2DArray setFilters(GLFilter min, GLFilter mag) {
         this.bind();
-        super.glSetMinFilter(PARAM_TARGET, min);
-        super.glSetMagFilter(PARAM_TARGET, mag);
+        GLTexture.glSetMinFilter(PARAM_TARGET, min);
+        GLTexture.glSetMagFilter(PARAM_TARGET, mag);
         return this;
     }
 
@@ -172,7 +172,7 @@ public class Texture2DArray extends GLTexture {
 
     public Texture2DArray setMinLod(int value) {
         this.bind();
-        super.glSetMinLod(PARAM_TARGET, value);
+        GLTexture.glSetMinLod(PARAM_TARGET, value);
         return this;
     }
 
@@ -184,7 +184,7 @@ public class Texture2DArray extends GLTexture {
 
     public Texture2DArray setMaxLod(int value) {
         this.bind();
-        super.glSetMaxLod(PARAM_TARGET, value);
+        GLTexture.glSetMaxLod(PARAM_TARGET, value);
         return this;
     }
 
@@ -196,7 +196,7 @@ public class Texture2DArray extends GLTexture {
 
     public Texture2DArray setMaxLevel(int level) {
         this.bind();
-        super.glSetMaxLevel(PARAM_TARGET, level);
+        GLTexture.glSetMaxLevel(PARAM_TARGET, level);
         return this;
     }
 
@@ -208,7 +208,7 @@ public class Texture2DArray extends GLTexture {
 
     public Texture2DArray setSqizzleR(int value) {
         this.bind();
-        super.glSetSqizzleR(PARAM_TARGET, value);
+        GLTexture.glSetSqizzleR(PARAM_TARGET, value);
         return this;
     }
 
@@ -220,7 +220,7 @@ public class Texture2DArray extends GLTexture {
 
     public Texture2DArray setSqizzleG(int value) {
         this.bind();
-        super.glSetSqizzleG(PARAM_TARGET, value);
+        GLTexture.glSetSqizzleG(PARAM_TARGET, value);
         return this;
     }
 
@@ -232,7 +232,7 @@ public class Texture2DArray extends GLTexture {
 
     public Texture2DArray setSqizzleB(int value) {
         this.bind();
-        super.glSetSqizzleB(PARAM_TARGET, value);
+        GLTexture.glSetSqizzleB(PARAM_TARGET, value);
         return this;
     }
 
@@ -244,7 +244,7 @@ public class Texture2DArray extends GLTexture {
 
     public Texture2DArray setSqizzleA(int value) {
         this.bind();
-        super.glSetSqizzleA(PARAM_TARGET, value);
+        GLTexture.glSetSqizzleA(PARAM_TARGET, value);
         return this;
     }
 
@@ -256,34 +256,34 @@ public class Texture2DArray extends GLTexture {
 
     public Texture2DArray setWrapS(GLWrap wrap) {
         this.bind();
-        super.glSetWrapS(PARAM_TARGET, wrap);
+        GLTexture.glSetWrapS(PARAM_TARGET, wrap);
         return this;
     }
 
     public Texture2DArray setWrapT(GLWrap wrap) {
         this.bind();
-        super.glSetWrapT(PARAM_TARGET, wrap);
+        GLTexture.glSetWrapT(PARAM_TARGET, wrap);
         return this;
     }
 
     public Texture2DArray setWrapR(GLWrap wrap) {
         this.bind();
-        super.glSetWrapR(PARAM_TARGET, wrap);
+        GLTexture.glSetWrapR(PARAM_TARGET, wrap);
         return this;
     }
 
     public Texture2DArray setWrap(GLWrap s, GLWrap t) {
         this.bind();
-        super.glSetWrapS(PARAM_TARGET, s);
-        super.glSetWrapT(PARAM_TARGET, t);
+        GLTexture.glSetWrapS(PARAM_TARGET, s);
+        GLTexture.glSetWrapT(PARAM_TARGET, t);
         return this;
     }
 
     public Texture2DArray setWrap(GLWrap s, GLWrap t, GLWrap r) {
         this.bind();
-        super.glSetWrapS(PARAM_TARGET, s);
-        super.glSetWrapT(PARAM_TARGET, t);
-        super.glSetWrapT(PARAM_TARGET, r);
+        GLTexture.glSetWrapS(PARAM_TARGET, s);
+        GLTexture.glSetWrapT(PARAM_TARGET, t);
+        GLTexture.glSetWrapT(PARAM_TARGET, r);
         return this;
     }
 
@@ -314,7 +314,7 @@ public class Texture2DArray extends GLTexture {
 
     public Texture2DArray setBorderColor(float... color) {
         this.bind();
-        super.glSetBorderColor(PARAM_TARGET, color);
+        GLTexture.glSetBorderColor(PARAM_TARGET, color);
         return this;
     }
 
@@ -326,7 +326,7 @@ public class Texture2DArray extends GLTexture {
 
     public Texture2DArray setSwizzle(float... color) {
         this.bind();
-        super.glSetSwizzle(PARAM_TARGET, color);
+        GLTexture.glSetSwizzle(PARAM_TARGET, color);
         return this;
     }
 
@@ -338,7 +338,7 @@ public class Texture2DArray extends GLTexture {
 
     public Texture2DArray setMaxAnisotropy(float levels) {
         this.bind();
-        super.glSetMaxAnisotropy(PARAM_TARGET, levels);
+        GLTexture.glSetMaxAnisotropy(PARAM_TARGET, levels);
         return this;
     }
 
@@ -353,17 +353,17 @@ public class Texture2DArray extends GLTexture {
 
     public int getWidth(GLTexLevelTarget target, int level) {
         this.bind();
-        return super.glGetWidth(target, level);
+        return GLTexture.glGetWidth(target, level);
     }
 
     public int getHeight(GLTexLevelTarget target, int level) {
         this.bind();
-        return super.glGetHeight(target, level);
+        return GLTexture.glGetHeight(target, level);
     }
 
     public int getDepth(GLTexLevelTarget target, int level) {
         this.bind();
-        return super.glGetDepth(target, level);
+        return GLTexture.glGetDepth(target, level);
     }
 
     public int getWidth(GLTexLevelTarget target) {
@@ -381,7 +381,7 @@ public class Texture2DArray extends GLTexture {
 
     public GLInternalFormat getInternalFormat(GLTexLevelTarget target, int level) {
         this.bind();
-        return super.glGetInternalFormat(target, level);
+        return GLTexture.glGetInternalFormat(target, level);
     }
 
     public GLInternalFormat getInternalFormat(GLTexLevelTarget target) {
@@ -391,7 +391,7 @@ public class Texture2DArray extends GLTexture {
 
     public int getRedSize(GLTexLevelTarget target, int level) {
         this.bind();
-        return super.glGetRedSize(target, level);
+        return GLTexture.glGetRedSize(target, level);
     }
 
     public int getRedSize(GLTexLevelTarget target) {
@@ -400,7 +400,7 @@ public class Texture2DArray extends GLTexture {
 
     public int getGreenSize(GLTexLevelTarget target, int level) {
         this.bind();
-        return super.glGetGreenSize(target, level);
+        return GLTexture.glGetGreenSize(target, level);
     }
 
     public int getGreenSize(GLTexLevelTarget target) {
@@ -409,7 +409,7 @@ public class Texture2DArray extends GLTexture {
 
     public int getBlueSize(GLTexLevelTarget target, int level) {
         this.bind();
-        return super.glGetBlueSize(target, level);
+        return GLTexture.glGetBlueSize(target, level);
     }
 
     public int getBlueSize(GLTexLevelTarget target) {
@@ -418,7 +418,7 @@ public class Texture2DArray extends GLTexture {
 
     public int getAlphaSize(GLTexLevelTarget target, int level) {
         this.bind();
-        return super.glGetAlphaSize(target, level);
+        return GLTexture.glGetAlphaSize(target, level);
     }
 
     public int getAlphaSize(GLTexLevelTarget target) {
@@ -428,7 +428,7 @@ public class Texture2DArray extends GLTexture {
 
     public int getDepthSize(GLTexLevelTarget target, int level) {
         this.bind();
-        return super.glGetDepthSize(target, level);
+        return GLTexture.glGetDepthSize(target, level);
     }
 
     public int getDepthSize(GLTexLevelTarget target) {
@@ -437,7 +437,7 @@ public class Texture2DArray extends GLTexture {
 
     public int getCompressedImageSize(GLTexLevelTarget target, int level) {
         this.bind();
-        return super.glGetCompressedImageSize(target, level);
+        return GLTexture.glGetCompressedImageSize(target, level);
     }
 
     public int getCompressedImageSize(GLTexLevelTarget target) {
@@ -446,7 +446,7 @@ public class Texture2DArray extends GLTexture {
 
     public boolean isCompressed(GLTexLevelTarget target, int level) {
         this.bind();
-        return super.glIsCompressed(target, level);
+        return GLTexture.glIsCompressed(target, level);
     }
 
     public boolean isCompressed(GLTexLevelTarget target) {
@@ -455,7 +455,7 @@ public class Texture2DArray extends GLTexture {
 
     public int getBufferOffset(GLTexLevelTarget target, int level) {
         this.bind();
-        return super.glGetBufferOffset(target, level);
+        return GLTexture.glGetBufferOffset(target, level);
     }
 
     public int getBufferOffset(GLTexLevelTarget target) {
