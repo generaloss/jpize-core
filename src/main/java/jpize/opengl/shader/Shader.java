@@ -11,6 +11,7 @@ import generaloss.spatialmath.matrix.Matrix4f;
 import generaloss.spatialmath.vector.*;
 import generaloss.resourceflow.resource.Resource;
 
+import java.awt.*;
 import java.util.HashMap;
 
 public class Shader extends GLProgram {
@@ -139,42 +140,42 @@ public class Shader extends GLProgram {
 
 
     public Shader uniformFloat(CharSequence uniformName, float value) {
-        super.uniformFloat(this.requireUniformLocation(uniformName), value);
+        GLProgram.uniformFloat(this.requireUniformLocation(uniformName), value);
         return this;
     }
 
     public Shader uniformInt(CharSequence uniformName, int value) {
-        super.uniformInt(this.requireUniformLocation(uniformName), value);
+        GLProgram.uniformInt(this.requireUniformLocation(uniformName), value);
         return this;
     }
 
     public Shader uniformVec2f(CharSequence uniformName, float x, float y) {
-        super.uniformVec2f(this.requireUniformLocation(uniformName), x, y);
+        GLProgram.uniformVec2f(this.requireUniformLocation(uniformName), x, y);
         return this;
     }
 
     public Shader uniformVec2i(CharSequence uniformName, int x, int y) {
-        super.uniformVec2i(this.requireUniformLocation(uniformName), x, y);
+        GLProgram.uniformVec2i(this.requireUniformLocation(uniformName), x, y);
         return this;
     }
 
     public Shader uniformVec3f(CharSequence uniformName, float x, float y, float z) {
-        super.uniformVec3f(this.requireUniformLocation(uniformName), x, y, z);
+        GLProgram.uniformVec3f(this.requireUniformLocation(uniformName), x, y, z);
         return this;
     }
 
     public Shader uniformVec3i(CharSequence uniformName, int x, int y, int z) {
-        super.uniformVec3i(this.requireUniformLocation(uniformName), x, y, z);
+        GLProgram.uniformVec3i(this.requireUniformLocation(uniformName), x, y, z);
         return this;
     }
 
     public Shader uniformVec4f(CharSequence uniformName, float x, float y, float z, float w) {
-        super.uniformVec4f(this.requireUniformLocation(uniformName), x, y, z, w);
+        GLProgram.uniformVec4f(this.requireUniformLocation(uniformName), x, y, z, w);
         return this;
     }
 
     public Shader uniformVec4i(CharSequence uniformName, int x, int y, int z, int w) {
-        super.uniformVec4i(this.requireUniformLocation(uniformName), x, y, z, w);
+        GLProgram.uniformVec4i(this.requireUniformLocation(uniformName), x, y, z, w);
         return this;
     }
 
@@ -185,156 +186,248 @@ public class Shader extends GLProgram {
     }
 
     public Shader uniformVec2f(CharSequence uniformName, Vec2f v) {
-        super.uniformVec2f(this.requireUniformLocation(uniformName), v.x, v.y);
+        GLProgram.uniformVec2f(this.requireUniformLocation(uniformName), v.x, v.y);
         return this;
     }
 
     public Shader uniformVec3f(CharSequence uniformName, Vec3f v) {
-        super.uniformVec3f(this.requireUniformLocation(uniformName), v.x, v.y, v.z);
+        GLProgram.uniformVec3f(this.requireUniformLocation(uniformName), v.x, v.y, v.z);
         return this;
     }
 
     public Shader uniformVec4f(CharSequence uniformName, Vec4f v) {
-        super.uniformVec4f(this.requireUniformLocation(uniformName), v.x, v.y, v.z, v.w);
+        GLProgram.uniformVec4f(this.requireUniformLocation(uniformName), v.x, v.y, v.z, v.w);
         return this;
     }
 
     public Shader uniformVec2i(CharSequence uniformName, Vec2i v) {
-        super.uniformVec2i(this.requireUniformLocation(uniformName), v.x, v.y);
+        GLProgram.uniformVec2i(this.requireUniformLocation(uniformName), v.x, v.y);
         return this;
     }
 
     public Shader uniformVec3i(CharSequence uniformName, Vec3i v) {
-        super.uniformVec3i(this.requireUniformLocation(uniformName), v.x, v.y, v.z);
+        GLProgram.uniformVec3i(this.requireUniformLocation(uniformName), v.x, v.y, v.z);
         return this;
     }
 
     public Shader uniformVec4i(CharSequence uniformName, Vec4i v) {
-        super.uniformVec4i(this.requireUniformLocation(uniformName), v.x, v.y, v.z, v.w);
+        GLProgram.uniformVec4i(this.requireUniformLocation(uniformName), v.x, v.y, v.z, v.w);
         return this;
     }
 
-    public Shader uniformVec4f(CharSequence uniformName, AbstractColor color) {
-        super.uniformVec4f(this.requireUniformLocation(uniformName), color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha());
+    public Shader uniformColor(CharSequence uniformName, AbstractColor color) {
+        GLProgram.uniformVec4f(this.requireUniformLocation(uniformName), color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha());
+        return this;
+    }
+
+    public Shader uniformColor(CharSequence uniformName, Color color) {
+        GLProgram.uniformVec4f(this.requireUniformLocation(uniformName), color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha());
         return this;
     }
 
     public Shader uniformTex2(CharSequence uniformName, Texture2D sampler2D) {
         sampler2D.active(numSampler);
-        super.uniformInt(this.requireUniformLocation(uniformName), numSampler);
+        GLProgram.uniformInt(this.requireUniformLocation(uniformName), numSampler);
         numSampler++;
         return this;
     }
 
     public Shader uniformTex2Arr(CharSequence uniformName, Texture2DArray sampler2DArray) {
         sampler2DArray.active(numSampler);
-        super.uniformInt(this.requireUniformLocation(uniformName), numSampler);
+        GLProgram.uniformInt(this.requireUniformLocation(uniformName), numSampler);
         numSampler++;
         return this;
     }
 
     public Shader uniformCubemap(CharSequence uniformName, TextureCubemap samplerCube) {
         samplerCube.active(numSampler);
-        super.uniformInt(this.requireUniformLocation(uniformName), numSampler);
+        GLProgram.uniformInt(this.requireUniformLocation(uniformName), numSampler);
         numSampler++;
         return this;
     }
 
 
     public Shader uniformFloats(CharSequence uniformName, float[] array) {
-        super.uniformFloats(this.requireUniformLocation(uniformName), array);
+        GLProgram.uniformFloats(this.requireUniformLocation(uniformName), array);
+        return this;
+    }
+
+    public Shader uniformDoubles(CharSequence uniformName, double[] array) {
+        GLProgram.uniformDoubles(this.requireUniformLocation(uniformName), array);
         return this;
     }
 
     public Shader uniformInts(CharSequence uniformName, int[] array) {
-        super.uniformInts(this.requireUniformLocation(uniformName), array);
+        GLProgram.uniformInts(this.requireUniformLocation(uniformName), array);
+        return this;
+    }
+
+    public Shader uniformUints(CharSequence uniformName, int[] array) {
+        GLProgram.uniformUints(this.requireUniformLocation(uniformName), array);
         return this;
     }
 
     public Shader uniformVecs2f(CharSequence uniformName, float[] values) {
-        super.uniformVecs2f(this.requireUniformLocation(uniformName), values);
+        GLProgram.uniformVecs2f(this.requireUniformLocation(uniformName), values);
+        return this;
+    }
+
+    public Shader uniformVecs2d(CharSequence uniformName, double[] values) {
+        GLProgram.uniformVecs2d(this.requireUniformLocation(uniformName), values);
         return this;
     }
 
     public Shader uniformVecs2i(CharSequence uniformName, int[] values) {
-        super.uniformVecs2i(this.requireUniformLocation(uniformName), values);
+        GLProgram.uniformVecs2i(this.requireUniformLocation(uniformName), values);
+        return this;
+    }
+
+    public Shader uniformVecs2ui(CharSequence uniformName, int[] values) {
+        GLProgram.uniformVecs2ui(this.requireUniformLocation(uniformName), values);
         return this;
     }
 
     public Shader uniformVecs3f(CharSequence uniformName, float[] values) {
-        super.uniformVecs3f(this.requireUniformLocation(uniformName), values);
+        GLProgram.uniformVecs3f(this.requireUniformLocation(uniformName), values);
+        return this;
+    }
+
+    public Shader uniformVecs3d(CharSequence uniformName, double[] values) {
+        GLProgram.uniformVecs3d(this.requireUniformLocation(uniformName), values);
         return this;
     }
 
     public Shader uniformVecs3i(CharSequence uniformName, int[] values) {
-        super.uniformVecs3i(this.requireUniformLocation(uniformName), values);
+        GLProgram.uniformVecs3i(this.requireUniformLocation(uniformName), values);
+        return this;
+    }
+
+    public Shader uniformVecs3ui(CharSequence uniformName, int[] values) {
+        GLProgram.uniformVecs3ui(this.requireUniformLocation(uniformName), values);
         return this;
     }
 
     public Shader uniformVecs4f(CharSequence uniformName, float[] values) {
-        super.uniformVecs4f(this.requireUniformLocation(uniformName), values);
+        GLProgram.uniformVecs4f(this.requireUniformLocation(uniformName), values);
+        return this;
+    }
+
+    public Shader uniformVecs4d(CharSequence uniformName, double[] values) {
+        GLProgram.uniformVecs4d(this.requireUniformLocation(uniformName), values);
         return this;
     }
 
     public Shader uniformVecs4i(CharSequence uniformName, int[] values) {
-        super.uniformVecs4i(this.requireUniformLocation(uniformName), values);
+        GLProgram.uniformVecs4i(this.requireUniformLocation(uniformName), values);
+        return this;
+    }
+
+    public Shader uniformVecs4ui(CharSequence uniformName, int[] values) {
+        GLProgram.uniformVecs4ui(this.requireUniformLocation(uniformName), values);
         return this;
     }
 
 
-    public Shader uniformMat4(CharSequence uniformName, boolean transpose, float[] values) {
-        super.uniformMat4(this.requireUniformLocation(uniformName), transpose, values);
+    public Shader uniformMat2f(CharSequence uniformName, boolean transpose, float[] values) {
+        GLProgram.uniformMat2f(this.requireUniformLocation(uniformName), transpose, values);
         return this;
     }
 
-    public Shader uniformMat4x3(CharSequence uniformName, boolean transpose, float[] values) {
-        super.uniformMat4x3(this.requireUniformLocation(uniformName), transpose, values);
+    public Shader uniformMat2d(CharSequence uniformName, boolean transpose, double[] values) {
+        GLProgram.uniformMat2d(this.requireUniformLocation(uniformName), transpose, values);
         return this;
     }
 
-    public Shader uniformMat4x2(CharSequence uniformName, boolean transpose, float[] values) {
-        super.uniformMat4x2(this.requireUniformLocation(uniformName), transpose, values);
+    public Shader uniformMat2x3f(CharSequence uniformName, boolean transpose, float[] values) {
+        GLProgram.uniformMat2x3f(this.requireUniformLocation(uniformName), transpose, values);
         return this;
     }
 
-    public Shader uniformMat3x4(CharSequence uniformName, boolean transpose, float[] values) {
-        super.uniformMat3x4(this.requireUniformLocation(uniformName), transpose, values);
+    public Shader uniformMat2x3d(CharSequence uniformName, boolean transpose, double[] values) {
+        GLProgram.uniformMat2x3d(this.requireUniformLocation(uniformName), transpose, values);
         return this;
     }
 
-    public Shader uniformMat3(CharSequence uniformName, boolean transpose, float[] values) {
-        super.uniformMat3(this.requireUniformLocation(uniformName), transpose, values);
+    public Shader uniformMat2x4f(CharSequence uniformName, boolean transpose, float[] values) {
+        GLProgram.uniformMat2x4f(this.requireUniformLocation(uniformName), transpose, values);
         return this;
     }
 
-    public Shader uniformMat3x2(CharSequence uniformName, boolean transpose, float[] values) {
-        super.uniformMat3x2(this.requireUniformLocation(uniformName), transpose, values);
-        return this;
-    }
-
-    public Shader uniformMat2x4(CharSequence uniformName, boolean transpose, float[] values) {
-        super.uniformMat2x4(this.requireUniformLocation(uniformName), transpose, values);
-        return this;
-    }
-
-    public Shader uniformMat2x3(CharSequence uniformName, boolean transpose, float[] values) {
-        super.uniformMat2x3(this.requireUniformLocation(uniformName), transpose, values);
-        return this;
-    }
-
-    public Shader uniformMat2(CharSequence uniformName, boolean transpose, float[] values) {
-        super.uniformMat2(this.requireUniformLocation(uniformName), transpose, values);
+    public Shader uniformMat2x4d(CharSequence uniformName, boolean transpose, double[] values) {
+        GLProgram.uniformMat2x4d(this.requireUniformLocation(uniformName), transpose, values);
         return this;
     }
 
 
-    public Shader uniformMat4(CharSequence uniformName, Matrix4f matrix4f) {
-        this.uniformMat4(uniformName, false, matrix4f.values);
+    public Shader uniformMat3x2f(CharSequence uniformName, boolean transpose, float[] values) {
+        GLProgram.uniformMat3x2f(this.requireUniformLocation(uniformName), transpose, values);
         return this;
     }
 
-    public Shader uniformMat3(CharSequence uniformName, Matrix3f matrix3f) {
-        this.uniformMat3(uniformName, false, matrix3f.values);
+    public Shader uniformMat3x2d(CharSequence uniformName, boolean transpose, double[] values) {
+        GLProgram.uniformMat3x2d(this.requireUniformLocation(uniformName), transpose, values);
+        return this;
+    }
+
+    public Shader uniformMat3f(CharSequence uniformName, boolean transpose, float[] values) {
+        GLProgram.uniformMat3f(this.requireUniformLocation(uniformName), transpose, values);
+        return this;
+    }
+
+    public Shader uniformMat3d(CharSequence uniformName, boolean transpose, double[] values) {
+        GLProgram.uniformMat3d(this.requireUniformLocation(uniformName), transpose, values);
+        return this;
+    }
+
+    public Shader uniformMat3x4f(CharSequence uniformName, boolean transpose, float[] values) {
+        GLProgram.uniformMat3x4f(this.requireUniformLocation(uniformName), transpose, values);
+        return this;
+    }
+
+    public Shader uniformMat3x4d(CharSequence uniformName, boolean transpose, double[] values) {
+        GLProgram.uniformMat3x4d(this.requireUniformLocation(uniformName), transpose, values);
+        return this;
+    }
+
+
+    public Shader uniformMat4x2f(CharSequence uniformName, boolean transpose, float[] values) {
+        GLProgram.uniformMat4x2f(this.requireUniformLocation(uniformName), transpose, values);
+        return this;
+    }
+
+    public Shader uniformMat4x2d(CharSequence uniformName, boolean transpose, double[] values) {
+        GLProgram.uniformMat4x2d(this.requireUniformLocation(uniformName), transpose, values);
+        return this;
+    }
+
+    public Shader uniformMat4x3f(CharSequence uniformName, boolean transpose, float[] values) {
+        GLProgram.uniformMat4x3f(this.requireUniformLocation(uniformName), transpose, values);
+        return this;
+    }
+
+    public Shader uniformMat4x3d(CharSequence uniformName, boolean transpose, double[] values) {
+        GLProgram.uniformMat4x3d(this.requireUniformLocation(uniformName), transpose, values);
+        return this;
+    }
+
+    public Shader uniformMat4f(CharSequence uniformName, boolean transpose, float[] values) {
+        GLProgram.uniformMat4f(this.requireUniformLocation(uniformName), transpose, values);
+        return this;
+    }
+
+    public Shader uniformMat4d(CharSequence uniformName, boolean transpose, double[] values) {
+        GLProgram.uniformMat4d(this.requireUniformLocation(uniformName), transpose, values);
+        return this;
+    }
+
+
+    public Shader uniformMat4f(CharSequence uniformName, Matrix4f matrix4f) {
+        this.uniformMat4f(uniformName, false, matrix4f.values);
+        return this;
+    }
+
+    public Shader uniformMat3f(CharSequence uniformName, Matrix3f matrix3f) {
+        this.uniformMat3f(uniformName, false, matrix3f.values);
         return this;
     }
 

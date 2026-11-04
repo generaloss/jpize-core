@@ -88,7 +88,7 @@ public class TextureBatch implements Disposable {
         }
 
         currentShader.bind();
-        currentShader.uniformMat4("u_combined", combined);
+        currentShader.uniformMat4f("u_combined", combined);
         currentMatrix.set(combined);
     }
 

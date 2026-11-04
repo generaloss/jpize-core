@@ -64,9 +64,9 @@ public class Skybox extends TextureCubemap {
     public void render(Matrix4f combined) {
         GL.depthMask(false);
         shader.bind();
-        shader.uniformMat4("u_combined", combined);
+        shader.uniformMat4f("u_combined", combined);
         shader.uniformCubemap("u_cubemap", this);
-        shader.uniformVec4f("u_color", color);
+        shader.uniformColor("u_color", color);
         mesh.render();
         GL.depthMask(true);
     }

@@ -4,13 +4,8 @@ import jpize.context.Jpize;
 import jpize.opengl.*;
 import jpize.opengl.gl.GL20I;
 import jpize.opengl.gl.GL41I;
-import jpize.opengl.texture.Texture2D;
-import jpize.opengl.texture.Texture2DArray;
-import jpize.opengl.texture.TextureCubemap;
 import jpize.opengl.type.GLBool;
-import jpize.util.color.AbstractColor;
 
-import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import java.util.Arrays;
 
@@ -123,14 +118,6 @@ public class GLProgram extends GLObject {
         Jpize.GL31.glGetUniformIndices(ID, uniformNames, uniformIndices);
     }
 
-    /// LU: public void getUniformIndices(PointerBuffer uniformNames, IntBuffer uniformIndices) {
-    /// LU:     Jpize.GL31.glGetUniformIndices(ID, uniformNames, uniformIndices);
-    /// LU: }
-
-    /// LU: public void getUniformIndices(PointerBuffer uniformNames, int[] uniformIndices) {
-    /// LU:     Jpize.GL31.glGetUniformIndices(ID, uniformNames, uniformIndices);
-    /// LU: }
-
 
     public void bindAttributeLocation(int index, CharSequence name) {
         Jpize.GL20.glBindAttribLocation(ID, index, name);
@@ -159,119 +146,6 @@ public class GLProgram extends GLObject {
     }
 
 
-    public void uniformFloat(int location, float x) {
-        Jpize.GL20.glUniform1f(location, x);
-    }
-
-    public void uniformInt(int location, int x) {
-        Jpize.GL20.glUniform1i(location, x);
-    }
-
-    public void uniformVec2f(int location, float x, float y) {
-        Jpize.GL20.glUniform2f(location, x, y);
-    }
-
-    public void uniformVec2i(int location, int x, int y) {
-        Jpize.GL20.glUniform2i(location, x, y);
-    }
-
-    public void uniformVec3f(int location, float x, float y, float z) {
-        Jpize.GL20.glUniform3f(location, x, y, z);
-    }
-
-    public void uniformVec3i(int location, int x, int y, int z) {
-        Jpize.GL20.glUniform3i(location, x, y, z);
-    }
-
-    public void uniformVec4f(int location, float x, float y, float z, float w) {
-        Jpize.GL20.glUniform4f(location, x, y, z, w);
-    }
-
-    public void uniformVec4i(int location, int x, int y, int z, int w) {
-        Jpize.GL20.glUniform4i(location, x, y, z, w);
-    }
-
-
-    public void uniformFloats(int location, float[] values) {
-        Jpize.GL20.glUniform1fv(location, values);
-    }
-
-    public void uniformFloats(int location, FloatBuffer buffer) {
-        Jpize.GL20.glUniform1fv(location, buffer);
-    }
-
-    public void uniformInts(int location, int[] values) {
-        Jpize.GL20.glUniform1iv(location, values);
-    }
-
-    public void uniformInts(int location, IntBuffer buffer) {
-        Jpize.GL20.glUniform1iv(location, buffer);
-    }
-
-    public void uniformVecs2f(int location, float[] values) {
-        Jpize.GL20.glUniform2fv(location, values);
-    }
-
-    public void uniformVecs2i(int location, int[] values) {
-        Jpize.GL20.glUniform2iv(location, values);
-    }
-
-    public void uniformVecs3f(int location, float[] values) {
-        Jpize.GL20.glUniform3fv(location, values);
-    }
-
-    public void uniformVecs3i(int location, int[] values) {
-        Jpize.GL20.glUniform3iv(location, values);
-    }
-
-    public void uniformVecs4f(int location, float[] values) {
-        Jpize.GL20.glUniform4fv(location, values);
-    }
-
-    public void uniformVecs4i(int location, int[] values) {
-        Jpize.GL20.glUniform4iv(location, values);
-    }
-
-
-    public void uniformMat4(int location, boolean transpose, float[] values) {
-        Jpize.GL20.glUniformMatrix4fv(location, transpose, values);
-    }
-
-    public void uniformMat4x3(int location, boolean transpose, float[] values) {
-        Jpize.GL21.glUniformMatrix4x3fv(location, transpose, values);
-    }
-
-    public void uniformMat4x2(int location, boolean transpose, float[] values) {
-        Jpize.GL21.glUniformMatrix4x2fv(location, transpose, values);
-    }
-
-
-    public void uniformMat3x4(int location, boolean transpose, float[] values) {
-        Jpize.GL21.glUniformMatrix3x4fv(location, transpose, values);
-    }
-
-    public void uniformMat3(int location, boolean transpose, float[] values) {
-        Jpize.GL20.glUniformMatrix3fv(location, transpose, values);
-    }
-
-    public void uniformMat3x2(int location, boolean transpose, float[] values) {
-        Jpize.GL21.glUniformMatrix3x2fv(location, transpose, values);
-    }
-
-
-    public void uniformMat2x4(int location, boolean transpose, float[] values) {
-        Jpize.GL21.glUniformMatrix2x4fv(location, transpose, values);
-    }
-
-    public void uniformMat2x3(int location, boolean transpose, float[] values) {
-        Jpize.GL21.glUniformMatrix2x3fv(location, transpose, values);
-    }
-
-    public void uniformMat2(int location, boolean transpose, float[] values) {
-        Jpize.GL20.glUniformMatrix2fv(location, transpose, values);
-    }
-
-
     public void bind() {
         Jpize.GL20.glUseProgram(ID);
     }
@@ -284,6 +158,212 @@ public class GLProgram extends GLObject {
     @Override
     public void dispose() {
         Jpize.GL20.glDeleteProgram(ID);
+    }
+
+
+
+    public static void uniformFloat(int location, float x) {
+        Jpize.GL20.glUniform1f(location, x);
+    }
+
+    public static void uniformDouble(int location, double x) {
+        Jpize.GL40.glUniform1d(location, x);
+    }
+
+    public static void uniformInt(int location, int x) {
+        Jpize.GL20.glUniform1i(location, x);
+    }
+
+    public static void uniformUint(int location, int x) {
+        Jpize.GL30.glUniform1ui(location, x);
+    }
+
+    public static void uniformVec2f(int location, float x, float y) {
+        Jpize.GL20.glUniform2f(location, x, y);
+    }
+
+    public static void uniformVec2d(int location, double x, double y) {
+        Jpize.GL40.glUniform2d(location, x, y);
+    }
+
+    public static void uniformVec2i(int location, int x, int y) {
+        Jpize.GL20.glUniform2i(location, x, y);
+    }
+
+    public static void uniformVec2ui(int location, int x, int y) {
+        Jpize.GL30.glUniform2ui(location, x, y);
+    }
+
+    public static void uniformVec3f(int location, float x, float y, float z) {
+        Jpize.GL20.glUniform3f(location, x, y, z);
+    }
+
+    public static void uniformVec3d(int location, double x, double y, double z) {
+        Jpize.GL40.glUniform3d(location, x, y, z);
+    }
+
+    public static void uniformVec3i(int location, int x, int y, int z) {
+        Jpize.GL20.glUniform3i(location, x, y, z);
+    }
+
+    public static void uniformVec3ui(int location, int x, int y, int z) {
+        Jpize.GL30.glUniform3ui(location, x, y, z);
+    }
+
+    public static void uniformVec4f(int location, float x, float y, float z, float w) {
+        Jpize.GL20.glUniform4f(location, x, y, z, w);
+    }
+
+    public static void uniformVec4d(int location, double x, double y, double z, double w) {
+        Jpize.GL40.glUniform4d(location, x, y, z, w);
+    }
+
+    public static void uniformVec4i(int location, int x, int y, int z, int w) {
+        Jpize.GL20.glUniform4i(location, x, y, z, w);
+    }
+
+    public static void uniformVec4ui(int location, int x, int y, int z, int w) {
+        Jpize.GL30.glUniform4ui(location, x, y, z, w);
+    }
+
+
+    public static void uniformFloats(int location, float[] values) {
+        Jpize.GL20.glUniform1fv(location, values);
+    }
+
+    public static void uniformDoubles(int location, double[] values) {
+        Jpize.GL40.glUniform1dv(location, values);
+    }
+
+    public static void uniformInts(int location, int[] values) {
+        Jpize.GL20.glUniform1iv(location, values);
+    }
+
+    public static void uniformUints(int location, int[] values) {
+        Jpize.GL30.glUniform1uiv(location, values);
+    }
+
+    public static void uniformVecs2f(int location, float[] values) {
+        Jpize.GL20.glUniform2fv(location, values);
+    }
+
+    public static void uniformVecs2d(int location, double[] values) {
+        Jpize.GL40.glUniform2dv(location, values);
+    }
+
+    public static void uniformVecs2i(int location, int[] values) {
+        Jpize.GL20.glUniform2iv(location, values);
+    }
+
+    public static void uniformVecs2ui(int location, int[] values) {
+        Jpize.GL30.glUniform2uiv(location, values);
+    }
+
+    public static void uniformVecs3f(int location, float[] values) {
+        Jpize.GL20.glUniform3fv(location, values);
+    }
+
+    public static void uniformVecs3d(int location, double[] values) {
+        Jpize.GL40.glUniform3dv(location, values);
+    }
+
+    public static void uniformVecs3i(int location, int[] values) {
+        Jpize.GL20.glUniform3iv(location, values);
+    }
+
+    public static void uniformVecs3ui(int location, int[] values) {
+        Jpize.GL30.glUniform3uiv(location, values);
+    }
+
+    public static void uniformVecs4f(int location, float[] values) {
+        Jpize.GL20.glUniform4fv(location, values);
+    }
+
+    public static void uniformVecs4d(int location, double[] values) {
+        Jpize.GL40.glUniform4dv(location, values);
+    }
+
+    public static void uniformVecs4i(int location, int[] values) {
+        Jpize.GL20.glUniform4iv(location, values);
+    }
+
+    public static void uniformVecs4ui(int location, int[] values) {
+        Jpize.GL30.glUniform4uiv(location, values);
+    }
+
+
+    public static void uniformMat2f(int location, boolean transpose, float[] values) {
+        Jpize.GL20.glUniformMatrix2fv(location, transpose, values);
+    }
+
+    public static void uniformMat2d(int location, boolean transpose, double[] values) {
+        Jpize.GL40.glUniformMatrix2dv(location, transpose, values);
+    }
+
+    public static void uniformMat2x3f(int location, boolean transpose, float[] values) {
+        Jpize.GL21.glUniformMatrix2x3fv(location, transpose, values);
+    }
+
+    public static void uniformMat2x3d(int location, boolean transpose, double[] values) {
+        Jpize.GL40.glUniformMatrix2x3dv(location, transpose, values);
+    }
+
+    public static void uniformMat2x4f(int location, boolean transpose, float[] values) {
+        Jpize.GL21.glUniformMatrix2x4fv(location, transpose, values);
+    }
+
+    public static void uniformMat2x4d(int location, boolean transpose, double[] values) {
+        Jpize.GL40.glUniformMatrix2x4dv(location, transpose, values);
+    }
+
+
+    public static void uniformMat3x2f(int location, boolean transpose, float[] values) {
+        Jpize.GL21.glUniformMatrix3x2fv(location, transpose, values);
+    }
+
+    public static void uniformMat3x2d(int location, boolean transpose, double[] values) {
+        Jpize.GL40.glUniformMatrix3x2dv(location, transpose, values);
+    }
+
+    public static void uniformMat3f(int location, boolean transpose, float[] values) {
+        Jpize.GL20.glUniformMatrix3fv(location, transpose, values);
+    }
+
+    public static void uniformMat3d(int location, boolean transpose, double[] values) {
+        Jpize.GL40.glUniformMatrix3dv(location, transpose, values);
+    }
+
+    public static void uniformMat3x4f(int location, boolean transpose, float[] values) {
+        Jpize.GL21.glUniformMatrix3x4fv(location, transpose, values);
+    }
+
+    public static void uniformMat3x4d(int location, boolean transpose, double[] values) {
+        Jpize.GL40.glUniformMatrix3x4dv(location, transpose, values);
+    }
+
+
+    public static void uniformMat4x2f(int location, boolean transpose, float[] values) {
+        Jpize.GL21.glUniformMatrix4x2fv(location, transpose, values);
+    }
+
+    public static void uniformMat4x2d(int location, boolean transpose, double[] values) {
+        Jpize.GL40.glUniformMatrix4x2dv(location, transpose, values);
+    }
+
+    public static void uniformMat4x3f(int location, boolean transpose, float[] values) {
+        Jpize.GL21.glUniformMatrix4x3fv(location, transpose, values);
+    }
+
+    public static void uniformMat4x3d(int location, boolean transpose, double[] values) {
+        Jpize.GL40.glUniformMatrix4x3dv(location, transpose, values);
+    }
+
+    public static void uniformMat4f(int location, boolean transpose, float[] values) {
+        Jpize.GL20.glUniformMatrix4fv(location, transpose, values);
+    }
+
+    public static void uniformMat4d(int location, boolean transpose, double[] values) {
+        Jpize.GL40.glUniformMatrix4dv(location, transpose, values);
     }
 
 }

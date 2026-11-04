@@ -163,7 +163,7 @@ public class TextRenderer {
                 vertices.clear();
 
                 renderer.shader.bind();
-                renderer.shader.uniformMat4("u_combined", renderer.combinedMatrix);
+                renderer.shader.uniformMat4f("u_combined", renderer.combinedMatrix);
                 renderer.shader.uniformTex2("u_texture", lastTexture);
                 renderer.mesh.render();
 
@@ -206,7 +206,7 @@ public class TextRenderer {
 
         renderer.mesh.vertices().setData(vertices.copyOf());
         renderer.shader.bind();
-        renderer.shader.uniformMat4("u_combined", renderer.combinedMatrix);
+        renderer.shader.uniformMat4f("u_combined", renderer.combinedMatrix);
         renderer.shader.uniformTex2("u_texture", lastTexture);
         renderer.mesh.render();
 
@@ -313,7 +313,7 @@ public class TextRenderer {
                 vertices.clear();
 
                 renderer.shader.bind();
-                renderer.shader.uniformMat4("u_combined", camera.getCombined());
+                renderer.shader.uniformMat4f("u_combined", camera.getCombined());
                 renderer.shader.uniformTex2("u_texture", lastTexture);
                 renderer.mesh.render();
             }
@@ -325,7 +325,7 @@ public class TextRenderer {
 
         renderer.mesh.vertices().setData(vertices.copyOf());
         renderer.shader.bind();
-        renderer.shader.uniformMat4("u_combined", camera.getCombined());
+        renderer.shader.uniformMat4f("u_combined", camera.getCombined());
         renderer.shader.uniformTex2("u_texture", lastTexture);
         renderer.mesh.render();
 
