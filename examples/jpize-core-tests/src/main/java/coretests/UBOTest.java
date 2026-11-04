@@ -36,7 +36,7 @@ public class UBOTest extends JpizeApplication {
         this.updateUBO();
 
         shader.bind();
-        shader.uniform("State", statesBuf);
+        shader.uniformBuffer("State", statesBuf);
     }
 
     private void updateUBO() {
@@ -53,7 +53,7 @@ public class UBOTest extends JpizeApplication {
 
         GL.clearColorBuffer();
         shader.bind();
-        shader.uniform("u_texture", texture);
+        shader.uniformTex2("u_texture", texture);
         RenderQuad.instance().render();
     }
 

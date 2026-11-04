@@ -68,8 +68,8 @@ public class IndexedMeshTest extends JpizeApplication {
         GL.clearColorDepthBuffers();
 
         shader.bind();
-        shader.uniform("u_combined", camera.getCombined());
-        shader.uniform("u_texture", texture);
+        shader.uniformMat4("u_combined", camera.getCombined());
+        shader.uniformTex2("u_texture", texture);
         mesh.render();
     }
 

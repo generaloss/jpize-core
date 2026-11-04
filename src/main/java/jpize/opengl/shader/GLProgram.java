@@ -159,36 +159,77 @@ public class GLProgram extends GLObject {
     }
 
 
-    public void uniform(int location, float x) {
+    public void uniformFloat(int location, float x) {
         Jpize.GL20.glUniform1f(location, x);
     }
 
-    public void uniform(int location, int x) {
+    public void uniformInt(int location, int x) {
         Jpize.GL20.glUniform1i(location, x);
     }
 
-    public void uniform(int location, float x, float y) {
+    public void uniformVec2f(int location, float x, float y) {
         Jpize.GL20.glUniform2f(location, x, y);
     }
 
-    public void uniform(int location, int x, int y) {
+    public void uniformVec2i(int location, int x, int y) {
         Jpize.GL20.glUniform2i(location, x, y);
     }
 
-    public void uniform(int location, float x, float y, float z) {
+    public void uniformVec3f(int location, float x, float y, float z) {
         Jpize.GL20.glUniform3f(location, x, y, z);
     }
 
-    public void uniform(int location, int x, int y, int z) {
+    public void uniformVec3i(int location, int x, int y, int z) {
         Jpize.GL20.glUniform3i(location, x, y, z);
     }
 
-    public void uniform(int location, float x, float y, float z, float w) {
+    public void uniformVec4f(int location, float x, float y, float z, float w) {
         Jpize.GL20.glUniform4f(location, x, y, z, w);
     }
 
-    public void uniform(int location, int x, int y, int z, int w) {
+    public void uniformVec4i(int location, int x, int y, int z, int w) {
         Jpize.GL20.glUniform4i(location, x, y, z, w);
+    }
+
+
+    public void uniformFloats(int location, float[] values) {
+        Jpize.GL20.glUniform1fv(location, values);
+    }
+
+    public void uniformFloats(int location, FloatBuffer buffer) {
+        Jpize.GL20.glUniform1fv(location, buffer);
+    }
+
+    public void uniformInts(int location, int[] values) {
+        Jpize.GL20.glUniform1iv(location, values);
+    }
+
+    public void uniformInts(int location, IntBuffer buffer) {
+        Jpize.GL20.glUniform1iv(location, buffer);
+    }
+
+    public void uniformVecs2f(int location, float[] values) {
+        Jpize.GL20.glUniform2fv(location, values);
+    }
+
+    public void uniformVecs2i(int location, int[] values) {
+        Jpize.GL20.glUniform2iv(location, values);
+    }
+
+    public void uniformVecs3f(int location, float[] values) {
+        Jpize.GL20.glUniform3fv(location, values);
+    }
+
+    public void uniformVecs3i(int location, int[] values) {
+        Jpize.GL20.glUniform3iv(location, values);
+    }
+
+    public void uniformVecs4f(int location, float[] values) {
+        Jpize.GL20.glUniform4fv(location, values);
+    }
+
+    public void uniformVecs4i(int location, int[] values) {
+        Jpize.GL20.glUniform4iv(location, values);
     }
 
 
@@ -228,44 +269,6 @@ public class GLProgram extends GLObject {
 
     public void uniformMat2(int location, boolean transpose, float[] values) {
         Jpize.GL20.glUniformMatrix2fv(location, transpose, values);
-    }
-
-
-    public void uniform(int location, float[] array) {
-        Jpize.GL20.glUniform1fv(location, array);
-    }
-
-    public void uniform(int location, int[] array) {
-        Jpize.GL20.glUniform1iv(location, array);
-    }
-
-    public void uniform(int location, FloatBuffer buffer) {
-        Jpize.GL20.glUniform1fv(location, buffer);
-    }
-
-    public void uniform(int location, IntBuffer buffer) {
-        Jpize.GL20.glUniform1iv(location, buffer);
-    }
-
-
-    public void uniform(int location, Texture2D sampler2D, int active) {
-        sampler2D.active(active);
-        this.uniform(location, active);
-    }
-
-    public void uniform(int location, Texture2DArray sampler2DArray, int active) {
-        sampler2DArray.active(active);
-        this.uniform(location, active);
-    }
-
-    public void uniform(int location, TextureCubemap samplerCube, int active) {
-        samplerCube.active(active);
-        this.uniform(location, active);
-    }
-
-
-    public void uniform(int location, AbstractColor color) {
-        this.uniform(location, color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha());
     }
 
 

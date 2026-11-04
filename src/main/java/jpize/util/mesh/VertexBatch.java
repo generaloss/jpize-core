@@ -59,7 +59,7 @@ public class VertexBatch implements Disposable {
 
     public void setup(Matrix4f combined) {
         currentShader.bind();
-        currentShader.uniform("u_combined", combined);
+        currentShader.uniformMat4("u_combined", combined);
         combinedMat = combined;
     }
 

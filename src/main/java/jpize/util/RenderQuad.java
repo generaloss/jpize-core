@@ -1,7 +1,6 @@
 package jpize.util;
 
 import jpize.context.Jpize;
-import jpize.opengl.gl.GL;
 import jpize.opengl.shader.Shader;
 import jpize.opengl.texture.Texture2D;
 import jpize.opengl.type.GLType;
@@ -37,7 +36,7 @@ public class RenderQuad implements Disposable {
 
     public void render(Shader shader, Texture2D texture) {
         shader.bind();
-        shader.uniform("u_texture", texture);
+        shader.uniformTex2("u_texture", texture);
         this.render();
     }
 

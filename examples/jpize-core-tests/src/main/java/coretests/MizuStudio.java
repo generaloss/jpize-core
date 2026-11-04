@@ -264,11 +264,11 @@ public final class MizuStudio extends JpizeApplication {
         // Switch to the custom shader for the procedural character.
         batch.setShader(deformer);
         deformer.bind();
-        deformer.uniform("u_bend", bend);
-        deformer.uniform("u_breath", breathing);
-        deformer.uniform("u_blink", blink);
-        deformer.uniform("u_time", time);
-        deformer.uniform("u_mesh", showMesh ? 1F : 0F);
+        deformer.uniformFloat("u_bend", bend);
+        deformer.uniformFloat("u_breath", breathing);
+        deformer.uniformFloat("u_blink", blink);
+        deformer.uniformFloat("u_time", time);
+        deformer.uniformBool("u_mesh", showMesh);
 
         batch.drawRect(mx, my, mw, mh, 1, 1, 1, 1);
         batch.render();

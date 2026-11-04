@@ -88,7 +88,7 @@ public class TextureBatch implements Disposable {
         }
 
         currentShader.bind();
-        currentShader.uniform("u_combined", combined);
+        currentShader.uniformMat4("u_combined", combined);
         currentMatrix.set(combined);
     }
 
@@ -124,7 +124,7 @@ public class TextureBatch implements Disposable {
 
         // render
         currentShader.bind();
-        currentShader.uniform("u_texture", quadTexture);
+        currentShader.uniformTex2("u_texture", quadTexture);
         mesh.vertices().setData(vertexList.arrayTrimmed());
         mesh.render();
 
