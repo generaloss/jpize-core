@@ -1,7 +1,6 @@
 package jpize.opengl.framebuffer;
 
 import jpize.context.Jpize;
-import jpize.opengl.gl.GL;
 import jpize.opengl.framebuffer.attachment.FramebufferAttachment;
 import jpize.opengl.framebuffer.attachment.FramebufferTexture;
 import jpize.opengl.texture.Texture2D;
@@ -45,7 +44,6 @@ public class Framebuffer3D extends GLFramebuffer {
 
     public void begin() {
         super.bind();
-        GL.clearColorDepthBuffers();
     }
 
     public void end() {
